@@ -10,17 +10,14 @@ class Article extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'category_id',
         'admin_id',
         'image_id',
         'title',
         'slug',
+        'style',
+        'blocks',
         'excerpt',
         'content',
         'video_url',
@@ -33,222 +30,201 @@ class Article extends Model
         'meta_keywords',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'is_featured' => 'boolean',
         'views_count' => 'integer',
         'published_at' => 'datetime',
     ];
 
-    /**
-     * Boot the model.
-     */
+    // ──────────────────────────────────────────────────────────────────────
+    //  BOOT — auto-slug + auto-excerpt + auto published_at
+    // ──────────────────────────────────────────────────────────────────────
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($article) {
+            // Auto slug
             if (empty($article->slug)) {
                 $article->slug = Str::slug($article->title);
             }
-            
-            // Auto-generate excerpt if not provided
-            if (empty($article->excerpt) && !empty($article->content)) {
+
+            // Auto excerpt
+            if (empty($article->excerpt) && ! empty($article->content)) {
                 $article->excerpt = Str::limit(strip_tags($article->content), 200);
+            }
+
+            // Auto published_at when creating as published
+            if ($article->status === 'published' && empty($article->published_at)) {
+                $article->published_at = now();
             }
         });
 
         static::updating(function ($article) {
-            if ($article->isDirty('title') && !$article->isDirty('slug')) {
+            // Regenerate slug only if title changed but slug wasn't manually changed
+            if ($article->isDirty('title') && ! $article->isDirty('slug')) {
                 $article->slug = Str::slug($article->title);
+            }
+
+            // Set published_at when status transitions to published
+            if ($article->isDirty('status')
+                && $article->status === 'published'
+                && empty($article->published_at)) {
+                $article->published_at = now();
             }
         });
     }
 
-    /**
-     * Get the category that owns the article.
-     */
+    // ──────────────────────────────────────────────────────────────────────
+    //  RELATIONSHIPS
+    // ──────────────────────────────────────────────────────────────────────
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * Get the admin that owns the article.
-     */
     public function admin()
     {
         return $this->belongsTo(Admin::class);
     }
 
-    /**
-     * Get the featured image for the article.
-     */
+    /** Featured image (direct FK). */
     public function image()
     {
         return $this->belongsTo(Image::class);
     }
 
-    /**
-     * Get the featured image (alias).
-     */
+    /** Alias. */
     public function featuredImage()
     {
         return $this->image();
     }
 
-    /**
-     * Get all images for this article (polymorphic).
-     */
+    /** All polymorphic images attached to this article. */
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    /**
-     * Get gallery images (excluding featured image).
-     */
+    /** Polymorphic images excluding the featured one. */ 
     public function galleryImages()
     {
         return $this->morphMany(Image::class, 'imageable')
             ->where('id', '!=', $this->image_id);
     }
 
-    /**
-     * Get the media for the article (legacy support).
-     */
+    /** Legacy media. */
     public function media()
     {
         return $this->hasMany(ArticleMedia::class)->orderBy('display_order');
     }
 
-    /**
-     * Increment the view count.
-     */
-    public function incrementViews()
+    /** Tags (many-to-many). */
+    public function tags()
     {
-        $this->increment('views_count');
+        return $this->belongsToMany(Tag::class);
     }
 
-    /**
-     * Check if article is published.
-     */
-    public function isPublished(): bool
-    {
-        return $this->status === 'published' 
-            && $this->published_at !== null 
-            && $this->published_at <= now();
-    }
+    // ──────────────────────────────────────────────────────────────────────
+    //  SCOPES
+    // ──────────────────────────────────────────────────────────────────────
 
     /**
-     * Check if article is draft.
-     */
-    public function isDraft(): bool
-    {
-        return $this->status === 'draft';
-    }
-
-    /**
-     * Get featured image URL with fallback.
-     */
-    public function getFeaturedImageUrlAttribute()
-    {
-        return $this->image ? $this->image->url : asset('images/default-article.jpg');
-    }
-
-    /**
-     * Get featured image thumbnail URL with fallback.
-     */
-    public function getFeaturedImageThumbnailAttribute()
-    {
-        return $this->image ? $this->image->thumbnail_url : asset('images/default-article.jpg');
-    }
-
-    /**
-     * Scope a query to only include published articles.
+     * Published: status = published.
+     * published_at is allowed to be null (treated as "publish immediately").
+     * Future-dated articles are still excluded.
      */
     public function scopePublished($query)
     {
         return $query->where('status', 'published')
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now());
+            ->where(function ($q) {
+                $q->whereNull('published_at')
+                  ->orWhere('published_at', '<=', now());
+            });
     }
 
-    /**
-     * Scope a query to only include draft articles.
-     */
     public function scopeDraft($query)
     {
         return $query->where('status', 'draft');
     }
 
-    /**
-     * Scope a query to only include featured articles.
-     */
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
     }
 
-    /**
-     * Scope a query to search articles.
-     */
     public function scopeSearch($query, $term)
     {
-        return $query->whereFullText(['title', 'content', 'excerpt'], $term);
+        return $query->where(function ($q) use ($term) {
+            $q->where('title', 'like', "%{$term}%")
+              ->orWhere('excerpt', 'like', "%{$term}%")
+              ->orWhere('content', 'like', "%{$term}%");
+        });
     }
 
-    /**
-     * Scope a query to filter by category.
-     */
     public function scopeByCategory($query, $categoryId)
     {
         return $query->where('category_id', $categoryId);
     }
 
     /**
-     * Scope a query to order by latest.
-     */
-    public function scopeLatest($query)
-    {
-        return $query->orderBy('published_at', 'desc');
-    }
-
-    /**
-     * Scope a query to order by most viewed.
+     * scopePopular — order by views descending.
+     * NOTE: scopeLatest was removed to avoid conflicting with Eloquent's
+     * built-in latest() method (which orders by created_at desc).
+     * Use ->orderBy('published_at', 'desc') directly when needed.
      */
     public function scopePopular($query)
     {
         return $query->orderBy('views_count', 'desc');
     }
 
-    /**
-     * Get the route key for the model.
-     */
     public function getRouteKeyName()
     {
         return 'slug';
     }
 
-    /**
-     * Get the formatted published date.
-     */
-    public function getPublishedDateAttribute()
+    // ──────────────────────────────────────────────────────────────────────
+    //  HELPERS / ACCESSORS
+    // ──────────────────────────────────────────────────────────────────────
+    public function incrementViews(): void
+    {
+        $this->increment('views_count');
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->status === 'published'
+            && ($this->published_at === null || $this->published_at <= now());
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status === 'draft';
+    }
+
+    public function getFeaturedImageUrlAttribute(): string
+    {
+        return $this->image
+            ? $this->image->url
+            : asset('images/default-article.jpg');
+    }
+
+    public function getFeaturedImageThumbnailAttribute(): string
+    {
+        return $this->image
+            ? $this->image->thumbnail_url
+            : asset('images/default-article.jpg');
+    }
+
+    public function getPublishedDateAttribute(): ?string
     {
         return $this->published_at?->format('F j, Y');
     }
 
-    /**
-     * Get the reading time in minutes.
-     */
-    public function getReadingTimeAttribute()
+    public function getReadingTimeAttribute(): int
     {
-        $wordCount = str_word_count(strip_tags($this->content));
-        $minutes = ceil($wordCount / 200); // Average reading speed
-        return $minutes;
+        $words   = str_word_count(strip_tags($this->content ?? ''));
+        $minutes = (int) ceil($words / 200);
+        return max(1, $minutes);
     }
 }

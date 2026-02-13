@@ -184,6 +184,89 @@
     </div>
 </div>
 
+<!-- Geographic Analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Top Countries -->
+    <div class="card">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <i class="fas fa-globe text-blue-500"></i>
+                Top Countries
+            </h2>
+            <span class="text-xs text-gray-500">Last 30 days</span>
+        </div>
+        <div class="space-y-3">
+            @forelse($topCountries as $country)
+                <div class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-flag text-blue-600 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-gray-800">{{ $country->country ?? 'Unknown' }}</p>
+                        <p class="text-xs text-gray-500">{{ App\Helpers\NumberHelper::formatNumber($country->count) }} visits</p>
+                    </div>
+                    <div class="text-right">
+                        @php
+                            $percentage = $totalSiteVisits > 0 ? round(($country->count / $totalSiteVisits) * 100, 1) : 0;
+                        @endphp
+                        <span class="text-sm font-bold text-blue-600">{{ $percentage }}%</span>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-globe text-gray-300 text-2xl"></i>
+                    </div>
+                    <p class="text-sm text-gray-400">No country data yet</p>
+                    <p class="text-xs text-gray-400 mt-1">Data will appear as visitors arrive</p>
+                </div>
+            @endforelse
+        </div>
+        
+        @if($topCountries->count() > 0)
+            <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-map-marked-alt text-gray-400 text-sm"></i>
+                    <span class="text-sm font-semibold text-gray-700">{{ $uniqueCountries }} countries reached</span>
+                </div>
+                <span class="text-xs text-gray-500">All time</span>
+            </div>
+        @endif
+    </div>
+
+    <!-- Top Cities -->
+    <div class="card">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <i class="fas fa-city text-green-500"></i>
+                Top Cities
+            </h2>
+            <span class="text-xs text-gray-500">Last 30 days</span>
+        </div>
+        <div class="space-y-3">
+            @forelse($topCities as $city)
+                <div class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition">
+                    <div class="w-10 h-10 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-map-marker-alt text-green-600 text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-gray-800">{{ $city->city ?? 'Unknown' }}</p>
+                        <p class="text-xs text-gray-500">{{ $city->country ?? 'Unknown' }} • {{ App\Helpers\NumberHelper::formatNumber($city->count) }} visits</p>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-city text-gray-300 text-2xl"></i>
+                    </div>
+                    <p class="text-sm text-gray-400">No city data yet</p>
+                    <p class="text-xs text-gray-400 mt-1">Data will appear as visitors arrive</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</div>
+
 <!-- Traffic Trend Chart -->
 <div class="card mb-8">
     <div class="flex items-center justify-between mb-6">

@@ -1,8 +1,15 @@
+{{-- resources/views/admin/admins/edit.blade.php --}}
 @extends('admin.layouts.app')
 
 @section('title', 'Edit Admin')
 
 @section('content')
+@php
+    $currentAdmin = Auth::guard('admin')->user();
+    $isSuperAdmin = $currentAdmin->role === 'super_admin';
+    $isEditingSelf = $admin->id === $currentAdmin->id;
+@endphp
+
 <!-- Page Header -->
 <div class="page-header">
     <div class="flex items-center gap-4 mb-6">
@@ -10,11 +17,24 @@
             <i class="fas fa-arrow-left text-gray-600"></i>
         </a>
         <div>
-            <h1 class="page-title">Edit Admin</h1>
-            <p class="page-subtitle">Update administrator account details</p>
+            <h1 class="page-title">{{ $isEditingSelf ? 'Edit My Profile' : 'Edit Admin' }}</h1>
+            <p class="page-subtitle">{{ $isEditingSelf ? 'Update your account details' : 'Update administrator account details' }}</p>
         </div>
     </div>
 </div>
+
+<!-- Permission Warning -->
+@if(!$isSuperAdmin && !$isEditingSelf)
+    <div class="max-w-3xl mb-6">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg flex items-start gap-3">
+            <i class="fas fa-exclamation-triangle text-xl mt-0.5"></i>
+            <div>
+                <h3 class="font-semibold mb-1">Access Denied</h3>
+                <p class="text-sm">Only Super Admins can edit other administrator accounts.</p>
+            </div>
+        </div>
+    </div>
+@endif
 
 <!-- Form -->
 <div class="max-w-3xl">
@@ -29,7 +49,12 @@
                      alt="{{ $admin->name }}" 
                      class="w-16 h-16 rounded-full shadow-lg">
                 <div>
-                    <h3 class="font-bold text-gray-800 text-lg">{{ $admin->name }}</h3>
+                    <h3 class="font-bold text-gray-800 text-lg">
+                        {{ $admin->name }}
+                        @if($isEditingSelf)
+                            <span class="text-sm text-orange-600 font-normal">(You)</span>
+                        @endif
+                    </h3>
                     <p class="text-sm text-gray-600">{{ $admin->email }}</p>
                     <div class="flex items-center gap-2 mt-1">
                         @if($admin->role === 'super_admin')
@@ -78,6 +103,7 @@
                            name="name" 
                            value="{{ old('name', $admin->name) }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition @error('name') border-red-500 @enderror"
+                           {{ (!$isSuperAdmin && !$isEditingSelf) ? 'disabled' : '' }}
                            required>
                     @error('name')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -94,6 +120,7 @@
                            name="email" 
                            value="{{ old('email', $admin->email) }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition @error('email') border-red-500 @enderror"
+                           {{ (!$isSuperAdmin && !$isEditingSelf) ? 'disabled' : '' }}
                            required>
                     @error('email')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -128,10 +155,12 @@
                                id="password"
                                name="password" 
                                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition @error('password') border-red-500 @enderror"
-                               placeholder="••••••••">
+                               placeholder="••••••••"
+                               {{ (!$isSuperAdmin && !$isEditingSelf) ? 'disabled' : '' }}>
                         <button type="button" 
                                 onclick="togglePassword('password')"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                {{ (!$isSuperAdmin && !$isEditingSelf) ? 'disabled' : '' }}>
                             <i class="fas fa-eye" id="password-icon"></i>
                         </button>
                     </div>
@@ -151,10 +180,12 @@
                                id="password_confirmation"
                                name="password_confirmation" 
                                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
-                               placeholder="••••••••">
+                               placeholder="••••••••"
+                               {{ (!$isSuperAdmin && !$isEditingSelf) ? 'disabled' : '' }}>
                         <button type="button" 
                                 onclick="togglePassword('password_confirmation')"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                {{ (!$isSuperAdmin && !$isEditingSelf) ? 'disabled' : '' }}>
                             <i class="fas fa-eye" id="password_confirmation-icon"></i>
                         </button>
                     </div>
@@ -162,33 +193,58 @@
             </div>
         </div>
 
-        <!-- Role & Permissions -->
-        <div class="card">
+        <!-- Role & Permissions - Only Super Admin can change -->
+        <div class="card {{ (!$isSuperAdmin) ? 'opacity-75' : '' }}">
             <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <i class="fas fa-shield-alt text-orange-500"></i>
                 Role & Permissions
+                @if(!$isSuperAdmin)
+                    <span class="ml-auto text-xs font-normal text-red-600 flex items-center gap-1">
+                        <i class="fas fa-lock"></i>
+                        Super Admin Only
+                    </span>
+                @endif
             </h2>
+
+            @if(!$isSuperAdmin)
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-5">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-info-circle text-yellow-600 mt-0.5"></i>
+                        <p class="text-sm text-yellow-800">Only Super Admins can change user roles and account status.</p>
+                    </div>
+                </div>
+            @endif
 
             <div class="space-y-5">
                 <!-- Role -->
                 <div>
                     <label for="role" class="block text-sm font-semibold text-gray-700 mb-2">
                         Role <span class="text-red-500">*</span>
+                        @if(!$isSuperAdmin)
+                            <span class="text-xs text-gray-500">(Read-only)</span>
+                        @endif
                     </label>
                     <select id="role"
                             name="role" 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition @error('role') border-red-500 @enderror"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition @error('role') border-red-500 @enderror {{ (!$isSuperAdmin) ? 'bg-gray-100 cursor-not-allowed' : '' }}"
+                            {{ (!$isSuperAdmin) ? 'disabled' : '' }}
                             required>
                         <option value="super_admin" {{ old('role', $admin->role) == 'super_admin' ? 'selected' : '' }}>
-                            Super Admin - Full System Access
+                            👑 Super Admin - Full System Access
                         </option>
                         <option value="admin" {{ old('role', $admin->role) == 'admin' ? 'selected' : '' }}>
-                            Admin - Manage Content & Users
+                            🛡️ Admin - Manage Content & Users
                         </option>
                         <option value="editor" {{ old('role', $admin->role) == 'editor' ? 'selected' : '' }}>
-                            Editor - Manage Content Only
+                            ✏️ Editor - Manage Content Only
                         </option>
                     </select>
+                    
+                    {{-- Hidden field to preserve role if not super admin --}}
+                    @if(!$isSuperAdmin)
+                        <input type="hidden" name="role" value="{{ $admin->role }}">
+                    @endif
+                    
                     @error('role')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -196,17 +252,28 @@
 
                 <!-- Status -->
                 <div>
-                    <label class="flex items-center gap-3 cursor-pointer">
+                    <label class="flex items-center gap-3 {{ (!$isSuperAdmin) ? 'cursor-not-allowed' : 'cursor-pointer' }}">
                         <input type="checkbox" 
                                name="is_active" 
                                value="1"
                                {{ old('is_active', $admin->is_active) ? 'checked' : '' }}
-                               class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500">
+                               {{ (!$isSuperAdmin) ? 'disabled' : '' }}
+                               class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500 {{ (!$isSuperAdmin) ? 'cursor-not-allowed' : '' }}">
                         <div>
-                            <span class="text-sm font-semibold text-gray-700">Active Account</span>
+                            <span class="text-sm font-semibold text-gray-700">
+                                Active Account
+                                @if(!$isSuperAdmin)
+                                    <span class="text-xs text-gray-500">(Read-only)</span>
+                                @endif
+                            </span>
                             <p class="text-xs text-gray-500">User can login and access the admin panel</p>
                         </div>
                     </label>
+                    
+                    {{-- Hidden field to preserve status if not super admin --}}
+                    @if(!$isSuperAdmin && $admin->is_active)
+                        <input type="hidden" name="is_active" value="1">
+                    @endif
                 </div>
             </div>
         </div>
@@ -253,11 +320,20 @@
                 Cancel
             </a>
 
-            <button type="submit" 
-                    class="action-btn">
-                <i class="fas fa-save mr-2"></i>
-                Update Admin
-            </button>
+            @if($isSuperAdmin || $isEditingSelf)
+                <button type="submit" 
+                        class="action-btn">
+                    <i class="fas fa-save mr-2"></i>
+                    {{ $isEditingSelf ? 'Update My Profile' : 'Update Admin' }}
+                </button>
+            @else
+                <button type="button" 
+                        class="px-6 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-semibold"
+                        disabled>
+                    <i class="fas fa-lock mr-2"></i>
+                    No Permission
+                </button>
+            @endif
         </div>
     </form>
 </div>

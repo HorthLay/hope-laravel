@@ -84,6 +84,52 @@ class SiteVisit extends Model
     }
 
     /**
+     * Get visits by country
+     */
+    public static function byCountry($limit = 10, $startDate = null, $endDate = null)
+    {
+        $query = self::query();
+        
+        if ($startDate) {
+            $query->where('visited_at', '>=', $startDate);
+        }
+        
+        if ($endDate) {
+            $query->where('visited_at', '<=', $endDate);
+        }
+        
+        return $query->select('country', DB::raw('count(*) as count'))
+            ->whereNotNull('country')
+            ->groupBy('country')
+            ->orderBy('count', 'desc')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get visits by city
+     */
+    public static function byCity($limit = 10, $startDate = null, $endDate = null)
+    {
+        $query = self::query();
+        
+        if ($startDate) {
+            $query->where('visited_at', '>=', $startDate);
+        }
+        
+        if ($endDate) {
+            $query->where('visited_at', '<=', $endDate);
+        }
+        
+        return $query->select('city', 'country', DB::raw('count(*) as count'))
+            ->whereNotNull('city')
+            ->groupBy('city', 'country')
+            ->orderBy('count', 'desc')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
      * Get top pages
      */
     public static function topPages($limit = 10, $startDate = null, $endDate = null)
@@ -116,5 +162,25 @@ class SiteVisit extends Model
             ->groupBy('date')
             ->orderBy('date')
             ->get();
+    }
+
+    /**
+     * Get unique countries count
+     */
+    public static function uniqueCountries($startDate = null, $endDate = null)
+    {
+        $query = self::query();
+        
+        if ($startDate) {
+            $query->where('visited_at', '>=', $startDate);
+        }
+        
+        if ($endDate) {
+            $query->where('visited_at', '<=', $endDate);
+        }
+        
+        return $query->whereNotNull('country')
+            ->distinct('country')
+            ->count('country');
     }
 }

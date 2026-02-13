@@ -1,4 +1,3 @@
-{{-- resources/views/admin/layouts/app.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -138,6 +137,31 @@
             padding: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Role Badge in Sidebar Footer */
+        .role-badge {
+            font-size: 0.65rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            margin-top: 0.25rem;
+            display: inline-block;
+        }
+
+        .role-super-admin {
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
+        }
+
+        .role-admin {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
+
+        .role-editor {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
         }
 
         /* ========== MOBILE TOP BAR ========== */
@@ -291,13 +315,20 @@
 
         <!-- Navigation -->
         <nav class="sidebar-nav">
-            {{-- Dashboard --}}
+            @php
+                $currentAdmin = Auth::guard('admin')->user();
+                $isSuperAdmin = $currentAdmin->role === 'super_admin';
+                $isAdmin = $currentAdmin->role === 'admin';
+                $isEditor = $currentAdmin->role === 'editor';
+            @endphp
+
+            {{-- Dashboard - Available to ALL roles --}}
             <a href="{{ route('admin.dashboard') }}" class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-home"></i>
                 <span class="font-medium">Dashboard</span>
             </a>
 
-            {{-- Content Management --}}
+            {{-- Content Management - Available to ALL roles --}}
             <div class="nav-group-title">Content Management</div>
             
             <a href="{{ route('admin.articles.index') }}" class="nav-item {{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
@@ -311,59 +342,104 @@
                 @endif
             </a>
 
+
+            <a href="{{ route('admin.tags.index') }}" class="nav-item {{ request()->routeIs('admin.tags.*') ? 'active' : '' }}">
+                <i class="fas fa-tags"></i>
+                <span class="font-medium">Tags</span>
+            </a>
+
             <a href="{{ route('admin.categories.index') }}" class="nav-item {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                 <i class="fas fa-folder"></i>
                 <span class="font-medium">Categories</span>
             </a>
 
-            <a href="#" class="nav-item">
+            <a href="{{ route('admin.media.index') }}" class="nav-item {{ request()->routeIs('admin.media.*') ? 'active' : '' }}">
                 <i class="fas fa-images"></i>
                 <span class="font-medium">Media Library</span>
             </a>
 
-            {{-- User Management --}}
-            <div class="nav-group-title">User Management</div>
-            
-            <a href="{{ route('admin.admins.index') }}" class="nav-item {{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">
-                <i class="fas fa-user-shield"></i>
-                <span class="font-medium">Admins</span>
-                @php
-                    $adminCount = \App\Models\Admin::count();
-                @endphp
-                <span class="ml-auto text-xs text-gray-400">{{ $adminCount }}</span>
-            </a>
+            {{-- User Management - Only SUPER ADMIN & ADMIN --}}
+            @if($isSuperAdmin || $isAdmin)
+                <div class="nav-group-title">User Management</div>
+                
+                {{-- Admins - Only SUPER ADMIN --}}
+                @if($isSuperAdmin)
+                    <a href="{{ route('admin.admins.index') }}" class="nav-item {{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">
+                        <i class="fas fa-user-shield"></i>
+                        <span class="font-medium">Admins</span>
+                        @php
+                            $adminCount = \App\Models\Admin::count();
+                        @endphp
+                        <span class="ml-auto text-xs text-gray-400">{{ $adminCount }}</span>
+                    </a>
+                @endif
 
-            {{-- Reports & Analytics --}}
-            <div class="nav-group-title">Reports & Analytics</div>
-            
-            <a href="{{ route('admin.reports.index') }}" class="nav-item {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
-                <i class="fas fa-chart-bar"></i>
-                <span class="font-medium">Reports</span>
-            </a>
+                {{-- Additional user management items for Admin & Super Admin --}}
+                {{-- You can add more items here like Sponsors, Donations, etc. --}}
+            @endif
 
-            <a href="#" class="nav-item">
-                <i class="fas fa-chart-line"></i>
-                <span class="font-medium">Analytics</span>
-            </a>
+            {{-- Reports & Analytics - Only SUPER ADMIN & ADMIN --}}
+            @if($isSuperAdmin || $isAdmin)
+                <div class="nav-group-title">Reports & Analytics</div>
+                
+                <a href="{{ route('admin.reports.index') }}" class="nav-item {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="font-medium">Reports</span>
+                </a>
 
-            {{-- Settings --}}
-            <div class="nav-group-title">System</div>
+                <a href="{{ route('admin.analytics.index') }}" class="nav-item {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="font-medium">Analytics</span>
+                </a>
+            @endif
+
+            {{-- Settings - Only SUPER ADMIN --}}
+            @if($isSuperAdmin)
+                <div class="nav-group-title">System</div>
+                
+                <a href="{{ route('admin.settings.index') }}" class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                    <i class="fas fa-cog"></i>
+                    <span class="font-medium">Settings</span>
+                </a>
+            @endif
+
+            {{-- My Profile - Available to ALL roles --}}
+            <div class="nav-group-title">Account</div>
             
-            <a href="{{ route('admin.settings.index') }}" class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                <i class="fas fa-cog"></i>
-                <span class="font-medium">Settings</span>
+            <a href="{{ route('admin.admins.edit', $currentAdmin) }}" class="nav-item {{ request()->routeIs('admin.admins.edit') && request()->route('admin')->id == $currentAdmin->id ? 'active' : '' }}">
+                <i class="fas fa-user-circle"></i>
+                <span class="font-medium">My Profile</span>
             </a>
         </nav>
 
         <!-- Sidebar Footer -->
         <div class="sidebar-footer">
             <div class="flex items-center gap-3">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::guard('admin')->user()->name) }}&background=f97316&color=fff" 
-                     alt="{{ Auth::guard('admin')->user()->name }}" 
-                     class="w-10 h-10 rounded-full">
-                <div class="flex-1">
-                    <p class="text-white text-sm font-semibold">{{ Auth::guard('admin')->user()->name }}</p>
-                    <p class="text-gray-400 text-xs text-truncate" style="max-width: 140px;">{{ Auth::guard('admin')->user()->email }}</p>
+                <div class="relative">
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($currentAdmin->name) }}&background=f97316&color=fff" 
+                         alt="{{ $currentAdmin->name }}" 
+                         class="w-10 h-10 rounded-full">
+                    @if($currentAdmin->is_active)
+                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-gray-800 rounded-full"></span>
+                    @endif
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-white text-sm font-semibold truncate">{{ $currentAdmin->name }}</p>
+                    <div class="flex items-center gap-2">
+                        @if($isSuperAdmin)
+                            <span class="role-badge role-super-admin">
+                                <i class="fas fa-crown text-xs"></i> Super Admin
+                            </span>
+                        @elseif($isAdmin)
+                            <span class="role-badge role-admin">
+                                <i class="fas fa-user-shield text-xs"></i> Admin
+                            </span>
+                        @else
+                            <span class="role-badge role-editor">
+                                <i class="fas fa-user-edit text-xs"></i> Editor
+                            </span>
+                        @endif
+                    </div>
                 </div>
                 <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display:none;">
                     @csrf

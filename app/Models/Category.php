@@ -83,6 +83,7 @@ class Category extends Model
         return $this->articles()->count();
     }
 
+
     /**
      * Scope a query to only include active categories.
      */

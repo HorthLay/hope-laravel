@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +24,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',[HomeController::class,'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/learn-more', [HomeController::class, 'learnmore'])->name('learn-more');
+Route::get('/contact',    [HomeController::class, 'contact'])->name('contact');
+Route::get('/about',      [HomeController::class, 'about'])->name('about');
+Route::get('/privacy-policy',   [HomeController::class, 'privacy'])->name('privacy-policy');
+Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms-of-service');
+Route::get('/details',    [HomeController::class, 'details'])->name('detail');
+Route::get('/sponsor',     [HomeController::class, 'sponsor'])->name('sponsor');
+
+// Encrypted slug routes
+Route::get('/articles/{slug}',       [HomeController::class, 'articleDetails'])->name('articles.show');
+Route::get('/categories/{category}', [HomeController::class, 'categoryArticles'])->name('category.articles');
 
 Route::prefix('admin')->group(function () {
         Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
@@ -58,13 +72,32 @@ Route::prefix('admin')->group(function () {
         Route::get('/admins/{admin}/edit', [AdminController::class, 'edit'])->name('admin.admins.edit');
         Route::put('/admins/{admin}', [AdminController::class, 'update'])->name('admin.admins.update');
         Route::delete('/admins/{admin}', [AdminController::class, 'destroy'])->name('admin.admins.destroy');
+        // ======== MEDIA MANAGEMENT ==========
+        Route::get('/media', [MediaController::class, 'index'])->name('admin.media.index');
+        Route::post('/media', [MediaController::class, 'store'])->name('admin.media.store');
+        Route::put('/media/{image}', [MediaController::class, 'update'])->name('admin.media.update');
+        Route::delete('/media/{image}', [MediaController::class, 'destroy'])->name('admin.media.destroy');
+
         // ======== REPORTS MANAGEMENT ==========
         Route::get('/reports', [ReportController::class, 'index'])->name('admin.reports.index');
         Route::get('/reports/export', [ReportController::class, 'export'])->name('admin.reports.export');
         // ======== SETTINGS MANAGEMENT ==========
         Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings.index');
-        Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
+        Route::put('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
+        Route::post('/settings/cache', [SettingController::class, 'clearCache'])->name('admin.settings.cache');
 
+        // ======== ANALYTICS MANAGEMENT ==========
+        Route::get('/analytics', [AnalyticsController::class, 'index'])->name('admin.analytics.index');
+        Route::post('/analytics/export', [AnalyticsController::class, 'export'])->name('admin.analytics.export');
+        // Tag Management
+        Route::get   ('/tags',       [TagController::class, 'index'  ])->name('admin.tags.index');
+        Route::post  ('/tags',       [TagController::class, 'store'  ])->name('admin.tags.store');
+        Route::put   ('/tags/{tag}', [TagController::class, 'update' ])->name('admin.tags.update');
+        Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('admin.tags.destroy');
+        // Report Management
+        Route::get('/reports', [ReportController::class, 'index'])->name('admin.reports.index');
+        Route::get('/reports/export', [ReportController::class, 'export'])->name('admin.reports.export');
+        // ======== END OF ADMIN ROUTES ==========
     });
 });
 

@@ -14,7 +14,7 @@ use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
-     public function index()
+    public function index()
     {
         // ========== SITE VISIT STATISTICS ==========
         
@@ -60,6 +60,17 @@ class AdminController extends Controller
         
         // Visits trend (last 7 days)
         $visitsTrend = SiteVisit::visitsTrend(7);
+        
+        // ========== COUNTRY STATISTICS ==========
+        
+        // Top countries (last 30 days)
+        $topCountries = SiteVisit::byCountry(5, now()->subDays(30));
+        
+        // Top cities (last 30 days)
+        $topCities = SiteVisit::byCity(5, now()->subDays(30));
+        
+        // Unique countries (all time)
+        $uniqueCountries = SiteVisit::uniqueCountries();
         
         // ========== ARTICLE STATISTICS ==========
         $totalArticles = Article::count();
@@ -133,6 +144,11 @@ class AdminController extends Controller
             'visitsByDevice',
             'topPages',
             'visitsTrend',
+            
+            // Country stats
+            'topCountries',
+            'topCities',
+            'uniqueCountries',
             
             // Article stats
             'totalArticles',

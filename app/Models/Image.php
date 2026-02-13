@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
@@ -30,18 +29,7 @@ class Image extends Model
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'file_size' => 'integer',
-        'width' => 'integer',
-        'height' => 'integer',
-    ];
-
-    /**
-     * Get the parent imageable model (polymorphic).
+     * Get the parent imageable model (Article, etc).
      */
     public function imageable()
     {
@@ -49,122 +37,39 @@ class Image extends Model
     }
 
     /**
-     * Get all articles that use this image as featured image.
-     */
-    public function articles()
-    {
-        return $this->hasMany(Article::class);
-    }
-
-    /**
-     * Get the full URL of the image.
+     * Get the URL for the image.
      */
     public function getUrlAttribute()
     {
-        return Storage::url($this->file_path);
+        return asset($this->file_path);
     }
 
     /**
-     * Get the full URL of the thumbnail.
+     * Get the thumbnail URL for the image.
      */
     public function getThumbnailUrlAttribute()
     {
-        return $this->thumbnail_path ? Storage::url($this->thumbnail_path) : $this->url;
+        return $this->thumbnail_path ? asset($this->thumbnail_path) : asset($this->file_path);
     }
 
     /**
-     * Get the file size in human readable format.
+     * Get formatted file size.
      */
-    public function getFormattedSizeAttribute()
+    public function getFileSizeFormattedAttribute()
     {
-        $bytes = $this->file_size;
-        
-        if ($bytes >= 1073741824) {
-            return number_format($bytes / 1073741824, 2) . ' GB';
-        } elseif ($bytes >= 1048576) {
-            return number_format($bytes / 1048576, 2) . ' MB';
-        } elseif ($bytes >= 1024) {
-            return number_format($bytes / 1024, 2) . ' KB';
-        } elseif ($bytes > 1) {
-            return $bytes . ' bytes';
-        } elseif ($bytes == 1) {
-            return $bytes . ' byte';
-        } else {
-            return '0 bytes';
+        if (!$this->file_size) {
+            return 'Unknown';
         }
-    }
 
-    /**
-     * Get image dimensions as string.
-     */
-    public function getDimensionsAttribute()
-    {
-        if ($this->width && $this->height) {
-            return "{$this->width} × {$this->height} px";
+        $units = ['B', 'KB', 'MB', 'GB'];
+        $size = $this->file_size;
+        $unit = 0;
+
+        while ($size >= 1024 && $unit < count($units) - 1) {
+            $size /= 1024;
+            $unit++;
         }
-        return null;
-    }
 
-    /**
-     * Check if image is portrait orientation.
-     */
-    public function isPortrait(): bool
-    {
-        if (!$this->width || !$this->height) {
-            return false;
-        }
-        return $this->height > $this->width;
-    }
-
-    /**
-     * Check if image is landscape orientation.
-     */
-    public function isLandscape(): bool
-    {
-        if (!$this->width || !$this->height) {
-            return false;
-        }
-        return $this->width > $this->height;
-    }
-
-    /**
-     * Check if image is square.
-     */
-    public function isSquare(): bool
-    {
-        if (!$this->width || !$this->height) {
-            return false;
-        }
-        return $this->width === $this->height;
-    }
-
-    /**
-     * Scope a query to search images by name.
-     */
-    public function scopeSearch($query, $term)
-    {
-        return $query->where('file_name', 'like', "%{$term}%")
-            ->orWhere('alt_text', 'like', "%{$term}%")
-            ->orWhere('title', 'like', "%{$term}%");
-    }
-
-    /**
-     * Delete the image file from storage when model is deleted.
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($image) {
-            // Delete main image
-            if (Storage::disk('public')->exists($image->file_path)) {
-                Storage::disk('public')->delete($image->file_path);
-            }
-
-            // Delete thumbnail
-            if ($image->thumbnail_path && Storage::disk('public')->exists($image->thumbnail_path)) {
-                Storage::disk('public')->delete($image->thumbnail_path);
-            }
-        });
+        return round($size, 2) . ' ' . $units[$unit];
     }
 }
