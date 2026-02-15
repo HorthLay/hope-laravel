@@ -30,5 +30,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+   'every' => [
+        'base_url' => env('EVERY_BASE_URL', 'https://api.every.org/v0'),
+        'key' => env('EVERY_API_KEY'),
+        'secret' => env('EVERY_API_SECRET'),
+    ],
+
 
 ];

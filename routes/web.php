@@ -5,6 +5,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ReportController;
@@ -32,7 +33,8 @@ Route::get('/privacy-policy',   [HomeController::class, 'privacy'])->name('priva
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms-of-service');
 Route::get('/details',    [HomeController::class, 'details'])->name('detail');
 Route::get('/sponsor',     [HomeController::class, 'sponsor'])->name('sponsor');
-
+// Route::get('/donate',      [DonationController::class, 'donate'])->name('donate');
+Route::post('/webhooks/every-org', [DonationController::class, 'handleWebhook']);
 // Encrypted slug routes
 Route::get('/articles/{slug}',       [HomeController::class, 'articleDetails'])->name('articles.show');
 Route::get('/categories/{category}', [HomeController::class, 'categoryArticles'])->name('category.articles');

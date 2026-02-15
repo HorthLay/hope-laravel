@@ -350,4 +350,5 @@ class HomeController extends Controller
         if (str_contains($ua, 'Safari'))                             return 'Safari';
         return 'Other';
     }
+
 }
