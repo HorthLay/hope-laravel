@@ -65,7 +65,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(125deg, rgba(230, 126, 34, 0.85) 5%, rgba(211, 84, 0, 0.65) 50%);
+            background: linear-gradient(125deg, rgba(244,182,48) 5%, rgba(160,149,31) 50%);
             z-index: 2;
         }
 
@@ -175,7 +175,7 @@
 
         /* ========== BUTTONS ========== */
         .btn-primary {
-            background: #e67e22;
+            background: #f4b630;
             color: white;
             padding: 16px 48px;
             border-radius: 50px;
@@ -201,7 +201,7 @@
 
         .btn-secondary {
             background: white;
-            color: #e67e22;
+            color: #f4b630;
             padding: 16px 48px;
             border-radius: 50px;
             font-weight: 600;
@@ -267,14 +267,14 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #e67e22, #d35400);
+            background: linear-gradient(90deg, #f4b630, #d35400);
             border-radius: 10px;
             transition: width 1.5s ease;
         }
 
         /* ========== STATS SECTION ========== */
         .stats-section {
-            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            background: linear-gradient(135deg, #f4b630 0%, #d35400 100%);
             color: white;
             padding: 60px 20px;
         }
@@ -437,7 +437,7 @@
         }
 
         .nav-item.active {
-            color: #e67e22;
+            color: #f4b630;
         }
 
         .nav-item.active i {

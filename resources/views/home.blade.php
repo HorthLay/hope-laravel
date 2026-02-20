@@ -21,9 +21,9 @@
     }
     .news-tag-btn.active-tag-btn,
     .top-tag-btn.active-tag-btn {
-        background: #f97316 !important;
+        background: #f5c518 !important;
         color: #fff !important;
-        border-color: #f97316 !important;
+        border-color: #f5c518 !important;
         opacity: 1 !important;
         box-shadow: 0 2px 10px rgba(249,115,22,.35);
     }
@@ -35,9 +35,9 @@
     .news-cat-btn { transition: all .18s ease; }
     .news-cat-btn.opacity-60 { opacity: .55; }
     .news-cat-btn.active-cat-btn {
-        background: #f97316 !important;
+        background: #f5c518 !important;
         color: #fff !important;
-        border-color: #f97316 !important;
+        border-color: #f5c518 !important;
         opacity: 1 !important;
         box-shadow: 0 2px 10px rgba(249,115,22,.35);
     }
@@ -49,26 +49,178 @@
 @include('layouts.header')
 
 {{-- ═══════ HERO ═══════ --}}
-<section id="home" class="hero-section">
-    <video autoplay muted loop playsinline class="hero-video">
+<style>
+/* ── Hero: full-viewport video/image, text anchored bottom-left ── */
+#hero-section {
+    position: relative;
+    width: 100%;
+    height: 62vh;
+    min-height: 380px;
+    max-height: 560px;
+    overflow: hidden;
+    background: #111;
+}
+
+/* Video fills the frame */
+#hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+}
+
+/* Fallback image (shown when video not loaded / mobile) */
+#hero-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: none; /* shown via JS if video fails */
+}
+
+/* Very subtle dark gradient — just enough for text, photo stays vivid */
+#hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to top,   rgba(0,0,0,.72) 0%,  rgba(0,0,0,.10) 40%, transparent 70%),
+        linear-gradient(to right, rgba(0,0,0,.30) 0%,  transparent 55%);
+    z-index: 1;
+}
+
+/* Content anchored bottom-left — exactly like reference */
+#hero-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 2;
+    padding: 0 40px 52px;
+    max-width: 640px;
+}
+
+#hero-content h1 {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.12;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.4);
+    letter-spacing: -.01em;
+}
+
+#hero-content p {
+    font-size: clamp(.95rem, 1.5vw, 1.2rem);
+    font-weight: 700;
+    color: rgba(255,255,255,.92);
+    margin-bottom: 28px;
+    text-shadow: 0 1px 6px rgba(0,0,0,.4);
+}
+
+/* Yellow sponsor button — ref style */
+.hero-sponsor-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: #f5c518;
+    color: #1a1a1a;
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background .18s, transform .15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,.25);
+}
+.hero-sponsor-btn:hover {
+    background: #e6b800;
+    transform: translateY(-2px);
+    color: #1a1a1a;
+}
+.hero-sponsor-btn i { font-size: 18px; }
+
+/* Scroll indicator */
+#hero-scroll {
+    position: absolute;
+    bottom: 18px; right: 28px; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    color: rgba(255,255,255,.55); font-size: 10px; font-weight: 600;
+    letter-spacing: .05em; text-transform: uppercase;
+}
+@keyframes bounce-down {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+}
+#hero-scroll i { animation: bounce-down 1.6s ease-in-out infinite; }
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+    #hero-content { padding: 0 20px 40px; max-width: 100%; }
+    #hero-section  { max-height: 620px; }
+}
+</style>
+
+<section id="hero-section">
+
+    {{-- Background video --}}
+    <video id="hero-video" autoplay muted loop playsinline preload="auto"
+           poster="{{ asset('images/cambodia-bg.jpg') }}">
         <source src="{{ asset('project/videos/video.mp4') }}" type="video/mp4">
     </video>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-down">
-                Sponsor a Child Today
-            </h1>
-            <p class="text-lg sm:text-xl md:text-2xl mb-10 opacity-95 animate-fade-in-up delay-200">
-                And change a life with the gift of education
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-400">
-                <a href="#sponsor" class="btn-primary text-lg">Sponsor a Child Now</a>
-                <a href="{{ route('learn-more') }}" class="btn-secondary text-lg">Learn More</a>
-            </div>
-        </div>
+
+    {{-- Fallback image if video fails --}}
+    <img id="hero-fallback" src="{{ asset('images/cambodia-bg.jpg') }}"
+         alt="Children in Cambodia classroom">
+
+    {{-- Gradient overlay --}}
+    <div id="hero-overlay"></div>
+
+    {{-- Content — bottom-left --}}
+    <div id="hero-content">
+        <h1 data-en="Sponsor a child today"
+            data-km="ឧបត្ថម្ភកុមារថ្ងៃនេះ"
+            data-fr="Parrainer un enfant aujourd'hui">
+            Sponsor a child today
+        </h1>
+        <p data-en="And change life with the gift of education"
+           data-km="ហើយផ្លាស់ប្តូរជីវិតដោយអំណោយការអប់រំ"
+           data-fr="Et changer une vie grâce au don de l'éducation">
+            And change life with the gift of education
+        </p>
+        <a href="{{ route('detail') }}" class="hero-sponsor-btn">
+            <i class="fas fa-child"></i>
+            <span data-en="Sponsor a Child Now"
+                  data-km="ឧបត្ថម្ភកុមារឥឡូវ"
+                  data-fr="Parrainer un enfant maintenant">
+                Sponsor a Child Now
+            </span>
+        </a>
     </div>
+
+    {{-- Scroll hint --}}
+    <div id="hero-scroll">
+        <i class="fas fa-chevron-down"></i>
+        <span>Scroll</span>
+    </div>
+
 </section>
+
+<script>
+// Show fallback image if video fails to load / is not supported
+(function() {
+    const vid = document.getElementById('hero-video');
+    const img = document.getElementById('hero-fallback');
+    if (!vid) return;
+    vid.addEventListener('error', () => { vid.style.display = 'none'; if(img) img.style.display = 'block'; });
+    // Also hide scroll hint after user scrolls
+    window.addEventListener('scroll', function() {
+        const hint = document.getElementById('hero-scroll');
+        if (hint) hint.style.opacity = window.scrollY > 60 ? '0' : '1';
+    }, { passive: true });
+})();
+</script>
 
 {{-- ═══════ STATS ═══════ --}}
 <section class="stats-section scroll-animate">
@@ -153,31 +305,107 @@
     </div>
 </section>
 
-{{-- ═══════ TRANSPARENCY ═══════ --}}
-<section class="section bg-gray-50">
-    <div class="max-w-7xl mx-auto">
+{{-- ═══════ OUR WORK ═══════ --}}
+<section id="our-work" class="section bg-gray-50 py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8 md:mb-12 scroll-animate">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Transparency and Efficiency of Our Action</h2>
-            <div class="green-line"></div>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2"
+                data-fr="Ce que nous faisons"
+                data-en="What We Do"
+                data-km="អ្វីដែលយើងធ្វើ">What We Do</h2>
+            <div class="w-20 h-1 bg-orange-500 rounded-full green-line"></div>
         </div>
+
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             @foreach([
-                ['img'=>'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600','overlay'=>'1958','title'=>'66 years of experience','desc'=>'With its wealth of experience, Children of Mekong has relied since 1958 on a network of friends made up of more than 1,000 local volunteers.','btn'=>'OUR HISTORY'],
-                ['img'=>'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600','overlay'=>'MISSION','title'=>'Providing education and support','desc'=>'Educate, train, and support young people so that they can improve their material living conditions and build themselves intellectually.','btn'=>'VISION AND ETHICS'],
-                ['img'=>'https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=600','overlay'=>'84%','title'=>'Charitable Expenditure','desc'=>'84% of the funds raised are dedicated to our education programmes. In Asia, over 95,000 children benefit from our work every year.','btn'=>'ANNUAL REPORT'],
-                ['img'=>'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=600','overlay'=>'IDEAS','title'=>'Label renewed in 2024','desc'=>'Children of the Mekong was awarded the IDEAS label for good governance, transparency, and monitoring of the effectiveness of its actions.','btn'=>'TRANSPARENCY'],
+                [
+                    'img' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600',
+                    'overlay' => '1958',
+                    'title' => [
+                        'fr' => '66 ans d’expérience',
+                        'en' => '66 years of experience',
+                        'km' => '៦៦ឆ្នាំប្រសិនបទ'
+                    ],
+                    'desc' => [
+                        'fr' => 'Depuis 1958, nous transformons la vie des enfants grâce à un réseau de plus de 1 000 bénévoles locaux.',
+                        'en' => 'Since 1958, we’ve been transforming children’s lives through a network of over 1,000 local volunteers.',
+                        'km' => 'ចាប់ពីឆ្នាំ ១៩៥៨។ យើងធ្វើការផ្លាស់ប្តូរជីវិតកុមារតាមរយៈបណ្តាញមិត្តភក្តិចំនួនលើក ១០០០នាក់នៅក្នុងប្រទេស។'
+                    ],
+                    'btn' => [
+                        'fr' => 'NOTRE HISTOIRE',
+                        'en' => 'OUR HISTORY',
+                        'km' => 'ប្រវត្តិរបស់យើង'
+                    ]
+                ],
+                [
+                    'img' => 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600',
+                    'overlay' => 'MISSION',
+                    'title' => [
+                        'fr' => 'Éducation et soutien',
+                        'en' => 'Education and Support',
+                        'km' => 'ការអប់រំនិងការគាំទ្រ'
+                    ],
+                    'desc' => [
+                        'fr' => 'Nous éduquons et formons les jeunes pour améliorer leurs conditions de vie et les aider à se construire intellectuellement.',
+                        'en' => 'We educate and train young people to improve their living conditions and build themselves intellectually.',
+                        'km' => 'យើងផ្តល់ការអប់រំនិងការបណ្តាញអ្នកយុវជនដើម្បីធ្វើការលើកប្រសិនបទជីវិតរបស់ពួកគេ ហើយជួយពួកគេដើម្បីសង្កាត់ដំណើរការប្រព័ន្ធប្រតិបត្តិរបស់ខ្លួនឯង។'
+                    ],
+                    'btn' => [
+                        'fr' => 'NOTRE MISSION',
+                        'en' => 'OUR MISSION',
+                        'km' => 'ប្រធានបទរបស់យើង'
+                    ]
+                ],
+                [
+                    'img' => 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=600',
+                    'overlay' => '84%',
+                    'title' => [
+                        'fr' => 'Impact des dons',
+                        'en' => 'Impact of Donations',
+                        'km' => 'ផ្លាស់ប្តូរនៃការបរិច្ចាគ'
+                    ],
+                    'desc' => [
+                        'fr' => '84% des fonds collectés sont dédiés à nos programmes éducatifs. Chaque année, plus de 95 000 enfants bénéficient de notre action.',
+                        'en' => '84% of funds raised go directly to our education programs. Over 95,000 children benefit from our work every year.',
+                        'km' => '៨៤% នៃមូលនិធិដែលបានរួមបញ្ចូលត្រូវបានបញ្ចូលទៅកម្មវិធីការអប់រំរបស់យើង។ ឆ្នាំមួយៗ។ កុមារលើក ៩៥០០០នាក់ទទួលបានស្វែងរកពីការងាររបស់យើង។'
+                    ],
+                    'btn' => [
+                        'fr' => 'RAPPORT ANNUEL',
+                        'en' => 'ANNUAL REPORT',
+                        'km' => 'របាយការណ៍ប្រចាំឆ្នាំ'
+                    ]
+                ],
+                [
+                    'img' => 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=600',
+                    'overlay' => 'IDEAS',
+                    'title' => [
+                        'fr' => 'Label IDEAS 2024',
+                        'en' => 'IDEAS Label 2024',
+                        'km' => 'ស្លាកសញ្ជាតិ IDEAS ២០២៤'
+                    ],
+                    'desc' => [
+                        'fr' => 'Nous avons obtenu le label IDEAS pour notre bonne gouvernance, transparence et suivi de l’efficacité de nos actions.',
+                        'en' => 'We’ve been awarded the IDEAS label for good governance, transparency, and monitoring the effectiveness of our actions.',
+                        'km' => 'យើងបានទទួលស្លាកសញ្ជាតិ IDEAS សម្រាប់ការគាំទ្រប្រកាសភាពល្អ។ ភាពស្បែកនិងការតាមដានការធ្វើការដោយសមាធិភាព។'
+                    ],
+                    'btn' => [
+                        'fr' => 'TRANSPARENCE',
+                        'en' => 'TRANSPARENCY',
+                        'km' => 'ភាពស្បែក'
+                    ]
+                ]
             ] as $i => $card)
-            <div class="card scroll-animate" style="animation-delay:{{ $i*0.1 }}s">
-                <div class="relative overflow-hidden">
-                    <img src="{{ $card['img'] }}" alt="{{ $card['title'] }}" class="w-full h-64 object-cover">
+            <div class="card scroll-animate bg-white rounded-xl shadow-lg overflow-hidden" style="animation-delay:{{ $i*0.1 }}s">
+                <div class="relative">
+                    <img src="{{ $card['img'] }}" alt="{{ $card['title']['en'] }}" class="w-full h-64 object-cover">
                     <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
                         <h3 class="text-5xl md:text-6xl font-black text-white text-center px-2">{{ $card['overlay'] }}</h3>
                     </div>
                 </div>
                 <div class="p-6">
-                    <h4 class="text-lg font-bold text-gray-800 mb-3">{{ $card['title'] }}</h4>
-                    <p class="text-sm text-gray-600 mb-6">{{ $card['desc'] }}</p>
-                    <a href="{{ route('learn-more') }}" class="inline-block px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm rounded transition">{{ $card['btn'] }}</a>
+                    <h4 class="text-lg font-bold text-gray-800 mb-3" data-fr="{{ $card['title']['fr'] }}" data-en="{{ $card['title']['en'] }}" data-km="{{ $card['title']['km'] }}">{{ $card['title']['en'] }}</h4>
+                    <p class="text-sm text-gray-600 mb-6" data-fr="{{ $card['desc']['fr'] }}" data-en="{{ $card['desc']['en'] }}" data-km="{{ $card['desc']['km'] }}">{{ $card['desc']['en'] }}</p>
+                    <a href="{{ route('learn-more') }}" class="inline-block px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm rounded transition" data-fr="{{ $card['btn']['fr'] }}" data-en="{{ $card['btn']['en'] }}" data-km="{{ $card['btn']['km'] }}">{{ $card['btn']['en'] }}</a>
                 </div>
             </div>
             @endforeach
@@ -191,7 +419,7 @@
     <div class="max-w-7xl mx-auto">
 
         <div class="mb-3 scroll-animate">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Latest News from Southeast Asia</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">News And Updates</h2>
             <div class="green-line"></div>
         </div>
 
@@ -452,9 +680,8 @@
     </div>
 </section>
 
-{{-- ═══════ YOUTUBE / VIDEO ARTICLES — articles with video_url, auto-embedded ═══════ --}}
-{{-- ═══════ YOUTUBE / VIDEO ARTICLES — articles with video_url, auto-embedded ═══════ --}}
-@if($videoArticles->isNotEmpty())
+{{-- ═══════ YOUTUBE / VIDEO ARTICLES — ONLY shown when articles have video_url ═══════ --}}
+@if(isset($videoArticles) && $videoArticles->isNotEmpty())
 <section id="videos" class="section bg-gray-50">
     <div class="max-w-7xl mx-auto">
         <div class="mb-8 md:mb-10 scroll-animate">
@@ -464,52 +691,53 @@
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($videoArticles as $article)
-                {{-- Real DB article with video_url --}}
-                <div class="group scroll-animate">
-                    <div class="relative overflow-hidden rounded-xl shadow-lg mb-4">
-                        <div class="aspect-video">
-                            <iframe class="w-full h-full"
-                                    src="{{ $article->embed_url }}"
-                                    title="{{ $article->title }}"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen></iframe>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-1.5 mb-1.5">
-                        @if($article->category)
-                            <a href=""
-                               class="text-xs font-bold hover:underline flex items-center gap-1"
-                               style="color:{{ $article->category->color ?? '#f97316' }}">
-                                @if($article->category->icon)<i class="{{ $article->category->icon }} text-xs"></i>@endif{{ $article->category->name }}
-                            </a>
-                        @endif
-                        @if($article->relationLoaded('tags') && $article->tags->isNotEmpty())
-                            @foreach($article->tags->take(2) as $tag)
-                                <span class="{{ $tag->badge_classes }}" style="{{ $tag->badge_style }}">{{ $tag->name }}</span>
-                            @endforeach
-                        @endif
-                    </div>
-                    <h4 class="font-bold text-gray-800 mb-1 group-hover:text-orange-500 transition leading-snug">
-                        <a href="{{ route('articles.show', $article->encrypted_slug) }}">{{ $article->title }}</a>
-                    </h4>
-                    @if($article->excerpt)
-                        <p class="text-sm text-gray-600 line-clamp-2 mb-2">{{ Str::limit(strip_tags($article->excerpt), 100) }}</p>
-                    @endif
-                    <div class="flex items-center gap-3 text-xs text-gray-400">
-                        <span><i class="fas fa-eye mr-0.5"></i>{{ number_format($article->views_count) }}</span>
-                        <span>{{ $article->published_at?->format('M d, Y') }}</span>
-                        <a href="{{ route('articles.show', $article->encrypted_slug) }}"
-                           class="ml-auto font-semibold text-orange-500 hover:text-orange-600 flex items-center gap-1">
-                            Read More <i class="fas fa-arrow-right text-xs"></i>
-                        </a>
+            <div class="group scroll-animate">
+                <div class="relative overflow-hidden rounded-xl shadow-lg mb-4">
+                    <div class="aspect-video">
+                        <iframe class="w-full h-full"
+                                src="{{ $article->embed_url }}"
+                                title="{{ $article->title }}"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
                     </div>
                 </div>
+                <div class="flex flex-wrap items-center gap-1.5 mb-1.5">
+                    @if($article->category)
+                        <a href="{{ route('category.articles', $article->category->encrypted_slug) }}"
+                           class="text-xs font-bold hover:underline flex items-center gap-1"
+                           style="color:{{ $article->category->color ?? '#f97316' }}">
+                            @if($article->category->icon)<i class="{{ $article->category->icon }} text-xs"></i>@endif
+                            {{ $article->category->name }}
+                        </a>
+                    @endif
+                    @if($article->relationLoaded('tags') && $article->tags->isNotEmpty())
+                        @foreach($article->tags->take(2) as $tag)
+                            <span class="{{ $tag->badge_classes }}" style="{{ $tag->badge_style }}">{{ $tag->name }}</span>
+                        @endforeach
+                    @endif
+                </div>
+                <h4 class="font-bold text-gray-800 mb-1 group-hover:text-orange-500 transition leading-snug">
+                    <a href="{{ route('articles.show', $article->encrypted_slug) }}">{{ $article->title }}</a>
+                </h4>
+                @if($article->excerpt)
+                    <p class="text-sm text-gray-600 line-clamp-2 mb-2">{{ Str::limit(strip_tags($article->excerpt), 100) }}</p>
+                @endif
+                <div class="flex items-center gap-3 text-xs text-gray-400">
+                    <span><i class="fas fa-eye mr-0.5"></i>{{ number_format($article->views_count) }}</span>
+                    <span>{{ $article->published_at?->format('M d, Y') }}</span>
+                    <a href="{{ route('articles.show', $article->encrypted_slug) }}"
+                       class="ml-auto font-semibold text-orange-500 hover:text-orange-600 flex items-center gap-1">
+                        Read More <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
             @endforeach
         </div>
     </div>
 </section>
 @endif
+{{-- If $videoArticles is empty or null, the entire section is silently omitted --}}
 
 {{-- ═══════ MOST VIEWED — article loop with Sponsor Now ═══════ --}}
 <section id="sponsor" class="section bg-white">

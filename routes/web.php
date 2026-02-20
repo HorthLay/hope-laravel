@@ -5,11 +5,18 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChildrenController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\FamilyController;
+use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SponsorAdminController;
+use App\Http\Controllers\SponsorAuthController;
+use App\Http\Controllers\SponsorContactController;
+use App\Http\Controllers\SponsorDashboardController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -32,12 +39,14 @@ Route::get('/about',      [HomeController::class, 'about'])->name('about');
 Route::get('/privacy-policy',   [HomeController::class, 'privacy'])->name('privacy-policy');
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms-of-service');
 Route::get('/details',    [HomeController::class, 'details'])->name('detail');
-Route::get('/sponsor',     [HomeController::class, 'sponsor'])->name('sponsor');
 // Route::get('/donate',      [DonationController::class, 'donate'])->name('donate');
 Route::post('/webhooks/every-org', [DonationController::class, 'handleWebhook']);
 // Encrypted slug routes
 Route::get('/articles/{slug}',       [HomeController::class, 'articleDetails'])->name('articles.show');
 Route::get('/categories/{category}', [HomeController::class, 'categoryArticles'])->name('category.articles');
+Route::get('/login/sponsor', [SponsorAuthController::class, 'showLogin'])->name('sponsor.login');
+ Route::post('/login/sponsor', [SponsorAuthController::class, 'login']);
+Route::get('/sponsor',     [HomeController::class, 'sponsorshow'])->name('sponsor');
 
 Route::prefix('admin')->group(function () {
         Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
@@ -99,10 +108,58 @@ Route::prefix('admin')->group(function () {
         // Report Management
         Route::get('/reports', [ReportController::class, 'index'])->name('admin.reports.index');
         Route::get('/reports/export', [ReportController::class, 'export'])->name('admin.reports.export');
-        // ======== END OF ADMIN ROUTES ==========
+        // children mangement
+    
+        Route::get('/children/admin', [ChildrenController::class, 'index'])->name('admin.children.index');
+        Route::get('/admin/children/create', [ChildrenController::class, 'create'])->name('admin.children.create');
+        Route::post('/admin/children', [ChildrenController::class, 'store'])->name('admin.children.store');  
+        Route::get('/admin/children/{child}', [ChildrenController::class, 'show'])->name('admin.children.show');
+        Route::get('/admin/children/{child}/edit', [ChildrenController::class, 'edit'])->name('admin.children.edit');
+        Route::put('/admin/children/{child}', [ChildrenController::class, 'update'])->name('admin.children.update');
+        Route::delete('/admin/children/{child}', [ChildrenController::class, 'destroy'])->name('admin.children.destroy');
+
+        // Sponsor Management
+        Route::get('/sponsors/admin', [SponsorAdminController::class, 'index'])->name('admin.sponsors.index');
+        Route::get('/admin/sponsors/create', [SponsorAdminController::class, 'create'])->name('admin.sponsors.create');
+        Route::post('/admin/sponsors', [SponsorAdminController::class, 'store'])->name('admin.sponsors.store');
+        Route::get('/admin/sponsors/{sponsor}', [SponsorAdminController::class, 'show'])->name('admin.sponsors.show');
+        Route::get('/admin/sponsors/{sponsor}/edit', [SponsorAdminController::class, 'edit'])->name('admin.sponsors.edit');
+        Route::put('/admin/sponsors/{sponsor}', [SponsorAdminController::class, 'update'])->name('admin.sponsors.update');
+        Route::delete('/admin/sponsors/{sponsor}', [SponsorAdminController::class, 'destroy'])->name('admin.sponsors.destroy');
+
+        // Family Management
+        Route::get('/families/admin', [FamilyController::class, 'index'])->name('admin.families.index');
+        Route::get('/admin/families/create', [FamilyController::class, 'create'])->name('admin.families.create');
+        Route::post('/admin/families', [FamilyController::class, 'store'])->name('admin.families.store');
+        Route::get('/admin/families/{family}', [FamilyController::class, 'show'])->name('admin.families.show');
+        Route::get('/admin/families/{family}/edit', [FamilyController::class, 'edit'])->name('admin.families.edit');
+        Route::put('/admin/families/{family}', [FamilyController::class, 'update'])->name('admin.families.update');
+        Route::delete('/admin/families/{family}', [FamilyController::class, 'destroy'])->name('admin.families.destroy');
+        // Family Member Management
+        Route::get('/family-members/admin', [FamilyMemberController::class, 'index'])->name('admin.family-members.index');
+        Route::get('/admin/family-members/create', [FamilyMemberController::class, 'create'])->name('admin.family-members.create');
+        Route::post('/admin/family-members', [FamilyMemberController::class, 'store'])->name('admin.family-members.store');
+        Route::get('/admin/family-members/{member}', [FamilyMemberController::class, 'show'])->name('admin.family-members.show');
+        Route::get('/admin/family-members/{member}/edit', [FamilyMemberController::class, 'edit'])->name('admin.family-members.edit');
+        Route::put('/admin/family-members/{member}', [FamilyMemberController::class, 'update'])->name('admin.family-members.update');
+        Route::delete('/admin/family-members/{member}', [FamilyMemberController::class, 'destroy'])->name('admin.family-members.destroy');
+            // ======== END OF ADMIN ROUTES ==========
     });
 });
 
+
+    // ── Protected (authenticated sponsors only) ────────────────────
+    Route::middleware('sponsor.auth')->group(function () {
+        Route::get('/dashboard', [SponsorDashboardController::class, 'index'])->name('sponsor.dashboard');
+        Route::get('/download/{type}/{id}', [SponsorDashboardController::class, 'download'])->name('sponsor.download');
+        Route::post('/logout/sponsor', [SponsorAuthController::class, 'logout'])->name('sponsor.logout');
+        Route::post('/sponsor/child',     [HomeController::class, 'sponsor'])->name('sponsor.child');
+    });
+
+
+   
+    Route::get('/contact/created', [SponsorContactController::class, 'show'])->name('sponsor.contact');
+    Route::post('/contact', [SponsorContactController::class, 'submit'])->name('sponsor.contact.submit');
 
 
 Auth::routes(['verify'=>true]);

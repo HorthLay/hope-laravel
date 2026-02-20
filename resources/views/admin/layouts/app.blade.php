@@ -48,8 +48,8 @@
         }
 
         .sidebar-logo .logo-icon {
-            width: 48px;
-            height: 48px;
+            width: 80px;
+            height: 60px;
             background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-dark) 100%);
             border-radius: 12px;
             display: flex;
@@ -303,15 +303,106 @@
     <!-- Desktop Sidebar -->
     <aside id="sidebar" class="sidebar">
         <!-- Logo -->
-        <div class="sidebar-logo">
-            <div class="logo-icon">
-                <i class="fas fa-heart text-white text-2xl"></i>
-            </div>
-            <div>
-                <h1 class="text-white font-bold text-xl">Hope & Impact</h1>
-                <p class="text-gray-400 text-xs">Admin Dashboard</p>
-            </div>
-        </div>
+        <div class="sidebar-logo flex items-center gap-3 px-4 py-4 relative overflow-hidden"
+     style="min-height: 88px;">
+
+    <!-- Background Image with dark overlay to keep text readable -->
+    <div class="absolute inset-0 z-0">
+        <img src="{{ asset('images/image.jpg') }}" 
+             alt="" 
+             class="w-full h-full object-cover object-center">
+        <!-- Gradient overlay to blend with sidebar dark theme -->
+        <div class="absolute inset-0" 
+             style="background: linear-gradient(135deg, rgba(15,23,42,0.75) 0%, rgba(249,115,22,0.55) 60%, rgba(234,88,12,0.65) 100%);"></div>
+    </div>
+
+    <!-- Animated Particles -->
+    <div class="particles-container absolute inset-0 pointer-events-none z-10">
+        <span class="particle" style="--x: 15%; --delay: 0s;   --size: 4px; --duration: 4s;"></span>
+        <span class="particle" style="--x: 30%; --delay: 0.8s; --size: 3px; --duration: 5s;"></span>
+        <span class="particle" style="--x: 50%; --delay: 1.5s; --size: 5px; --duration: 3.5s;"></span>
+        <span class="particle" style="--x: 65%; --delay: 0.3s; --size: 3px; --duration: 4.5s;"></span>
+        <span class="particle" style="--x: 80%; --delay: 1s;   --size: 4px; --duration: 5.5s;"></span>
+        <span class="particle" style="--x: 90%; --delay: 2s;   --size: 2px; --duration: 4s;"></span>
+        <span class="particle" style="--x: 42%; --delay: 2.5s; --size: 3px; --duration: 3s;"></span>
+        <span class="particle" style="--x: 72%; --delay: 1.8s; --size: 5px; --duration: 6s;"></span>
+
+        <!-- Glowing orbs -->
+        <div class="glow-orb" style="width:90px; height:90px; top:-25px; right:-15px; --orb-color: rgba(249,115,22,0.4);"></div>
+        <div class="glow-orb" style="width:60px; height:60px; bottom:-20px; left:35%; --orb-color: rgba(234,88,12,0.3);"></div>
+    </div>
+
+    <!-- Logo with glow ring -->
+    <div class="relative z-20 flex-shrink-0">
+    <img src="{{ asset('images/logo.png') }}"
+         alt="Hope & Impact Logo"
+         class="h-14 w-auto object-contain drop-shadow-lg">
+</div>
+
+    <!-- Text Block -->
+    <div class="relative z-20">
+        <p class="text-white font-extrabold text-base leading-tight tracking-wide"
+           style="text-shadow: 0 1px 8px rgba(0,0,0,0.6);">
+            Admin Dashboard
+        </p>
+      
+    </div>
+</div>
+
+<style>
+/* ===== PARTICLES ===== */
+.particle {
+    position: absolute;
+    left: var(--x);
+    bottom: -6px;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    animation: floatUp var(--duration) ease-in var(--delay) infinite;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes floatUp {
+    0%   { transform: translateY(0) scale(1);    opacity: 0; }
+    10%  { opacity: 1; }
+    80%  { opacity: 0.5; }
+    100% { transform: translateY(-95px) scale(0.3); opacity: 0; }
+}
+
+/* ===== GLOWING ORBS ===== */
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--orb-color);
+    filter: blur(20px);
+    animation: pulse-orb 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-orb {
+    0%   { transform: scale(1);   opacity: 0.5; }
+    100% { transform: scale(1.4); opacity: 1;   }
+}
+
+/* ===== LOGO RING ===== */
+.logo-ring {
+    padding: 6px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    box-shadow:
+        0 0 0 2px rgba(249, 115, 22, 0.45),
+        0 4px 20px rgba(0, 0, 0, 0.4);
+    animation: ring-pulse 3s ease-in-out infinite;
+}
+
+@keyframes ring-pulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(249,115,22,0.45), 0 4px 20px rgba(0,0,0,0.4); }
+    50%       { box-shadow: 0 0 0 4px rgba(249,115,22,0.75), 0 4px 24px rgba(249,115,22,0.35); }
+}
+</style>
+
 
         <!-- Navigation -->
         <nav class="sidebar-nav">
@@ -357,6 +448,28 @@
                 <i class="fas fa-images"></i>
                 <span class="font-medium">Media Library</span>
             </a>
+
+
+            
+            <a href="{{ route('admin.children.index') }}" class="nav-item {{ request()->routeIs('admin.children.*') ? 'active' : '' }}">
+                <i class="fas fa-child"></i>
+                <span class="font-medium">Children</span>
+            </a>
+
+
+            <a href="{{ route('admin.families.index') }}" class="nav-item {{ request()->routeIs('admin.families.*') ? 'active' : '' }}">
+                <i class="fas fa-users"></i>
+                <span class="font-medium">Families</span>
+            </a>
+
+             <a href="{{ route('admin.sponsors.index') }}" class="nav-item {{ request()->routeIs('admin.sponsors.*') ? 'active' : '' }}">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span class="font-medium">Sponsors</span>
+            </a>
+
+            
+
+
 
             {{-- User Management - Only SUPER ADMIN & ADMIN --}}
             @if($isSuperAdmin || $isAdmin)
@@ -457,12 +570,15 @@
             <i class="fas fa-bars text-xl"></i>
         </button>
 
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center">
-                <i class="fas fa-heart text-white text-sm"></i>
-            </div>
-            <h1 class="font-bold text-gray-800">Hope & Impact</h1>
-        </div>
+     <div class="flex items-center gap-2">
+    
+    <!-- Logo Image -->
+    <img src="{{ asset('images/logo.png') }}" 
+         alt="Hope & Impact Logo" 
+         class="w-8 h-8 object-contain rounded-lg">
+        
+    </div>
+
 
         <button class="text-gray-700 hover:text-orange-500 transition">
             <i class="fas fa-bell text-xl"></i>

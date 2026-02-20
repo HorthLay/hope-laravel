@@ -75,6 +75,27 @@ class Article extends Model
         });
     }
 
+      public function sponsoredChildren()
+    {
+        return $this->belongsToMany(
+            SponsoredChild::class,
+            'article_sponsored_child',
+            'article_id',
+            'sponsored_child_id'
+        )->withTimestamps();
+    }
+
+    // family
+     public function families()
+    {
+        return $this->belongsToMany(
+            Family::class,
+            'article_family',
+            'article_id',
+            'family_id'
+        )->withTimestamps();
+    }
+
     // ──────────────────────────────────────────────────────────────────────
     //  RELATIONSHIPS
     // ──────────────────────────────────────────────────────────────────────
@@ -220,6 +241,9 @@ class Article extends Model
     {
         return $this->published_at?->format('F j, Y');
     }
+
+    // sponsor 
+
 
     public function getReadingTimeAttribute(): int
     {

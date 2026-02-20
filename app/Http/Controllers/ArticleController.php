@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
 use App\Models\Category;
+use App\Models\Family;
+use App\Models\SponsoredChild;
 use App\Models\Tag;
 
 class ArticleController extends Controller
 {
-     // ─────────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────
     //  INDEX
     // ─────────────────────────────────────────────────────────────────
     public function index(Request $request)
@@ -44,8 +46,14 @@ class ArticleController extends Controller
     {
         $categories = Category::all();
         $tags       = Tag::active()->ordered()->get();
+        $children   = SponsoredChild::where('is_active', true)
+                        ->orderBy('first_name')
+                        ->get(['id', 'first_name', 'code', 'profile_photo']);
+        $families   = Family::where('is_active', true)
+                        ->orderBy('name')
+                        ->get(['id', 'name', 'code', 'profile_photo']);
 
-        return view('admin.articles.create', compact('categories', 'tags'));
+        return view('admin.articles.create', compact('categories', 'tags', 'children', 'families'));
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -70,37 +78,36 @@ class ArticleController extends Controller
             'meta_keywords'    => 'nullable|string|max:255',
             'tags'             => 'nullable|array',
             'tags.*'           => 'exists:tags,id',
+            'children'         => 'nullable|array',
+            'children.*'       => 'exists:sponsored_children,id',
+            'families'         => 'nullable|array',
+            'families.*'       => 'exists:families,id',
         ]);
 
-        // Auto slug
         if (empty($validated['slug'])) {
             $validated['slug'] = $this->uniqueSlug(Str::slug($validated['title']));
         }
 
-        // Defaults
         $validated['admin_id']    = Auth::guard('admin')->id();
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['style']       = $validated['style'] ?? 'overlay';
 
-        // Clear empty video_url
         if (empty($validated['video_url'])) {
             $validated['video_url'] = null;
         }
 
-        // Auto set published_at when publishing
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
             $validated['published_at'] = now();
         }
 
-        // Create (exclude pivot/file fields from fillable)
         $article = Article::create(
-            collect($validated)->except(['tags', 'featured_image'])->toArray()
+            collect($validated)->except(['tags', 'featured_image', 'children', 'families'])->toArray()
         );
 
-        // Tags
         $article->tags()->sync($request->input('tags', []));
+        $article->sponsoredChildren()->sync($request->input('children', []));
+        $article->families()->sync($request->input('families', []));
 
-        // Image
         if ($request->hasFile('featured_image')) {
             $this->handleImageUpload($article, $request->file('featured_image'));
         }
@@ -115,7 +122,7 @@ class ArticleController extends Controller
     // ─────────────────────────────────────────────────────────────────
     public function show(Article $article)
     {
-        $article->load(['category', 'admin', 'image', 'tags']);
+        $article->load(['category', 'admin', 'image', 'tags', 'sponsoredChildren', 'families']);
 
         $wordCount   = str_word_count(strip_tags($article->content ?? ''));
         $readingTime = (int) ceil($wordCount / 200);
@@ -137,9 +144,16 @@ class ArticleController extends Controller
     {
         $categories = Category::all();
         $tags       = Tag::active()->ordered()->get();
-        $article->load('tags');
+        $children   = SponsoredChild::where('is_active', true)
+                        ->orderBy('first_name')
+                        ->get(['id', 'first_name', 'code', 'profile_photo']);
+        $families   = Family::where('is_active', true)
+                        ->orderBy('name')
+                        ->get(['id', 'name', 'code', 'profile_photo']);
 
-        return view('admin.articles.edit', compact('article', 'categories', 'tags'));
+        $article->load('tags', 'sponsoredChildren', 'families');
+
+        return view('admin.articles.edit', compact('article', 'categories', 'tags', 'children', 'families'));
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -165,23 +179,23 @@ class ArticleController extends Controller
             'meta_keywords'    => 'nullable|string|max:255',
             'tags'             => 'nullable|array',
             'tags.*'           => 'exists:tags,id',
+            'children'         => 'nullable|array',
+            'children.*'       => 'exists:sponsored_children,id',
+            'families'         => 'nullable|array',
+            'families.*'       => 'exists:families,id',
         ]);
 
-        // Auto slug
         if (empty($validated['slug'])) {
             $validated['slug'] = $this->uniqueSlug(Str::slug($validated['title']), $article->id);
         }
 
-        // Booleans + style default
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['style']       = $validated['style'] ?? 'overlay';
 
-        // Clear empty video_url
         if (empty($validated['video_url'])) {
             $validated['video_url'] = null;
         }
 
-        // published_at transitions
         if ($validated['status'] === 'published' && ! $article->published_at) {
             $validated['published_at'] = now();
         }
@@ -189,27 +203,23 @@ class ArticleController extends Controller
             $validated['published_at'] = null;
         }
 
-        // Remove image
         if ($request->boolean('remove_image') && $article->image) {
             $this->deleteImage($article->image);
             $validated['image_id'] = null;
         }
 
-        // Replace image
         if ($request->hasFile('featured_image')) {
-            if ($article->image) {
-                $this->deleteImage($article->image);
-            }
+            if ($article->image) $this->deleteImage($article->image);
             $this->handleImageUpload($article, $request->file('featured_image'));
         }
 
-        // Update (exclude pivot/file fields)
         $article->update(
-            collect($validated)->except(['tags', 'featured_image', 'remove_image'])->toArray()
+            collect($validated)->except(['tags', 'featured_image', 'remove_image', 'children', 'families'])->toArray()
         );
 
-        // Tags
         $article->tags()->sync($request->input('tags', []));
+        $article->sponsoredChildren()->sync($request->input('children', []));
+        $article->families()->sync($request->input('families', []));
 
         return redirect()
             ->route('admin.articles.index')
@@ -223,11 +233,11 @@ class ArticleController extends Controller
     {
         $title = $article->title;
 
-        if ($article->image) {
-            $this->deleteImage($article->image);
-        }
+        if ($article->image) $this->deleteImage($article->image);
 
         $article->tags()->detach();
+        $article->sponsoredChildren()->detach();
+        $article->families()->detach();
         $article->delete();
 
         return redirect()
@@ -238,48 +248,29 @@ class ArticleController extends Controller
     // ═════════════════════════════════════════════════════════════════
     //  PRIVATE HELPERS
     // ═════════════════════════════════════════════════════════════════
-
-    /**
-     * Generate a unique slug, appending -2, -3 … when duplicates exist.
-     */
     private function uniqueSlug(string $base, ?int $excludeId = null): string
     {
-        $slug   = $base;
-        $suffix = 2;
-
+        $slug = $base; $suffix = 2;
         while (true) {
             $exists = Article::where('slug', $slug)
                 ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
                 ->exists();
-
             if (! $exists) break;
-
-            $slug = "{$base}-{$suffix}";
-            $suffix++;
+            $slug = "{$base}-{$suffix}"; $suffix++;
         }
-
         return $slug;
     }
 
-    /**
-     * Upload a featured image, create a thumbnail, and attach the Image record.
-     */
     protected function handleImageUpload(Article $article, $file): void
     {
         $uploadPath = public_path('uploads/articles');
-
-        if (! File::exists($uploadPath)) {
-            File::makeDirectory($uploadPath, 0755, true);
-        }
+        if (! File::exists($uploadPath)) File::makeDirectory($uploadPath, 0755, true);
 
         $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
         $filepath = 'uploads/articles/' . $filename;
         $file->move($uploadPath, $filename);
 
-        $fullPath  = public_path($filepath);
-        $fileSize  = filesize($fullPath);
-        $mimeType  = mime_content_type($fullPath);
-
+        $fullPath      = public_path($filepath);
         $thumbFilename = 'thumb_' . $filename;
         $thumbPath     = 'uploads/articles/' . $thumbFilename;
         $this->createThumbnail($fullPath, public_path($thumbPath), 400, 300);
@@ -289,51 +280,28 @@ class ArticleController extends Controller
             'imageable_id'   => $article->id,
             'file_name'      => $filename,
             'file_path'      => $filepath,
-            'file_size'      => $fileSize,
-            'mime_type'      => $mimeType,
+            'file_size'      => filesize($fullPath),
+            'mime_type'      => mime_content_type($fullPath),
             'thumbnail_path' => $thumbPath,
         ]);
 
         $article->update(['image_id' => $image->id]);
     }
 
-    /**
-     * Delete image file(s) and the Image database record.
-     */
     protected function deleteImage(Image $image): void
     {
         foreach ([$image->file_path, $image->thumbnail_path] as $path) {
-            if ($path && File::exists(public_path($path))) {
-                File::delete(public_path($path));
-            }
+            if ($path && File::exists(public_path($path))) File::delete(public_path($path));
         }
-
         $image->delete();
     }
 
-    /**
-     * Create a proportional thumbnail using PHP GD.
-     * Falls back to a plain copy when GD is not available.
-     */
-    protected function createThumbnail(
-        string $src,
-        string $dst,
-        int    $maxW = 400,
-        int    $maxH = 300
-    ): void {
-        if (! extension_loaded('gd')) {
-            copy($src, $dst);
-            return;
-        }
-
+    protected function createThumbnail(string $src, string $dst, int $maxW = 400, int $maxH = 300): void
+    {
+        if (! extension_loaded('gd')) { copy($src, $dst); return; }
         $info = @getimagesize($src);
-        if (! $info) {
-            copy($src, $dst);
-            return;
-        }
-
+        if (! $info) { copy($src, $dst); return; }
         [$origW, $origH, $type] = $info;
-
         $source = match ($type) {
             IMAGETYPE_JPEG => imagecreatefromjpeg($src),
             IMAGETYPE_PNG  => imagecreatefrompng($src),
@@ -341,31 +309,16 @@ class ArticleController extends Controller
             IMAGETYPE_WEBP => imagecreatefromwebp($src),
             default        => null,
         };
-
-        if (! $source) {
-            copy($src, $dst);
-            return;
-        }
-
-        // Fit inside maxW × maxH, keep aspect ratio
+        if (! $source) { copy($src, $dst); return; }
         $ratio = min($maxW / $origW, $maxH / $origH);
         $newW  = (int) round($origW * $ratio);
         $newH  = (int) round($origH * $ratio);
-
         $thumb = imagecreatetruecolor($newW, $newH);
-
-        // Preserve transparency for PNG / GIF
         if (in_array($type, [IMAGETYPE_PNG, IMAGETYPE_GIF])) {
-            imagealphablending($thumb, false);
-            imagesavealpha($thumb, true);
-            imagefilledrectangle(
-                $thumb, 0, 0, $newW, $newH,
-                imagecolorallocatealpha($thumb, 255, 255, 255, 127)
-            );
+            imagealphablending($thumb, false); imagesavealpha($thumb, true);
+            imagefilledrectangle($thumb, 0, 0, $newW, $newH, imagecolorallocatealpha($thumb, 255, 255, 255, 127));
         }
-
         imagecopyresampled($thumb, $source, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
-
         match ($type) {
             IMAGETYPE_JPEG => imagejpeg($thumb, $dst, 90),
             IMAGETYPE_PNG  => imagepng($thumb, $dst, 9),
@@ -373,8 +326,6 @@ class ArticleController extends Controller
             IMAGETYPE_WEBP => imagewebp($thumb, $dst, 90),
             default        => copy($src, $dst),
         };
-
-        imagedestroy($source);
-        imagedestroy($thumb);
+        imagedestroy($source); imagedestroy($thumb);
     }
 }

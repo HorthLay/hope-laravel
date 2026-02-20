@@ -45,6 +45,10 @@ return [
             'provider' => 'admins',
             'hash' => false,
         ],
+            'sponsor' => [
+                'driver' => 'session',
+                'provider' => 'sponsors',
+            ],
     ],
 
     /*
@@ -68,6 +72,10 @@ return [
       'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
+        ],
+        'sponsors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Sponsor::class,
         ],
 
         // 'users' => [

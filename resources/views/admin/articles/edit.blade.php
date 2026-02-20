@@ -36,13 +36,15 @@
                         {{ $article->status==='published'?'bg-green-100 text-green-700':($article->status==='draft'?'bg-yellow-100 text-yellow-700':'bg-gray-100 text-gray-600') }}">
                         {{ ucfirst($article->status) }}
                     </span>
-                    {{-- Current style badge --}}
-                    <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-600 flex items-center gap-1">
-                        <i class="fas fa-th-large text-xs"></i>
-                        Style: {{ ucfirst($article->style ?? 'overlay') }}
-                    </span>
+                    @if($article->sponsoredChildren->isNotEmpty())
+                        @foreach($article->sponsoredChildren as $child)
+                        <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-purple-100 text-purple-600 flex items-center gap-1">
+                            <i class="fas fa-child text-xs"></i>
+                            {{ $child->first_name }}{{ $child->code ? ' ('.$child->code.')' : '' }}
+                        </span>
+                        @endforeach
+                    @endif
                     <span class="text-xs text-gray-500"><i class="fas fa-eye mr-1"></i>{{ number_format($article->views_count) }} views</span>
-                    <span class="text-xs text-gray-500"><i class="fas fa-calendar mr-1"></i>{{ $article->created_at->format('M d, Y') }}</span>
                 </div>
             </div>
         </div>
@@ -53,7 +55,7 @@
     @csrf @method('PUT')
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {{-- MAIN COLUMN --}}
+        {{-- ══════ MAIN COLUMN ══════ --}}
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Title --}}
@@ -96,11 +98,10 @@
             {{-- Video URL --}}
             <div class="card">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">
-                    <i class="fab fa-youtube text-red-500 mr-1"></i>
-                    Video URL
+                    <i class="fab fa-youtube text-red-500 mr-1"></i> Video URL
                     <span class="text-xs text-gray-400 font-normal ml-1">(appears in Watch Our Impact section)</span>
                 </label>
-                <input type="url" id="video_url" name="video_url"
+                <input type="url" name="video_url"
                        value="{{ old('video_url', $article->video_url) }}"
                        oninput="previewYoutube(this.value)"
                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
@@ -109,15 +110,13 @@
                     <p class="text-xs text-green-500 mb-2"><i class="fas fa-check-circle mr-1"></i>YouTube URL — preview:</p>
                     <div class="aspect-video rounded-xl overflow-hidden shadow">
                         <iframe id="video-preview-iframe"
-                                src="{{ old('video_url', $article->video_url) ? 'https://www.youtube.com/embed/'.($article->video_url ? preg_replace('/.*(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_\-]{11}).*/','$1',$article->video_url) : '').'?rel=0' : '' }}"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen class="w-full h-full"></iframe>
+                                src="{{ old('video_url', $article->video_url) ? 'https://www.youtube.com/embed/'.preg_replace('/.*(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_\-]{11}).*/','$1',$article->video_url ?? '').'?rel=0' : '' }}"
+                                frameborder="0" allowfullscreen class="w-full h-full"></iframe>
                     </div>
                 </div>
             </div>
 
-            {{-- ═══ HOME PAGE CARD STYLE PICKER ═══ --}}
+            {{-- Card Style --}}
             <div class="card">
                 <div class="flex items-center justify-between mb-1">
                     <h3 class="font-bold text-gray-800 flex items-center gap-2">
@@ -133,8 +132,7 @@
                     First article in Latest News always renders as a full-width hero. This style applies to all other positions.
                 </p>
                 <input type="hidden" name="style" id="article-style-input" value="{{ old('style', $article->style ?? 'overlay') }}">
-
-                <div class="grid grid-cols-5 gap-3" id="article-style-cards">
+                <div class="grid grid-cols-5 gap-3">
                     @foreach([
                         ['key'=>'overlay', 'label'=>'Overlay', 'desc'=>'Dark image'],
                         ['key'=>'card',    'label'=>'Card',    'desc'=>'White card'],
@@ -145,8 +143,7 @@
                     @php $isActive = old('style', $article->style ?? 'overlay') === $s['key']; @endphp
                     <div class="article-style-card relative rounded-2xl border-2 p-2.5 cursor-pointer transition-all duration-150 hover:border-orange-400 hover:shadow-md hover:-translate-y-0.5
                                 {{ $isActive ? 'border-orange-500 bg-orange-50 shadow-md' : 'border-gray-200 bg-gray-50' }}"
-                         data-style="{{ $s['key'] }}" data-label="{{ $s['label'] }}"
-                         onclick="pickArticleStyle('{{ $s['key'] }}')">
+                         data-style="{{ $s['key'] }}" onclick="pickArticleStyle('{{ $s['key'] }}')">
                         <span class="style-check absolute -top-2 -right-2 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center shadow transition-all duration-200
                                      {{ $isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-50' }}">
                             <i class="fas fa-check text-white text-[9px]"></i>
@@ -154,43 +151,28 @@
                         @if($s['key']==='overlay')
                         <div class="h-12 rounded-lg overflow-hidden relative mb-2" style="background:linear-gradient(135deg,#374151,#1f2937)">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                            <div class="absolute bottom-1 left-1.5 right-1.5">
-                                <div class="h-1.5 bg-white/70 rounded mb-0.5" style="width:80%"></div>
-                                <div class="h-1 bg-white/40 rounded" style="width:55%"></div>
-                            </div>
+                            <div class="absolute bottom-1 left-1.5 right-1.5"><div class="h-1.5 bg-white/70 rounded mb-0.5" style="width:80%"></div><div class="h-1 bg-white/40 rounded" style="width:55%"></div></div>
                         </div>
                         @elseif($s['key']==='card')
                         <div class="h-12 rounded-lg overflow-hidden mb-2 bg-white border border-gray-200">
                             <div class="h-6 bg-gray-200"></div>
-                            <div class="px-1 pt-1">
-                                <div class="h-1.5 bg-gray-300 rounded mb-0.5" style="width:90%"></div>
-                                <div class="h-1 bg-gray-200 rounded" style="width:65%"></div>
-                            </div>
+                            <div class="px-1 pt-1"><div class="h-1.5 bg-gray-300 rounded mb-0.5" style="width:90%"></div><div class="h-1 bg-gray-200 rounded" style="width:65%"></div></div>
                         </div>
                         @elseif($s['key']==='magazine')
                         <div class="h-12 rounded-lg overflow-hidden mb-2 bg-white border border-gray-200 flex gap-1 p-1">
                             <div class="w-7 flex-shrink-0 bg-gray-200 rounded-sm"></div>
-                            <div class="flex-1 flex flex-col justify-center gap-0.5">
-                                <div class="h-1.5 bg-gray-300 rounded" style="width:100%"></div>
-                                <div class="h-1 bg-gray-200 rounded" style="width:75%"></div>
-                            </div>
+                            <div class="flex-1 flex flex-col justify-center gap-0.5"><div class="h-1.5 bg-gray-300 rounded" style="width:100%"></div><div class="h-1 bg-gray-200 rounded" style="width:75%"></div></div>
                         </div>
                         @elseif($s['key']==='featured')
                         <div class="h-12 rounded-lg overflow-hidden relative mb-2" style="background:linear-gradient(135deg,#1e3a5f,#0f1e3a)">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                             <div class="absolute top-1 left-1.5"><div class="h-1.5 w-5 rounded-full bg-orange-500/80"></div></div>
-                            <div class="absolute bottom-1 left-1.5 right-1.5">
-                                <div class="h-2 bg-white/80 rounded mb-0.5" style="width:85%"></div>
-                                <div class="h-1 bg-white/50 rounded" style="width:60%"></div>
-                            </div>
+                            <div class="absolute bottom-1 left-1.5 right-1.5"><div class="h-2 bg-white/80 rounded mb-0.5" style="width:85%"></div><div class="h-1 bg-white/50 rounded" style="width:60%"></div></div>
                         </div>
                         @else
                         <div class="h-12 rounded-lg overflow-hidden mb-2 bg-white border-l-4 border-orange-500 flex gap-1 p-1">
                             <div class="w-6 flex-shrink-0 bg-gray-100 rounded-sm"></div>
-                            <div class="flex-1 flex flex-col justify-center gap-0.5">
-                                <div class="h-1 bg-orange-400 rounded w-6"></div>
-                                <div class="h-1.5 bg-gray-300 rounded" style="width:100%"></div>
-                            </div>
+                            <div class="flex-1 flex flex-col justify-center gap-0.5"><div class="h-1 bg-orange-400 rounded w-6"></div><div class="h-1.5 bg-gray-300 rounded" style="width:100%"></div></div>
                         </div>
                         @endif
                         <p class="text-[10px] font-black text-gray-700 uppercase tracking-wide leading-none">{{ $s['label'] }}</p>
@@ -202,7 +184,7 @@
 
         </div>{{-- /main col --}}
 
-        {{-- SIDEBAR --}}
+        {{-- ══════ SIDEBAR ══════ --}}
         <div class="lg:col-span-1 space-y-6">
 
             {{-- Publish Settings --}}
@@ -214,9 +196,9 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Status <span class="text-red-500">*</span></label>
                         <select id="status" name="status" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none">
-                            <option value="draft"     {{ old('status',$article->status)=='draft'    ?'selected':'' }}>Draft</option>
-                            <option value="published" {{ old('status',$article->status)=='published' ?'selected':'' }}>Published</option>
-                            <option value="archived"  {{ old('status',$article->status)=='archived'  ?'selected':'' }}>Archived</option>
+                            <option value="draft"     {{ old('status',$article->status)=='draft'     ?'selected':'' }}>Draft</option>
+                            <option value="published" {{ old('status',$article->status)=='published'  ?'selected':'' }}>Published</option>
+                            <option value="archived"  {{ old('status',$article->status)=='archived'   ?'selected':'' }}>Archived</option>
                         </select>
                     </div>
                     <div>
@@ -250,6 +232,17 @@
                 </div>
             </div>
 
+            {{-- ══ Sponsored Children Multi-Picker ══ --}}
+            @include('admin.articles.partials._child_picker', [
+                'selectedChildIds' => old('children', $article->sponsoredChildren->pluck('id')->toArray())
+            ])
+
+               {{-- ══ Sponsored Family Multi-Picker ══ --}}
+
+               @include('admin.articles.partials._family_picker', [
+                'selectedFamilyIds' => old('families', $article->families->pluck('id')->toArray())
+            ])
+
             {{-- Tags --}}
             <div class="card">
                 <h3 class="font-bold text-gray-800 mb-1 flex items-center gap-2">
@@ -258,8 +251,7 @@
                 </h3>
                 <div class="flex items-center justify-between mb-3">
                     <p class="text-xs text-gray-400"><span id="tag-count">0</span> selected</p>
-                    <button type="button" id="clear-tags-btn" onclick="clearAllTags()"
-                            class="text-xs text-red-400 hover:text-red-600 hidden">Clear all</button>
+                    <button type="button" id="clear-tags-btn" onclick="clearAllTags()" class="text-xs text-red-400 hover:text-red-600 hidden">Clear all</button>
                 </div>
                 <div class="relative mb-3">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-xs pointer-events-none"></i>
@@ -273,14 +265,12 @@
                         <label class="tag-item flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-150 border border-transparent hover:bg-gray-50 group {{ $checked?'bg-orange-50 border-orange-200':'' }}"
                                data-name="{{ strtolower($tag->name) }}" id="tag-label-{{ $tag->id }}">
                             <div class="relative flex-shrink-0 w-5 h-5">
-                                <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
-                                       {{ $checked?'checked':'' }} class="peer sr-only" onchange="onTagChange(this)">
+                                <input type="checkbox" name="tags[]" value="{{ $tag->id }}" {{ $checked?'checked':'' }} class="peer sr-only" onchange="onTagChange(this)">
                                 <div class="w-5 h-5 rounded-md border-2 border-gray-300 bg-white peer-checked:border-0 peer-checked:bg-orange-500 transition-all flex items-center justify-center">
                                     <i class="fas fa-check text-white text-[10px] opacity-0 peer-checked:opacity-100"></i>
                                 </div>
                             </div>
                             <span class="{{ $tag->badge_classes }}" style="{{ $tag->badge_style }}">{{ $tag->name }}</span>
-                            <span class="ml-auto text-xs text-gray-300 capitalize opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">{{ $tag->style }}</span>
                         </label>
                     @empty
                         <div class="text-center py-8">
@@ -289,13 +279,6 @@
                         </div>
                     @endforelse
                 </div>
-                @if(($tags ?? collect())->isNotEmpty())
-                <div class="mt-3 pt-3 border-t border-gray-100">
-                    <a href="{{ route('admin.tags.index') }}" class="text-xs text-gray-400 hover:text-orange-500 flex items-center gap-1.5">
-                        <i class="fas fa-plus-circle"></i> Manage / create more tags
-                    </a>
-                </div>
-                @endif
             </div>
 
             {{-- Featured Image --}}
@@ -370,7 +353,7 @@
                     <i class="fas fa-trash text-sm"></i> Delete Article
                 </button>
             </div>
-        </div>
+        </div>{{-- /sidebar --}}
     </div>
 </form>
 
@@ -382,8 +365,8 @@
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <style>
 #tags-list input[type="checkbox"].peer:checked+div>i{opacity:1}
-#tags-list::-webkit-scrollbar{width:4px}
-#tags-list::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:4px}
+#tags-list::-webkit-scrollbar,#child-dropdown::-webkit-scrollbar{width:4px}
+#tags-list::-webkit-scrollbar-thumb,#child-dropdown::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:4px}
 </style>
 @endpush
 @push('scripts')

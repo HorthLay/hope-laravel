@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Blade;
 use App\Helpers\NumberHelper;
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Support\Facades\URL;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -35,5 +35,9 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('formatDuration', function ($expression) {
             return "<?php echo \App\Helpers\NumberHelper::formatDuration($expression); ?>";
         });
+
+        //  if (config('app.env') === 'local') {
+        //     URL::forceScheme('https');
+        // }
     }
 }

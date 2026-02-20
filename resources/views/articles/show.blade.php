@@ -39,6 +39,49 @@
         .article-body code{background:#f3f4f6;padding:.125rem .375rem;border-radius:.25rem;font-size:.875rem;color:#e11d48}
         .article-body pre code{background:transparent;padding:0;color:#f9fafb}
         .article-body hr{border:none;border-top:2px solid #fed7aa;margin:2rem 0}
+
+        /* ── Quill editor alignment classes ─────────────────────────── */
+        .article-body .ql-align-center,
+        .article-body p.ql-align-center,
+        .article-body h1.ql-align-center,
+        .article-body h2.ql-align-center,
+        .article-body h3.ql-align-center,
+        .article-body h4.ql-align-center,
+        .article-body li.ql-align-center   { text-align: center !important; }
+
+        .article-body .ql-align-right,
+        .article-body p.ql-align-right,
+        .article-body h1.ql-align-right,
+        .article-body h2.ql-align-right,
+        .article-body h3.ql-align-right,
+        .article-body h4.ql-align-right,
+        .article-body li.ql-align-right    { text-align: right !important; }
+
+        .article-body .ql-align-justify,
+        .article-body p.ql-align-justify,
+        .article-body li.ql-align-justify  { text-align: justify !important; }
+
+        .article-body .ql-align-left,
+        .article-body p.ql-align-left      { text-align: left !important; }
+
+        /* ── Quill indent levels ─────────────────────────────────────── */
+        .article-body .ql-indent-1  { padding-left: 3em !important; }
+        .article-body .ql-indent-2  { padding-left: 6em !important; }
+        .article-body .ql-indent-3  { padding-left: 9em !important; }
+        .article-body .ql-indent-4  { padding-left: 12em !important; }
+        .article-body .ql-indent-5  { padding-left: 15em !important; }
+        .article-body .ql-indent-6  { padding-left: 18em !important; }
+        .article-body .ql-indent-7  { padding-left: 21em !important; }
+        .article-body .ql-indent-8  { padding-left: 24em !important; }
+
+        /* ── Quill color/background spans ───────────────────────────── */
+        .article-body span[style*="color"]      { /* preserve inline color */ }
+        .article-body span[style*="background"] { /* preserve inline bg */ }
+
+        /* ── Quill font-size spans ───────────────────────────────────── */
+        .article-body .ql-size-small  { font-size: .85em !important; }
+        .article-body .ql-size-large  { font-size: 1.5em !important; }
+        .article-body .ql-size-huge   { font-size: 2em !important; }
     </style>
 </head>
 <body class="bg-gray-50">

@@ -1,4 +1,4 @@
-{{-- resources/views/layouts/ads.blade.php --}}
+@if(!empty($popupArticle))
 
 <!-- ========== POPUP MODAL — #1 Most-Viewed Article ========== -->
 <div id="popup-modal" class="popup-overlay">
@@ -9,8 +9,7 @@
             <i class="fas fa-times"></i>
         </button>
 
-        @if(!empty($popupArticle))
-        {{-- ═══ LEFT — Article image ═══ --}}
+        {{-- LEFT — Article image --}}
         <div class="popup-image-side">
             @if($popupArticle->image)
                 <img src="{{ $popupArticle->image->url }}"
@@ -35,7 +34,7 @@
             </div>
         </div>
 
-        {{-- ═══ RIGHT — Content ═══ --}}
+        {{-- RIGHT — Content --}}
         <div class="popup-content-side">
 
             <!-- Logo -->
@@ -64,7 +63,7 @@
             </p>
             @endif
 
-            <!-- Time + views strip -->
+            <!-- Time + views -->
             <div class="popup-meta">
                 <span><i class="fas fa-clock" style="color:#f97316;margin-right:4px"></i>{{ $popupArticle->published_at?->diffForHumans() ?? 'Recently' }}</span>
                 <span style="color:#e5e7eb">·</span>
@@ -89,7 +88,7 @@
                 </div>
             </div>
 
-            <!-- CTA Buttons -->
+            <!-- CTAs -->
             <div class="popup-actions">
                 <a href="{{ route('detail') }}" class="popup-btn-primary">
                     <i class="fas fa-heart" style="margin-right:8px"></i>
@@ -105,50 +104,13 @@
                 Maybe later — remind me next time
             </button>
 
-            <!-- Trust -->
+            <!-- Trust badges -->
             <div class="popup-trust">
                 <span class="popup-trust-item"><i class="fas fa-shield-alt" style="color:#22c55e;margin-right:4px"></i>100% Secure</span>
                 <span class="popup-trust-item"><i class="fas fa-certificate" style="color:#3b82f6;margin-right:4px"></i>Certified NGO</span>
                 <span class="popup-trust-item"><i class="fas fa-check-circle" style="color:#f97316;margin-right:4px"></i>IDEAS Labeled</span>
             </div>
         </div>
-
-        @else
-        {{-- ═══ Fallback — static ═══ --}}
-        <div class="popup-image-side">
-            <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600"
-                 alt="Sponsored Child" class="popup-image">
-            <div class="popup-image-overlay">
-                <span class="popup-badge"><i class="fas fa-heart" style="margin-right:4px"></i>Change a Life Today</span>
-            </div>
-        </div>
-        <div class="popup-content-side">
-            <div class="popup-logo">
-                <div class="popup-logo-icon"><i class="fas fa-heart"></i></div>
-                <span class="popup-logo-text">Hope &amp; Impact</span>
-            </div>
-            <h2 class="popup-title">Sponsor a Child<br><span class="popup-title-highlight">for just $1/day</span></h2>
-            <p class="popup-description">Your small contribution provides a child with education, meals, healthcare, and hope for a brighter future.</p>
-            <div class="popup-stats">
-                <div class="popup-stat"><span class="popup-stat-number">95K+</span><span class="popup-stat-label">Children Helped</span></div>
-                <div class="popup-stat-divider"></div>
-                <div class="popup-stat"><span class="popup-stat-number">84%</span><span class="popup-stat-label">To Programs</span></div>
-                <div class="popup-stat-divider"></div>
-                <div class="popup-stat"><span class="popup-stat-number">7</span><span class="popup-stat-label">Countries</span></div>
-            </div>
-            <div class="popup-actions">
-                <a href="{{ route('detail') }}" class="popup-btn-primary">
-                    <i class="fas fa-child" style="margin-right:8px"></i>Sponsor a Child Now
-                </a>
-            </div>
-            <button id="remind-later" class="popup-dismiss">Maybe later — remind me next time</button>
-            <div class="popup-trust">
-                <span class="popup-trust-item"><i class="fas fa-shield-alt" style="color:#22c55e;margin-right:4px"></i>100% Secure</span>
-                <span class="popup-trust-item"><i class="fas fa-certificate" style="color:#3b82f6;margin-right:4px"></i>Certified NGO</span>
-                <span class="popup-trust-item"><i class="fas fa-check-circle" style="color:#f97316;margin-right:4px"></i>IDEAS Labeled</span>
-            </div>
-        </div>
-        @endif
 
     </div>
 </div>
@@ -168,9 +130,7 @@
 .popup-overlay.active { opacity: 1; visibility: visible; }
 
 .popup-container {
-    background: #fff;
-    border-radius: 1.25rem;
-    overflow: hidden;
+    background: #fff; border-radius: 1.25rem; overflow: hidden;
     max-width: 820px; width: 100%;
     display: flex; position: relative;
     box-shadow: 0 25px 60px rgba(0,0,0,.35);
@@ -191,17 +151,14 @@
 }
 .popup-close:hover { background: rgba(0,0,0,.5); transform: rotate(90deg); }
 
-/* Left image */
 .popup-image-side {
     width: 45%; flex-shrink: 0;
     position: relative; display: none;
 }
 @media(min-width:640px){ .popup-image-side { display: block; } }
 
-.popup-image {
-    width: 100%; height: 100%;
-    object-fit: cover; min-height: 480px;
-}
+.popup-image { width: 100%; height: 100%; object-fit: cover; min-height: 480px; }
+
 .popup-image-overlay {
     position: absolute; inset: 0;
     background: linear-gradient(to top, rgba(0,0,0,.65) 0%, transparent 55%);
@@ -212,7 +169,6 @@
     background: #f97316; color: #fff;
     font-size: .8rem; font-weight: 700;
     padding: .45rem 1rem; border-radius: 999px;
-    letter-spacing: .02em;
 }
 .popup-views-badge {
     display: inline-flex; align-items: center;
@@ -221,9 +177,8 @@
     padding: .35rem .8rem; border-radius: 999px;
 }
 
-/* Right content */
 .popup-content-side {
-    flex: 1; padding: 1.75rem 1.75rem;
+    flex: 1; padding: 1.75rem;
     display: flex; flex-direction: column; justify-content: center;
     overflow-y: auto;
 }
@@ -235,31 +190,16 @@
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
     color: #fff; font-size: .875rem;
 }
-.popup-logo-text { font-weight: 800; font-size: 1rem; color: #111827; letter-spacing: -.01em; }
+.popup-logo-text { font-weight: 800; font-size: 1rem; color: #111827; }
 
-.popup-title {
-    font-size: 1.45rem; font-weight: 800;
-    color: #111827; line-height: 1.25;
-    margin-bottom: .6rem;
-}
-.popup-title-highlight { color: #f97316; }
-
-.popup-description {
-    color: #6b7280; font-size: .875rem;
-    line-height: 1.6; margin-bottom: .875rem;
-}
-
-.popup-meta {
-    display: flex; align-items: center; gap: .5rem;
-    font-size: .72rem; color: #9ca3af;
-    margin-bottom: 1rem;
-}
+.popup-title { font-size: 1.45rem; font-weight: 800; color: #111827; line-height: 1.25; margin-bottom: .6rem; }
+.popup-description { color: #6b7280; font-size: .875rem; line-height: 1.6; margin-bottom: .875rem; }
+.popup-meta { display: flex; align-items: center; gap: .5rem; font-size: .72rem; color: #9ca3af; margin-bottom: 1rem; }
 
 .popup-stats {
     display: flex; align-items: center; gap: .75rem;
     background: #fff7ed; border: 1px solid #fed7aa;
-    border-radius: .75rem; padding: .75rem 1rem;
-    margin-bottom: 1rem;
+    border-radius: .75rem; padding: .75rem 1rem; margin-bottom: 1rem;
 }
 .popup-stat { flex: 1; text-align: center; }
 .popup-stat-number { display: block; font-size: 1.05rem; font-weight: 800; color: #f97316; line-height: 1.2; }
@@ -281,27 +221,22 @@
 
 .popup-btn-secondary {
     display: flex; align-items: center; justify-content: center;
-    padding: .8rem 1.5rem;
-    border: 2px solid #e5e7eb; color: #374151;
-    font-weight: 600; font-size: .875rem;
+    padding: .8rem 1.5rem; border: 2px solid #e5e7eb;
+    color: #374151; font-weight: 600; font-size: .875rem;
     border-radius: .625rem; text-decoration: none;
     transition: border-color .2s, background .2s, color .2s;
 }
 .popup-btn-secondary:hover { border-color: #f97316; background: #fff7ed; color: #f97316; }
 
 .popup-dismiss {
-    background: none; border: none;
-    color: #9ca3af; font-size: .75rem;
-    cursor: pointer; width: 100%;
-    text-align: center; text-decoration: underline;
-    margin-bottom: .75rem; padding: 0;
-    transition: color .2s;
+    background: none; border: none; color: #9ca3af; font-size: .75rem;
+    cursor: pointer; width: 100%; text-align: center; text-decoration: underline;
+    margin-bottom: .75rem; padding: 0; transition: color .2s;
 }
 .popup-dismiss:hover { color: #6b7280; }
 
 .popup-trust {
-    display: flex; justify-content: center;
-    gap: .75rem; flex-wrap: wrap;
+    display: flex; justify-content: center; gap: .75rem; flex-wrap: wrap;
     border-top: 1px solid #f3f4f6; padding-top: .75rem;
 }
 .popup-trust-item { font-size: .68rem; color: #6b7280; font-weight: 500; display: flex; align-items: center; }
@@ -318,31 +253,33 @@
 <!-- ========== POPUP SCRIPT ========== -->
 <script>
 (function () {
-    const modal    = document.getElementById('popup-modal');
-    const closeBtn = document.getElementById('close-popup');
-    const remindBtn= document.getElementById('remind-later');
+    const modal     = document.getElementById('popup-modal');
+    const closeBtn  = document.getElementById('close-popup');
+    const remindBtn = document.getElementById('remind-later');
     if (!modal) return;
 
     const KEY      = 'popup_closed_at';
-    const COOLDOWN = 24 * 60 * 60 * 1000; // 24 h
+    const COOLDOWN = 24 * 60 * 60 * 1000; // 24 hours
 
-    function close() {
+    function closePopup() {
         modal.classList.remove('active');
-        sessionStorage.setItem(KEY, Date.now());
+        localStorage.setItem(KEY, Date.now());
     }
 
     function maybeShow() {
-        const last = sessionStorage.getItem(KEY);
-        if (last && Date.now() - parseInt(last) < COOLDOWN) return;
+        const lastClosed = localStorage.getItem(KEY);
+        if (lastClosed && Date.now() - parseInt(lastClosed) < COOLDOWN) return;
         setTimeout(() => modal.classList.add('active'), 3500);
     }
 
-    closeBtn ?.addEventListener('click', close);
-    remindBtn?.addEventListener('click', close);
-    modal.addEventListener('click', e => { if (e.target === modal) close(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    closeBtn?.addEventListener('click', closePopup);
+    remindBtn?.addEventListener('click', closePopup);
+    modal.addEventListener('click', e => { if (e.target === modal) closePopup(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
     if (document.readyState === 'complete') maybeShow();
     else window.addEventListener('load', maybeShow);
 })();
 </script>
+
+@endif

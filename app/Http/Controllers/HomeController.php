@@ -230,20 +230,7 @@ class HomeController extends Controller
         return view('pages.terms-of-service');
     }
 
-    public function details()
-    {
-        $featuredArticles = Article::with(['category', 'image'])
-            ->published()
-            ->featured()
-            ->orderBy('published_at', 'desc')
-            ->limit(3)
-            ->get()
-            ->map(fn($a) => $this->encryptArticle($a));
-
-        $settings = $this->getSiteSettings();
-
-        return view('pages.details', compact('featuredArticles', 'settings'));
-    }
+  
 
     // ──────────────────────────────────────────────────────────────────────
     //  SITE SETTINGS HELPER  (reads from Setting model / DB)
