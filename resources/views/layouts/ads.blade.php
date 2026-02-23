@@ -39,8 +39,11 @@
 
             <!-- Logo -->
             <div class="popup-logo">
-                <div class="popup-logo-icon"><i class="fas fa-heart"></i></div>
-                <span class="popup-logo-text">Hope &amp; Impact</span>
+              
+                   <a href="{{ route('home') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="Association Des Ailes Pour Grandir Logo" class="popup-logo-img" style="height: 64px;width:auto;">
+                   </a>
+            
             </div>
 
             <!-- Category -->
@@ -249,7 +252,6 @@
     .popup-stat-number { font-size: .9rem; }
 }
 </style>
-
 <!-- ========== POPUP SCRIPT ========== -->
 <script>
 (function () {
@@ -258,18 +260,21 @@
     const remindBtn = document.getElementById('remind-later');
     if (!modal) return;
 
-    const KEY      = 'popup_closed_at';
+    const KEY      = 'popup_last_shown';
     const COOLDOWN = 24 * 60 * 60 * 1000; // 24 hours
 
     function closePopup() {
         modal.classList.remove('active');
-        localStorage.setItem(KEY, Date.now());
     }
 
     function maybeShow() {
-        const lastClosed = localStorage.getItem(KEY);
-        if (lastClosed && Date.now() - parseInt(lastClosed) < COOLDOWN) return;
-        setTimeout(() => modal.classList.add('active'), 3500);
+        const lastShown = localStorage.getItem(KEY);
+        if (lastShown && Date.now() - parseInt(lastShown) < COOLDOWN) return;
+
+        setTimeout(() => {
+            modal.classList.add('active');
+            localStorage.setItem(KEY, Date.now()); // mark as shown NOW
+        }, 3500);
     }
 
     closeBtn?.addEventListener('click', closePopup);

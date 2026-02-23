@@ -5,17 +5,26 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChildDocumentController;
+use App\Http\Controllers\ChildMediaController;
 use App\Http\Controllers\ChildrenController;
+use App\Http\Controllers\ChildUpdateController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\FamilyController;
+use App\Http\Controllers\FamilyDocumentController;
+use App\Http\Controllers\FamilyMediaController;
 use App\Http\Controllers\FamilyMemberController;
+use App\Http\Controllers\FamilyUpdateController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\PublicChildController;
+use App\Http\Controllers\PublicFamilyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SponsorAdminController;
 use App\Http\Controllers\SponsorAuthController;
 use App\Http\Controllers\SponsorContactController;
+use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\SponsorDashboardController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Auth;
@@ -39,14 +48,20 @@ Route::get('/about',      [HomeController::class, 'about'])->name('about');
 Route::get('/privacy-policy',   [HomeController::class, 'privacy'])->name('privacy-policy');
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms-of-service');
 Route::get('/details',    [HomeController::class, 'details'])->name('detail');
-// Route::get('/donate',      [DonationController::class, 'donate'])->name('donate');
-Route::post('/webhooks/every-org', [DonationController::class, 'handleWebhook']);
+
+
+
+Route::get('/sponsor',      [SponsorController::class, 'index'])->name('sponsor.children');
 // Encrypted slug routes
+Route::get('/families/{family}', action: [PublicFamilyController::class, 'show'])->name('families.show');
+
+// Public child detail page  
+Route::get('/children/{child}', [PublicChildController::class, 'show'])->name('children.show');
+// Public family detail page
 Route::get('/articles/{slug}',       [HomeController::class, 'articleDetails'])->name('articles.show');
 Route::get('/categories/{category}', [HomeController::class, 'categoryArticles'])->name('category.articles');
 Route::get('/login/sponsor', [SponsorAuthController::class, 'showLogin'])->name('sponsor.login');
- Route::post('/login/sponsor', [SponsorAuthController::class, 'login']);
-Route::get('/sponsor',     [HomeController::class, 'sponsorshow'])->name('sponsor');
+Route::post('/login/sponsor', [SponsorAuthController::class, 'login']);
 
 Route::prefix('admin')->group(function () {
         Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
@@ -118,6 +133,26 @@ Route::prefix('admin')->group(function () {
         Route::put('/admin/children/{child}', [ChildrenController::class, 'update'])->name('admin.children.update');
         Route::delete('/admin/children/{child}', [ChildrenController::class, 'destroy'])->name('admin.children.destroy');
 
+        // Child Updates
+        Route::post('children/{child}/updates', [ChildUpdateController::class, 'store'])
+            ->name('admin.children.updates.store');
+        Route::delete('children/{child}/updates/{update}', [ChildUpdateController::class, 'destroy'])
+            ->name('admin.children.updates.destroy');
+
+        // Child Media
+        Route::post('children/{child}/media', [ChildMediaController::class, 'store'])
+            ->name('admin.children.media.store');
+        Route::delete('children/{child}/media/{media}', [ChildMediaController::class, 'destroy'])
+            ->name('admin.children.media.destroy');
+
+        // Child Documents
+        Route::post('children/{child}/documents', [ChildDocumentController::class, 'store'])
+            ->name('admin.children.documents.store');
+        Route::delete('children/{child}/documents/{document}', [ChildDocumentController::class, 'destroy'])
+            ->name('admin.children.documents.destroy');
+
+
+
         // Sponsor Management
         Route::get('/sponsors/admin', [SponsorAdminController::class, 'index'])->name('admin.sponsors.index');
         Route::get('/admin/sponsors/create', [SponsorAdminController::class, 'create'])->name('admin.sponsors.create');
@@ -135,6 +170,26 @@ Route::prefix('admin')->group(function () {
         Route::get('/admin/families/{family}/edit', [FamilyController::class, 'edit'])->name('admin.families.edit');
         Route::put('/admin/families/{family}', [FamilyController::class, 'update'])->name('admin.families.update');
         Route::delete('/admin/families/{family}', [FamilyController::class, 'destroy'])->name('admin.families.destroy');
+
+        // Family Updates
+        Route::post('families/{family}/updates', [FamilyUpdateController::class, 'store'])
+            ->name('admin.families.updates.store');
+        Route::delete('families/{family}/updates/{update}', [FamilyUpdateController::class, 'destroy'])
+            ->name('admin.families.updates.destroy');
+
+        // Family Media
+        Route::post('families/{family}/media', [FamilyMediaController::class, 'store'])
+            ->name('admin.families.media.store');
+        Route::delete('families/{family}/media/{media}', [FamilyMediaController::class, 'destroy'])
+            ->name('admin.families.media.destroy');
+
+        // Family Documents
+        Route::post('families/{family}/documents', [FamilyDocumentController::class, 'store'])
+            ->name('admin.families.documents.store');
+        Route::delete('families/{family}/documents/{document}', [FamilyDocumentController::class, 'destroy'])
+            ->name('admin.families.documents.destroy');
+
+
         // Family Member Management
         Route::get('/family-members/admin', [FamilyMemberController::class, 'index'])->name('admin.family-members.index');
         Route::get('/admin/family-members/create', [FamilyMemberController::class, 'create'])->name('admin.family-members.create');

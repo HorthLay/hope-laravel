@@ -80,7 +80,7 @@ class FamilyController extends Controller
 
     public function show(Family $family)
     {
-        $family->load(['sponsors', 'media', 'documents']);
+        $family->load(['sponsors', 'media', 'documents', 'updates']);
         return view('admin.families.show', compact('family'));
     }
 

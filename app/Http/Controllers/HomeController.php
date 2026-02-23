@@ -15,88 +15,108 @@ class HomeController extends Controller
        // ──────────────────────────────────────────────────────────────────────
     //  HOME
     // ──────────────────────────────────────────────────────────────────────
-    public function index()
-    {
-        // All published articles — used for both the news grid and the most-read ranked list
-        $articles = Article::with(['category', 'image', 'tags'])
-            ->published()
-            ->orderBy('published_at', 'desc')
-            ->get()
-            ->map(fn($a) => $this->encryptArticle($a));
+ public function index()
+{
+    $articles = Article::with(['category', 'image', 'tags'])
+        ->published()
+        ->orderBy('published_at', 'desc')
+        ->get()
+        ->map(fn($a) => $this->encryptArticle($a));
 
-        // Featured success story
-        $successStory = Article::with(['category', 'image', 'tags'])
-            ->published()
-            ->featured()
-            ->orderBy('published_at', 'desc')
-            ->first();
-
-        if ($successStory) {
-            $successStory = $this->encryptArticle($successStory);
-        }
-
-        // Video articles — articles with a YouTube/video URL
-        $videoArticles = Article::with(['category', 'image', 'tags'])
-            ->published()
-            ->whereNotNull('video_url')
-            ->where('video_url', '!=', '')
-            ->orderBy('published_at', 'desc')
-            ->limit(3)
-            ->get()
-            ->map(function ($a) {
-                $a = $this->encryptArticle($a);
-                $a->embed_url = $this->getYoutubeEmbedUrl($a->video_url);
-                return $a;
-            });
-
-        // Categories for nav + filtering
-        $categories = Category::active()
-            ->withCount(['articles' => fn($q) => $q->published()])
-            ->ordered()
-            ->get()
-            ->map(fn($c) => $this->encryptCategory($c));
-
-        // Per-category article groups (first 3 categories, up to 4 articles each)
-        // Each article keeps its own $article->style for the card partial
-        $categoryArticles = $categories->take(3)->mapWithKeys(function ($cat) {
-            $articles = Article::with(['category', 'image', 'tags'])
-                ->published()
-                ->where('category_id', $cat->id)
-                ->orderBy('published_at', 'desc')
-                ->limit(4)
-                ->get()
-                ->map(fn($a) => $this->encryptArticle($a));
-            return [$cat->id => $articles];
-        });
-
-        $stats = [
-            'total_articles'   => Article::published()->count(),
-            'total_categories' => Category::active()->count(),
-            'total_views'      => Article::sum('views_count'),
-        ];
-
-        // Most-viewed article for popup
-        $popupArticle = Article::with(['category', 'image'])
-            ->published()
-            ->orderBy('views_count', 'desc')
-            ->first();
-        if ($popupArticle) {
-            $this->encryptArticle($popupArticle);
-        }
-
-        $this->trackVisit(request());
-
-        return view('home', compact(
-            'articles',
-            'successStory',
-            'videoArticles',
-            'categories',
-            'categoryArticles',
-            'stats',
-            'popupArticle'
-        ));
+    $successStory = Article::with(['category', 'image', 'tags'])
+        ->published()
+        ->featured()
+        ->orderBy('published_at', 'desc')
+        ->first();
+    if ($successStory) {
+        $successStory = $this->encryptArticle($successStory);
     }
 
+    $videoArticles = Article::with(['category', 'image', 'tags'])
+        ->published()
+        ->whereNotNull('video_url')
+        ->where('video_url', '!=', '')
+        ->orderBy('published_at', 'desc')
+        ->limit(3)
+        ->get()
+        ->map(function ($a) {
+            $a = $this->encryptArticle($a);
+            $a->embed_url = $this->getYoutubeEmbedUrl($a->video_url);
+            return $a;
+        });
+
+    $categories = Category::active()
+        ->withCount(['articles' => fn($q) => $q->published()])
+        ->ordered()
+        ->get()
+        ->map(fn($c) => $this->encryptCategory($c));
+
+    $categoryArticles = $categories->take(3)->mapWithKeys(function ($cat) {
+        $articles = Article::with(['category', 'image', 'tags'])
+            ->published()
+            ->where('category_id', $cat->id)
+            ->orderBy('published_at', 'desc')
+            ->limit(4)
+            ->get()
+            ->map(fn($a) => $this->encryptArticle($a));
+        return [$cat->id => $articles];
+    });
+
+    $stats = [
+        'total_articles'   => Article::published()->count(),
+        'total_categories' => Category::active()->count(),
+        'total_views'      => Article::sum('views_count'),
+    ];
+
+    $popupArticle = Article::with(['category', 'image'])
+        ->published()
+        ->orderBy('views_count', 'desc')
+        ->first();
+    if ($popupArticle) {
+        $this->encryptArticle($popupArticle);
+    }
+
+    // ── NEW: unsponsored children & families ──────────────────────────
+    $unsponsoredChildren = \App\Models\SponsoredChild::where('is_active', true)
+        ->whereDoesntHave('sponsors')
+        ->inRandomOrder()
+        ->limit(6)
+        ->get();
+
+    $stats = [
+    'total_articles'  => Article::published()->count(),
+    'total_categories'=> Category::active()->count(),
+    'total_views'     => Article::sum('views_count'),
+    'total_children'  => \App\Models\SponsoredChild::where('is_active', true)->count(),
+    'total_countries' => \App\Models\SponsoredChild::where('is_active', true)
+                            ->whereNotNull('country')
+                            ->distinct('country')
+                            ->count('country'),
+];
+
+    $unsponsoredFamilies = \App\Models\Family::where('is_active', true)
+        ->whereDoesntHave('sponsors')
+        ->withCount('members')
+        ->inRandomOrder()
+        ->limit(4)
+        ->get();
+    // ─────────────────────────────────────────────────────────────────
+
+    $this->trackVisit(request());
+
+    return view('home', compact(
+        'articles',
+        'successStory',
+        'videoArticles',
+        'categories',
+        'categoryArticles',
+        'stats',
+        'popupArticle',
+        'unsponsoredChildren',
+        'unsponsoredFamilies',
+        'stats'
+    ));
+}
     // ──────────────────────────────────────────────────────────────────────
     //  ARTICLE DETAIL  /articles/{slug}
     // ──────────────────────────────────────────────────────────────────────

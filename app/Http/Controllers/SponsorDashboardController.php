@@ -9,7 +9,7 @@ use App\Models\FamilyDocument;
 use App\Models\FamilyMedia;
 class SponsorDashboardController extends Controller
 {
-     public function __construct()
+      public function __construct()
     {
         $this->middleware('sponsor.auth');
     }
@@ -18,10 +18,14 @@ class SponsorDashboardController extends Controller
     {
         $sponsor = Auth::guard('sponsor')->user();
 
-        // Families and children are INDEPENDENT — load both separately
         $sponsor->load([
-            'families.media', 'families.documents', 'families.sponsors',
-            'children.updates', 'children.media', 'children.documents',
+            'families.media',
+            'families.documents',
+            'families.updates',
+            'families.sponsors',
+            'children.updates',
+            'children.media',
+            'children.documents',
         ]);
 
         $families = $sponsor->families;
@@ -38,31 +42,44 @@ class SponsorDashboardController extends Controller
     {
         $sponsor = Auth::guard('sponsor')->user();
 
-        // Family media/docs
+        // ── Family files ──
         if (str_starts_with($type, 'family_')) {
             $familyIds = $sponsor->families()->pluck('families.id');
 
             if ($type === 'family_document') {
-                $file = FamilyDocument::where('id', $id)->whereIn('family_id', $familyIds)->firstOrFail();
+                $file = FamilyDocument::where('id', $id)
+                    ->whereIn('family_id', $familyIds)
+                    ->firstOrFail();
             } elseif ($type === 'family_media') {
-                $file = FamilyMedia::where('id', $id)->whereIn('family_id', $familyIds)->firstOrFail();
+                $file = FamilyMedia::where('id', $id)
+                    ->whereIn('family_id', $familyIds)
+                    ->firstOrFail();
             } else {
                 abort(404);
             }
         }
-        // Child media/docs
+
+        // ── Child files ──
         elseif ($type === 'document') {
             $childIds = $sponsor->children()->pluck('sponsored_children.id');
-            $file = ChildDocument::where('id', $id)->whereIn('child_id', $childIds)->firstOrFail();
+            $file = ChildDocument::where('id', $id)
+                ->whereIn('child_id', $childIds)
+                ->firstOrFail();
         } elseif ($type === 'media') {
             $childIds = $sponsor->children()->pluck('sponsored_children.id');
-            $file = ChildMedia::where('id', $id)->whereIn('child_id', $childIds)->firstOrFail();
+            $file = ChildMedia::where('id', $id)
+                ->whereIn('child_id', $childIds)
+                ->firstOrFail();
         } else {
             abort(404);
         }
 
-        $filePath = storage_path('app/public/' . $file->file_path);
-        if (!file_exists($filePath)) abort(404, 'File not found.');
+        // Files are stored in public/uploads/... not storage/app/public/
+        $filePath = public_path($file->file_path);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found.');
+        }
 
         return response()->download($filePath);
     }

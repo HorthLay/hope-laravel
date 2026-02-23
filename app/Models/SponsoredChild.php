@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\Crypt;
+
 class SponsoredChild extends Model
 {
     use HasFactory;
@@ -44,6 +46,10 @@ public function sponsors()
     )->withTimestamps();
 }
 
+public function getEncryptedIdAttribute()
+{
+    return Crypt::encryptString($this->id);
+}
     public function updates()
     {
         return $this->hasMany(ChildUpdate::class, 'child_id')->orderBy('report_date', 'desc');

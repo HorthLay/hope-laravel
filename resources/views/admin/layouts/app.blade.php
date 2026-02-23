@@ -462,6 +462,12 @@
                 <span class="font-medium">Families</span>
             </a>
 
+             <a href="{{ route('admin.family-members.index') }}" class="nav-item {{ request()->routeIs('admin.family-members.*') ? 'active' : '' }}">
+                <i class="fas fa-user-friends"></i>
+                <span class="font-medium">Family Members</span>
+            </a>
+            
+
              <a href="{{ route('admin.sponsors.index') }}" class="nav-item {{ request()->routeIs('admin.sponsors.*') ? 'active' : '' }}">
                 <i class="fas fa-hand-holding-heart"></i>
                 <span class="font-medium">Sponsors</span>

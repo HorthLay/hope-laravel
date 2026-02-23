@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -27,4 +28,23 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => $exception->getMessage()], 401);
+        }
+
+        // Check which guard failed and redirect accordingly
+        $guards = $exception->guards();
+        if (in_array('sponsor', $guards)) {
+            return redirect()->guest(route('sponsor.login'));
+        }
+
+        return redirect()->guest(route('login'));
+    }
+
+
+    
 }
