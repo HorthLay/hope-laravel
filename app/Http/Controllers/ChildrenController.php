@@ -66,6 +66,7 @@ class ChildrenController extends Controller
             'story'         => 'nullable|string',
             'is_active'     => 'boolean',
             'profile_photo' => 'nullable|image|max:2048',
+            'has_family'    => 'boolean',
         ]);
 
         $data['is_active'] = $request->boolean('is_active', true);
@@ -116,6 +117,7 @@ class ChildrenController extends Controller
             'story'         => 'nullable|string',
             'is_active'     => 'boolean',
             'profile_photo' => 'nullable|image|max:2048',
+            'has_family'    => 'boolean',
         ]);
 
         $data['is_active'] = $request->boolean('is_active');

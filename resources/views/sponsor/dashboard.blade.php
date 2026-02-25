@@ -121,11 +121,11 @@
 <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <a href="{{ route('home') }}">
-            <img src="{{ asset('images/logo.png') }}" style="height:56px;width:auto;" alt="Logo">
+            <img src="{{ asset('images/logo.png') }}" style="height:80px;width:auto;" alt="Logo">
         </a>
         <div class="flex items-center gap-3">
 
-            {{-- Language dropdown (same logic as main header) --}}
+            {{-- Language dropdown --}}
             <div class="relative" id="dash-translate-wrapper">
                 <div id="google_translate_element" style="display:none;position:absolute"></div>
                 <button class="lang-pill" onclick="dashTogglePanel()" id="dash-translate-toggle">
@@ -225,7 +225,6 @@
     {{-- ═══════════════════════════════════════════ --}}
     @foreach($families as $fi => $family)
     @php
-        /* Collect all years from media + documents + updates */
         $fYears = collect();
         foreach($family->updates  as $u) { $fYears->push(\Carbon\Carbon::parse($u->report_date ?? $u->created_at)->year); }
         foreach($family->media    as $m) { $fYears->push($m->created_at->year); }
@@ -255,7 +254,6 @@
                     @if($family->story)
                     <p class="text-sm text-gray-600 leading-relaxed line-clamp-4">{{ $family->story }}</p>
                     @endif
-                    {{-- Stats row --}}
                     <div class="flex flex-wrap gap-3 mt-4">
                         <span class="flex items-center gap-1 text-xs font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
                             <i class="fas fa-newspaper"></i> {{ $family->updates->count() }} Updates
@@ -293,11 +291,10 @@
         </div>
         @endif
 
-        {{-- Latest section (most recent 6 media items) --}}
+        {{-- Latest section --}}
         <div class="year-section active" data-panel="{{ $fPanelId }}" data-section="latest">
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="md:col-span-2 space-y-5">
-                    {{-- Latest updates --}}
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-newspaper text-green-500"></i> Latest Updates
@@ -323,7 +320,6 @@
                         @endforelse
                     </div>
 
-                    {{-- All media grid --}}
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-photo-film text-orange-500"></i> Latest Media
@@ -360,7 +356,6 @@
                     </div>
                 </div>
                 <div class="space-y-5">
-                    {{-- Latest documents --}}
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-base font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-file-pdf text-orange-500"></i> Documents
@@ -399,8 +394,6 @@
         <div class="year-section" data-panel="{{ $fPanelId }}" data-section="{{ $yr }}">
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="md:col-span-2 space-y-5">
-
-                    {{-- Updates for this year --}}
                     @php $yFUpdates = $family->updates->filter(fn($u) => \Carbon\Carbon::parse($u->report_date ?? $u->created_at)->year == $yr)->sortByDesc('report_date'); @endphp
                     @if($yFUpdates->isNotEmpty())
                     <div class="bg-white rounded-xl p-6 shadow">
@@ -436,7 +429,6 @@
                     </div>
                     @endif
 
-                    {{-- Photos --}}
                     @if($yPhotos->isNotEmpty())
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
@@ -462,7 +454,6 @@
                     </div>
                     @endif
 
-                    {{-- Videos --}}
                     @if($yVideos->isNotEmpty())
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
@@ -497,10 +488,8 @@
                         <p class="text-gray-400 text-sm">No content for {{ $yr }}.</p>
                     </div>
                     @endif
-
                 </div>
                 <div class="space-y-5">
-                    {{-- Documents for this year --}}
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-base font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-folder text-yellow-500"></i> Documents · {{ $yr }}
@@ -543,7 +532,6 @@
         $eidx = $families->count() + $ci;
         $cPanelId = "ep-{$eidx}";
 
-        /* Collect all years */
         $cYears = collect();
         foreach($child->updates  as $u) { $cYears->push(\Carbon\Carbon::parse($u->report_date ?? $u->created_at)->year); }
         foreach($child->media    as $m) { $cYears->push($m->created_at->year); }
@@ -552,7 +540,7 @@
     @endphp
     <div class="entity-panel {{ ($totalEntities === 1 || $eidx === 0) ? 'active' : '' }}" id="{{ $cPanelId }}">
 
-        {{-- Child hero --}}
+        {{-- ── Child hero ── --}}
         <div class="bg-white rounded-2xl shadow overflow-hidden mb-6">
             <div class="flex flex-col sm:flex-row items-center gap-6 p-6">
                 <div class="w-32 h-32 rounded-2xl overflow-hidden border-4 border-orange-100 flex-shrink-0 shadow-md bg-orange-50 flex items-center justify-center">
@@ -563,7 +551,19 @@
                     @endif
                 </div>
                 <div class="text-center sm:text-left flex-1">
-                    <h3 class="text-2xl font-black text-gray-800">{{ $child->first_name }}</h3>
+                    <div class="flex items-center gap-3 justify-center sm:justify-start flex-wrap mb-1">
+                        <h3 class="text-2xl font-black text-gray-800">{{ $child->first_name }}</h3>
+                        {{-- ── Has Family status badge ── --}}
+                        @if($child->has_family)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-green-100 text-green-700 border border-green-200">
+                            <i class="fas fa-home text-[10px]"></i> Has Family
+                        </span>
+                        @else
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-red-100 text-red-600 border border-red-200">
+                            <i class="fas fa-home text-[10px]"></i> No Family
+                        </span>
+                        @endif
+                    </div>
                     <p class="text-sm text-gray-500 mt-1">
                         <i class="fas fa-birthday-cake text-orange-400 mr-1"></i>{{ $child->age }} years old ·
                         <i class="fas fa-map-marker-alt text-orange-400 mx-1"></i>{{ $child->country }}
@@ -617,7 +617,6 @@
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="md:col-span-2 space-y-5">
 
-                    {{-- Latest updates (all types) --}}
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-newspaper text-green-500"></i> Latest Updates
@@ -643,7 +642,6 @@
                         @endforelse
                     </div>
 
-                    {{-- Latest media --}}
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-photo-film text-orange-500"></i> Latest Media
@@ -680,7 +678,33 @@
 
                 </div>
                 <div class="space-y-5">
-                    {{-- Latest documents --}}
+                    {{-- ── Family info card (only shown when child has a family) ── --}}
+                    @if($child->has_family && $child->family)
+                    <div class="bg-white rounded-xl p-5 shadow border-l-4 border-green-400">
+                        <h3 class="text-sm font-black text-gray-800 mb-3 flex items-center gap-2">
+                            <i class="fas fa-home text-green-500"></i> Family
+                        </h3>
+                        <div class="flex items-center gap-3">
+                            @if($child->family->profile_photo)
+                            <img src="{{ asset($child->family->profile_photo) }}" class="w-12 h-12 rounded-xl object-cover border-2 border-green-100 flex-shrink-0">
+                            @else
+                            <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0 border-2 border-green-100">
+                                <i class="fas fa-users text-green-400 text-lg"></i>
+                            </div>
+                            @endif
+                            <div class="min-w-0">
+                                <p class="font-bold text-gray-800 text-sm truncate">{{ $child->family->name }}</p>
+                                @if($child->family->country)
+                                <p class="text-xs text-gray-400"><i class="fas fa-map-marker-alt mr-1 text-orange-400 text-[10px]"></i>{{ $child->family->country }}</p>
+                                @endif
+                                @if($child->family->code)
+                                <p class="font-mono text-[10px] text-gray-400 mt-0.5">{{ $child->family->code }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-base font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-file-pdf text-orange-500"></i> Documents
@@ -721,14 +745,12 @@
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="md:col-span-2 space-y-5">
 
-                    {{-- Updates for year (all types) --}}
                     @if($yUpdates->isNotEmpty())
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-newspaper text-green-500"></i> Updates · {{ $yr }}
                             <span class="ml-auto text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">{{ $yUpdates->count() }}</span>
                         </h3>
-                        {{-- Update type filter chips --}}
                         @php $updateTypes = $yUpdates->pluck('type')->filter()->unique()->values(); @endphp
                         @if($updateTypes->count() > 1)
                         <div class="flex flex-wrap gap-1.5 mb-4">
@@ -757,7 +779,6 @@
                     </div>
                     @endif
 
-                    {{-- Photos for year --}}
                     @if($yPhotos->isNotEmpty())
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
@@ -783,7 +804,6 @@
                     </div>
                     @endif
 
-                    {{-- Videos for year --}}
                     @if($yVideos->isNotEmpty())
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
@@ -821,7 +841,30 @@
 
                 </div>
                 <div class="space-y-5">
-                    {{-- Documents for year --}}
+                    {{-- ── Family info card in year view ── --}}
+                    @if($child->has_family && $child->family)
+                    <div class="bg-white rounded-xl p-5 shadow border-l-4 border-green-400">
+                        <h3 class="text-sm font-black text-gray-800 mb-3 flex items-center gap-2">
+                            <i class="fas fa-home text-green-500"></i> Family
+                        </h3>
+                        <div class="flex items-center gap-3">
+                            @if($child->family->profile_photo)
+                            <img src="{{ asset($child->family->profile_photo) }}" class="w-12 h-12 rounded-xl object-cover border-2 border-green-100 flex-shrink-0">
+                            @else
+                            <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0 border-2 border-green-100">
+                                <i class="fas fa-users text-green-400 text-lg"></i>
+                            </div>
+                            @endif
+                            <div class="min-w-0">
+                                <p class="font-bold text-gray-800 text-sm truncate">{{ $child->family->name }}</p>
+                                @if($child->family->country)
+                                <p class="text-xs text-gray-400"><i class="fas fa-map-marker-alt mr-1 text-orange-400 text-[10px]"></i>{{ $child->family->country }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="bg-white rounded-xl p-6 shadow">
                         <h3 class="text-base font-black text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-folder text-yellow-500"></i> Documents · {{ $yr }}
@@ -861,7 +904,12 @@
         <p class="text-sm text-gray-700 leading-relaxed">
             <i class="fas fa-info-circle text-orange-500 mr-2"></i>
             <strong>Thank you for your continued support!</strong> Your sponsorship makes a real difference.
-            Questions? Contact <a href="mailto:sponsors@hopeimpact.org" class="text-orange-600 hover:underline font-bold">sponsors@hopeimpact.org</a>
+            Questions? Contact 
+            <a href="https://mail.google.com/mail/?view=cm&to=asso.desailespourgrandir@gmail.com"
+                target="_blank" rel="noopener"
+                class="text-orange-600 hover:underline font-bold">
+                    asso.desailespourgrandir@gmail.com
+            </a>
         </p>
     </div>
 
@@ -874,7 +922,6 @@
      class="fixed inset-0 bg-black/95 backdrop-blur-sm z-[100] items-center justify-center p-4"
      onclick="closeLightbox()">
 
-    {{-- Top bar --}}
     <div class="absolute top-0 left-0 right-0 flex items-center justify-between px-5 py-4 z-10" onclick="event.stopPropagation()">
         <p id="lb-caption" class="text-white/80 text-sm font-bold truncate max-w-sm"></p>
         <div class="flex items-center gap-2">
@@ -889,7 +936,6 @@
         </div>
     </div>
 
-    {{-- Media content --}}
     <div onclick="event.stopPropagation()" class="max-w-5xl max-h-[80vh] flex items-center justify-center mt-10">
         <img id="lb-img" src="" alt=""
              class="max-w-full max-h-[80vh] rounded-xl shadow-2xl object-contain"
@@ -900,7 +946,6 @@
         </video>
     </div>
 
-    {{-- ESC hint --}}
     <p class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/30 text-xs">Press ESC to close</p>
 </div>
 
@@ -914,7 +959,6 @@ function switchEntity(index) {
 
 // ── Year filter ──
 function switchYear(panelId, year) {
-    // update button states for this panel
     document.querySelectorAll(`.year-btn[data-panel="${panelId}"]`).forEach(btn => {
         btn.classList.toggle('active', btn.dataset.year === String(year));
         if (btn.classList.contains('active')) {
@@ -925,7 +969,6 @@ function switchYear(panelId, year) {
             btn.classList.add('bg-white','text-gray-600','border-gray-200');
         }
     });
-    // show/hide sections
     document.querySelectorAll(`.year-section[data-panel="${panelId}"]`).forEach(sec => {
         sec.classList.toggle('active', sec.dataset.section === String(year));
     });
@@ -977,7 +1020,7 @@ document.querySelectorAll('.year-btn.active').forEach(btn => {
     btn.classList.remove('bg-orange-50','text-orange-600','border-orange-200');
 });
 
-// ══ Language controller (mirrors main header logic) ══════════════
+// ══ Language controller ══════════════════════════════════════════
 
 const DASH_LANGS = {
     en: { label:'EN', flag:'https://flagcdn.com/w40/us.png', name:'English' },
@@ -1048,7 +1091,6 @@ document.addEventListener('click', e => {
     if (w && !w.contains(e.target)) dashClosePanel();
 });
 
-// Init on load
 document.addEventListener('DOMContentLoaded', () => {
     const cookie = document.cookie.split(';').find(c => c.trim().startsWith('googtrans='));
     const stored = localStorage.getItem('gt_lang');
@@ -1057,7 +1099,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const cl = parts[parts.length - 1].trim();
         if (cl && DASH_LANGS[cl]) { dashCurrentLang = cl; localStorage.setItem('gt_lang', cl); }
     } else if (!stored) {
-        // First visit → default French
         const pair = '/en/fr';
         document.cookie = 'googtrans=' + pair + '; path=/';
         document.cookie = 'googtrans=' + pair + '; path=/; domain=' + location.hostname;

@@ -22,7 +22,11 @@ class PublicFamilyController extends Controller
             ->findOrFail($id);
 
         $family->is_sponsored = $family->sponsors->isNotEmpty();
+        $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
 
-        return view('sponsor.families-show', compact('family'));
+        return view('sponsor.families-show', compact('family', 'settings'));
     }
 }

@@ -19,6 +19,7 @@ class SponsoredChild extends Model
         'profile_photo',
         'country',
         'is_active',
+        'has_family',
     ];
 
     protected $casts = [

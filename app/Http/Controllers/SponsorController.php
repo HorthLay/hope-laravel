@@ -65,9 +65,14 @@ class SponsorController extends Controller
             'members'   => \App\Models\FamilyMember::where('is_active', true)->count(),
         ];
 
+        $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
+
         return view('sponsor.index', compact(
             'tab',
-            'children', 'childCountries', 'childStats',
+            'children', 'childCountries', 'childStats','settings',
             'families', 'familyCountries', 'familyStats'
         ));
     }

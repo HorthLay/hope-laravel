@@ -12,7 +12,12 @@ class SponsorAuthController extends Controller
         if (Auth::guard('sponsor')->check()) {
             return redirect()->route('sponsor.dashboard');
         }
-        return view('sponsor.login');
+
+        $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
+        return view('sponsor.login', compact('settings'));
     }
 
     // Handle login
@@ -44,6 +49,7 @@ class SponsorAuthController extends Controller
             $request->session()->regenerate();
             return redirect()->intended(route('sponsor.dashboard'));
         }
+        
 
         RateLimiter::hit($key, 60);
         

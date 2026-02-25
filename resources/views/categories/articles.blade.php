@@ -4,7 +4,12 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>{{ $category->name }} | Hope & Impact</title>
+    <title>{{ $category->name }} | {{ $settings['site_name'] ?? 'Hope & Impact' }}</title>
+    <meta name="description" content="{{ $settings['meta_description'] ?? $settings['site_description'] ?? '' }}">
+    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <meta name="description" content="{{ $category->description ?? 'Browse all articles in '.$category->name.' on Hope & Impact.' }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>

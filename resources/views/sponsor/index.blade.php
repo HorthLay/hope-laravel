@@ -4,7 +4,12 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Sponsor a Child or Family | Hope & Impact</title>
+    <title>Sponsor a Child or Family | {{ $settings['site_name'] ?? 'Hope & Impact' }}</title>
+     <meta name="description" content="{{ $settings['meta_description'] ?? $settings['site_description'] ?? '' }}">
+    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <meta name="description" content="Sponsor a child or family and change lives forever.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -21,12 +26,14 @@
         .tab-btn::after {
             content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
             height: 3px; border-radius: 99px;
-            background: #f97316; transform: scaleX(0);
+            background: #f4b630; transform: scaleX(0);
             transition: transform .25s ease;
         }
         .tab-btn.active::after { transform: scaleX(1); }
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
+        /* Modal uses style.display only — no Tailwind hidden conflict */
+        #story-modal { display: none; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -34,17 +41,20 @@
 @include('layouts.header')
 
 {{-- ── HERO ── --}}
-<div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white py-14 md:py-20">
+<div class="bg-gradient-to-br from-[#f4b630] to-[#e0a500] text-white py-14 md:py-20">
     <div class="max-w-5xl mx-auto px-4 text-center">
         <div class="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-1.5 text-sm font-bold mb-4">
             <i class="fas fa-heart text-white"></i> Make a Difference Today
         </div>
+
         <h1 class="text-3xl md:text-5xl font-black mb-4 leading-tight">
             Change a Life Forever
         </h1>
+
         <p class="text-white/90 text-lg max-w-xl mx-auto mb-8">
             For just $1 a day, give a child — or an entire family — access to education, nutritious meals, healthcare, and hope.
         </p>
+
         <div class="flex flex-wrap justify-center gap-3">
             @foreach(['fa-graduation-cap' => 'Education', 'fa-utensils' => 'Nutrition', 'fa-heartbeat' => 'Healthcare', 'fa-home' => 'Safe Home'] as $icon => $label)
             <div class="flex items-center gap-2 bg-white/15 rounded-xl px-4 py-2.5 text-sm font-bold">
@@ -54,13 +64,12 @@
         </div>
     </div>
 </div>
-
 {{-- ── TABS ── --}}
 <div class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
     <div class="max-w-5xl mx-auto px-4">
         <div class="flex items-center gap-0">
             <button id="tab-children" onclick="switchTab('children')"
-                    class="tab-btn active flex items-center gap-2 px-6 py-4 font-black text-sm text-orange-500 transition border-b-2 border-transparent">
+                    class="tab-btn flex items-center gap-2 px-6 py-4 font-black text-sm transition border-b-2 border-transparent">
                 <i class="fas fa-child"></i>
                 Children
                 <span class="bg-orange-100 text-orange-600 text-[10px] font-black px-2 py-0.5 rounded-full ml-1">
@@ -68,7 +77,7 @@
                 </span>
             </button>
             <button id="tab-families" onclick="switchTab('families')"
-                    class="tab-btn flex items-center gap-2 px-6 py-4 font-black text-sm text-gray-400 hover:text-amber-500 transition border-b-2 border-transparent">
+                    class="tab-btn flex items-center gap-2 px-6 py-4 font-black text-sm transition border-b-2 border-transparent">
                 <i class="fas fa-users"></i>
                 Families
                 <span class="bg-gray-100 text-gray-500 text-[10px] font-black px-2 py-0.5 rounded-full ml-1" id="fam-badge">
@@ -82,7 +91,7 @@
 {{-- ══════════════════════════════════════
      TAB: CHILDREN
 ══════════════════════════════════════ --}}
-<div id="panel-children" class="tab-panel active">
+<div id="panel-children" class="tab-panel">
 
     {{-- Stats bar --}}
     <div class="bg-white border-b border-gray-100">
@@ -125,7 +134,6 @@
                 @endforeach
             </select>
             @endif
-         
             <button type="submit" class="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm rounded-xl transition">
                 <i class="fas fa-filter mr-1"></i> Filter
             </button>
@@ -165,6 +173,17 @@
                         <span class="flex items-center gap-1 bg-black/60 text-white text-xs font-bold px-2.5 py-1 rounded-full backdrop-blur-sm">
                             <i class="fas fa-map-marker-alt text-orange-300 text-[10px]"></i>
                             {{ $child->country }}
+                        </span>
+                        @endif
+                        @if($child->has_family)
+                        <span class="flex items-center gap-1 bg-green-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                            <i class="fas fa-home text-[10px]"></i>
+                            Has Family
+                        </span>
+                        @else
+                        <span class="flex items-center gap-1 bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                            <i class="fas fa-home text-[10px]"></i>
+                            No Family
                         </span>
                         @endif
                     </div>
@@ -207,12 +226,14 @@
                                     '{{ addslashes(strip_tags($child->story ?? 'No story available yet.')) }}',
                                     '{{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth ?? now())->age }}',
                                     '{{ $child->country ?? '' }}',
+                                    {{ $child->has_family ? 'true' : 'false' }},
                                     '{{ route('children.show', $encId) }}'
                                 )"
                                 class="flex items-center justify-center gap-1.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
                             <i class="fas fa-book-open text-gray-500"></i> My Story
                         </button>
-                        <a href="#"
+                        <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
+                           target="_blank" rel="noopener"
                            class="flex items-center justify-center gap-1.5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl transition shadow-sm">
                             <i class="fas fa-heart text-xs"></i> {{ $child->first_name }}
                         </a>
@@ -371,7 +392,8 @@
                            class="flex items-center justify-center gap-1.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
                             <i class="fas fa-eye text-gray-500"></i> View Family
                         </a>
-                        <a href="#"
+                        <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
+                           target="_blank" rel="noopener"
                            class="flex items-center justify-center gap-1.5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl transition shadow-sm">
                             <i class="fas fa-hands-helping text-xs"></i> {{ $family->name }}
                         </a>
@@ -390,8 +412,9 @@
 
 
 {{-- ── STORY MODAL (children) ── --}}
+{{-- NOTE: No Tailwind 'hidden' class here — visibility controlled via style.display only --}}
 <div id="story-modal"
-     class="story-modal fixed inset-0 bg-black/70 z-[9999] hidden items-center justify-center p-4"
+     class="story-modal fixed inset-0 bg-black/70 z-[9999] items-center justify-center p-4"
      onclick="if(event.target===this) closeStory()">
     <div class="bg-white rounded-3xl overflow-hidden shadow-2xl w-full max-w-md relative">
         <button onclick="closeStory()"
@@ -405,6 +428,7 @@
                 <h2 id="modal-name" class="text-2xl font-black text-white leading-tight"></h2>
                 <div class="flex items-center gap-3 mt-1" id="modal-meta"></div>
             </div>
+            {{-- FIX: removed the unused #modal-has-family div that overlapped #modal-meta --}}
         </div>
         <div class="p-6">
             <div class="flex items-center gap-2 mb-3">
@@ -417,7 +441,9 @@
                    class="flex items-center justify-center gap-2 py-3 border-2 border-gray-200 hover:border-orange-300 text-gray-700 font-bold text-sm rounded-xl transition">
                     <i class="fas fa-eye text-gray-400"></i> Full Detail
                 </a>
-                <a id="modal-sponsor-link" href="#"
+                <a id="modal-sponsor-link"
+                   href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
+                   target="_blank" rel="noopener"
                    class="flex items-center justify-center gap-2 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm rounded-xl transition shadow-sm">
                     <i class="fas fa-heart"></i> Sponsor Now
                 </a>
@@ -463,12 +489,18 @@ function switchTab(name) {
         const btn   = document.getElementById('tab-' + t);
         const panel = document.getElementById('panel-' + t);
         const isActive = t === name;
+
         panel.classList.toggle('active', isActive);
         btn.classList.toggle('active', isActive);
-        btn.classList.toggle('text-orange-500', isActive && t === 'children');
-        btn.classList.toggle('text-amber-500',  isActive && t === 'families');
-        btn.classList.toggle('text-gray-400',  !isActive);
+
+        btn.classList.remove('text-orange-500', 'text-amber-500', 'text-gray-400');
+        if (isActive) {
+            btn.classList.add(t === 'children' ? 'text-orange-500' : 'text-amber-500');
+        } else {
+            btn.classList.add('text-gray-400');
+        }
     });
+
     // Persist tab in URL without full reload
     const url = new URL(window.location);
     url.searchParams.set('tab', name);
@@ -480,7 +512,10 @@ const urlTab = new URLSearchParams(window.location.search).get('tab') || 'childr
 switchTab(urlTab);
 
 // ── Story modal ───────────────────────────────────────────────────
-function openStory(name, photo, story, age, country, detailUrl) {
+const SPONSOR_URL = 'https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1';
+
+// FIX: added hasFamily as 6th param, detailUrl moved to 7th
+function openStory(name, photo, story, age, country, hasFamily, detailUrl) {
     document.getElementById('modal-name').textContent  = name;
     document.getElementById('modal-photo').src         = photo;
     document.getElementById('modal-story').textContent = story;
@@ -488,27 +523,31 @@ function openStory(name, photo, story, age, country, detailUrl) {
     let meta = '';
     if (age)     meta += `<span class="flex items-center gap-1 text-white/90 text-xs font-bold"><i class="fas fa-birthday-cake text-orange-300 text-[10px]"></i>${age} yrs</span>`;
     if (country) meta += `<span class="flex items-center gap-1 text-white/90 text-xs font-bold"><i class="fas fa-map-marker-alt text-orange-300 text-[10px]"></i>${country}</span>`;
+    // FIX: hasFamily is now a real boolean — always show the badge in both true/false cases
+    meta += `<span class="flex items-center gap-1 text-white/90 text-xs font-bold">
+        <i class="fas fa-home ${hasFamily ? 'text-green-300' : 'text-red-300'} text-[10px]"></i>
+        ${hasFamily ? 'Has Family' : 'No Family'}
+    </span>`;
     document.getElementById('modal-meta').innerHTML = meta;
 
-    document.getElementById('modal-detail-link').href  = detailUrl;
-    const sponsorUrl = detailUrl.replace('/children/', '/sponsor/child/');
-    document.getElementById('modal-sponsor-link').href = sponsorUrl;
-    document.getElementById('modal-sponsor-link').innerHTML = `<i class="fas fa-heart"></i> Sponsor ${name.split(' ')[0]}`;
+    document.getElementById('modal-detail-link').href = detailUrl;
 
-    const modal = document.getElementById('story-modal');
-    modal.classList.remove('hidden');
-    modal.style.display = 'flex';
+    // Always use the fixed sponsor URL
+    const sponsorLink = document.getElementById('modal-sponsor-link');
+    sponsorLink.href      = SPONSOR_URL;
+    sponsorLink.innerHTML = `<i class="fas fa-heart"></i> Sponsor ${name.split(' ')[0]}`;
+
+    // Control visibility via style.display only (no Tailwind 'hidden' conflict)
+    document.getElementById('story-modal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
 
 function closeStory() {
-    const modal = document.getElementById('story-modal');
-    modal.classList.add('hidden');
-    modal.style.display = '';
+    document.getElementById('story-modal').style.display = 'none';
     document.body.style.overflow = '';
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeStory(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStory(); });
 
 // ── Mobile nav ───────────────────────────────────────────────────
 const mobileMenu = document.getElementById('mobile-menu');

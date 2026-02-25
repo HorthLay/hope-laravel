@@ -3,7 +3,12 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Hope & Impact | Changing Children's Lives</title>
+    <title>{{ $settings['site_name'] ?? 'Hope & Impact' }} | Changing Children's Lives</title>
+     <meta name="description" content="{{ $settings['meta_description'] ?? $settings['site_description'] ?? '' }}">
+    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <meta name="description" content="Help transform children's lives through education, healthcare, and nutrition in Southeast Asia.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Hanuman&display=swap" rel="stylesheet">

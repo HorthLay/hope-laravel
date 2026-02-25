@@ -20,9 +20,14 @@ class PublicChildController extends Controller
             ->where('is_active', true)
             ->with(['sponsors'])
             ->findOrFail($id);
+        
+        $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
 
         $child->is_sponsored = $child->sponsors->isNotEmpty();
 
-        return view('sponsor.children-show', compact('child'));
+        return view('sponsor.children-show', compact('child', 'settings'));
     }
 }

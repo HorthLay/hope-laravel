@@ -22,6 +22,12 @@ class HomeController extends Controller
         ->orderBy('published_at', 'desc')
         ->get()
         ->map(fn($a) => $this->encryptArticle($a));
+    
+    $settingsFile = storage_path('app/settings.json');
+    $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
+
 
     $successStory = Article::with(['category', 'image', 'tags'])
         ->published()
@@ -114,7 +120,8 @@ class HomeController extends Controller
         'popupArticle',
         'unsponsoredChildren',
         'unsponsoredFamilies',
-        'stats'
+        'stats',
+        'settings'
     ));
 }
     // ──────────────────────────────────────────────────────────────────────
@@ -162,11 +169,17 @@ class HomeController extends Controller
 
         $this->trackVisit(request());
 
+        $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
+
         return view('articles.show', compact(
             'article',
             'related',
             'prevArticle',
-            'nextArticle'
+            'nextArticle',
+            'settings'
         ));
     }
 
@@ -201,10 +214,17 @@ class HomeController extends Controller
 
         $this->trackVisit(request());
 
+
+        $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
+
         return view('categories.articles', compact(
             'category',
             'articles',
-            'categories'
+            'categories',
+            'settings'
         ));
     }
 
@@ -220,8 +240,12 @@ class HomeController extends Controller
             ->limit(6)
             ->get()
             ->map(fn($a) => $this->encryptArticle($a));
+            $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
 
-        return view('pages.learn-more', compact('featuredArticles'));
+        return view('pages.learn-more', compact('featuredArticles', 'settings'));
     }
 
     public function contact()

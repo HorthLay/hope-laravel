@@ -93,7 +93,7 @@
 
             <!-- CTAs -->
             <div class="popup-actions">
-                <a href="{{ route('detail') }}" class="popup-btn-primary">
+                <a href="{{ route('sponsor.children') }}" class="popup-btn-primary">
                     <i class="fas fa-heart" style="margin-right:8px"></i>
                     Sponsor a Child Now
                 </a>

@@ -4,7 +4,12 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>{{ $child->first_name }} {{ $child->last_name ?? '' }} | Hope & Impact</title>
+    <title>{{ $child->first_name }} {{ $child->last_name ?? '' }} | {{ ($settings['site_name'] ?? 'Hope & Impact') }}</title>
+    <meta name="description" content="{{ $child->story ? \Illuminate\Support\Str::limit(strip_tags($child->story), 150) : ($settings['meta_description'] ?? $settings['site_description'] ?? '') }}">
+    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+     @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Hanuman&display=swap" rel="stylesheet">
@@ -89,12 +94,13 @@
             </span>
             @endif
 
-            @if(!empty($child->grade))
-            <span class="flex items-center gap-1.5 bg-purple-500/80 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                <i class="fas fa-graduation-cap text-[10px]"></i>
-                {{ $child->grade }}
+            @if(!empty($child->has_family))
+             <span class="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                <i class="fas fa-home text-green-300 text-[10px]"></i>
+                Has Family
             </span>
             @endif
+        
 
         </div>
     </div>
@@ -110,10 +116,13 @@
                             <span class="font-normal text-sm text-gray-500">yrs</span>
                         </p>
                     </div>
-                    <div class="py-4 text-center">
-                        <p class="text-xs text-gray-400 font-medium mb-0.5">Grade</p>
-                        <p class="font-black text-gray-800">{{ $child->grade ?? '—' }}</p>
-                    </div>
+                 <div class="py-4 text-center">
+                    <p class="text-xs text-gray-400 font-medium mb-0.5">Has Family</p>
+
+                    <p class="font-black {{ $child->has_family ? 'text-green-600' : 'text-red-600' }}">
+                        {{ $child->has_family ? 'Yes' : 'No' }}
+                    </p>
+                </div>
                     <div class="py-4 text-center">
                         <p class="text-xs text-gray-400 font-medium mb-0.5">Status</p>
                         @if($child->is_sponsored)

@@ -42,7 +42,7 @@
             </button>
             <button type="button" onclick="switchTab('sponsor')" id="tab-sponsor"
                     class="tab-button px-6 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 font-semibold transition whitespace-nowrap">
-                <i class="fas fa-qrcode mr-2"></i>Sponsor / KHQR
+                <i class="fas fa-hand-holding-heart mr-2"></i>Sponsor
             </button>
             <button type="button" onclick="switchTab('seo')" id="tab-seo"
                     class="tab-button px-6 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 font-semibold transition whitespace-nowrap">
@@ -166,21 +166,6 @@
                 </h2>
                 <div class="space-y-6">
 
-                    {{-- Telegram --}}
-                    <div>
-                        <label for="telegram_url" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fab fa-telegram text-[#2ca5e0] mr-2"></i>Telegram
-                        </label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">t.me/</span>
-                            <input type="text" id="telegram_url" name="telegram_url"
-                                   value="{{ old('telegram_url', $settings['telegram_url'] ?? '') }}"
-                                   class="w-full pl-14 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
-                                   placeholder="YourChannelName">
-                        </div>
-                        <p class="mt-1 text-xs text-gray-400">Username only — e.g. <code>YourChannelName</code> → becomes <code>https://t.me/YourChannelName</code></p>
-                    </div>
-
                     {{-- WhatsApp --}}
                     <div>
                         <label for="whatsapp_url" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -196,6 +181,21 @@
                         <p class="mt-1 text-xs text-gray-400">Phone number with country code, no + or spaces — e.g. <code>85512345678</code></p>
                     </div>
 
+                    {{-- Telegram --}}
+                    <div>
+                        <label for="telegram_url" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fab fa-telegram text-[#2ca5e0] mr-2"></i>Telegram
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">t.me/</span>
+                            <input type="text" id="telegram_url" name="telegram_url"
+                                   value="{{ old('telegram_url', $settings['telegram_url'] ?? '') }}"
+                                   class="w-full pl-14 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                                   placeholder="YourChannelName">
+                        </div>
+                        <p class="mt-1 text-xs text-gray-400">Username only — e.g. <code>YourChannelName</code> → becomes <code>https://t.me/YourChannelName</code></p>
+                    </div>
+
                     {{-- Instagram --}}
                     <div>
                         <label for="instagram_url" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -207,37 +207,15 @@
                                placeholder="https://instagram.com/yourprofile">
                     </div>
 
-                    {{-- X / Twitter --}}
-                    <div>
-                        <label for="x_url" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fab fa-x-twitter text-gray-900 mr-2"></i>X (Twitter) URL
-                        </label>
-                        <input type="url" id="x_url" name="x_url"
-                               value="{{ old('x_url', $settings['x_url'] ?? '') }}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
-                               placeholder="https://x.com/yourhandle">
-                    </div>
-
-                    {{-- Facebook --}}
-                    <div>
-                        <label for="facebook_url" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fab fa-facebook text-blue-600 mr-2"></i>Facebook URL
-                        </label>
-                        <input type="url" id="facebook_url" name="facebook_url"
-                               value="{{ old('facebook_url', $settings['facebook_url'] ?? '') }}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
-                               placeholder="https://facebook.com/yourpage">
-                    </div>
-
                     {{-- YouTube --}}
                     <div>
                         <label for="youtube_url" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fab fa-youtube text-red-600 mr-2"></i>YouTube URL
+                            <i class="fab fa-youtube text-red-600 mr-2"></i>YouTube Channel URL
                         </label>
                         <input type="url" id="youtube_url" name="youtube_url"
                                value="{{ old('youtube_url', $settings['youtube_url'] ?? '') }}"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
-                               placeholder="https://youtube.com/c/yourchannel">
+                               placeholder="https://youtube.com/@yourchannel">
                     </div>
 
                     {{-- LinkedIn --}}
@@ -251,51 +229,40 @@
                                placeholder="https://linkedin.com/company/yourcompany">
                     </div>
 
+                    {{-- Facebook --}}
+                    <div>
+                        <label for="facebook_url" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fab fa-facebook text-blue-600 mr-2"></i>Facebook URL
+                        </label>
+                        <input type="url" id="facebook_url" name="facebook_url"
+                               value="{{ old('facebook_url', $settings['facebook_url'] ?? '') }}"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                               placeholder="https://facebook.com/yourpage">
+                    </div>
+
                 </div>
             </div>
         </div>
 
         {{-- ══════════════════════════════════════════
-             SPONSOR / KHQR  (new tab)
+             SPONSOR  (no KHQR upload — contact links only)
         ══════════════════════════════════════════ --}}
         <div id="content-sponsor" class="tab-content hidden">
             <div class="card">
                 <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
-                    <i class="fas fa-qrcode text-orange-500"></i> Sponsor Page &amp; KHQR Settings
+                    <i class="fas fa-hand-holding-heart text-orange-500"></i> Sponsor Page Settings
                 </h2>
                 <p class="text-sm text-gray-500 mb-6 bg-orange-50 border border-orange-100 rounded-lg px-4 py-3">
                     <i class="fas fa-info-circle text-orange-400 mr-2"></i>
-                    These values appear on the public <strong>Sponsor</strong> page — contact buttons, QR code, and bank account details.
+                    These values appear on the public <strong>Sponsor</strong> page — account details and contact buttons.
                 </p>
 
                 <div class="space-y-6">
 
-                    {{-- KHQR / QR Image --}}
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-qrcode text-red-600 mr-2"></i>KHQR / ABA QR Code Image
-                        </label>
-
-                        @if(!empty($settings['khqr_image'] ?? ''))
-                            <div class="mb-4 p-4 bg-gray-50 rounded-xl inline-flex flex-col items-center gap-2">
-                                <div class="bg-gradient-to-br from-red-700 to-red-600 p-3 rounded-lg">
-                                    <div class="bg-white p-2 rounded">
-                                        <img src="{{ asset(($settings['khqr_image'] ?? '')) }}" alt="KHQR Code" class="w-32 h-32 object-contain">
-                                    </div>
-                                </div>
-                                <p class="text-xs text-gray-500">Current KHQR Image</p>
-                            </div>
-                        @endif
-
-                        <input type="file" name="khqr_image" accept="image/jpeg,image/jpg,image/png"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition">
-                        <p class="mt-2 text-xs text-gray-500">Upload your KHQR or ABA QR code image. PNG recommended, Max 2MB.</p>
-                    </div>
-
                     {{-- Account Name --}}
                     <div>
                         <label for="account_name" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-user-circle text-gray-400 mr-2"></i>Account Name (shown under QR)
+                            <i class="fas fa-user-circle text-gray-400 mr-2"></i>Account Name
                         </label>
                         <input type="text" id="account_name" name="account_name"
                                value="{{ old('account_name', $settings['account_name'] ?? 'Hope & Impact Foundation') }}"
@@ -306,7 +273,7 @@
                     {{-- Account Bank --}}
                     <div>
                         <label for="account_bank" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-university text-gray-400 mr-2"></i>Bank / Description (shown under account name)
+                            <i class="fas fa-university text-gray-400 mr-2"></i>Bank / Description
                         </label>
                         <input type="text" id="account_bank" name="account_bank"
                                value="{{ old('account_bank', $settings['account_bank'] ?? 'ABA Bank · Phnom Penh, Cambodia') }}"
@@ -314,27 +281,30 @@
                                placeholder="ABA Bank · Phnom Penh, Cambodia">
                     </div>
 
-                    {{-- Divider --}}
+                    {{-- Contact Links Reference --}}
                     <div class="border-t pt-4">
                         <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
                             <i class="fas fa-link mr-1"></i> Sponsor Contact Links
                             <span class="font-normal normal-case text-gray-400 ml-1">(pulled from Social Media tab — shown here for reference)</span>
                         </p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="bg-[#2ca5e0]/5 border border-[#2ca5e0]/20 rounded-xl p-4 flex items-center gap-3">
-                                <i class="fab fa-telegram text-[#2ca5e0] text-2xl"></i>
-                                <div>
-                                    <p class="text-xs font-bold text-gray-700">Telegram</p>
-                                    <p class="text-xs text-gray-500 font-mono">{{ !empty(($settings['telegram_url'] ?? '')) ? 't.me/'.($settings['telegram_url'] ?? '') : 'Not set — go to Social Media tab' }}</p>
-                                </div>
-                            </div>
+
                             <div class="bg-[#25d366]/5 border border-[#25d366]/20 rounded-xl p-4 flex items-center gap-3">
                                 <i class="fab fa-whatsapp text-[#25d366] text-2xl"></i>
                                 <div>
                                     <p class="text-xs font-bold text-gray-700">WhatsApp</p>
-                                    <p class="text-xs text-gray-500 font-mono">{{ !empty(($settings['whatsapp_url'] ?? '')) ? 'wa.me/'.($settings['whatsapp_url'] ?? '') : 'Not set — go to Social Media tab' }}</p>
+                                    <p class="text-xs text-gray-500 font-mono">{{ !empty($settings['whatsapp_url'] ?? '') ? 'wa.me/'.($settings['whatsapp_url'] ?? '') : 'Not set — go to Social Media tab' }}</p>
                                 </div>
                             </div>
+
+                            <div class="bg-[#2ca5e0]/5 border border-[#2ca5e0]/20 rounded-xl p-4 flex items-center gap-3">
+                                <i class="fab fa-telegram text-[#2ca5e0] text-2xl"></i>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-700">Telegram</p>
+                                    <p class="text-xs text-gray-500 font-mono">{{ !empty($settings['telegram_url'] ?? '') ? 't.me/'.($settings['telegram_url'] ?? '') : 'Not set — go to Social Media tab' }}</p>
+                                </div>
+                            </div>
+
                             <div class="bg-pink-50 border border-pink-100 rounded-xl p-4 flex items-center gap-3">
                                 <i class="fab fa-instagram text-pink-500 text-2xl"></i>
                                 <div>
@@ -342,13 +312,31 @@
                                     <p class="text-xs text-gray-500 font-mono truncate">{{ $settings['instagram_url'] ?? 'Not set — go to Social Media tab' ?: 'Not set — go to Social Media tab' }}</p>
                                 </div>
                             </div>
-                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center gap-3">
-                                <i class="fab fa-x-twitter text-gray-900 text-2xl"></i>
+
+                            <div class="bg-red-50 border border-red-100 rounded-xl p-4 flex items-center gap-3">
+                                <i class="fab fa-youtube text-red-600 text-2xl"></i>
                                 <div>
-                                    <p class="text-xs font-bold text-gray-700">X (Twitter)</p>
-                                    <p class="text-xs text-gray-500 font-mono truncate">{{ $settings['x_url'] ?? 'Not set — go to Social Media tab' ?: 'Not set — go to Social Media tab' }}</p>
+                                    <p class="text-xs font-bold text-gray-700">YouTube</p>
+                                    <p class="text-xs text-gray-500 font-mono truncate">{{ $settings['youtube_url'] ?? 'Not set — go to Social Media tab' ?: 'Not set — go to Social Media tab' }}</p>
                                 </div>
                             </div>
+
+                            <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-center gap-3 sm:col-span-2">
+                                <i class="fab fa-linkedin text-blue-700 text-2xl"></i>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-700">LinkedIn</p>
+                                    <p class="text-xs text-gray-500 font-mono truncate">{{ $settings['linkedin_url'] ?? 'Not set — go to Social Media tab' ?: 'Not set — go to Social Media tab' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center gap-3 sm:col-span-2">
+                                <i class="fab fa-facebook text-blue-600 text-2xl"></i>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-700">Facebook</p>
+                                    <p class="text-xs text-gray-500 font-mono truncate">{{ $settings['facebook_url'] ?? 'Not set — go to Social Media tab' ?: 'Not set — go to Social Media tab' }}</p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

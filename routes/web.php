@@ -47,7 +47,6 @@ Route::get('/contact',    [HomeController::class, 'contact'])->name('contact');
 Route::get('/about',      [HomeController::class, 'about'])->name('about');
 Route::get('/privacy-policy',   [HomeController::class, 'privacy'])->name('privacy-policy');
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms-of-service');
-Route::get('/details',    [HomeController::class, 'details'])->name('detail');
 
 
 

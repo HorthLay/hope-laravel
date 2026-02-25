@@ -9,7 +9,12 @@ class SponsorContactController extends Controller
 {
   public function show()
     {
-        return view('sponsor.contact');
+    $settingsFile = storage_path('app/settings.json');
+    $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
+
+    return view('sponsor.contact', compact('settings'));
     }
 
     /**

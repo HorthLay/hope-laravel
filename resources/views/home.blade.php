@@ -4,8 +4,12 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Hope & Impact | Changing Children's Lives</title>
-    <meta name="description" content="Help transform children's lives through education, healthcare, and nutrition in Southeast Asia.">
+    <title>{{ ($settings['site_name'] ?? 'Hope & Impact') }} | {{ ($settings['site_tagline'] ?? 'Changing Children\'s Lives') }}</title>
+    <meta name="description" content="{{ $settings['meta_description'] ?? $settings['site_description'] ?? '' }}">
+    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Hanuman&display=swap" rel="stylesheet">
@@ -107,7 +111,7 @@
         .hero-sponsor-btn {
             display: inline-flex; align-items: center; gap: 10px;
             padding: 13px 26px;
-            background: #f5c518; color: #1a1a1a;
+            background: #f4b630; color: #1a1a1a;
             font-size: 12px; font-weight: 900;
             text-transform: uppercase; letter-spacing: .08em;
             border-radius: 4px; text-decoration: none;
@@ -278,6 +282,20 @@
                         </span>
                         @endif
                     </div>
+                    <div class="absolute bottom-2 left-2" style="bottom:28px;">
+                        @if($child->has_family)
+                        <span class="text-white text-[10px] font-bold flex items-center gap-1">
+                            <i class="fas fa-home text-green-300 text-[8px]"></i>
+                            Has Family
+                        </span>
+                        @else
+                        <span class="text-white text-[10px] font-bold flex items-center gap-1">
+                            <i class="fas fa-home text-gray-400 text-[8px]"></i>
+                            No Family
+                        </span>
+                        @endif
+
+                    </div>
                 </div>
                 <div class="p-3 flex flex-col flex-1">
                     <p class="font-black text-gray-800 text-sm leading-tight truncate">{{ $child->first_name }} {{ $child->last_name ?? '' }}</p>
@@ -291,7 +309,7 @@
                            class="flex items-center justify-center py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-bold rounded-lg transition">
                             <i class="fas fa-eye text-[8px] mr-1"></i> Story
                         </a>
-                        <a href="#"
+                        <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
                            class="flex items-center justify-center py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold rounded-lg transition">
                             <i class="fas fa-heart heart-pulse text-[8px] mr-1"></i> Sponsor
                         </a>
@@ -750,22 +768,6 @@
     </div>
 </section>
 
-{{-- ═══════ NEWSLETTER ═══════ --}}
-<section class="section bg-gray-800 text-white">
-    <div class="max-w-4xl mx-auto text-center reveal px-4">
-        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4">Stay Connected</h2>
-        <p class="text-sm md:text-base lg:text-lg mb-6 md:mb-8 opacity-90">Receive impact stories and updates from Southeast Asia</p>
-        <form class="flex flex-col sm:flex-row gap-3 md:gap-4 max-w-md mx-auto" method="POST" action="{{ route('contact') }}">
-            @csrf
-            <input type="email" name="email" placeholder="Your email address"
-                   class="flex-1 px-6 py-4 rounded-full text-sm md:text-base text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
-            <button type="submit" class="btn-primary whitespace-nowrap">Subscribe</button>
-        </form>
-        @if(session('newsletter_success'))
-        <p class="mt-4 text-green-400 text-sm"><i class="fas fa-check-circle mr-1"></i>{{ session('newsletter_success') }}</p>
-        @endif
-    </div>
-</section>
 
 @include('layouts.footer')
 @include('layouts.navigation')

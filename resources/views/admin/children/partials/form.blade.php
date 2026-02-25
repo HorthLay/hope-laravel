@@ -68,6 +68,28 @@
             </label>
         </div>
 
+        {{-- Has Family toggle --}}
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <h3 class="text-sm font-black text-gray-700 mb-4 flex items-center gap-2">
+                <i class="fas fa-toggle-on text-green-400"></i> Has Family
+            </h3>
+            <label class="flex items-center justify-between cursor-pointer p-3 rounded-xl border-2 border-gray-100 hover:border-green-200 transition select-none">
+                <div>
+                    <p class="text-sm font-bold text-gray-700">Has Family</p>
+                    <p class="text-xs text-gray-400">Child has a family</p>
+                </div>
+                <div class="relative">
+                    <input type="hidden" name="has_family" value="0">
+                    <input type="checkbox" name="has_family" value="1"
+                           id="has_family_toggle"
+                           {{ ($isEdit ? $child->has_family : false) ? 'checked' : '' }}
+                           class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-checked:bg-green-500 rounded-full transition-colors duration-200"></div>
+                    <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+                </div>
+            </label>
+        </div>
+
         {{-- Read-only info on edit --}}
         @if($isEdit)
         <div class="bg-gray-50 rounded-2xl border border-gray-100 p-5 space-y-3 text-sm">

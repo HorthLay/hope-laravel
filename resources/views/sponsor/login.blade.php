@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Parrain | Association Des Ailes Pour Grandir</title>
+ <title>Login  | {{ $settings['site_name'] ?? 'Hope & Impact' }}</title>
+     <meta name="description" content="{{ $settings['meta_description'] ?? $settings['site_description'] ?? '' }}">
+    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <meta name="robots" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -42,7 +47,7 @@
             transition:all .18s; white-space:nowrap;
             box-shadow:0 2px 8px rgba(0,0,0,.07);
         }
-        .lang-pill:hover { border-color:#f97316; color:#f97316; box-shadow:0 4px 16px rgba(249,115,22,.15); }
+        .lang-pill:hover { border-color:#f4b630; color:#f4b630; box-shadow:0 4px 16px rgba(249,115,22,.15); }
 
         #login-translate-panel {
             position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(-6px);
@@ -62,9 +67,9 @@
             font-size:12px; font-weight:600; color:#374151;
         }
         .lang-opt:hover { background:#fff7ed; border-color:#fed7aa; }
-        .lang-opt.active { background:linear-gradient(135deg,#fff7ed,#ffedd5); border-color:#f97316; color:#c2410c; }
+        .lang-opt.active { background:linear-gradient(135deg,#fff7ed,#ffedd5); border-color:#f4b630; color:#f4b630; }
         .lang-opt .flag { width:22px; height:15px; object-fit:cover; border-radius:2px; box-shadow:0 1px 4px rgba(0,0,0,.15); flex-shrink:0; }
-        .lang-opt .chk  { margin-left:auto; color:#f97316; font-size:10px; }
+        .lang-opt .chk  { margin-left:auto; color:#f4b630; font-size:10px; }
 
         @keyframes gt-spin { to { transform:rotate(360deg); } }
         .gt-spin { display:inline-block; animation:gt-spin .7s linear infinite; }

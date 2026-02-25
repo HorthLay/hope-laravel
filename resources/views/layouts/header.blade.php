@@ -1,6 +1,23 @@
 {{-- resources/views/layouts/header.blade.php --}}
 <div id="google_translate_element" style="display:none;position:absolute"></div>
 
+{{-- Load settings once for the entire header --}}
+@php
+    $headerSettings = (function() {
+        $file = storage_path('app/settings.json');
+        return file_exists($file) ? json_decode(file_get_contents($file), true) : [];
+    })();
+    $siteName    = $headerSettings['site_name']    ?? 'Association Des Ailes Pour Grandir';
+    $logoPath    = !empty($headerSettings['logo'])    ? asset($headerSettings['logo'])    : asset('images/logo.png');
+    $faviconPath = !empty($headerSettings['favicon']) ? asset($headerSettings['favicon']) : null;
+    $fbUrl       = $headerSettings['facebook_url']  ?? null;
+    $igUrl       = $headerSettings['instagram_url'] ?? null;
+    $ytUrl       = $headerSettings['youtube_url']   ?? null;
+    $tgUrl       = !empty($headerSettings['telegram_url'])  ? 'https://t.me/' . $headerSettings['telegram_url']   : null;
+    $waUrl       = !empty($headerSettings['whatsapp_url'])  ? 'https://wa.me/' . $headerSettings['whatsapp_url']  : null;
+    $liUrl       = $headerSettings['linkedin_url']  ?? null;
+@endphp
+
 <style>
 /* ── Reset Google toolbar ──────────────────────────────────────── */
 body { top: 0 !important; }
@@ -181,11 +198,9 @@ iframe.goog-te-banner-frame { display:none !important; }
     background: #1e3a4a;
     display: flex; align-items: center; justify-content: space-between;
     padding: 8px 16px;
-    position: sticky; top: 0; z-index: 1000;  /* ← sticky on mobile */
+    position: sticky; top: 0; z-index: 1000;
     box-shadow: 0 2px 12px rgba(0,0,0,.25);
 }
-
-/* The secondary mobile nav bar — sits just below the sticky topbar */
 #mobile-nav-bar {
     background: #fff;
     border-bottom: 3px solid #e5e7eb;
@@ -194,10 +209,7 @@ iframe.goog-te-banner-frame { display:none !important; }
     box-shadow: 0 2px 8px rgba(0,0,0,.06);
     overflow-x: auto;
     gap: 4px;
-    /* NOT sticky — scrolls away so hero shows full-screen */
 }
-
-/* Mobile menu drawer */
 .mobile-menu-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:1090; }
 .mobile-menu-overlay.active { display:block; }
 .mobile-menu {
@@ -280,16 +292,33 @@ iframe.goog-te-banner-frame { display:none !important; }
             </div>
         </div>
 
-        {{-- Right: social + contact --}}
+        {{-- Right: social icons + contact --}}
         <div class="flex items-center gap-4">
             <a href="{{ route('home') }}#contact" class="util-link">
                 <i class="fas fa-phone-alt text-[10px]"></i>
                 <span data-en="Contact" data-km="ទំនាក់ទំនង" data-fr="Contact">Contact</span>
             </a>
             <span class="text-white/20">|</span>
-            <a href="https://facebook.com"  target="_blank" rel="noopener" class="util-link"><i class="fab fa-facebook-f text-[11px]"></i></a>
-            <a href="https://instagram.com" target="_blank" rel="noopener" class="util-link"><i class="fab fa-instagram text-[11px]"></i></a>
-            <a href="https://youtube.com"   target="_blank" rel="noopener" class="util-link"><i class="fab fa-youtube text-[11px]"></i></a>
+
+            @if($fbUrl)
+            <a href="{{ $fbUrl }}" target="_blank" rel="noopener" class="util-link"><i class="fab fa-facebook-f text-[11px]"></i></a>
+            @endif
+            @if($igUrl)
+            <a href="{{ $igUrl }}" target="_blank" rel="noopener" class="util-link"><i class="fab fa-instagram text-[11px]"></i></a>
+            @endif
+            @if($ytUrl)
+            <a href="{{ $ytUrl }}" target="_blank" rel="noopener" class="util-link"><i class="fab fa-youtube text-[11px]"></i></a>
+            @endif
+            @if($tgUrl)
+            <a href="{{ $tgUrl }}" target="_blank" rel="noopener" class="util-link"><i class="fab fa-telegram text-[11px]"></i></a>
+            @endif
+            @if($waUrl)
+            <a href="{{ $waUrl }}" target="_blank" rel="noopener" class="util-link"><i class="fab fa-whatsapp text-[11px]"></i></a>
+            @endif
+            @if($liUrl)
+            <a href="{{ $liUrl }}" target="_blank" rel="noopener" class="util-link"><i class="fab fa-linkedin-in text-[11px]"></i></a>
+            @endif
+
             <span class="text-white/20">|</span>
             <span id="mobile-lang-badge" class="text-[11px] font-bold text-orange-400">FR</span>
         </div>
@@ -300,8 +329,8 @@ iframe.goog-te-banner-frame { display:none !important; }
 <div id="logo-banner">
     <div class="banner-inner">
         <a href="{{ route('home') }}" class="logo-mark">
-            <img src="{{ asset('images/logo.png') }}"
-                 alt="Association Des Ailes Pour Grandir"
+            <img src="{{ $logoPath }}"
+                 alt="{{ $siteName }}"
                  class="logo-img">
         </a>
         <div class="banner-cta-group">
@@ -353,15 +382,13 @@ iframe.goog-te-banner-frame { display:none !important; }
      MOBILE HEADER (<1024px)
 ════════════════════════════════════════════════════ --}}
 
-{{-- Sticky mobile topbar --}}
 <div id="mobile-topbar">
     <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-        <img src="{{ asset('images/logo.png') }}"
-             alt="Association Des Ailes Pour Grandir"
+        <img src="{{ $logoPath }}"
+             alt="{{ $siteName }}"
              style="height:60px;width:auto;filter:brightness(1.15) saturate(1.2) drop-shadow(0 2px 8px rgba(0,0,0,.55));">
     </a>
     <div class="flex items-center gap-2">
-        {{-- Quick sponsor button on mobile topbar --}}
         <a href="{{ route('sponsor.children') }}"
            class="flex items-center gap-1.5 px-3 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-[11px] font-black uppercase rounded-lg transition">
             <i class="fas fa-child text-xs"></i>
@@ -374,7 +401,6 @@ iframe.goog-te-banner-frame { display:none !important; }
     </div>
 </div>
 
-{{-- Non-sticky secondary mobile nav (scrolls away with page) --}}
 <div id="mobile-nav-bar">
     @auth('sponsor')
         <a href="{{ route('sponsor.dashboard') }}" class="flex items-center gap-1.5 py-3 text-xs font-black uppercase tracking-wide whitespace-nowrap flex-shrink-0" style="color:#f5c518">
@@ -389,8 +415,8 @@ iframe.goog-te-banner-frame { display:none !important; }
             </button>
         </form>
     @else
-        <a href="{{ route('home') }}#news"    class="py-3 text-xs font-black uppercase tracking-wide text-gray-700 hover:text-orange-500 transition whitespace-nowrap flex-shrink-0">News</a>
-        <a href="{{ route('learn-more') }}"   class="py-3 text-xs font-black uppercase tracking-wide text-gray-700 hover:text-orange-500 transition whitespace-nowrap flex-shrink-0">About</a>
+        <a href="{{ route('home') }}#news"     class="py-3 text-xs font-black uppercase tracking-wide text-gray-700 hover:text-orange-500 transition whitespace-nowrap flex-shrink-0">News</a>
+        <a href="{{ route('learn-more') }}"    class="py-3 text-xs font-black uppercase tracking-wide text-gray-700 hover:text-orange-500 transition whitespace-nowrap flex-shrink-0">About</a>
         <a href="{{ route('home') }}#our-work" class="py-3 text-xs font-black uppercase tracking-wide text-gray-700 hover:text-orange-500 transition whitespace-nowrap flex-shrink-0">What We Do</a>
         <a href="{{ route('sponsor.login') }}"
            class="my-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-[11px] font-black uppercase rounded-md transition flex-shrink-0">
@@ -408,8 +434,8 @@ iframe.goog-te-banner-frame { display:none !important; }
         {{-- Drawer header --}}
         <div class="flex items-center justify-between mb-5 pb-4 border-b border-gray-100">
             <a href="{{ route('home') }}">
-                <img src="{{ asset('images/logo.png') }}"
-                     alt="Association Des Ailes Pour Grandir"
+                <img src="{{ $logoPath }}"
+                     alt="{{ $siteName }}"
                      style="height:60px;width:auto;filter:brightness(1.1) saturate(1.2) drop-shadow(0 2px 8px rgba(0,0,0,.35));">
             </a>
             <button id="close-menu" class="text-gray-400 hover:text-gray-700 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
@@ -443,6 +469,42 @@ iframe.goog-te-banner-frame { display:none !important; }
                 <span data-en="Auto Translate" data-km="បកប្រែស្វ័យប្រវត្តិ" data-fr="Traduction auto">Auto Translate</span>
             </button>
         </div>
+
+        {{-- Social icons in drawer --}}
+        @if($fbUrl || $igUrl || $ytUrl || $tgUrl || $waUrl || $liUrl)
+        <div class="flex gap-2 mb-4">
+            @if($fbUrl)
+            <a href="{{ $fbUrl }}" target="_blank" class="w-9 h-9 bg-gray-100 hover:bg-orange-500 hover:text-white text-gray-600 rounded-full flex items-center justify-center transition text-sm">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            @endif
+            @if($igUrl)
+            <a href="{{ $igUrl }}" target="_blank" class="w-9 h-9 bg-gray-100 hover:bg-orange-500 hover:text-white text-gray-600 rounded-full flex items-center justify-center transition text-sm">
+                <i class="fab fa-instagram"></i>
+            </a>
+            @endif
+            @if($ytUrl)
+            <a href="{{ $ytUrl }}" target="_blank" class="w-9 h-9 bg-gray-100 hover:bg-orange-500 hover:text-white text-gray-600 rounded-full flex items-center justify-center transition text-sm">
+                <i class="fab fa-youtube"></i>
+            </a>
+            @endif
+            @if($tgUrl)
+            <a href="{{ $tgUrl }}" target="_blank" class="w-9 h-9 bg-gray-100 hover:bg-orange-500 hover:text-white text-gray-600 rounded-full flex items-center justify-center transition text-sm">
+                <i class="fab fa-telegram"></i>
+            </a>
+            @endif
+            @if($waUrl)
+            <a href="{{ $waUrl }}" target="_blank" class="w-9 h-9 bg-gray-100 hover:bg-orange-500 hover:text-white text-gray-600 rounded-full flex items-center justify-center transition text-sm">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            @endif
+            @if($liUrl)
+            <a href="{{ $liUrl }}" target="_blank" class="w-9 h-9 bg-gray-100 hover:bg-orange-500 hover:text-white text-gray-600 rounded-full flex items-center justify-center transition text-sm">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            @endif
+        </div>
+        @endif
 
         {{-- Nav links --}}
         <nav class="mb-4">
@@ -608,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateLangUI(currentLang);
 });
 
-// ── Mobile drawer (single source of truth — home.blade.php dedupes these) ──
+// ── Mobile drawer ──
 document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
     document.getElementById('mobile-menu')?.classList.add('active');
     document.getElementById('mobile-menu-overlay')?.classList.add('active');

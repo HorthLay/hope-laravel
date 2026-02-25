@@ -4,7 +4,10 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>{{ $article->meta_title ?? $article->title }} | Hope & Impact</title>
+    <title>{{ $settings['site_name'] ?? 'Hope & Impact' }} | {{ $article->meta_title ?? $article->title }}  </title>
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <meta name="description" content="{{ $article->meta_description ?? Str::limit(strip_tags($article->excerpt ?? $article->content ?? ''), 160) }}">
     @if($article->meta_keywords)<meta name="keywords" content="{{ $article->meta_keywords }}">@endif
     <meta property="og:title"       content="{{ $article->title }}">
@@ -158,7 +161,7 @@
                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
                                     <i class="fas fa-eye text-gray-500"></i> View Detail
                                 </a>
-                                <a href=""
+                                <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl transition shadow-sm">
                                     <i class="fas fa-hands-helping text-xs"></i> {{ $family->name }}
                                 </a>
@@ -202,6 +205,17 @@
                                         {{ $child->country }}
                                     </span>
                                     @endif
+                                   @if($child->has_family !== null)
+                                    <span class="text-white text-xs font-bold flex items-center gap-1">
+                                        <i class="fas fa-home {{ $child->has_family ? 'text-green-300' : 'text-red-300' }} text-[10px]"></i>
+                                        {{ $child->has_family ? 'Has Family' : 'No Family' }}
+                                    </span>
+                                @else
+                                    <span class="text-white text-xs font-bold flex items-center gap-1">
+                                        <i class="fas fa-home text-gray-500 text-[10px]"></i>
+                                        No Info
+                                    </span>
+                                @endif
                                 </div>
                             </div>
                         </div>
@@ -221,7 +235,7 @@
                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
                                     <i class="fas fa-eye text-gray-500"></i> View Detail
                                 </a>
-                                <a href="{{ route('sponsor.child', $cEncId) }}"
+                                <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl transition shadow-sm">
                                     <i class="fas fa-heart text-xs"></i> {{ $child->first_name }}
                                 </a>
@@ -348,9 +362,23 @@
                             <img src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}"
                                  class="w-full h-full object-cover">
                         </div>
-                        <div class="flex-1 min-w-0">
+                     <div class="flex-1 min-w-0">
                             <p class="text-sm font-bold text-gray-800 truncate">{{ $child->first_name }}</p>
-                            @if(!empty($child->age))<p class="text-xs text-gray-400">{{ $child->age }} yrs · {{ $child->country ?? '' }}</p>@endif
+
+                            @if(!empty($child->age))
+                                <p class="text-xs text-gray-400">{{ $child->age }} yrs · {{ $child->country ?? '' }}</p>
+                            @endif
+
+                            @if($child->has_family !== null)
+                                <span class="text-xs font-bold flex items-center gap-1 
+                                    {{ $child->has_family ? 'text-green-500' : 'text-red-500' }}">
+                                    
+                                    <i class="fas fa-home text-[10px] 
+                                        {{ $child->has_family ? 'text-green-300' : 'text-red-300' }}"></i>
+
+                                    {{ $child->has_family ? 'Has Family' : 'No Family' }}
+                                </span>
+                            @endif
                         </div>
                         <div class="flex flex-col gap-1">
                             <a href="{{ route('children.show', $cEncId) }}"
@@ -397,7 +425,7 @@
                                class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">
                                 Detail
                             </a>
-                            <a href=""
+                            <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
                                class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-black rounded-lg transition text-center">
                                 Sponsor
                             </a>

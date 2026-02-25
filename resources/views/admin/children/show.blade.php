@@ -99,6 +99,7 @@
                 @foreach([
                     ['icon'=>'fas fa-map-marker-alt', 'color'=>'orange', 'label'=>'Country', 'value'=>$child->country ?? '—'],
                     ['icon'=>'fas fa-barcode',         'color'=>'gray',   'label'=>'Code',    'value'=>$child->code ?? '—'],
+                    ['icon'=>'fas fa-home',            'color'=>'green',  'label'=>'Has Family', 'value'=>$child->has_family ? 'Yes' : 'No'],
                     ['icon'=>'fas fa-calendar',        'color'=>'blue',   'label'=>'Added',   'value'=>$child->created_at->format('d M Y')],
                 ] as $row)
                 <div class="flex items-start gap-3">

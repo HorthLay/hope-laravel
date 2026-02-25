@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+
 class SettingController extends Controller
 {
-       public function index()
+    public function index()
     {
         $settings = $this->getSettings();
         return view('admin.settings.index', compact('settings'));
@@ -18,43 +19,40 @@ class SettingController extends Controller
     {
         $validated = $request->validate([
             // General Settings
-            'site_name'        => 'nullable|string|max:255',
-            'site_tagline'     => 'nullable|string|max:500',
-            'site_description' => 'nullable|string|max:1000',
-            'contact_email'    => 'nullable|email|max:255',
-            'contact_phone'    => 'nullable|string|max:50',
-            'address'          => 'nullable|string|max:500',
+            'site_name'         => 'nullable|string|max:255',
+            'site_tagline'      => 'nullable|string|max:500',
+            'site_description'  => 'nullable|string|max:1000',
+            'contact_email'     => 'nullable|email|max:255',
+            'contact_phone'     => 'nullable|string|max:50',
+            'address'           => 'nullable|string|max:500',
 
-            // Social Media
-            'facebook_url'     => 'nullable|url|max:255',
-            'twitter_url'      => 'nullable|url|max:255',
-            'instagram_url'    => 'nullable|url|max:255',
-            'youtube_url'      => 'nullable|url|max:255',
-            'linkedin_url'     => 'nullable|url|max:255',
-            'telegram_url'     => 'nullable|string|max:255',
-            'whatsapp_url'     => 'nullable|string|max:255',
-            'x_url'            => 'nullable|url|max:255',
+            // Social Media (WhatsApp, Telegram, Instagram, YouTube, LinkedIn only)
+            'whatsapp_url'      => 'nullable|string|max:255',
+            'telegram_url'      => 'nullable|string|max:255',
+            'instagram_url'     => 'nullable|url|max:255',
+            'youtube_url'       => 'nullable|url|max:255',
+            'linkedin_url'      => 'nullable|url|max:255',
+            'facebook_url'      => 'nullable|url|max:255',
 
-            // KHQR / Payment
-            'khqr_image'       => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
-            'account_name'     => 'nullable|string|max:255',
-            'account_bank'     => 'nullable|string|max:255',
+            // Sponsor / Account Details
+            'account_name'      => 'nullable|string|max:255',
+            'account_bank'      => 'nullable|string|max:255',
 
             // SEO Settings
-            'meta_title'       => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
-            'meta_keywords'    => 'nullable|string|max:500',
+            'meta_title'        => 'nullable|string|max:255',
+            'meta_description'  => 'nullable|string|max:500',
+            'meta_keywords'     => 'nullable|string|max:500',
 
             // Images
-            'logo'             => 'nullable|image|mimes:jpeg,jpg,png,svg|max:2048',
-            'favicon'          => 'nullable|image|mimes:ico,png|max:512',
+            'logo'              => 'nullable|image|mimes:jpeg,jpg,png,svg|max:2048',
+            'favicon'           => 'nullable|image|mimes:ico,png|max:512',
 
             // Other Settings
-            'timezone'         => 'nullable|string|max:50',
-            'date_format'      => 'nullable|string|max:50',
-            'articles_per_page'=> 'nullable|integer|min:1|max:100',
-            'enable_comments'  => 'nullable|boolean',
-            'maintenance_mode' => 'nullable|boolean',
+            'timezone'          => 'nullable|string|max:50',
+            'date_format'       => 'nullable|string|max:50',
+            'articles_per_page' => 'nullable|integer|min:1|max:100',
+            'enable_comments'   => 'nullable|boolean',
+            'maintenance_mode'  => 'nullable|boolean',
         ]);
 
         // Handle logo upload
@@ -65,11 +63,6 @@ class SettingController extends Controller
         // Handle favicon upload
         if ($request->hasFile('favicon')) {
             $validated['favicon'] = $this->handleImageUpload($request->file('favicon'), 'favicon');
-        }
-
-        // Handle KHQR image upload
-        if ($request->hasFile('khqr_image')) {
-            $validated['khqr_image'] = $this->handleImageUpload($request->file('khqr_image'), 'khqr_image');
         }
 
         // Checkboxes send nothing when unchecked — default to false
@@ -113,33 +106,30 @@ class SettingController extends Controller
         }
 
         return [
-            'site_name'        => 'Hope & Impact',
-            'site_tagline'     => 'Making a Difference Together',
-            'site_description' => 'A charity organization dedicated to helping communities',
-            'contact_email'    => 'contact@hopeimpact.org',
-            'contact_phone'    => '',
-            'address'          => '',
-            'facebook_url'     => '',
-            'twitter_url'      => '',
-            'instagram_url'    => '',
-            'youtube_url'      => '',
-            'linkedin_url'     => '',
-            'telegram_url'     => '',
-            'whatsapp_url'     => '',
-            'x_url'            => '',
-            'khqr_image'       => '',
-            'account_name'     => 'Hope & Impact Foundation',
-            'account_bank'     => 'ABA Bank · Phnom Penh, Cambodia',
-            'meta_title'       => 'Hope & Impact - Charity Organization',
-            'meta_description' => 'Join us in making a difference in the world',
-            'meta_keywords'    => 'charity, nonprofit, help, community',
-            'logo'             => '',
-            'favicon'          => '',
-            'timezone'         => 'UTC',
-            'date_format'      => 'M d, Y',
-            'articles_per_page'=> 12,
-            'enable_comments'  => false,
-            'maintenance_mode' => false,
+            'site_name'         => 'Hope & Impact',
+            'site_tagline'      => 'Making a Difference Together',
+            'site_description'  => 'A charity organization dedicated to helping communities',
+            'contact_email'     => 'contact@hopeimpact.org',
+            'contact_phone'     => '',
+            'address'           => '',
+            'whatsapp_url'      => '',
+            'telegram_url'      => '',
+            'instagram_url'     => '',
+            'youtube_url'       => '',
+            'linkedin_url'      => '',
+            'facebook_url'      => '',
+            'account_name'      => 'Hope & Impact Foundation',
+            'account_bank'      => 'ABA Bank · Phnom Penh, Cambodia',
+            'meta_title'        => 'Hope & Impact - Charity Organization',
+            'meta_description'  => 'Join us in making a difference in the world',
+            'meta_keywords'     => 'charity, nonprofit, help, community',
+            'logo'              => '',
+            'favicon'           => '',
+            'timezone'          => 'UTC',
+            'date_format'       => 'M d, Y',
+            'articles_per_page' => 12,
+            'enable_comments'   => false,
+            'maintenance_mode'  => false,
         ];
     }
 

@@ -124,6 +124,7 @@
                         <th class="px-4 py-3 text-left w-0">#</th>
                         <th class="px-4 py-3 text-left">Child</th>
                         <th class="px-4 py-3 text-left">Code</th>
+                        <th class="px-4 py-3 text-left">Has Family</th>
                         <th class="px-4 py-3 text-left">Age</th>
                         <th class="px-4 py-3 text-left">Country</th>
                         <th class="px-4 py-3 text-left">Sponsor</th>
@@ -163,6 +164,19 @@
                             <span class="font-mono text-xs font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded">
                                 {{ $child->code ?? '—' }}
                             </span>
+                        </td>
+
+                        {{-- Has Family --}}
+                        <td>
+                            @if($child->has_family)
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                                    <i class="fas fa-home text-green-400 text-[6px]"></i> With Family
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-500">
+                                    <i class="fas fa-home text-gray-400 text-[6px]"></i> No Family
+                                </span>
+                            @endif
                         </td>
 
                         {{-- Age --}}

@@ -4,7 +4,12 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>{{ $family->name ?? 'Family' }} | Hope & Impact</title>
+    <title>{{ $family->name ?? 'Family' }} | {{ $settings['site_name'] ?? 'Hope & Impact' }}</title>
+    <meta name="description" content="{{ $settings['meta_description'] ?? $settings['site_description'] ?? '' }}">
+    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Hanuman&display=swap" rel="stylesheet">
@@ -224,7 +229,7 @@
                         @endforeach
                     </ul>
 
-                    <a href=""
+                    <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
                        class="block w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-black text-center rounded-2xl transition shadow-md shadow-amber-200 text-base">
                         <i class="fas fa-hands-helping mr-2"></i> Sponsor {{ $family->name ?? 'This Family' }}
                     </a>
