@@ -17,163 +17,111 @@ class AdminController extends Controller
     public function index()
     {
         // ========== SITE VISIT STATISTICS ==========
-        
-        // Total site visits (all time)
-        $totalSiteVisits = SiteVisit::count();
+        $totalSiteVisits          = SiteVisit::count();
         $totalSiteVisitsFormatted = NumberHelper::formatNumber($totalSiteVisits);
-        
-        // Unique visitors (all time)
-        $uniqueVisitors = SiteVisit::uniqueVisitors();
-        $uniqueVisitorsFormatted = NumberHelper::formatNumber($uniqueVisitors);
-        
-        // Site visits this month
-        $siteVisitsThisMonth = SiteVisit::totalVisits(now()->startOfMonth());
-        
-        // Site visits last month
-        $siteVisitsLastMonth = SiteVisit::totalVisits(
-            now()->subMonth()->startOfMonth(),
-            now()->subMonth()->endOfMonth()
-        );
-        
-        // Calculate site visits growth
-        $siteVisitsGrowth = $siteVisitsLastMonth > 0 
-            ? round((($siteVisitsThisMonth - $siteVisitsLastMonth) / $siteVisitsLastMonth) * 100) 
-            : 0;
-        
-        // Visits today
-        $visitsToday = SiteVisit::totalVisits(now()->startOfDay());
-        $visitsTodayFormatted = NumberHelper::formatNumber($visitsToday);
-        
-        // Unique visitors today
-        $uniqueVisitorsToday = SiteVisit::uniqueVisitors(now()->startOfDay());
+        $uniqueVisitors           = SiteVisit::uniqueVisitors();
+        $uniqueVisitorsFormatted  = NumberHelper::formatNumber($uniqueVisitors);
+        $siteVisitsThisMonth      = SiteVisit::totalVisits(now()->startOfMonth());
+        $siteVisitsLastMonth      = SiteVisit::totalVisits(now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth());
+        $siteVisitsGrowth         = $siteVisitsLastMonth > 0
+                                        ? round((($siteVisitsThisMonth - $siteVisitsLastMonth) / $siteVisitsLastMonth) * 100)
+                                        : 0;
+        $visitsToday              = SiteVisit::totalVisits(now()->startOfDay());
+        $visitsTodayFormatted     = NumberHelper::formatNumber($visitsToday);
+        $uniqueVisitorsToday      = SiteVisit::uniqueVisitors(now()->startOfDay());
         $uniqueVisitorsTodayFormatted = NumberHelper::formatNumber($uniqueVisitorsToday);
-        
-        // Visits this week
-        $visitsThisWeek = SiteVisit::totalVisits(now()->startOfWeek());
-        $visitsThisWeekFormatted = NumberHelper::formatNumber($visitsThisWeek);
-        
-        // Visits by device type
-        $visitsByDevice = SiteVisit::byDeviceType();
-        
-        // Top pages
-        $topPages = SiteVisit::topPages(5);
-        
-        // Visits trend (last 7 days)
-        $visitsTrend = SiteVisit::visitsTrend(7);
-        
+        $visitsThisWeek           = SiteVisit::totalVisits(now()->startOfWeek());
+        $visitsThisWeekFormatted  = NumberHelper::formatNumber($visitsThisWeek);
+        $visitsByDevice           = SiteVisit::byDeviceType();
+        $topPages                 = SiteVisit::topPages(5);
+        $visitsTrend              = SiteVisit::visitsTrend(7);
+
         // ========== COUNTRY STATISTICS ==========
-        
-        // Top countries (last 30 days)
-        $topCountries = SiteVisit::byCountry(5, now()->subDays(30));
-        
-        // Top cities (last 30 days)
-        $topCities = SiteVisit::byCity(5, now()->subDays(30));
-        
-        // Unique countries (all time)
+        $topCountries    = SiteVisit::byCountry(5, now()->subDays(30));
+        $topCities       = SiteVisit::byCity(5, now()->subDays(30));
         $uniqueCountries = SiteVisit::uniqueCountries();
-        
+
         // ========== ARTICLE STATISTICS ==========
-        $totalArticles = Article::count();
+        $totalArticles    = Article::count();
         $publishedArticles = Article::where('status', 'published')->count();
-        $draftArticles = Article::where('status', 'draft')->count();
-        
-        // Total article views
-        $totalViews = Article::sum('views_count');
+        $draftArticles    = Article::where('status', 'draft')->count();
+        $totalViews       = Article::sum('views_count');
         $totalViewsFormatted = NumberHelper::formatNumber($totalViews);
-        
-        // Article views this month
-        $viewsThisMonth = Article::where('created_at', '>=', now()->startOfMonth())
-            ->sum('views_count');
+        $viewsThisMonth   = Article::where('created_at', '>=', now()->startOfMonth())->sum('views_count');
         $viewsThisMonthFormatted = NumberHelper::formatNumber($viewsThisMonth);
-        
-        // Article views today
-        $viewsToday = Article::where('created_at', '>=', now()->startOfDay())
-            ->sum('views_count');
-        
-        // Calculate article views growth
-        $viewsLastMonth = Article::whereBetween('created_at', [
-            now()->subMonth()->startOfMonth(),
-            now()->subMonth()->endOfMonth()
-        ])->sum('views_count');
-        
-        $viewsGrowth = $viewsLastMonth > 0 
-            ? round((($viewsThisMonth - $viewsLastMonth) / $viewsLastMonth) * 100) 
-            : 0;
-        
+        $viewsToday       = Article::where('created_at', '>=', now()->startOfDay())->sum('views_count');
+        $viewsLastMonth   = Article::whereBetween('created_at', [
+                                now()->subMonth()->startOfMonth(),
+                                now()->subMonth()->endOfMonth()
+                            ])->sum('views_count');
+        $viewsGrowth      = $viewsLastMonth > 0
+                                ? round((($viewsThisMonth - $viewsLastMonth) / $viewsLastMonth) * 100)
+                                : 0;
+
         // ========== MEDIA STATISTICS ==========
-        $totalImages = Image::count();
+        $totalImages          = Image::count();
         $totalImagesFormatted = NumberHelper::formatNumber($totalImages);
-        
-        $imagesThisMonth = Image::where('created_at', '>=', now()->startOfMonth())->count();
+        $imagesThisMonth      = Image::where('created_at', '>=', now()->startOfMonth())->count();
         $imagesThisMonthFormatted = NumberHelper::formatNumber($imagesThisMonth);
-        
-        $totalStorageBytes = Image::sum('file_size');
+        $totalStorageBytes    = Image::sum('file_size');
         $totalStorageFormatted = NumberHelper::formatBytes($totalStorageBytes);
-        
-        // ========== OTHER STATISTICS ==========
-        $totalCategories = Category::count();
-        
-        // Articles this week
+
+        // ========== OTHER ==========
+        $totalCategories  = Category::count();
         $articlesThisWeek = Article::where('created_at', '>=', now()->subWeek())
-            ->where('status', 'published')
-            ->count();
-        
-        // Recent articles
-        $recentArticles = Article::with(['category', 'image', 'admin'])
-            ->latest()
-            ->take(10)
-            ->get();
-        
-        // Draft count for sidebar
-        $draftCount = $draftArticles;
-        
+                                ->where('status', 'published')->count();
+        $recentArticles   = Article::with(['category', 'image', 'admin'])->latest()->take(10)->get();
+        $draftCount       = $draftArticles;
+
+        // ========== CHILDREN STATISTICS ==========
+        $totalChildren        = \App\Models\SponsoredChild::count();
+        $activeChildren       = \App\Models\SponsoredChild::where('is_active', true)->count();
+        $sponsoredChildren    = \App\Models\SponsoredChild::where('is_active', true)->whereHas('sponsors')->count();
+        $unsponsoredChildren  = \App\Models\SponsoredChild::where('is_active', true)->whereDoesntHave('sponsors')->count();
+        $childrenCountries    = \App\Models\SponsoredChild::where('is_active', true)
+                                    ->whereNotNull('country')->distinct('country')->count('country');
+        $newChildrenThisMonth = \App\Models\SponsoredChild::where('created_at', '>=', now()->startOfMonth())->count();
+        $recentChildren       = \App\Models\SponsoredChild::with('sponsors')->latest()->take(6)->get();
+
+        // ========== FAMILY STATISTICS ==========
+        $totalFamilies        = \App\Models\Family::count();
+        $activeFamilies       = \App\Models\Family::where('is_active', true)->count();
+        $sponsoredFamilies    = \App\Models\Family::where('is_active', true)->whereHas('sponsors')->count();
+        $unsponsoredFamilies  = \App\Models\Family::where('is_active', true)->whereDoesntHave('sponsors')->count();
+        $totalFamilyMembers   = \App\Models\FamilyMember::count();
+        $newFamiliesThisMonth = \App\Models\Family::where('created_at', '>=', now()->startOfMonth())->count();
+        $recentFamilies       = \App\Models\Family::withCount('members')->with('sponsors')->latest()->take(6)->get();
+
         return view('admin.dashboard', compact(
-            // Site visit stats
-            'totalSiteVisits',
-            'totalSiteVisitsFormatted',
-            'uniqueVisitors',
-            'uniqueVisitorsFormatted',
-            'siteVisitsThisMonth',
-            'siteVisitsGrowth',
-            'visitsToday',
-            'visitsTodayFormatted',
-            'uniqueVisitorsToday',
-            'uniqueVisitorsTodayFormatted',
-            'visitsThisWeek',
-            'visitsThisWeekFormatted',
-            'visitsByDevice',
-            'topPages',
-            'visitsTrend',
-            
-            // Country stats
-            'topCountries',
-            'topCities',
-            'uniqueCountries',
-            
-            // Article stats
-            'totalArticles',
-            'publishedArticles',
-            'draftArticles',
-            'totalViews',
-            'totalViewsFormatted',
-            'viewsThisMonth',
-            'viewsThisMonthFormatted',
-            'viewsToday',
-            'viewsGrowth',
-            
-            // Media stats
-            'totalImages',
-            'totalImagesFormatted',
-            'imagesThisMonth',
-            'imagesThisMonthFormatted',
-            'totalStorageBytes',
-            'totalStorageFormatted',
-            
+            // Site visits
+            'totalSiteVisits', 'totalSiteVisitsFormatted',
+            'uniqueVisitors', 'uniqueVisitorsFormatted',
+            'siteVisitsThisMonth', 'siteVisitsGrowth',
+            'visitsToday', 'visitsTodayFormatted',
+            'uniqueVisitorsToday', 'uniqueVisitorsTodayFormatted',
+            'visitsThisWeek', 'visitsThisWeekFormatted',
+            'visitsByDevice', 'topPages', 'visitsTrend',
+            // Countries
+            'topCountries', 'topCities', 'uniqueCountries',
+            // Articles
+            'totalArticles', 'publishedArticles', 'draftArticles',
+            'totalViews', 'totalViewsFormatted',
+            'viewsThisMonth', 'viewsThisMonthFormatted',
+            'viewsToday', 'viewsGrowth',
+            // Media
+            'totalImages', 'totalImagesFormatted',
+            'imagesThisMonth', 'imagesThisMonthFormatted',
+            'totalStorageBytes', 'totalStorageFormatted',
             // Other
-            'totalCategories',
-            'articlesThisWeek',
-            'recentArticles',
-            'draftCount'
+            'totalCategories', 'articlesThisWeek', 'recentArticles', 'draftCount',
+            // Children
+            'totalChildren', 'activeChildren', 'sponsoredChildren',
+            'unsponsoredChildren', 'childrenCountries',
+            'newChildrenThisMonth', 'recentChildren',
+            // Families
+            'totalFamilies', 'activeFamilies', 'sponsoredFamilies',
+            'unsponsoredFamilies', 'totalFamilyMembers',
+            'newFamiliesThisMonth', 'recentFamilies'
         ));
     }
 

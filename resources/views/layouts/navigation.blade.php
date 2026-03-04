@@ -106,10 +106,6 @@
         <i class="fas fa-heart"></i>
         <span>Services</span>
     </a>
-    <a href="{{ route('learn-more') }}" class="nav-item" id="bottom-nav-story">
-        <i class="fas fa-newspaper"></i>
-        <span>Our Story</span>
-    </a>
     <a href="#" id="menu-nav-item" class="nav-item">
         <i class="fas fa-bars"></i>
         <span>Menu</span>

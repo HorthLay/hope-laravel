@@ -66,10 +66,10 @@
             <div>
                 <h4 class="font-bold text-lg mb-4">Our Work</h4>
                 <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="{{ route('learn-more') }}" class="hover:text-[#f4b630] transition">Education Programs</a></li>
-                    <li><a href="{{ route('learn-more') }}" class="hover:text-[#f4b630] transition">Healthcare Access</a></li>
-                    <li><a href="{{ route('learn-more') }}" class="hover:text-[#f4b630] transition">Nutrition Support</a></li>
-                    <li><a href="{{ route('learn-more') }}" class="hover:text-[#f4b630] transition">Emergency Relief</a></li>
+                    <li><a href="{{ route('sponsor.children') }}" class="hover:text-[#f4b630] transition">Education Programs</a></li>
+                    <li><a href="{{ route('sponsor.children') }}" class="hover:text-[#f4b630] transition">Healthcare Access</a></li>
+                    <li><a href="{{ route('sponsor.children') }}" class="hover:text-[#f4b630] transition">Nutrition Support</a></li>
+                    <li><a href="{{ route('sponsor.children') }}" class="hover:text-[#f4b630] transition">Emergency Relief</a></li>
                 </ul>
             </div>
 

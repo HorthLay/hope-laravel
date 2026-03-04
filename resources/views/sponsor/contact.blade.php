@@ -1,381 +1,437 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ ($settings['site_name'] ?? 'Hope & Impact') }} | Contact Us</title>
-    <meta name="description" content="{{ $settings['meta_description'] ?? $settings['site_description'] ?? '' }}">
-    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
-    @if(!empty($settings['favicon']))
-    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
-    @endif
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Hanuman&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; margin: 0; background: #f9fafb; }
-        body.km { font-family: 'Hanuman', sans-serif; }
+{{-- resources/views/sponsor/contact.blade.php --}}
+@extends('layouts.app')
 
-        /* ── Header ───────────────────────────────── */
-        .site-header {
-            background: #fff; border-bottom: 1px solid #e5e7eb;
-            position: sticky; top: 0; z-index: 50;
-            box-shadow: 0 2px 12px rgba(0,0,0,.06);
-        }
-        .header-inner {
-            max-width: 1100px; margin: 0 auto;
-            padding: 10px 16px;
-            display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        }
-        .logo-mark { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-        .logo-img  { height: 44px; width: auto; object-fit: contain; }
+@section('title', 'Create a Sponsor Account')
 
-        .lang-row { display: flex; gap: 5px; }
-        .lang-btn {
-            padding: 5px 10px; border-radius: 8px;
-            border: 2px solid #e5e7eb; font-size: 11px; font-weight: 700;
-            cursor: pointer; transition: all .2s; background: white;
-            display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
-        }
-        .lang-btn:hover  { border-color: #f97316; background: #fff7ed; }
-        .lang-btn.active { border-color: #f97316; background: linear-gradient(135deg,#fff7ed,#ffedd5); color: #c2410c; }
-        .lang-btn img    { width: 16px; height: 11px; border-radius: 2px; }
-
-        @media (max-width: 480px) {
-            .lang-row     { display: none; }
-            .lang-compact { display: flex !important; }
-        }
-        .lang-compact { display: none; gap: 5px; }
-        .lang-compact button {
-            width: 30px; height: 30px; border-radius: 50%;
-            border: 2px solid #e5e7eb; background: white;
-            cursor: pointer; padding: 0; overflow: hidden; transition: border-color .2s;
-        }
-        .lang-compact button img    { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .lang-compact button.active { border-color: #f97316; }
-
-        .login-btn {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 14px; background: #f97316; color: #fff;
-            font-size: 11px; font-weight: 800; border-radius: 10px;
-            text-decoration: none; transition: background .2s; white-space: nowrap; flex-shrink: 0;
-        }
-        .login-btn:hover { background: #ea580c; color: #fff; }
-
-        /* ── Hero ─────────────────────────────────── */
-        .hero { text-align: center; padding: 28px 20px 20px; max-width: 580px; margin: 0 auto; }
-        .hero-icon {
-            width: 52px; height: 52px; background: #fff7ed; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 14px; box-shadow: 0 4px 16px rgba(249,115,22,.2);
-        }
-        .hero h1 { font-size: clamp(20px, 5vw, 32px); font-weight: 900; color: #1f2937; margin: 0 0 10px; }
-        .hero p  { font-size: clamp(13px, 3vw, 15px); color: #6b7280; margin: 0; line-height: 1.65; }
-
-        /* ── Page wrapper ─────────────────────────── */
-        .page-wrapper { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
-
-        /* ── Desktop: 2-col grid ──────────────────── */
-        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .desktop-contact-col { display: flex; flex-direction: column; gap: 20px; }
-        @media (max-width: 767px) {
-            .content-grid { grid-template-columns: 1fr; }
-            .desktop-contact-col { display: none !important; }
-        }
-
-        /* ── Cards ────────────────────────────────── */
-        .card { background: #fff; border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,.07); padding: 22px; }
-        .card-title { font-size: 17px; font-weight: 900; color: #1f2937; margin: 0 0 6px; }
-        .card-sub   { font-size: 12px; color: #6b7280; margin: 0 0 20px; line-height: 1.6; }
-
-        /* ── How-to steps ─────────────────────────── */
-        .step { display: flex; align-items: flex-start; gap: 12px; }
-        .step + .step { margin-top: 16px; }
-        .step-icon {
-            width: 34px; height: 34px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; margin-top: 1px; font-size: 13px;
-        }
-        .step h3 { font-size: 13px; font-weight: 800; color: #1f2937; margin: 0 0 3px; }
-        .step p  { font-size: 11px; color: #6b7280; margin: 0; line-height: 1.5; }
-
-        /* ── Contact buttons (shared desktop + modal) */
-        .contact-list { display: flex; flex-direction: column; gap: 9px; }
-        .section-label {
-            font-size: 11px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: .07em; color: #9ca3af; margin: 0 0 12px;
-        }
-        .contact-btn {
-            display: flex; align-items: center; gap: 13px;
-            padding: 13px 14px; border-radius: 14px; text-decoration: none;
-            background: #f9fafb; border: 1.5px solid #f3f4f6;
-            transition: all .18s; min-height: 62px;
-        }
-        .contact-btn:hover, .contact-btn:active {
-            transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.10);
-        }
-        .btn-icon {
-            width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
-        }
-        .btn-body   { flex: 1; min-width: 0; }
-        .btn-title  { font-size: 13px; font-weight: 800; color: #1f2937; }
-        .btn-sub    { font-size: 11px; color: #9ca3af; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .btn-arrow  { color: #d1d5db; font-size: 11px; flex-shrink: 0; }
-
-        .contact-btn.email:hover     { background: #fff7ed; border-color: #fed7aa; }
-        .contact-btn.whatsapp:hover  { background: #f0fdf4; border-color: #bbf7d0; }
-        .contact-btn.telegram:hover  { background: #f0f9ff; border-color: #bae6fd; }
-        .contact-btn.facebook:hover  { background: #eff6ff; border-color: #bfdbfe; }
-        .contact-btn.instagram:hover { background: #fdf2f8; border-color: #f5d0fe; }
-        .contact-btn.youtube:hover   { background: #fef2f2; border-color: #fecaca; }
-        .contact-btn.linkedin:hover  { background: #eff6ff; border-color: #bfdbfe; }
-
-        /* ── Why card ─────────────────────────────── */
-        .why-card {
-            background: linear-gradient(135deg,#f97316,#ea580c);
-            border-radius: 18px; padding: 22px; color: #fff;
-            box-shadow: 0 8px 28px rgba(249,115,22,.32);
-        }
-        .why-card h3 { font-size: 17px; font-weight: 900; margin: 0 0 14px; }
-        .why-item { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; }
-        .why-item + .why-item { margin-top: 9px; }
-        .why-item i { margin-top: 2px; flex-shrink: 0; }
-
-        /* ── Mobile "Contact Us" big trigger button ── */
-        .mobile-contact-trigger {
-            display: none;
-            align-items: center; justify-content: center; gap: 10px;
-            width: 100%; padding: 18px;
-            background: linear-gradient(135deg,#f97316,#ea580c);
-            color: #fff; border: none; border-radius: 16px;
-            font-family: inherit; font-size: 15px; font-weight: 900;
-            cursor: pointer; box-shadow: 0 8px 24px rgba(249,115,22,.40);
-            transition: transform .15s, box-shadow .15s;
-            text-align: center;
-        }
-        .mobile-contact-trigger:active { transform: scale(.97); box-shadow: 0 4px 12px rgba(249,115,22,.30); }
-        .mobile-contact-trigger i { font-size: 18px; }
-        @media (max-width: 767px) { .mobile-contact-trigger { display: flex; } }
-
-        /* ── Bottom sheet modal ───────────────────── */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; z-index: 500;
-            background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
-            align-items: flex-end; justify-content: center;
-        }
-        .modal-overlay.open { display: flex; }
-
-        .modal-sheet {
-            background: #fff; width: 100%; max-width: 520px;
-            border-radius: 24px 24px 0 0;
-            max-height: 90dvh; overflow-y: auto;
-            transform: translateY(110%);
-            transition: transform .35s cubic-bezier(.4,0,.2,1);
-            padding-bottom: env(safe-area-inset-bottom, 16px);
-        }
-        .modal-overlay.open .modal-sheet { transform: translateY(0); }
-
-        .modal-handle {
-            width: 40px; height: 4px; background: #e5e7eb;
-            border-radius: 2px; margin: 14px auto 0;
-        }
-        .modal-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 20px 12px;
-            border-bottom: 1px solid #f3f4f6;
-            position: sticky; top: 0; background: #fff; z-index: 1;
-        }
-        .modal-title { font-size: 16px; font-weight: 900; color: #1f2937; }
-        .modal-close {
-            width: 32px; height: 32px; border-radius: 50%;
-            border: none; background: #f3f4f6; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            color: #6b7280; font-size: 13px; transition: background .2s;
-        }
-        .modal-close:hover { background: #e5e7eb; }
-        .modal-body { padding: 18px 20px 28px; }
-
-        /* ── Bottom nav padding ───────────────────── */
-        @media (max-width: 1023px) { body { padding-bottom: 72px; } }
-    </style>
-</head>
-<body>
+@section('content')
 
 @php
-    $emailUrl     = !empty($settings['contact_email'])  ? 'https://mail.google.com/mail/?view=cm&to=' . $settings['contact_email'] : null;
-    $whatsappUrl  = !empty($settings['whatsapp_url'])   ? 'https://wa.me/' . $settings['whatsapp_url']  : null;
-    $telegramUrl  = !empty($settings['telegram_url'])   ? 'https://t.me/' . $settings['telegram_url']   : null;
-    $facebookUrl  = $settings['facebook_url']  ?? null ?: null;
-    $instagramUrl = $settings['instagram_url'] ?? null ?: null;
-    $youtubeUrl   = $settings['youtube_url']   ?? null ?: null;
-    $linkedinUrl  = $settings['linkedin_url']  ?? null ?: null;
-    $logoPath     = !empty($settings['logo']) ? asset($settings['logo']) : asset('images/logo.png');
-    $siteName     = $settings['site_name'] ?? 'Association Des Ailes Pour Grandir';
+    $headerSettings = (function() {
+        $file = storage_path('app/settings.json');
+        return file_exists($file) ? json_decode(file_get_contents($file), true) : [];
+    })();
+    $emailUrl     = !empty($headerSettings['contact_email'])  ? 'https://mail.google.com/mail/?view=cm&to=' . $headerSettings['contact_email'] : null;
+    $whatsappUrl  = !empty($headerSettings['whatsapp_url'])   ? 'https://wa.me/' . $headerSettings['whatsapp_url']  : null;
+    $telegramUrl  = !empty($headerSettings['telegram_url'])   ? 'https://t.me/' . $headerSettings['telegram_url']   : null;
+    $facebookUrl  = $headerSettings['facebook_url']  ?? null ?: null;
+    $instagramUrl = $headerSettings['instagram_url'] ?? null ?: null;
+    $youtubeUrl   = $headerSettings['youtube_url']   ?? null ?: null;
+    $linkedinUrl  = $headerSettings['linkedin_url']  ?? null ?: null;
 @endphp
 
-{{-- ── Header ─────────────────────────────────────── --}}
-<header class="site-header">
-    <div class="header-inner">
-        <a href="{{ route('home') }}" class="logo-mark">
-            <img src="{{ $logoPath }}" alt="{{ $siteName }}" class="logo-img">
-        </a>
-        <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:flex-end;">
-            <div class="lang-row">
-                <button class="lang-btn active" data-lang="fr" onclick="switchLang('fr')"><img src="https://flagcdn.com/w40/fr.png" alt="">FR</button>
-                <button class="lang-btn"        data-lang="en" onclick="switchLang('en')"><img src="https://flagcdn.com/w40/us.png" alt="">EN</button>
-                <button class="lang-btn"        data-lang="km" onclick="switchLang('km')"><img src="https://flagcdn.com/w40/kh.png" alt="">ខ្មែរ</button>
+<style>
+/* ══════════════════════════════════════════════
+   ANIMATIONS & REVEAL
+══════════════════════════════════════════════ */
+@keyframes fadeUp     { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse-soft { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+.reveal       {opacity:0;transform:translateY(28px); transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.reveal-left  {opacity:0;transform:translateX(-36px);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.reveal-right {opacity:0;transform:translateX(36px); transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.reveal.visible,.reveal-left.visible,.reveal-right.visible{opacity:1;transform:none}
+.stagger-1{transition-delay:.05s}.stagger-2{transition-delay:.12s}.stagger-3{transition-delay:.19s}
+.stagger-4{transition-delay:.26s}.stagger-5{transition-delay:.33s}
+
+/* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+.page-hero{position:relative;overflow:hidden;background:#1a1a1a;min-height:320px}
+.page-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.45) saturate(1.1);transition:transform 8s ease}
+.page-hero:hover .page-hero-bg{transform:scale(1.04)}
+.page-hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.2) 60%,transparent 100%)}
+.page-hero-content{position:relative;z-index:2;padding:70px 40px 60px;max-width:1280px;margin:0 auto}
+.breadcrumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:18px}
+.breadcrumb a:hover{color:#fff}
+.breadcrumb span{color:rgba(255,255,255,.9)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.wave-divider{line-height:0;overflow:hidden}.wave-divider svg{display:block}
+@media(max-width:640px){.page-hero-content{padding:50px 20px 44px}}
+
+/* ══════════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════════ */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:767px){
+    .contact-grid{grid-template-columns:1fr}
+    .desktop-contact-col{display:none!important}
+    .mobile-contact-trigger{display:flex!important}
+    #why-mobile{display:block!important}
+    #why-desktop{display:none!important}
+}
+@media(min-width:768px){
+    .mobile-contact-trigger{display:none!important}
+    #why-mobile{display:none!important}
+    #why-desktop{display:block!important}
+}
+
+/* ══════════════════════════════════════════════
+   CARDS
+══════════════════════════════════════════════ */
+.info-card{background:#fff;border-radius:20px;border:1px solid #f1f5f9;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:28px}
+.card-title{font-size:18px;font-weight:900;color:#1f2937;margin:0 0 6px}
+.card-sub{font-size:13px;color:#6b7280;margin:0 0 22px;line-height:1.65}
+.section-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#9ca3af;margin:0 0 14px}
+
+/* ══════════════════════════════════════════════
+   HOW-TO STEPS
+══════════════════════════════════════════════ */
+.step{display:flex;align-items:flex-start;gap:13px}
+.step+.step{margin-top:18px}
+.step-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:14px}
+.step h3{font-size:13px;font-weight:800;color:#1f2937;margin:0 0 3px}
+.step p{font-size:11px;color:#6b7280;margin:0;line-height:1.5}
+
+/* ══════════════════════════════════════════════
+   CONTACT BUTTONS
+══════════════════════════════════════════════ */
+.contact-list{display:flex;flex-direction:column;gap:10px}
+.contact-btn{
+    display:flex;align-items:center;gap:13px;
+    padding:14px 16px;border-radius:14px;text-decoration:none;
+    background:#f9fafb;border:1.5px solid #f3f4f6;
+    transition:all .18s;min-height:64px;
+}
+.contact-btn:hover,.contact-btn:active{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.10)}
+.btn-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:21px}
+.btn-body{flex:1;min-width:0}
+.btn-title{font-size:13px;font-weight:800;color:#1f2937}
+.btn-sub{font-size:11px;color:#9ca3af;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-arrow{color:#d1d5db;font-size:11px;flex-shrink:0}
+.contact-btn.email:hover    {background:#fff7ed;border-color:#fed7aa}
+.contact-btn.whatsapp:hover {background:#f0fdf4;border-color:#bbf7d0}
+.contact-btn.telegram:hover {background:#f0f9ff;border-color:#bae6fd}
+.contact-btn.facebook:hover {background:#eff6ff;border-color:#bfdbfe}
+.contact-btn.instagram:hover{background:#fdf2f8;border-color:#f5d0fe}
+.contact-btn.youtube:hover  {background:#fef2f2;border-color:#fecaca}
+.contact-btn.linkedin:hover {background:#eff6ff;border-color:#bfdbfe}
+
+/* ══════════════════════════════════════════════
+   WHY CARD
+══════════════════════════════════════════════ */
+.why-card{background:linear-gradient(135deg,#f97316,#ea580c);border-radius:20px;padding:24px;color:#fff;box-shadow:0 8px 28px rgba(249,115,22,.30)}
+.why-card h3{font-size:17px;font-weight:900;margin:0 0 16px}
+.why-item{display:flex;align-items:flex-start;gap:9px;font-size:13px}
+.why-item+.why-item{margin-top:10px}
+.why-item i{margin-top:2px;flex-shrink:0}
+
+/* ══════════════════════════════════════════════
+   MOBILE TRIGGER BUTTON
+══════════════════════════════════════════════ */
+.mobile-contact-trigger{
+    display:none;align-items:center;justify-content:center;gap:10px;
+    width:100%;padding:18px;
+    background:linear-gradient(135deg,#f97316,#ea580c);
+    color:#fff;border:none;border-radius:16px;
+    font-family:inherit;font-size:15px;font-weight:900;
+    cursor:pointer;box-shadow:0 8px 24px rgba(249,115,22,.38);
+    transition:transform .15s,box-shadow .15s;
+}
+.mobile-contact-trigger:active{transform:scale(.97)}
+.mobile-contact-trigger i{font-size:18px}
+
+/* ══════════════════════════════════════════════
+   BOTTOM SHEET MODAL
+══════════════════════════════════════════════ */
+.modal-overlay{
+    display:none;position:fixed;inset:0;z-index:1200;
+    background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
+    align-items:flex-end;justify-content:center;
+}
+.modal-overlay.open{display:flex}
+.modal-sheet{
+    background:#fff;width:100%;max-width:520px;
+    border-radius:24px 24px 0 0;
+    max-height:90dvh;overflow-y:auto;
+    transform:translateY(110%);
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+    padding-bottom:env(safe-area-inset-bottom,16px);
+}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:14px auto 0}
+.modal-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px 12px;border-bottom:1px solid #f3f4f6;
+    position:sticky;top:0;background:#fff;z-index:1
+}
+.modal-title{font-size:16px;font-weight:900;color:#1f2937}
+.modal-close{
+    width:32px;height:32px;border-radius:50%;
+    border:none;background:#f3f4f6;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    color:#6b7280;font-size:13px;transition:background .2s
+}
+.modal-close:hover{background:#e5e7eb}
+.modal-body{padding:18px 20px 28px}
+</style>
+
+{{-- HERO --}}
+<section class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+        <nav class="breadcrumb">
+            <a href="{{ route('home') }}">Home</a>
+            <i class="fas fa-chevron-right text-[9px]"></i>
+            <span>Sponsor</span>
+            <i class="fas fa-chevron-right text-[9px]"></i>
+            <span>Create Account</span>
+        </nav>
+        <div class="pill bg-orange-500/20 border border-orange-400/30 text-orange-300 mb-5" style="animation:fadeUp .7s ease both">
+            <i class="fas fa-user-plus text-xs"></i> Become a Sponsor
+        </div>
+        <h1 class="text-4xl md:text-5xl font-black text-white leading-tight mb-4" style="animation:fadeUp .9s ease both">Create a Sponsor Account</h1>
+        <p class="text-lg text-white/80 font-medium max-w-xl" style="animation:fadeUp .9s .15s ease both">Contact us directly to create your sponsor account and start changing a child's life.</p>
+    </div>
+</section>
+
+<div class="wave-divider" style="background:#f9fafb"><svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,30 C360,55 1080,5 1440,30 L1440,0 L0,0 Z" fill="#ffffff"/></svg></div>
+
+{{-- MAIN CONTENT --}}
+<section class="bg-white py-14 md:py-20">
+    <div class="max-w-5xl mx-auto px-4">
+
+        {{-- Mobile trigger --}}
+        <div class="mb-6">
+            <button class="mobile-contact-trigger" onclick="openContactModal()">
+                <i class="fas fa-paper-plane"></i>
+                <span>Contact Us</span>
+                <i class="fas fa-chevron-up" style="font-size:12px;margin-left:auto;opacity:.7;"></i>
+            </button>
+        </div>
+
+        <div class="contact-grid">
+
+            {{-- LEFT: How to + Why (mobile) --}}
+            <div style="display:flex;flex-direction:column;gap:20px;">
+
+                {{-- How to card --}}
+                <div class="info-card reveal">
+                    <h2 class="card-title">How to create an account?</h2>
+                    <p class="card-sub">Contact us via one of the methods below. Our team will guide you through the process and create your account.</p>
+
+                    @if($emailUrl)
+                    <div class="step">
+                        <div class="step-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
+                        <div>
+                            <h3>Send us an email</h3>
+                            <p>Include your name, email and phone number.</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if($whatsappUrl)
+                    <div class="step">
+                        <div class="step-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e"></i></div>
+                        <div>
+                            <h3>Contact us on WhatsApp</h3>
+                            <p>Immediate assistance via WhatsApp.</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if($telegramUrl)
+                    <div class="step">
+                        <div class="step-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9"></i></div>
+                        <div>
+                            <h3>Message on Telegram</h3>
+                            <p>Create your account via Telegram.</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if($facebookUrl)
+                    <div class="step">
+                        <div class="step-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb"></i></div>
+                        <div>
+                            <h3>Contact us on Facebook</h3>
+                            <p>Via our official Facebook page.</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if(!$emailUrl && !$whatsappUrl && !$telegramUrl && !$facebookUrl)
+                    <div class="step">
+                        <div class="step-icon" style="background:#f3f4f6"><i class="fas fa-headset" style="color:#9ca3af"></i></div>
+                        <div>
+                            <h3>Reach out to our team</h3>
+                            <p>We will get back to you within 24 hours.</p>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Why card — mobile only --}}
+                <div class="why-card reveal stagger-2" id="why-mobile">
+                    <h3>Why Become a Sponsor?</h3>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>Directly change a child's life</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>Receive regular updates & photos</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>84% of funds go directly to programs</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>Track your child's education journey</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>For just $1 a day — make a lasting impact</span></div>
+                </div>
             </div>
-            <div class="lang-compact">
-                <button data-lang="fr" onclick="switchLang('fr')" class="active"><img src="https://flagcdn.com/w40/fr.png" alt="FR"></button>
-                <button data-lang="en" onclick="switchLang('en')"><img src="https://flagcdn.com/w40/us.png" alt="EN"></button>
-                <button data-lang="km" onclick="switchLang('km')"><img src="https://flagcdn.com/w40/kh.png" alt="KM"></button>
+
+            {{-- RIGHT: Contact list + Why — desktop only --}}
+            <div class="desktop-contact-col" style="display:flex;flex-direction:column;gap:20px;">
+
+                <div class="info-card reveal stagger-1">
+                    <p class="section-label">Contact Us Directly</p>
+                    <div class="contact-list">
+
+                        @if($emailUrl)
+                        <a href="{{ $emailUrl }}" target="_blank" class="contact-btn email">
+                            <div class="btn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
+                            <div class="btn-body">
+                                <div class="btn-title">Email</div>
+                                <div class="btn-sub">{{ $headerSettings['contact_email'] ?? 'Send us a message' }}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt btn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($whatsappUrl)
+                        <a href="{{ $whatsappUrl }}" target="_blank" class="contact-btn whatsapp">
+                            <div class="btn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e"></i></div>
+                            <div class="btn-body">
+                                <div class="btn-title">WhatsApp</div>
+                                <div class="btn-sub">Instant chat</div>
+                            </div>
+                            <i class="fas fa-external-link-alt btn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($telegramUrl)
+                        <a href="{{ $telegramUrl }}" target="_blank" class="contact-btn telegram">
+                            <div class="btn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9"></i></div>
+                            <div class="btn-body">
+                                <div class="btn-title">Telegram</div>
+                                <div class="btn-sub">{{ $headerSettings['telegram_url'] ?? '' }}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt btn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($facebookUrl)
+                        <a href="{{ $facebookUrl }}" target="_blank" class="contact-btn facebook">
+                            <div class="btn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb"></i></div>
+                            <div class="btn-body">
+                                <div class="btn-title">Facebook</div>
+                                <div class="btn-sub">Official page</div>
+                            </div>
+                            <i class="fas fa-external-link-alt btn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($instagramUrl)
+                        <a href="{{ $instagramUrl }}" target="_blank" class="contact-btn instagram">
+                            <div class="btn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899"></i></div>
+                            <div class="btn-body">
+                                <div class="btn-title">Instagram</div>
+                                <div class="btn-sub">{{ $headerSettings['instagram_url'] ?? '' }}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt btn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($youtubeUrl)
+                        <a href="{{ $youtubeUrl }}" target="_blank" class="contact-btn youtube">
+                            <div class="btn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626"></i></div>
+                            <div class="btn-body">
+                                <div class="btn-title">YouTube</div>
+                                <div class="btn-sub">Watch our stories</div>
+                            </div>
+                            <i class="fas fa-external-link-alt btn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($linkedinUrl)
+                        <a href="{{ $linkedinUrl }}" target="_blank" class="contact-btn linkedin">
+                            <div class="btn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8"></i></div>
+                            <div class="btn-body">
+                                <div class="btn-title">LinkedIn</div>
+                                <div class="btn-sub">{{ $headerSettings['linkedin_url'] ?? '' }}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt btn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if(!$emailUrl && !$whatsappUrl && !$telegramUrl && !$facebookUrl && !$instagramUrl && !$youtubeUrl && !$linkedinUrl)
+                        <div style="padding:20px;text-align:center;color:#9ca3af;font-size:12px;background:#f9fafb;border-radius:12px;">
+                            <i class="fas fa-info-circle" style="margin-right:6px"></i>No contact links configured yet.
+                        </div>
+                        @endif
+
+                    </div>
+                </div>
+
+                {{-- Why card — desktop only --}}
+                <div class="why-card reveal stagger-2" id="why-desktop">
+                    <h3>Why Become a Sponsor?</h3>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>Directly change a child's life</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>Receive regular updates & photos</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>84% of funds go directly to programs</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>Track your child's education journey</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>For just $1 a day — make a lasting impact</span></div>
+                </div>
             </div>
-            <a href="{{ route('sponsor.login') }}" class="login-btn">
-                <i class="fas fa-sign-in-alt"></i>
-                <span data-fr="Connexion" data-en="Login" data-km="ចូល">Connexion</span>
-            </a>
+
+        </div>{{-- end contact-grid --}}
+
+        {{-- Already have an account link --}}
+        <div class="mt-10 text-center reveal">
+            <p class="text-sm text-gray-400">
+                Already have an account?
+                <a href="{{ route('sponsor.login') }}" class="text-orange-500 font-bold hover:underline ml-1">
+                    <i class="fas fa-sign-in-alt mr-1"></i>Log in here
+                </a>
+            </p>
+        </div>
+
+    </div>
+</section>
+
+{{-- Bottom CTA Banner --}}
+<section class="bg-white pb-20">
+    <div class="max-w-5xl mx-auto px-4">
+        <div class="bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 rounded-3xl p-10 md:p-14 relative overflow-hidden reveal">
+            <div class="absolute inset-0 opacity-10" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}');background-size:cover;"></div>
+            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="text-white text-center lg:text-left">
+                    <h2 class="text-3xl md:text-4xl font-black mb-3">Ready to Change a Life?</h2>
+                    <p class="text-white/85 text-lg max-w-lg">Contact us today and we'll set up your sponsor account and match you with a child.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
+                    <a href="{{ route('sponsor.children') }}" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-black rounded-xl hover:bg-orange-50 transition shadow-lg justify-center">
+                        <i class="fas fa-child"></i> Browse Children
+                    </a>
+                    <a href="{{ route('sponsor.login') }}" class="inline-flex items-center gap-3 px-8 py-4 border-2 border-white/50 text-white font-black rounded-xl hover:bg-white/10 transition justify-center">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</header>
+</section>
 
-{{-- ── Hero ─────────────────────────────────────────── --}}
-<div class="hero">
-    <div class="hero-icon">
-        <i class="fas fa-user-plus" style="color:#f97316;font-size:22px;"></i>
-    </div>
-    <h1 data-fr="Créer un Compte Parrain" data-en="Create a Sponsor Account" data-km="បង្កើតគណនីអ្នកឧបត្ថម្ភ">Créer un Compte Parrain</h1>
-    <p  data-fr="Contactez-nous directement pour créer votre compte parrain et commencer à changer la vie d'un enfant."
-        data-en="Contact us directly to create your sponsor account and start changing a child's life."
-        data-km="ទាក់ទងយើងដោយផ្ទាល់ដើម្បីបង្កើតគណនីអ្នកឧបត្ថម្ភ ហើយចប់ផ្តើមការផ្លាស់ប្តូរជីវិតកុមារ។">Contactez-nous directement pour créer votre compte parrain et commencer à changer la vie d'un enfant.</p>
-</div>
-
-{{-- ── Mobile: big "Contact Us" button ─────────────── --}}
-<div class="page-wrapper" style="padding-bottom:0;">
-    <button class="mobile-contact-trigger" onclick="openModal()">
-        <i class="fas fa-paper-plane"></i>
-        <span data-fr="Nous Contacter" data-en="Contact Us" data-km="ទាក់ទងយើង">Nous Contacter</span>
-        <i class="fas fa-chevron-up" style="font-size:12px;margin-left:auto;opacity:.7;"></i>
-    </button>
-</div>
-
-{{-- ── Content grid ─────────────────────────────────── --}}
-<div class="page-wrapper" style="padding-top:20px;">
-    <div class="content-grid">
-
-        {{-- Left: How to ──────────────────────────────── --}}
-        <div style="display:flex;flex-direction:column;gap:20px;">
-            <div class="card">
-                <h2 class="card-title"
-                    data-fr="Comment créer un compte ?"
-                    data-en="How to create an account?"
-                    data-km="តើអ្នកអាចបង្កើតគណនីដូចម្តេច ?">Comment créer un compte ?</h2>
-                <p class="card-sub"
-                   data-fr="Contactez-nous via l'une des méthodes ci-dessous. Notre équipe vous guidera."
-                   data-en="Contact us via one of the methods below. Our team will guide you."
-                   data-km="ទាក់ទងយើងតាមវិធីណាមួយ ក្រុមយើងនឹងណែនាំអ្នក។">Contactez-nous via l'une des méthodes ci-dessous. Notre équipe vous guidera.</p>
-
-                @if($emailUrl)
-                <div class="step">
-                    <div class="step-icon" style="background:#fff7ed;"><i class="fas fa-envelope" style="color:#f97316;"></i></div>
-                    <div>
-                        <h3 data-fr="Envoyez-nous un e-mail" data-en="Send us an email" data-km="ផ្ញើអ៊ីមែល">Envoyez-nous un e-mail</h3>
-                        <p data-fr="Nom, e-mail et numéro de téléphone." data-en="Name, email and phone number." data-km="ឈ្មោះ, អ៊ីមែល, លេខទូរស័ព្ទ។">Nom, e-mail et numéro de téléphone.</p>
-                    </div>
-                </div>
-                @endif
-
-                @if($whatsappUrl)
-                <div class="step">
-                    <div class="step-icon" style="background:#f0fdf4;"><i class="fab fa-whatsapp" style="color:#22c55e;"></i></div>
-                    <div>
-                        <h3 data-fr="Contactez-nous sur WhatsApp" data-en="Contact us on WhatsApp" data-km="ទាក់ទងតាម WhatsApp">Contactez-nous sur WhatsApp</h3>
-                        <p data-fr="Assistance immédiate via WhatsApp." data-en="Immediate assistance via WhatsApp." data-km="ជំនួយភ្លាមៗតាម WhatsApp។">Assistance immédiate via WhatsApp.</p>
-                    </div>
-                </div>
-                @endif
-
-                @if($telegramUrl)
-                <div class="step">
-                    <div class="step-icon" style="background:#f0f9ff;"><i class="fab fa-telegram" style="color:#0ea5e9;"></i></div>
-                    <div>
-                        <h3 data-fr="Message sur Telegram" data-en="Message on Telegram" data-km="សារតាម Telegram">Message sur Telegram</h3>
-                        <p data-fr="Créez votre compte via Telegram." data-en="Create your account via Telegram." data-km="បង្កើតគណនីតាម Telegram។">Créez votre compte via Telegram.</p>
-                    </div>
-                </div>
-                @endif
-
-                @if($facebookUrl)
-                <div class="step">
-                    <div class="step-icon" style="background:#eff6ff;"><i class="fab fa-facebook" style="color:#2563eb;"></i></div>
-                    <div>
-                        <h3 data-fr="Contactez-nous sur Facebook" data-en="Contact us on Facebook" data-km="ទាក់ទងតាម Facebook">Contactez-nous sur Facebook</h3>
-                        <p data-fr="Via notre page Facebook officielle." data-en="Via our official Facebook page." data-km="តាមទំព័រ Facebook ផ្លូវការ។">Via notre page Facebook officielle.</p>
-                    </div>
-                </div>
-                @endif
-            </div>
-
-            {{-- Why sponsor — desktop left col --}}
-            <div class="why-card" style="display:none;" id="why-desktop">
-                <h3 data-fr="Pourquoi Devenir Parrain ?" data-en="Why Become a Sponsor?" data-km="ហេតុអ្វីត្រូវក្លាយជាអ្នកឧបត្ថម្ភ?">Pourquoi Devenir Parrain ?</h3>
-                <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Changez directement la vie d'un enfant" data-en="Directly change a child's life" data-km="ផ្លាស់ប្តូរជីវិតកុមារដោយផ្ទាល់">Changez directement la vie d'un enfant</span></div>
-                <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Recevez des nouvelles régulières" data-en="Receive regular updates" data-km="ទទួលព័ត៌មានទៀងទាត់">Recevez des nouvelles régulières</span></div>
-                <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="84% des fonds vont aux programmes" data-en="84% of funds go to programs" data-km="៨៤% នៃមូលនិធិទៅកម្មវិធី">84% des fonds vont aux programmes</span></div>
-                <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Suivez la scolarité de votre filleul·e" data-en="Track your child's education" data-km="តាមដានការអប់រំរបស់កូនអ្នក">Suivez la scolarité de votre filleul·e</span></div>
-            </div>
-        </div>
-
-        {{-- Right: contact list + why — desktop only ─── --}}
-        <div class="desktop-contact-col">
-            <div class="card">
-                <p class="section-label" data-fr="Nous Contacter Directement" data-en="Contact Us Directly" data-km="ទាក់ទងយើងដោយផ្ទាល់">Nous Contacter Directement</p>
-                <div class="contact-list">
-                    @include('sponsor.partials.contact-links')
-                </div>
-            </div>
-            <div class="why-card">
-                <h3 data-fr="Pourquoi Devenir Parrain ?" data-en="Why Become a Sponsor?" data-km="ហេតុអ្វីត្រូវក្លាយជាអ្នកឧបត្ថម្ភ?">Pourquoi Devenir Parrain ?</h3>
-                <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Changez directement la vie d'un enfant" data-en="Directly change a child's life" data-km="ផ្លាស់ប្តូរជីវិតកុមារដោយផ្ទាល់">Changez directement la vie d'un enfant</span></div>
-                <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Recevez des nouvelles régulières" data-en="Receive regular updates" data-km="ទទួលព័ត៌មានទៀងទាត់">Recevez des nouvelles régulières</span></div>
-                <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="84% des fonds vont aux programmes" data-en="84% of funds go to programs" data-km="៨៤% នៃមូលនិធិទៅកម្មវិធី">84% des fonds vont aux programmes</span></div>
-                <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Suivez la scolarité de votre filleul·e" data-en="Track your child's education" data-km="តាមដានការអប់រំរបស់កូនអ្នក">Suivez la scolarité de votre filleul·e</span></div>
-            </div>
-        </div>
-
-    </div>{{-- end content-grid --}}
-
-    {{-- Mobile: Why sponsor below the how-to card --}}
-    <div class="why-card" id="why-mobile" style="margin-top:20px;">
-        <h3 data-fr="Pourquoi Devenir Parrain ?" data-en="Why Become a Sponsor?" data-km="ហេតុអ្វីត្រូវក្លាយជាអ្នកឧបត្ថម្ភ?">Pourquoi Devenir Parrain ?</h3>
-        <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Changez directement la vie d'un enfant" data-en="Directly change a child's life" data-km="ផ្លាស់ប្តូរជីវិតកុមារដោយផ្ទាល់">Changez directement la vie d'un enfant</span></div>
-        <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Recevez des nouvelles régulières" data-en="Receive regular updates" data-km="ទទួលព័ត៌មានទៀងទាត់">Recevez des nouvelles régulières</span></div>
-        <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="84% des fonds vont aux programmes" data-en="84% of funds go to programs" data-km="៨៤% នៃមូលនិធិទៅកម្មវិធី">84% des fonds vont aux programmes</span></div>
-        <div class="why-item"><i class="fas fa-check-circle"></i><span data-fr="Suivez la scolarité de votre filleul·e" data-en="Track your child's education" data-km="តាមដានការអប់រំរបស់កូនអ្នក">Suivez la scolarité de votre filleul·e</span></div>
-    </div>
-</div>
-
-{{-- ════════════════════════════════
+{{-- ══════════════════════════════════════════
      MOBILE BOTTOM SHEET MODAL
-════════════════════════════════ --}}
+══════════════════════════════════════════ --}}
 <div class="modal-overlay" id="contact-modal" onclick="handleOverlayClick(event)">
     <div class="modal-sheet" id="modal-sheet">
         <div class="modal-handle"></div>
         <div class="modal-header">
-            <span class="modal-title" data-fr="Nous Contacter" data-en="Contact Us" data-km="ទាក់ទងយើង">Nous Contacter</span>
-            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <span class="modal-title">Contact Us</span>
+            <button class="modal-close" onclick="closeContactModal()"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <div class="contact-list">
 
                 @if($emailUrl)
                 <a href="{{ $emailUrl }}" target="_blank" class="contact-btn email">
-                    <div class="btn-icon" style="background:#fff7ed;"><i class="fas fa-envelope" style="color:#f97316;"></i></div>
+                    <div class="btn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
                     <div class="btn-body">
-                        <div class="btn-title" data-fr="E-mail" data-en="Email" data-km="អ៊ីមែល">E-mail</div>
-                        <div class="btn-sub">{{ $settings['contact_email'] }}</div>
+                        <div class="btn-title">Email</div>
+                        <div class="btn-sub">{{ $headerSettings['contact_email'] ?? 'Send us a message' }}</div>
                     </div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
@@ -383,10 +439,10 @@
 
                 @if($whatsappUrl)
                 <a href="{{ $whatsappUrl }}" target="_blank" class="contact-btn whatsapp">
-                    <div class="btn-icon" style="background:#f0fdf4;"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:21px;"></i></div>
+                    <div class="btn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e"></i></div>
                     <div class="btn-body">
                         <div class="btn-title">WhatsApp</div>
-                        <div class="btn-sub" data-fr="Chat instantané" data-en="Instant chat" data-km="ជជែកភ្លាមៗ">Chat instantané</div>
+                        <div class="btn-sub">Instant chat</div>
                     </div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
@@ -394,10 +450,10 @@
 
                 @if($telegramUrl)
                 <a href="{{ $telegramUrl }}" target="_blank" class="contact-btn telegram">
-                    <div class="btn-icon" style="background:#f0f9ff;"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:21px;"></i></div>
+                    <div class="btn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9"></i></div>
                     <div class="btn-body">
                         <div class="btn-title">Telegram</div>
-                        <div class="btn-sub">&#64;{{ $settings['telegram_url'] }}</div>
+                        <div class="btn-sub">@{{ $headerSettings['telegram_url'] ?? '' }}</div>
                     </div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
@@ -405,10 +461,10 @@
 
                 @if($facebookUrl)
                 <a href="{{ $facebookUrl }}" target="_blank" class="contact-btn facebook">
-                    <div class="btn-icon" style="background:#eff6ff;"><i class="fab fa-facebook" style="color:#2563eb;font-size:21px;"></i></div>
+                    <div class="btn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb"></i></div>
                     <div class="btn-body">
                         <div class="btn-title">Facebook</div>
-                        <div class="btn-sub" data-fr="Page officielle" data-en="Official page" data-km="ទំព័រផ្លូវការ">Page officielle</div>
+                        <div class="btn-sub">Official page</div>
                     </div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
@@ -416,10 +472,10 @@
 
                 @if($instagramUrl)
                 <a href="{{ $instagramUrl }}" target="_blank" class="contact-btn instagram">
-                    <div class="btn-icon" style="background:#fdf2f8;"><i class="fab fa-instagram" style="color:#ec4899;font-size:21px;"></i></div>
+                    <div class="btn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899"></i></div>
                     <div class="btn-body">
                         <div class="btn-title">Instagram</div>
-                        <div class="btn-sub">{{ $settings['instagram_url'] }}</div>
+                        <div class="btn-sub">{{ $headerSettings['instagram_url'] ?? '' }}</div>
                     </div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
@@ -427,10 +483,10 @@
 
                 @if($youtubeUrl)
                 <a href="{{ $youtubeUrl }}" target="_blank" class="contact-btn youtube">
-                    <div class="btn-icon" style="background:#fef2f2;"><i class="fab fa-youtube" style="color:#dc2626;font-size:21px;"></i></div>
+                    <div class="btn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626"></i></div>
                     <div class="btn-body">
                         <div class="btn-title">YouTube</div>
-                        <div class="btn-sub">{{ $settings['youtube_url'] }}</div>
+                        <div class="btn-sub">Watch our stories</div>
                     </div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
@@ -438,10 +494,10 @@
 
                 @if($linkedinUrl)
                 <a href="{{ $linkedinUrl }}" target="_blank" class="contact-btn linkedin">
-                    <div class="btn-icon" style="background:#eff6ff;"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:21px;"></i></div>
+                    <div class="btn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8"></i></div>
                     <div class="btn-body">
                         <div class="btn-title">LinkedIn</div>
-                        <div class="btn-sub">{{ $settings['linkedin_url'] }}</div>
+                        <div class="btn-sub">{{ $headerSettings['linkedin_url'] ?? '' }}</div>
                     </div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
@@ -449,7 +505,7 @@
 
                 @if(!$emailUrl && !$whatsappUrl && !$telegramUrl && !$facebookUrl && !$instagramUrl && !$youtubeUrl && !$linkedinUrl)
                 <div style="padding:20px;text-align:center;color:#9ca3af;font-size:12px;background:#f9fafb;border-radius:12px;">
-                    <i class="fas fa-info-circle" style="margin-right:6px;"></i>No contact links configured yet.
+                    <i class="fas fa-info-circle" style="margin-right:6px"></i>No contact links configured yet.
                 </div>
                 @endif
 
@@ -459,64 +515,36 @@
 </div>
 
 <script>
-/* ── Language ─────────────────────────────────────────── */
-let currentLang = localStorage.getItem('sponsor_lang') || 'fr';
+// ── Scroll reveal ─────────────────────────────────────────
+(function(){
+    const o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');o.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>o.observe(el));
+})();
 
-function switchLang(lang) {
-    currentLang = lang;
-    localStorage.setItem('sponsor_lang', lang);
-    document.querySelectorAll('.lang-btn, .lang-compact button').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
-    document.querySelectorAll('[data-' + lang + ']').forEach(el => {
-        const text = el.getAttribute('data-' + lang);
-        if (!text) return;
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = text;
-        else el.textContent = text;
-    });
-    document.body.classList.toggle('km', lang === 'km');
-}
-
-/* ── Why card visibility ──────────────────────────────── */
-function updateWhyVisibility() {
-    const isMobile = window.innerWidth < 768;
-    document.getElementById('why-desktop').style.display = isMobile ? 'none' : 'block';
-    document.getElementById('why-mobile').style.display  = isMobile ? 'block' : 'none';
-}
-
-/* ── Bottom sheet modal ───────────────────────────────── */
-function openModal() {
-    const overlay = document.getElementById('contact-modal');
-    overlay.classList.add('open');
+// ── Bottom sheet modal ────────────────────────────────────
+function openContactModal() {
+    document.getElementById('contact-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
 }
-function closeModal() {
-    const overlay = document.getElementById('contact-modal');
-    overlay.classList.remove('open');
+function closeContactModal() {
+    document.getElementById('contact-modal').classList.remove('open');
     document.body.style.overflow = '';
 }
 function handleOverlayClick(e) {
-    if (e.target === document.getElementById('contact-modal')) closeModal();
+    if (e.target === document.getElementById('contact-modal')) closeContactModal();
 }
-// Close on ESC
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// Touch swipe down to close
+// Close on ESC
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContactModal(); });
+
+// Swipe down to close
 let touchStartY = 0;
 document.getElementById('modal-sheet').addEventListener('touchstart', e => {
     touchStartY = e.touches[0].clientY;
 }, { passive: true });
 document.getElementById('modal-sheet').addEventListener('touchmove', e => {
-    const delta = e.touches[0].clientY - touchStartY;
-    if (delta > 80) closeModal();
+    if (e.touches[0].clientY - touchStartY > 80) closeContactModal();
 }, { passive: true });
-
-/* ── Init ─────────────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', () => {
-    switchLang(currentLang);
-    updateWhyVisibility();
-});
-window.addEventListener('resize', updateWhyVisibility);
 </script>
-</body>
-</html>
+
+@endsection

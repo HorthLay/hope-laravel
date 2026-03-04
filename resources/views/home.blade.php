@@ -51,33 +51,23 @@
         .wave-divider svg { display:block; }
 
         /* ══════════════════════════════════════════════════════════
-           HERO  —  fixed for mobile portrait photos
+           HERO
         ══════════════════════════════════════════════════════════ */
         #hero-section {
-            position: relative;
-            width: 100%;
-            height: 62vh;
-            min-height: 380px;
-            max-height: 560px;
-            overflow: hidden;
-            background: #111;
+            position: relative; width: 100%;
+            height: 62vh; min-height: 380px; max-height: 560px;
+            overflow: hidden; background: #111;
         }
         #hero-video {
-            position: absolute;
-            top: 0; left: 0;
+            position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
-            object-position: center center;
-            z-index: 0;
+            object-fit: cover; object-position: center center; z-index: 0;
         }
         #hero-fallback {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             width: 100%; height: 100%;
-            object-fit: contain;          /* show full child, not cropped */
-            object-position: center top;
-            background: #111;
-            display: none;
+            object-fit: contain; object-position: center top;
+            background: #111; display: none;
         }
         #hero-overlay {
             position: absolute; inset: 0;
@@ -87,33 +77,24 @@
             z-index: 1;
         }
         #hero-content {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            z-index: 2;
-            padding: 0 40px 52px;
-            max-width: 640px;
+            position: absolute; bottom: 0; left: 0; right: 0;
+            z-index: 2; padding: 0 40px 52px; max-width: 640px;
         }
         #hero-content h1 {
             font-size: clamp(1.7rem, 4vw, 3.25rem);
-            font-weight: 900; color: #fff;
-            line-height: 1.12; margin-bottom: 10px;
-            text-shadow: 0 2px 12px rgba(0,0,0,.4);
-            animation: fadeUp .9s ease both;
+            font-weight: 900; color: #fff; line-height: 1.12; margin-bottom: 10px;
+            text-shadow: 0 2px 12px rgba(0,0,0,.4); animation: fadeUp .9s ease both;
         }
         #hero-content p {
             font-size: clamp(.9rem, 1.5vw, 1.2rem);
-            font-weight: 700; color: rgba(255,255,255,.92);
-            margin-bottom: 22px;
-            text-shadow: 0 1px 6px rgba(0,0,0,.4);
-            animation: fadeUp .9s .15s ease both;
+            font-weight: 700; color: rgba(255,255,255,.92); margin-bottom: 22px;
+            text-shadow: 0 1px 6px rgba(0,0,0,.4); animation: fadeUp .9s .15s ease both;
         }
         #hero-content a { animation: fadeUp .9s .3s ease both; }
         .hero-sponsor-btn {
             display: inline-flex; align-items: center; gap: 10px;
-            padding: 13px 26px;
-            background: #f4b630; color: #1a1a1a;
-            font-size: 12px; font-weight: 900;
-            text-transform: uppercase; letter-spacing: .08em;
+            padding: 13px 26px; background: #f4b630; color: #1a1a1a;
+            font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em;
             border-radius: 4px; text-decoration: none;
             transition: background .18s, transform .15s;
             box-shadow: 0 4px 16px rgba(0,0,0,.25);
@@ -127,21 +108,117 @@
         }
         #hero-scroll i { animation: bounce-down 1.6s ease-in-out infinite; }
 
-        /* ── Mobile hero: full viewport, cover fit, top-biased ─────── */
         @media (max-width: 640px) {
-            #hero-section {
-                height: 100svh;
-                max-height: 100svh;
-                min-height: 480px;
-            }
-            #hero-fallback {
-                object-fit: cover;           /* fill the tall mobile frame */
-                object-position: center 15%; /* show face + upper body */
-            }
+            #hero-section { height: 100svh; max-height: 100svh; min-height: 480px; }
+            #hero-fallback { object-fit: cover; object-position: center 15%; }
             #hero-video { object-position: center 15%; }
             #hero-content { padding: 0 20px 44px; max-width: 100%; }
             #hero-scroll  { display: none; }
         }
+
+        /* ══════════════════════════════════════════════════════════
+           CONTACT SECTION
+        ══════════════════════════════════════════════════════════ */
+        .contact-section { background: #f9fafb; padding: 72px 0; }
+        .contact-grid-home { display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px; align-items: start; }
+        @media (max-width: 900px) { .contact-grid-home { grid-template-columns: 1fr; } }
+
+        /* Desktop-only right col */
+        .contact-desktop-col { display: flex; flex-direction: column; gap: 20px; }
+        @media (max-width: 767px) { .contact-desktop-col { display: none !important; } }
+
+        /* Mobile trigger button */
+        .contact-mobile-trigger {
+            display: none;
+            align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 18px;
+            background: linear-gradient(135deg,#f97316,#ea580c);
+            color: #fff; border: none; border-radius: 16px;
+            font-family: inherit; font-size: 15px; font-weight: 900;
+            cursor: pointer; box-shadow: 0 8px 24px rgba(249,115,22,.38);
+            transition: transform .15s, box-shadow .15s; margin-top: 16px;
+        }
+        .contact-mobile-trigger:active { transform: scale(.97); }
+        @media (max-width: 767px) { .contact-mobile-trigger { display: flex !important; } }
+
+        .contact-info-card {
+            background: #fff; border-radius: 24px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 24px rgba(0,0,0,.06);
+            padding: 28px;
+        }
+        .contact-btn-home {
+            display: flex; align-items: center; gap: 14px;
+            padding: 14px 16px; border-radius: 14px; text-decoration: none;
+            background: #f9fafb; border: 1.5px solid #f3f4f6;
+            transition: all .2s; min-height: 64px;
+        }
+        .contact-btn-home:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.10); }
+        .contact-btn-home .cbtn-icon {
+            width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; font-size: 21px;
+        }
+        .contact-btn-home .cbtn-body { flex: 1; min-width: 0; }
+        .contact-btn-home .cbtn-title { font-size: 13px; font-weight: 800; color: #1f2937; }
+        .contact-btn-home .cbtn-sub   { font-size: 11px; color: #9ca3af; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .contact-btn-home .cbtn-arrow { color: #d1d5db; font-size: 11px; flex-shrink: 0; }
+        .contact-btn-home.cb-email:hover     { background: #fff7ed; border-color: #fed7aa; }
+        .contact-btn-home.cb-whatsapp:hover  { background: #f0fdf4; border-color: #bbf7d0; }
+        .contact-btn-home.cb-telegram:hover  { background: #f0f9ff; border-color: #bae6fd; }
+        .contact-btn-home.cb-facebook:hover  { background: #eff6ff; border-color: #bfdbfe; }
+        .contact-btn-home.cb-instagram:hover { background: #fdf2f8; border-color: #f5d0fe; }
+        .contact-btn-home.cb-youtube:hover   { background: #fef2f2; border-color: #fecaca; }
+        .contact-btn-home.cb-linkedin:hover  { background: #eff6ff; border-color: #bfdbfe; }
+
+        .contact-why-card {
+            background: linear-gradient(135deg, #1a2e3b 0%, #243444 100%);
+            border-radius: 24px; padding: 28px; color: #fff;
+            box-shadow: 0 8px 32px rgba(0,0,0,.18);
+            position: relative; overflow: hidden;
+        }
+        .contact-why-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 85% 15%, rgba(249,115,22,.25) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .cwhy-item { display: flex; align-items: flex-start; gap: 11px; font-size: 14px; color: rgba(255,255,255,.88); }
+        .cwhy-item + .cwhy-item { margin-top: 12px; }
+        .cwhy-item i { color: #f97316; margin-top: 2px; flex-shrink: 0; }
+        .cwhy-stat { background: rgba(249,115,22,.15); border: 1px solid rgba(249,115,22,.3); border-radius: 12px; padding: 14px 18px; margin-top: 18px; }
+        .cwhy-stat-num { font-size: 2rem; font-weight: 900; color: #f97316; line-height: 1; }
+        .cwhy-stat-label { font-size: 12px; color: rgba(255,255,255,.65); margin-top: 3px; }
+
+        /* ── Bottom sheet modal ── */
+        .home-contact-modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 1200;
+            background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
+            align-items: flex-end; justify-content: center;
+        }
+        .home-contact-modal-overlay.open { display: flex; }
+        .home-contact-sheet {
+            background: #fff; width: 100%; max-width: 520px;
+            border-radius: 24px 24px 0 0;
+            max-height: 90dvh; overflow-y: auto;
+            transform: translateY(110%);
+            transition: transform .35s cubic-bezier(.4,0,.2,1);
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+        .home-contact-modal-overlay.open .home-contact-sheet { transform: translateY(0); }
+        .home-contact-handle { width: 40px; height: 4px; background: #e5e7eb; border-radius: 2px; margin: 14px auto 0; }
+        .home-contact-modal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 20px 12px; border-bottom: 1px solid #f3f4f6;
+            position: sticky; top: 0; background: #fff; z-index: 1;
+        }
+        .home-contact-modal-title { font-size: 16px; font-weight: 900; color: #1f2937; }
+        .home-contact-modal-close {
+            width: 32px; height: 32px; border-radius: 50%;
+            border: none; background: #f3f4f6; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #6b7280; font-size: 13px; transition: background .2s;
+        }
+        .home-contact-modal-close:hover { background: #e5e7eb; }
+        .home-contact-modal-body { padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
@@ -225,9 +302,7 @@
 </section>
 @endif
 
-{{-- ═══════════════════════════════════════════════════════
-     CHILDREN WAITING FOR A SPONSOR
-═══════════════════════════════════════════════════════ --}}
+{{-- ═══════ CHILDREN WAITING FOR A SPONSOR ═══════ --}}
 @if(isset($unsponsoredChildren) && $unsponsoredChildren->isNotEmpty())
 <section class="py-16 md:py-20 bg-gradient-to-br from-orange-50 via-white to-amber-50 relative overflow-hidden">
     <div class="absolute top-0 right-0 w-72 h-72 bg-orange-100 rounded-full opacity-40 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
@@ -255,7 +330,6 @@
                 </a>
             </div>
         </div>
-
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             @foreach($unsponsoredChildren as $i => $child)
             @php $cEncId = \Illuminate\Support\Facades\Crypt::encryptString((string)$child->id); @endphp
@@ -285,16 +359,13 @@
                     <div class="absolute bottom-2 left-2" style="bottom:28px;">
                         @if($child->has_family)
                         <span class="text-white text-[10px] font-bold flex items-center gap-1">
-                            <i class="fas fa-home text-green-300 text-[8px]"></i>
-                            Has Family
+                            <i class="fas fa-home text-green-300 text-[8px]"></i> Has Family
                         </span>
                         @else
                         <span class="text-white text-[10px] font-bold flex items-center gap-1">
-                            <i class="fas fa-home text-gray-400 text-[8px]"></i>
-                            No Family
+                            <i class="fas fa-home text-gray-400 text-[8px]"></i> No Family
                         </span>
                         @endif
-
                     </div>
                 </div>
                 <div class="p-3 flex flex-col flex-1">
@@ -310,6 +381,7 @@
                             <i class="fas fa-eye text-[8px] mr-1"></i> Story
                         </a>
                         <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
+                           target="_blank" rel="noopener"
                            class="flex items-center justify-center py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold rounded-lg transition">
                             <i class="fas fa-heart heart-pulse text-[8px] mr-1"></i> Sponsor
                         </a>
@@ -318,7 +390,6 @@
             </div>
             @endforeach
         </div>
-
         <div class="mt-10 text-center reveal">
             <div class="inline-block bg-white rounded-3xl border border-orange-100 shadow-sm px-8 py-6">
                 <p class="text-gray-700 font-bold mb-1">Ready to make a difference?</p>
@@ -338,9 +409,7 @@
 </div>
 @endif
 
-{{-- ═══════════════════════════════════════════════════════
-     FAMILIES WITHOUT A SPONSOR
-═══════════════════════════════════════════════════════ --}}
+{{-- ═══════ FAMILIES WITHOUT A SPONSOR ═══════ --}}
 @if(isset($unsponsoredFamilies) && $unsponsoredFamilies->isNotEmpty())
 <section class="py-16 md:py-20 bg-white relative overflow-hidden">
     <div class="absolute top-1/2 right-0 w-80 h-80 bg-amber-50 rounded-full opacity-60 blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
@@ -482,7 +551,7 @@
                 <div class="p-6">
                     <h4 class="text-lg font-bold text-gray-800 mb-3">{{ $card['title'] }}</h4>
                     <p class="text-sm text-gray-600 mb-6">{{ $card['desc'] }}</p>
-                    <a href="{{ route('learn-more') }}" class="inline-block px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm rounded transition">LEARN MORE</a>
+                    <a href="{{ route('sponsor.children') }}" class="inline-block px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm rounded transition">LEARN MORE</a>
                 </div>
             </div>
             @endforeach
@@ -768,6 +837,292 @@
     </div>
 </section>
 
+{{-- ═══════════════════════════════════════════════════════
+     CONTACT SECTION
+═══════════════════════════════════════════════════════ --}}
+@php
+    $contactSettings = (function() {
+        $file = storage_path('app/settings.json');
+        return file_exists($file) ? json_decode(file_get_contents($file), true) : [];
+    })();
+    $c_emailUrl     = !empty($contactSettings['contact_email'])  ? 'https://mail.google.com/mail/?view=cm&to=' . $contactSettings['contact_email'] : null;
+    $c_whatsappUrl  = !empty($contactSettings['whatsapp_url'])   ? 'https://wa.me/' . $contactSettings['whatsapp_url']  : null;
+    $c_telegramUrl  = !empty($contactSettings['telegram_url'])   ? 'https://t.me/' . $contactSettings['telegram_url']   : null;
+    $c_facebookUrl  = $contactSettings['facebook_url']  ?? null ?: null;
+    $c_instagramUrl = $contactSettings['instagram_url'] ?? null ?: null;
+    $c_youtubeUrl   = $contactSettings['youtube_url']   ?? null ?: null;
+    $c_linkedinUrl  = $contactSettings['linkedin_url']  ?? null ?: null;
+@endphp
+
+<section id="contact" class="contact-section">
+    <div class="max-w-7xl mx-auto px-4">
+
+        {{-- Section header --}}
+        <div class="text-center mb-12 reveal">
+            <div class="inline-flex items-center gap-2 bg-orange-100 text-orange-600 text-xs font-black px-4 py-1.5 rounded-full mb-4 border border-orange-200">
+                <i class="fas fa-paper-plane text-[10px]"></i> Get In Touch
+            </div>
+            <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-3">Contact Us</h2>
+            <p class="text-gray-500 text-lg max-w-xl mx-auto">Have questions or want to become a sponsor? Our team is ready to help you make a difference.</p>
+        </div>
+
+        {{-- Mobile trigger button (hidden on desktop) --}}
+        <button class="contact-mobile-trigger reveal" onclick="openHomeContactModal()">
+            <i class="fas fa-paper-plane"></i>
+            <span>Contact Us</span>
+            <i class="fas fa-chevron-up" style="font-size:12px;margin-left:auto;opacity:.7;"></i>
+        </button>
+
+        <div class="contact-grid-home" style="margin-top:24px;">
+
+            {{-- LEFT: Why card --}}
+            <div class="reveal-left">
+                <div class="contact-why-card">
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center mb-5">
+                            <i class="fas fa-heart text-orange-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-2">Why Become a Sponsor?</h3>
+                        <p class="text-white/65 text-sm mb-6 leading-relaxed">Join thousands of sponsors who are changing children's lives every single day.</p>
+                        <div class="cwhy-item"><i class="fas fa-check-circle"></i><span>Directly change a child's life with $1/day</span></div>
+                        <div class="cwhy-item"><i class="fas fa-check-circle"></i><span>Receive regular updates, letters & photos</span></div>
+                        <div class="cwhy-item"><i class="fas fa-check-circle"></i><span>84% of all funds go directly to programs</span></div>
+                        <div class="cwhy-item"><i class="fas fa-check-circle"></i><span>Track your sponsored child's education journey</span></div>
+                        <div class="cwhy-item"><i class="fas fa-check-circle"></i><span>Certified NGO — full transparency & accountability</span></div>
+                        <div class="cwhy-stat">
+                            <div class="flex items-end gap-4">
+                                <div>
+                                    <div class="cwhy-stat-num">{{ $stats['total_children'] ?? '95k+' }}</div>
+                                    <div class="cwhy-stat-label">Children supported every year</div>
+                                </div>
+                                <div style="border-left:1px solid rgba(249,115,22,.3);padding-left:16px;">
+                                    <div class="cwhy-stat-num">84%</div>
+                                    <div class="cwhy-stat-label">Funds go to programs</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{{ route('sponsor.children') }}"
+                           class="mt-6 inline-flex items-center gap-3 px-7 py-3.5 bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl transition shadow-lg shadow-orange-900/30 w-full justify-center">
+                            <i class="fas fa-child"></i> Browse Children to Sponsor
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- RIGHT: Contact buttons — desktop only --}}
+            <div class="contact-desktop-col reveal-right">
+                <div class="contact-info-card">
+                    <h3 class="text-xl font-black text-gray-900 mb-1">Reach Out to Our Team</h3>
+                    <p class="text-gray-400 text-sm mb-6 leading-relaxed">Choose any channel below — we typically respond within a few hours.</p>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+
+                        @if($c_emailUrl)
+                        <a href="{{ $c_emailUrl }}" target="_blank" class="contact-btn-home cb-email">
+                            <div class="cbtn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
+                            <div class="cbtn-body">
+                                <div class="cbtn-title">Email Us</div>
+                                <div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($c_whatsappUrl)
+                        <a href="{{ $c_whatsappUrl }}" target="_blank" class="contact-btn-home cb-whatsapp">
+                            <div class="cbtn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:22px"></i></div>
+                            <div class="cbtn-body">
+                                <div class="cbtn-title">WhatsApp</div>
+                                <div class="cbtn-sub">Chat with us instantly</div>
+                            </div>
+                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($c_telegramUrl)
+                        <a href="{{ $c_telegramUrl }}" target="_blank" class="contact-btn-home cb-telegram">
+                            <div class="cbtn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:22px"></i></div>
+                            <div class="cbtn-body">
+                                <div class="cbtn-title">Telegram</div>
+                                <div class="cbtn-sub">{{ $contactSettings['telegram_url'] ?? '' }}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($c_facebookUrl)
+                        <a href="{{ $c_facebookUrl }}" target="_blank" class="contact-btn-home cb-facebook">
+                            <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb;font-size:22px"></i></div>
+                            <div class="cbtn-body">
+                                <div class="cbtn-title">Facebook</div>
+                                <div class="cbtn-sub">Message our official page</div>
+                            </div>
+                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($c_instagramUrl)
+                        <a href="{{ $c_instagramUrl }}" target="_blank" class="contact-btn-home cb-instagram">
+                            <div class="cbtn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:22px"></i></div>
+                            <div class="cbtn-body">
+                                <div class="cbtn-title">Instagram</div>
+                                <div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($c_youtubeUrl)
+                        <a href="{{ $c_youtubeUrl }}" target="_blank" class="contact-btn-home cb-youtube">
+                            <div class="cbtn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626;font-size:22px"></i></div>
+                            <div class="cbtn-body">
+                                <div class="cbtn-title">YouTube</div>
+                                <div class="cbtn-sub">Watch our impact stories</div>
+                            </div>
+                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if($c_linkedinUrl)
+                        <a href="{{ $c_linkedinUrl }}" target="_blank" class="contact-btn-home cb-linkedin">
+                            <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:22px"></i></div>
+                            <div class="cbtn-body">
+                                <div class="cbtn-title">LinkedIn</div>
+                                <div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div>
+                            </div>
+                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
+                        </a>
+                        @endif
+
+                        @if(!$c_emailUrl && !$c_whatsappUrl && !$c_telegramUrl && !$c_facebookUrl && !$c_instagramUrl && !$c_youtubeUrl && !$c_linkedinUrl)
+                        <div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;background:#f9fafb;border-radius:16px;">
+                            <i class="fas fa-info-circle" style="margin-right:6px;color:#f97316"></i>
+                            Contact links will appear once configured in settings.
+                        </div>
+                        @endif
+
+                    </div>
+                    <div class="mt-6 pt-5 border-t border-gray-100 text-center">
+                        <p class="text-xs text-gray-400">
+                            Want to create a sponsor account?
+                            <a href="{{ route('sponsor.contact') }}" class="text-orange-500 font-bold hover:underline ml-1">Learn how →</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{{-- ═══════════════════════════════════════════════════════
+     HOME CONTACT BOTTOM SHEET (mobile)
+═══════════════════════════════════════════════════════ --}}
+<div class="home-contact-modal-overlay" id="home-contact-modal" onclick="handleHomeContactOverlay(event)">
+    <div class="home-contact-sheet" id="home-contact-sheet">
+        <div class="home-contact-handle"></div>
+        <div class="home-contact-modal-header">
+            <span class="home-contact-modal-title">
+                <i class="fas fa-paper-plane text-orange-500 mr-2 text-sm"></i> Contact Us
+            </span>
+            <button class="home-contact-modal-close" onclick="closeHomeContactModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="home-contact-modal-body">
+
+            @if($c_emailUrl)
+            <a href="{{ $c_emailUrl }}" target="_blank" class="contact-btn-home cb-email">
+                <div class="cbtn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
+                <div class="cbtn-body">
+                    <div class="cbtn-title">Email Us</div>
+                    <div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div>
+                </div>
+                <i class="fas fa-external-link-alt cbtn-arrow"></i>
+            </a>
+            @endif
+
+            @if($c_whatsappUrl)
+            <a href="{{ $c_whatsappUrl }}" target="_blank" class="contact-btn-home cb-whatsapp">
+                <div class="cbtn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:22px"></i></div>
+                <div class="cbtn-body">
+                    <div class="cbtn-title">WhatsApp</div>
+                    <div class="cbtn-sub">Chat with us instantly</div>
+                </div>
+                <i class="fas fa-external-link-alt cbtn-arrow"></i>
+            </a>
+            @endif
+
+            @if($c_telegramUrl)
+            <a href="{{ $c_telegramUrl }}" target="_blank" class="contact-btn-home cb-telegram">
+                <div class="cbtn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:22px"></i></div>
+                <div class="cbtn-body">
+                    <div class="cbtn-title">Telegram</div>
+                    <div class="cbtn-sub">@{{ $contactSettings['telegram_url'] ?? '' }}</div>
+                </div>
+                <i class="fas fa-external-link-alt cbtn-arrow"></i>
+            </a>
+            @endif
+
+            @if($c_facebookUrl)
+            <a href="{{ $c_facebookUrl }}" target="_blank" class="contact-btn-home cb-facebook">
+                <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb;font-size:22px"></i></div>
+                <div class="cbtn-body">
+                    <div class="cbtn-title">Facebook</div>
+                    <div class="cbtn-sub">Message our official page</div>
+                </div>
+                <i class="fas fa-external-link-alt cbtn-arrow"></i>
+            </a>
+            @endif
+
+            @if($c_instagramUrl)
+            <a href="{{ $c_instagramUrl }}" target="_blank" class="contact-btn-home cb-instagram">
+                <div class="cbtn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:22px"></i></div>
+                <div class="cbtn-body">
+                    <div class="cbtn-title">Instagram</div>
+                    <div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div>
+                </div>
+                <i class="fas fa-external-link-alt cbtn-arrow"></i>
+            </a>
+            @endif
+
+            @if($c_youtubeUrl)
+            <a href="{{ $c_youtubeUrl }}" target="_blank" class="contact-btn-home cb-youtube">
+                <div class="cbtn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626;font-size:22px"></i></div>
+                <div class="cbtn-body">
+                    <div class="cbtn-title">YouTube</div>
+                    <div class="cbtn-sub">Watch our impact stories</div>
+                </div>
+                <i class="fas fa-external-link-alt cbtn-arrow"></i>
+            </a>
+            @endif
+
+            @if($c_linkedinUrl)
+            <a href="{{ $c_linkedinUrl }}" target="_blank" class="contact-btn-home cb-linkedin">
+                <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:22px"></i></div>
+                <div class="cbtn-body">
+                    <div class="cbtn-title">LinkedIn</div>
+                    <div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div>
+                </div>
+                <i class="fas fa-external-link-alt cbtn-arrow"></i>
+            </a>
+            @endif
+
+            @if(!$c_emailUrl && !$c_whatsappUrl && !$c_telegramUrl && !$c_facebookUrl && !$c_instagramUrl && !$c_youtubeUrl && !$c_linkedinUrl)
+            <div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;background:#f9fafb;border-radius:16px;">
+                <i class="fas fa-info-circle" style="margin-right:6px;color:#f97316"></i>
+                Contact links will appear once configured in settings.
+            </div>
+            @endif
+
+            <div style="margin-top:8px;padding-top:16px;border-top:1px solid #f3f4f6;text-align:center;">
+                <p style="font-size:12px;color:#9ca3af;">
+                    Want to become a sponsor?
+                    <a href="{{ route('sponsor.contact') }}" style="color:#f97316;font-weight:700;text-decoration:none;margin-left:4px;">Learn how →</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @include('layouts.footer')
 @include('layouts.navigation')
@@ -811,7 +1166,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     });
 });
 
-// ── Scroll-reveal (IntersectionObserver) ───────────────────────────────
+// ── Scroll-reveal ───────────────────────────────────────────────────────
 const revealObs=new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
         if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); }
@@ -873,6 +1228,27 @@ function filterNewsCat(catId, btn) {
     document.getElementById('news-no-results').classList.toggle('hidden',shown>0);
     document.getElementById('news-grid')?.classList.toggle('hidden',shown===0);
 }
+
+// ── Home contact bottom sheet ───────────────────────────────────────────
+function openHomeContactModal() {
+    document.getElementById('home-contact-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeHomeContactModal() {
+    document.getElementById('home-contact-modal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function handleHomeContactOverlay(e) {
+    if (e.target === document.getElementById('home-contact-modal')) closeHomeContactModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHomeContactModal(); });
+(function(){
+    let ty = 0;
+    const sheet = document.getElementById('home-contact-sheet');
+    if (!sheet) return;
+    sheet.addEventListener('touchstart', e => { ty = e.touches[0].clientY; }, { passive: true });
+    sheet.addEventListener('touchmove',  e => { if (e.touches[0].clientY - ty > 80) closeHomeContactModal(); }, { passive: true });
+})();
 
 // ── Tag filter — Most Read ──────────────────────────────────────────────
 function filterTopTag(tagId, btn) {

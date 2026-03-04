@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/learn-more', [HomeController::class, 'learnmore'])->name('learn-more');
+// Route::get('/what-we-do', [HomeController::class, 'learnmore'])->name('learn-more');
 Route::get('/contact',    [HomeController::class, 'contact'])->name('contact');
 Route::get('/about',      [HomeController::class, 'about'])->name('about');
 Route::get('/privacy-policy',   [HomeController::class, 'privacy'])->name('privacy-policy');
@@ -215,5 +215,94 @@ Route::prefix('admin')->group(function () {
     Route::get('/contact/created', [SponsorContactController::class, 'show'])->name('sponsor.contact');
     Route::post('/contact', [SponsorContactController::class, 'submit'])->name('sponsor.contact.submit');
 
+    Route::prefix('about')->name('about.')->group(function () {
+    Route::get('/presentation',          fn() => view('pages.about.presentation'))   ->name('presentation');
+    Route::get('/vision-ethics',         fn() => view('pages.about.vision-ethics'))  ->name('vision');
+    Route::get('/team',                  fn() => view('pages.about.team'))            ->name('team');
+    Route::get('/partners',              fn() => view('pages.about.partners'))        ->name('partners');
+    // Note: 'support-branches' is hidden for now (per PDF)
+});
 
+
+
+
+
+// ══════════════════════════════════════════════════════════════
+// OUR ACTIONS — CHILDHOOD DEPARTMENT
+// ══════════════════════════════════════════════════════════════
+Route::prefix('our-actions/childhood')->name('childhood.')->group(function () {
+    Route::get('/protection',            fn() => view('pages.childhood.protection'))          ->name('protection');
+    Route::get('/health-nutrition',      fn() => view('pages.childhood.health-nutrition'))    ->name('health');
+    Route::get('/education',             fn() => view('pages.childhood.education'))           ->name('education');
+    Route::get('/personal-development',  fn() => view('pages.childhood.personal-development'))->name('development');
+    Route::get('/childrens-homes',       fn() => view('pages.childhood.childrens-homes'))     ->name('homes');
+});
+
+// ══════════════════════════════════════════════════════════════
+// OUR ACTIONS — FAMILY DEPARTMENT
+// ══════════════════════════════════════════════════════════════
+Route::prefix('our-actions/families')->name('families.')->group(function () {
+    Route::get('/housing-stability',     fn() => view('pages.families.housing'))              ->name('housing');
+    Route::get('/training-employment',   fn() => view('pages.families.training-employment'))  ->name('training');
+    Route::get('/financial-support',     fn() => view('pages.families.financial-support'))    ->name('financial');
+    Route::get('/health-wellbeing',      fn() => view('pages.families.health-wellbeing'))     ->name('health');
+});
+
+// ══════════════════════════════════════════════════════════════
+// OUR ACTIONS — COMMUNITY DEPARTMENT
+// ══════════════════════════════════════════════════════════════
+Route::prefix('our-actions/community')->name('community.')->group(function () {
+    Route::get('/infrastructure',        fn() => view('pages.community.infrastructure'))      ->name('infrastructure');
+    Route::get('/water-sanitation',      fn() => view('pages.community.water-sanitation'))    ->name('water');
+});
+
+// ══════════════════════════════════════════════════════════════
+// SPONSORSHIP
+// ══════════════════════════════════════════════════════════════
+Route::prefix('sponsor')->name('sponsor.')->group(function () {
+
+    // Child sponsorship
+    Route::prefix('child')->name('child.')->group(function () {
+        Route::get('/how-it-works',      fn() => view('pages.sponsorship.child-file'))        ->name('file');
+        Route::get('/stories',           fn() => view('pages.sponsorship.child-stories'))     ->name('stories');
+        Route::get('/corporate',         fn() => view('pages.sponsorship.sponsor-as-company'))->name('corporate');
+    });
+
+    // Family sponsorship
+    Route::prefix('family')->name('family.')->group(function () {
+        Route::get('/how-it-works',      fn() => view('pages.sponsorship.family-file'))       ->name('file');
+        Route::get('/stories',           fn() => view('pages.sponsorship.family-stories'))    ->name('stories');
+        Route::get('/corporate',         fn() => view('pages.sponsorship.sponsor-as-company'))->name('corporate');
+    });
+
+    // FAQ
+    Route::get('/faq',                   fn() => view('pages.sponsorship.faq'))               ->name('faq');
+});
+
+// ══════════════════════════════════════════════════════════════
+// SUPPORT US
+// ══════════════════════════════════════════════════════════════
+Route::prefix('support')->name('support.')->group(function () {
+
+    // Projects
+    Route::get('/projects',              fn() => view('pages.support.ongoing-projects'))      ->name('projects');
+
+    // Donations
+    Route::get('/donate',                fn() => view('pages.support.donate'))                ->name('donate');
+    // Route::get('/donate-ifi',            fn() => view('pages.support.donate-ifi'))            ->name('donate-ifi');
+    Route::get('/bequests',              fn() => view('pages.support.bequests'))              ->name('bequests');
+    Route::get('/fundraiser',            fn() => view('pages.support.fundraiser'))            ->name('fundraiser');
+    Route::get('/donations-faq',         fn() => view('pages.support.faq-donations'))         ->name('faq-donations');
+
+    // Events
+    Route::get('/solidarity-event',      fn() => view('pages.support.solidarity-event'))      ->name('event');
+
+    // Companies & Foundations
+    Route::get('/patron',                fn() => view('pages.support.patron'))                ->name('patron');
+    Route::get('/family-foundations',    fn() => view('pages.support.foundations-philanthropy'))->name('foundations');
+    Route::get('/corporate-foundations', fn() => view('pages.support.corporate-foundations')) ->name('corporate');
+
+    // Tax
+    Route::get('/tax-benefits',          fn() => view('pages.support.tax-benefits'))          ->name('tax-benefits');
+});
 Auth::routes(['verify'=>true]);

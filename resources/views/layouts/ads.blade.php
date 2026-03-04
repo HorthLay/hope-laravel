@@ -73,27 +73,64 @@
                 <span><i class="fas fa-eye" style="color:#f97316;margin-right:4px"></i>{{ number_format($popupArticle->views_count) }}</span>
             </div>
 
+            {{-- ✅ DYNAMIC STATS --}}
+            @php
+                // Total active children count
+                $totalChildren = \App\Models\SponsoredChild::where('is_active', true)->count();
+                
+                // Get country from linked child (if any)
+                $childCountry = $popupArticle->sponsoredChild?->country ?? null;
+                
+                // Format views (K/M)
+                $views = $popupArticle->views_count;
+                if ($views >= 1000000) {
+                    $viewsFormatted = round($views / 1000000, 1) . 'M';
+                } elseif ($views >= 1000) {
+                    $viewsFormatted = round($views / 1000, 1) . 'K';
+                } else {
+                    $viewsFormatted = number_format($views);
+                }
+            @endphp
+
             <!-- Stats -->
             <div class="popup-stats">
+                {{-- Stat 1: Article Views --}}
                 <div class="popup-stat">
-                    <span class="popup-stat-number">95K+</span>
+                    <span class="popup-stat-number">{{ $viewsFormatted }}</span>
+                    <span class="popup-stat-label">Article Views</span>
+                </div>
+                
+                <div class="popup-stat-divider"></div>
+                
+                {{-- Stat 2: Child's Country (if linked) OR Fallback --}}
+                @if($childCountry)
+                    <div class="popup-stat">
+                        <span class="popup-stat-number" style="font-size:.85rem;">
+                            <i class="fas fa-map-marker-alt" style="color:#f97316;margin-right:3px"></i>
+                            {{ $childCountry }}
+                        </span>
+                        <span class="popup-stat-label">Child's Country</span>
+                    </div>
+                @else
+                    {{-- Fallback: Total Published Articles --}}
+                    <div class="popup-stat">
+                        <span class="popup-stat-number">{{ \App\Models\Article::where('status', 'published')->count() }}</span>
+                        <span class="popup-stat-label">Stories Shared</span>
+                    </div>
+                @endif
+                
+                <div class="popup-stat-divider"></div>
+                
+                {{-- Stat 3: Total Children Helped --}}
+                <div class="popup-stat">
+                    <span class="popup-stat-number">{{ number_format($totalChildren) }}</span>
                     <span class="popup-stat-label">Children Helped</span>
-                </div>
-                <div class="popup-stat-divider"></div>
-                <div class="popup-stat">
-                    <span class="popup-stat-number">84%</span>
-                    <span class="popup-stat-label">To Programs</span>
-                </div>
-                <div class="popup-stat-divider"></div>
-                <div class="popup-stat">
-                    <span class="popup-stat-number">7</span>
-                    <span class="popup-stat-label">Countries</span>
                 </div>
             </div>
 
             <!-- CTAs -->
             <div class="popup-actions">
-                <a href="{{ route('sponsor.children') }}" class="popup-btn-primary">
+                <a href="{{ route('sponsor.contact') }}" class="popup-btn-primary">
                     <i class="fas fa-heart" style="margin-right:8px"></i>
                     Sponsor a Child Now
                 </a>

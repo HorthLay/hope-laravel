@@ -241,7 +241,7 @@
                         @endforeach
                     </ul>
 
-                    <a href="{{ route('sponsor.child', $encId) }}"
+                    <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
                        class="block w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-center rounded-2xl transition shadow-md shadow-orange-200 text-base">
                         <i class="fas fa-heart mr-2"></i> Sponsor {{ $child->first_name }} Now
                     </a>

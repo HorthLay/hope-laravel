@@ -4,191 +4,588 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sponsor Dashboard | {{ $sponsor->full_name }}</title>
+    <title>My Dashboard | {{ $sponsor->full_name }}</title>
     <meta name="robots" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     <style>
-        body { font-family: 'Montserrat', sans-serif; }
-
-        /* ── Entity tabs (Family / Child) ── */
-        .entity-btn { transition: all .15s; border-bottom: 3px solid transparent; }
-        .entity-btn.active { border-bottom-color: #f97316; color: #f97316; font-weight: 900; }
-
-        /* ── Year pills ── */
-        .year-btn { transition: all .2s; }
-        .year-btn.active { background: #f97316; color: #fff; box-shadow: 0 4px 12px rgba(249,115,22,.35); }
-
-        /* ── Panels ── */
-        .entity-panel { display: none; }
-        .entity-panel.active { display: block; animation: fadeUp .25s ease; }
-        .year-section { display: none; }
-        .year-section.active { display: block; animation: fadeUp .2s ease; }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: none; }
-        }
-
-        /* ── Update type badges ── */
-        .badge-health    { background:#dcfce7; color:#166534; }
-        .badge-education { background:#dbeafe; color:#1e40af; }
-        .badge-study     { background:#e0e7ff; color:#3730a3; }
-        .badge-financial { background:#fef9c3; color:#854d0e; }
-        .badge-general   { background:#f1f5f9; color:#475569; }
-        .badge-visit     { background:#fce7f3; color:#9d174d; }
-
-        /* ── Video thumbnail play button ── */
-        .play-overlay {
-            position: absolute; inset: 0;
-            background: rgba(0,0,0,.35);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity .2s;
-        }
-        .media-thumb:hover .play-overlay { opacity: 1; }
-
-        /* ── Lightbox ── */
-        #lightbox { display: none; }
-        #lightbox.open { display: flex; }
-
-        /* ── Hide Google Translate toolbar ── */
+        * { box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f4f3ef; margin: 0; overflow-x: hidden; }
         body { top: 0 !important; }
         .goog-te-banner-frame,.goog-te-balloon-frame,#goog-gt-tt,.goog-te-spinner-pos,.skiptranslate { display:none !important; }
         iframe.goog-te-banner-frame { display:none !important; }
 
-        /* ── Language dropdown ── */
+        /* ══════════════════════════════════════
+           KEYFRAMES
+        ══════════════════════════════════════ */
+        @keyframes fadeUp       { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+        @keyframes fadeIn       { from{opacity:0} to{opacity:1} }
+        @keyframes slideInLeft  { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:none} }
+        @keyframes slideInRight { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:none} }
+        @keyframes scaleIn      { from{opacity:0;transform:scale(.92)} to{opacity:1;transform:scale(1)} }
+        @keyframes shimmer      { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+        @keyframes heroFloat    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        @keyframes heroPulse    { 0%,100%{transform:scale(1);opacity:.28} 50%{transform:scale(1.15);opacity:.4} }
+        @keyframes pulse-dot    { 0%,100%{opacity:1} 50%{opacity:.4} }
+        @keyframes ripple       { 0%{transform:scale(0);opacity:.4} 100%{transform:scale(3);opacity:0} }
+        @keyframes bounceIn     { 0%{opacity:0;transform:scale(.5)} 60%{transform:scale(1.08)} 80%{transform:scale(.96)} 100%{opacity:1;transform:scale(1)} }
+        @keyframes slideDown    { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:none} }
+        @keyframes cardEntrance { from{opacity:0;transform:translateY(20px) scale(.97)} to{opacity:1;transform:none} }
+
+        /* ══════════════════════════════════════
+           SCROLL-REVEAL
+        ══════════════════════════════════════ */
+        .reveal { opacity:0; transform:translateY(28px); transition:opacity .55s ease,transform .55s ease; }
+        .reveal.visible { opacity:1; transform:none; }
+        .reveal-left { opacity:0; transform:translateX(-28px); transition:opacity .5s ease,transform .5s ease; }
+        .reveal-left.visible { opacity:1; transform:none; }
+        .reveal-scale { opacity:0; transform:scale(.94); transition:opacity .45s ease,transform .45s ease; }
+        .reveal-scale.visible { opacity:1; transform:scale(1); }
+        .stagger-1 { transition-delay:.07s; }
+        .stagger-2 { transition-delay:.14s; }
+        .stagger-3 { transition-delay:.21s; }
+        .stagger-4 { transition-delay:.28s; }
+        .stagger-5 { transition-delay:.35s; }
+
+        /* ══════════════════════════════════════
+           HEADER
+        ══════════════════════════════════════ */
+        .site-header {
+            background:#fff; border-bottom:1px solid rgba(0,0,0,.07);
+            position:sticky; top:0; z-index:100;
+            box-shadow:0 2px 20px rgba(0,0,0,.06);
+            animation:slideDown .4s ease both;
+        }
+        .header-inner {
+            max-width:1200px; margin:0 auto; padding:12px 20px;
+            display:flex; align-items:center; justify-content:space-between; gap:12px;
+        }
+        .header-logo { height:56px; width:auto; transition:opacity .2s; }
+        .header-logo:hover { opacity:.8; }
+        .header-right { display:flex; align-items:center; gap:10px; }
+
+        .sponsor-chip {
+            display:flex; align-items:center; gap:10px;
+            background:#f8f9fa; border-radius:12px; padding:7px 12px;
+            border:1px solid #e9ecef; animation:fadeIn .5s .2s both;
+        }
+        .sponsor-avatar {
+            width:34px; height:34px; border-radius:9px;
+            background:linear-gradient(135deg,#f97316,#ea580c);
+            color:#fff; font-weight:900; font-size:14px;
+            display:flex; align-items:center; justify-content:center; flex-shrink:0;
+        }
+        .sponsor-name { font-size:12px; font-weight:800; color:#0f172a; }
+        .sponsor-email { font-size:10px; color:#94a3b8; }
+
+        .logout-btn {
+            display:inline-flex; align-items:center; gap:6px;
+            padding:8px 14px; border-radius:10px;
+            background:#f1f5f9; border:none; cursor:pointer;
+            font-size:12px; font-weight:700; color:#475569;
+            transition:all .2s; font-family:inherit; position:relative; overflow:hidden;
+        }
+        .logout-btn::after {
+            content:''; position:absolute; inset:0; border-radius:10px;
+            background:rgba(220,38,38,.08); transform:scale(0);
+            transition:transform .3s; border-radius:50%;
+        }
+        .logout-btn:hover { background:#fee2e2; color:#dc2626; }
+
+        /* Language */
         .lang-pill {
             display:inline-flex; align-items:center; gap:6px;
-            padding:5px 12px 5px 8px; border-radius:999px;
-            border:1px solid #e5e7eb; background:#fff;
-            cursor:pointer; font-size:12px; font-weight:700; color:#374151;
-            transition:all .18s; white-space:nowrap; box-shadow:0 1px 3px rgba(0,0,0,.07);
+            padding:7px 11px; border-radius:10px; border:1px solid #e5e7eb;
+            background:#fff; cursor:pointer; font-size:12px; font-weight:800;
+            color:#374151; transition:all .2s; white-space:nowrap;
         }
         .lang-pill:hover { border-color:#f97316; color:#f97316; box-shadow:0 2px 8px rgba(249,115,22,.15); }
         #dash-translate-panel {
-            position:absolute; top:calc(100% + 8px); left:0;
-            width:200px; background:#fff; border-radius:12px;
-            box-shadow:0 12px 40px rgba(0,0,0,.18); border:1px solid #f0f0f0;
-            padding:10px; opacity:0; visibility:hidden;
-            transform:translateY(-6px);
-            transition:all .22s cubic-bezier(.34,1.56,.64,1);
-            z-index:9999;
+            position:absolute; top:calc(100% + 8px); right:0;
+            width:196px; background:#fff; border-radius:14px;
+            box-shadow:0 20px 56px rgba(0,0,0,.18); border:1px solid #f0f0f0;
+            padding:10px; opacity:0; visibility:hidden; transform:translateY(-8px) scale(.97);
+            transition:all .22s cubic-bezier(.34,1.56,.64,1); z-index:9999;
         }
-        #dash-translate-panel.open { opacity:1; visibility:visible; transform:translateY(0); }
+        #dash-translate-panel.open { opacity:1; visibility:visible; transform:translateY(0) scale(1); }
         .lang-opt {
-            display:flex; align-items:center; gap:9px;
-            width:100%; padding:8px 10px; border-radius:8px;
-            border:2px solid transparent; background:transparent;
-            cursor:pointer; transition:all .15s; text-align:left;
-            font-size:12px; font-weight:600; color:#374151;
+            display:flex; align-items:center; gap:9px; width:100%;
+            padding:9px 10px; border-radius:9px; border:2px solid transparent;
+            background:transparent; cursor:pointer; transition:all .15s;
+            text-align:left; font-size:12px; font-weight:600; color:#374151; font-family:inherit;
         }
         .lang-opt:hover { background:#fff7ed; border-color:#fed7aa; }
         .lang-opt.active { background:linear-gradient(135deg,#fff7ed,#ffedd5); border-color:#f97316; color:#c2410c; }
-        .lang-opt .flag { width:22px; height:15px; object-fit:cover; border-radius:2px; box-shadow:0 1px 4px rgba(0,0,0,.15); flex-shrink:0; }
+        .lang-opt .flag { width:22px; height:15px; object-fit:cover; border-radius:3px; box-shadow:0 1px 4px rgba(0,0,0,.15); flex-shrink:0; }
         .lang-opt .chk { margin-left:auto; color:#f97316; font-size:10px; }
-        @keyframes gt-spin { to { transform:rotate(360deg); } }
-        .gt-spin { display:inline-block; animation:gt-spin .7s linear infinite; }
+
+        /* ══════════════════════════════════════
+           PAGE WRAP
+        ══════════════════════════════════════ */
+        .page-wrap { max-width:1200px; margin:0 auto; padding:28px 20px 80px; }
+
+        /* ══════════════════════════════════════
+           WELCOME HERO
+        ══════════════════════════════════════ */
+        .welcome-hero {
+            background:linear-gradient(135deg,#1e2d3d 0%,#2d4a2d 55%,#1a3828 100%);
+            border-radius:24px; padding:32px 36px; margin-bottom:28px;
+            position:relative; overflow:hidden;
+            animation:scaleIn .55s cubic-bezier(.34,1.1,.64,1) both;
+        }
+        .hero-orb-1 {
+            position:absolute; top:-90px; right:-90px; width:340px; height:340px; border-radius:50%;
+            background:radial-gradient(circle,rgba(249,115,22,.3) 0%,transparent 65%);
+            animation:heroPulse 4s ease-in-out infinite; pointer-events:none;
+        }
+        .hero-orb-2 {
+            position:absolute; bottom:-70px; left:140px; width:220px; height:220px; border-radius:50%;
+            background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 65%);
+            animation:heroPulse 6s ease-in-out infinite 1s; pointer-events:none;
+        }
+        .hero-orb-3 {
+            position:absolute; top:20px; left:-40px; width:160px; height:160px; border-radius:50%;
+            background:radial-gradient(circle,rgba(251,146,60,.1) 0%,transparent 65%);
+            pointer-events:none;
+        }
+        .hero-content { position:relative; z-index:1; display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+        .hero-avatar {
+            width:68px; height:68px; border-radius:18px;
+            background:rgba(255,255,255,.15); border:2px solid rgba(255,255,255,.25);
+            display:flex; align-items:center; justify-content:center;
+            font-size:26px; font-weight:900; color:#fff; flex-shrink:0;
+            backdrop-filter:blur(10px);
+            animation:bounceIn .6s .2s both;
+            box-shadow:0 8px 24px rgba(0,0,0,.2);
+        }
+        .hero-text { animation:slideInLeft .5s .3s both; }
+        .hero-text h2 {
+            font-family:'Instrument Serif',serif;
+            font-size:28px; color:#fff; margin:0 0 5px; line-height:1.2;
+        }
+        .hero-text h2 em { color:#fb923c; font-style:italic; }
+        .hero-text p { color:rgba(255,255,255,.5); font-size:13px; font-weight:500; margin:0 0 14px; }
+        .hero-badges { display:flex; flex-wrap:wrap; gap:8px; animation:fadeUp .5s .5s both; }
+        .hero-badge {
+            display:inline-flex; align-items:center; gap:6px;
+            background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.2);
+            border-radius:99px; padding:6px 14px; font-size:12px; font-weight:700;
+            color:rgba(255,255,255,.9); backdrop-filter:blur(6px);
+            transition:all .2s;
+        }
+        .hero-badge:hover { background:rgba(255,255,255,.22); transform:translateY(-1px); }
+
+        /* ══════════════════════════════════════
+           SECTION HEAD
+        ══════════════════════════════════════ */
+        .sec-head { margin-bottom:18px; }
+        .sec-title {
+            font-family:'Instrument Serif',serif; font-size:21px; color:#0f172a;
+            display:flex; align-items:center; gap:10px; margin:0 0 3px;
+        }
+        .sec-title-icon {
+            width:33px; height:33px; border-radius:10px;
+            display:inline-flex; align-items:center; justify-content:center;
+            font-size:14px; flex-shrink:0;
+        }
+        .sec-sub { font-size:12px; color:#94a3b8; font-weight:500; }
+
+        /* ══════════════════════════════════════
+           ENTITY CARDS
+        ══════════════════════════════════════ */
+        .entities-grid {
+            display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+            gap:14px; margin-bottom:12px;
+        }
+        .entity-card {
+            background:#fff; border-radius:20px; overflow:hidden;
+            border:2.5px solid transparent; cursor:pointer;
+            transition:transform .25s cubic-bezier(.34,1.2,.64,1),
+                        box-shadow .25s ease, border-color .2s;
+            box-shadow:0 2px 12px rgba(0,0,0,.07); position:relative;
+            animation:cardEntrance .45s ease both;
+        }
+        .entity-card:hover {
+            box-shadow:0 16px 48px rgba(0,0,0,.14);
+            transform:translateY(-5px) scale(1.01);
+        }
+        .entity-card:active { transform:translateY(-2px) scale(.99); }
+        .entity-card.active-card { border-color:#f97316; box-shadow:0 8px 36px rgba(249,115,22,.22); }
+        .entity-card.active-card .card-active-bar { transform:scaleX(1); }
+
+        .card-active-bar {
+            position:absolute; top:0; left:0; right:0; height:4px;
+            background:linear-gradient(to right,#f97316,#fb923c,#fbbf24);
+            transform:scaleX(0); transform-origin:left;
+            transition:transform .3s cubic-bezier(.34,1.2,.64,1);
+        }
+        .card-photo { width:100%; height:175px; object-fit:cover; object-position:top; display:block; transition:transform .4s ease; }
+        .entity-card:hover .card-photo { transform:scale(1.04); }
+        .card-photo-placeholder {
+            width:100%; height:175px;
+            display:flex; align-items:center; justify-content:center; font-size:48px;
+        }
+        .card-body { padding:14px 16px 10px; }
+        .card-type-badge {
+            display:inline-flex; align-items:center; gap:5px; font-size:10px;
+            font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+            padding:3px 10px; border-radius:99px; margin-bottom:7px;
+        }
+        .card-name {
+            font-size:15px; font-weight:800; color:#0f172a;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:4px;
+        }
+        .card-meta {
+            font-size:11px; color:#94a3b8; font-weight:600;
+            display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+        }
+        .card-meta i { font-size:9px; }
+        .card-stats { display:flex; gap:6px; flex-wrap:wrap; padding:10px 14px 14px; }
+        .card-stat-pill {
+            font-size:10px; font-weight:700; padding:4px 10px; border-radius:99px;
+            display:inline-flex; align-items:center; gap:4px;
+            transition:transform .15s, box-shadow .15s;
+        }
+        .card-stat-pill:hover { transform:translateY(-1px); box-shadow:0 2px 8px rgba(0,0,0,.1); }
+
+        /* ══════════════════════════════════════
+           DETAIL PANEL
+        ══════════════════════════════════════ */
+        .detail-panel { display:none; }
+        .detail-panel.active { display:block; animation:fadeUp .35s ease both; }
+
+        /* ── Year bar ── */
+        .year-bar {
+            display:flex; align-items:center; gap:8px;
+            margin-bottom:22px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+            scrollbar-width:none; padding-bottom:4px;
+        }
+        .year-bar::-webkit-scrollbar { display:none; }
+        .year-bar-label {
+            font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase;
+            letter-spacing:.06em; white-space:nowrap; flex-shrink:0;
+        }
+        .year-pill {
+            padding:7px 16px; border-radius:99px; border:1.5px solid #e2e8f0;
+            background:#fff; font-size:12px; font-weight:700; color:#64748b;
+            cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0;
+            font-family:inherit;
+        }
+        .year-pill:hover { border-color:#f97316; color:#f97316; }
+        .year-pill.active {
+            background:#f97316; border-color:#f97316; color:#fff;
+            box-shadow:0 4px 14px rgba(249,115,22,.38);
+            transform:scale(1.04);
+        }
+
+        .year-section { display:none; }
+        .year-section.active { display:block; animation:fadeUp .22s ease both; }
+
+        /* ── Content grid ── */
+        .content-grid { display:grid; grid-template-columns:1fr 310px; gap:18px; }
+
+        /* ── White card ── */
+        .white-card {
+            background:#fff; border-radius:18px; padding:22px;
+            border:1px solid rgba(0,0,0,.06); box-shadow:0 2px 12px rgba(0,0,0,.05);
+            transition:box-shadow .2s, transform .2s;
+        }
+        .white-card:hover { box-shadow:0 6px 24px rgba(0,0,0,.08); }
+        .white-card + .white-card { margin-top:14px; }
+        .wc-title {
+            font-size:14px; font-weight:800; color:#0f172a;
+            display:flex; align-items:center; gap:8px; margin-bottom:16px;
+        }
+        .wc-icon {
+            width:27px; height:27px; border-radius:8px;
+            display:inline-flex; align-items:center; justify-content:center;
+            font-size:12px; flex-shrink:0;
+        }
+        .wc-badge { margin-left:auto; font-size:10px; font-weight:800; padding:2px 8px; border-radius:99px; }
+
+        /* ── Updates ── */
+        .update-item { padding:13px 0; border-bottom:1px solid #f1f5f9; animation:fadeUp .3s ease both; }
+        .update-item:first-child { padding-top:0; }
+        .update-item:last-child { border-bottom:none; padding-bottom:0; }
+        .update-head { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:5px; }
+        .update-title { font-size:13px; font-weight:800; color:#0f172a; }
+        .update-date  { font-size:11px; color:#94a3b8; font-weight:600; flex-shrink:0; }
+        .update-body  { font-size:13px; color:#475569; line-height:1.65; }
+        .update-type-badge {
+            display:inline-flex; align-items:center; font-size:10px; font-weight:800;
+            padding:2px 8px; border-radius:99px; margin-right:5px; text-transform:capitalize;
+        }
+        .badge-health    { background:#dcfce7;color:#166534; }
+        .badge-education { background:#dbeafe;color:#1e40af; }
+        .badge-study     { background:#e0e7ff;color:#3730a3; }
+        .badge-financial { background:#fef9c3;color:#854d0e; }
+        .badge-general   { background:#f1f5f9;color:#475569; }
+        .badge-visit     { background:#fce7f3;color:#9d174d; }
+
+        /* ── Media grid ── */
+        .media-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+        .media-thumb {
+            position:relative; aspect-ratio:1; border-radius:12px;
+            overflow:hidden; cursor:pointer; background:#f8f9fa;
+            transition:transform .25s ease, box-shadow .25s ease;
+        }
+        .media-thumb:hover { transform:scale(1.03); box-shadow:0 8px 24px rgba(0,0,0,.15); }
+        .media-thumb img,.media-thumb video {
+            width:100%; height:100%; object-fit:cover; transition:transform .4s ease; pointer-events:none;
+        }
+        .media-thumb:hover img,.media-thumb:hover video { transform:scale(1.08); }
+        .media-overlay {
+            position:absolute; inset:0; background:rgba(0,0,0,.28);
+            display:flex; align-items:center; justify-content:center;
+            opacity:0; transition:opacity .2s;
+        }
+        .media-thumb:hover .media-overlay { opacity:1; }
+        .media-play-btn {
+            width:40px; height:40px; background:rgba(255,255,255,.92);
+            border-radius:50%; display:flex; align-items:center; justify-content:center;
+            box-shadow:0 4px 16px rgba(0,0,0,.25);
+            transition:transform .2s; animation:scaleIn .2s ease both;
+        }
+        .media-play-btn i { color:#f97316; font-size:14px; }
+        .media-thumb:hover .media-play-btn { transform:scale(1.1); }
+        .media-video-tag {
+            position:absolute; top:7px; left:7px; background:rgba(0,0,0,.7);
+            color:#fff; font-size:9px; font-weight:800; padding:2px 7px; border-radius:5px;
+            display:flex; align-items:center; gap:3px; z-index:2;
+        }
+        .media-caption {
+            position:absolute; bottom:0; left:0; right:0;
+            background:linear-gradient(transparent,rgba(0,0,0,.65));
+            color:#fff; font-size:9px; padding:14px 8px 6px;
+            pointer-events:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        }
+
+        /* ── Documents ── */
+        .doc-item {
+            display:flex; align-items:center; gap:11px;
+            padding:11px 12px; border-radius:12px; background:#f8fafc;
+            border:1px solid #f1f5f9; margin-bottom:7px;
+            transition:all .2s; position:relative; overflow:hidden;
+        }
+        .doc-item:last-child { margin-bottom:0; }
+        .doc-item:hover { background:#fff7ed; border-color:#fed7aa; transform:translateX(3px); }
+        .doc-icon {
+            width:36px; height:36px; border-radius:10px; background:#fee2e2;
+            display:flex; align-items:center; justify-content:center; flex-shrink:0;
+            transition:transform .2s;
+        }
+        .doc-item:hover .doc-icon { transform:scale(1.1); }
+        .doc-icon i { color:#ef4444; font-size:14px; }
+        .doc-info { flex:1; min-width:0; }
+        .doc-name { font-size:12px; font-weight:700; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .doc-meta { font-size:10px; color:#94a3b8; font-weight:500; margin-top:1px; }
+        .doc-dl {
+            width:30px; height:30px; border-radius:8px;
+            background:#fff7ed; color:#f97316; display:flex; align-items:center;
+            justify-content:center; text-decoration:none; transition:all .2s; flex-shrink:0;
+            font-size:11px;
+        }
+        .doc-dl:hover { background:#f97316; color:#fff; transform:scale(1.1); }
+
+        /* ── Family mini card ── */
+        .family-mini-card {
+            display:flex; align-items:center; gap:12px;
+            background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px;
+            padding:13px 15px; margin-bottom:14px; transition:all .2s;
+        }
+        .family-mini-card:hover { background:#dcfce7; border-color:#86efac; }
+        .family-mini-photo { width:46px; height:46px; border-radius:11px; object-fit:cover; border:2px solid #86efac; flex-shrink:0; }
+        .family-mini-icon { width:46px; height:46px; border-radius:11px; background:#dcfce7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+        /* ══════════════════════════════════════
+           LIGHTBOX
+        ══════════════════════════════════════ */
+        #lightbox { display:none; }
+        #lightbox.open {
+            display:flex; animation:fadeIn .22s ease both;
+        }
+        #lb-inner { animation:scaleIn .25s cubic-bezier(.34,1.1,.64,1) both; }
+
+        /* ══════════════════════════════════════
+           FOOTER NOTE
+        ══════════════════════════════════════ */
+        .footer-note {
+            background:#fff; border-radius:16px; padding:18px 22px;
+            border-left:4px solid #f97316; margin-top:28px;
+            box-shadow:0 2px 12px rgba(0,0,0,.05);
+            transition:box-shadow .2s;
+        }
+        .footer-note:hover { box-shadow:0 6px 24px rgba(0,0,0,.09); }
 
         /* ── NEW badge ── */
         .new-dot::after {
-            content: 'NEW';
-            font-size: 9px; font-weight: 900;
-            background: #ef4444; color: #fff;
-            padding: 1px 5px; border-radius: 99px;
-            margin-left: 6px; vertical-align: middle;
-            animation: pulse 1.5s infinite;
+            content:'NEW'; font-size:9px; font-weight:900;
+            background:#ef4444; color:#fff; padding:1px 5px; border-radius:99px;
+            margin-left:6px; vertical-align:middle;
+            animation:pulse-dot 1.4s infinite;
         }
-        @keyframes pulse {
-            0%,100% { opacity:1; } 50% { opacity:.5; }
+
+        /* ══════════════════════════════════════
+           MOBILE NAV BOTTOM (≤640px)
+        ══════════════════════════════════════ */
+        .mobile-bottom-bar {
+            display:none; position:fixed; bottom:0; left:0; right:0;
+            background:#fff; border-top:1px solid #e5e7eb;
+            padding:8px 16px 12px; z-index:90;
+            box-shadow:0 -4px 20px rgba(0,0,0,.08);
+        }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════════════ */
+        @media (max-width:1024px) {
+            .content-grid { grid-template-columns:1fr; }
+        }
+        @media (max-width:768px) {
+            .welcome-hero { padding:24px 20px; border-radius:18px; }
+            .hero-text h2 { font-size:22px; }
+            .hero-content { gap:16px; }
+            .hero-avatar { width:56px; height:56px; font-size:22px; }
+            .header-inner { padding:10px 14px; }
+            .header-logo { height:44px; }
+            .entities-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+            .card-photo,.card-photo-placeholder { height:148px; }
+            .card-name { font-size:13px; }
+            .media-grid { grid-template-columns:repeat(2,1fr); }
+            .page-wrap { padding:18px 14px 90px; }
+            .sponsor-chip { display:none !important; }
+            .mobile-bottom-bar { display:flex; align-items:center; justify-content:space-around; }
+            .year-bar { gap:6px; }
+            .white-card { padding:16px; }
+            .footer-note { border-radius:12px; }
+        }
+        @media (max-width:480px) {
+            .hero-text h2 { font-size:19px; }
+            .hero-badge { font-size:11px; padding:5px 11px; }
+            .entities-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+            .card-photo,.card-photo-placeholder { height:130px; }
+            .card-body { padding:10px 12px 8px; }
+            .card-stats { padding:8px 12px 12px; gap:5px; }
+            .card-stat-pill { font-size:9px; padding:3px 8px; }
+            .welcome-hero { padding:20px 16px; }
+            .content-grid { gap:12px; }
+            .white-card { padding:14px; }
+            .media-grid { gap:6px; }
+            .update-head { flex-direction:column; gap:4px; }
+            .update-date { align-self:flex-start; }
+        }
+        @media (max-width:360px) {
+            .entities-grid { grid-template-columns:1fr 1fr; }
+            .card-photo,.card-photo-placeholder { height:115px; }
+        }
+
+        /* touch tap feedback */
+        @media (hover:none) {
+            .entity-card:active { transform:scale(.97); box-shadow:0 2px 8px rgba(0,0,0,.1); }
+            .media-thumb:hover { transform:none; }
+            .media-thumb:active { transform:scale(.96); }
         }
     </style>
-    {{-- Google Translate --}}
-    <script type="text/javascript">
+    <script>
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'en,km,fr',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false, multilanguagePage: true
-        }, 'google_translate_element');
+            pageLanguage:'en', includedLanguages:'en,km,fr',
+            layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay:false, multilanguagePage:true
+        },'google_translate_element');
     }
     </script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body>
 
-{{-- ── Header ── --}}
-<header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+{{-- ═══════════════════════════
+     HEADER
+═══════════════════════════ --}}
+<header class="site-header">
+    <div class="header-inner">
         <a href="{{ route('home') }}">
-            <img src="{{ asset('images/logo.png') }}" style="height:80px;width:auto;" alt="Logo">
+            <img src="{{ asset('images/logo.png') }}" class="header-logo" alt="Logo">
         </a>
-        <div class="flex items-center gap-3">
+        <div class="header-right">
 
-            {{-- Language dropdown --}}
-            <div class="relative" id="dash-translate-wrapper">
+            {{-- Language --}}
+            <div style="position:relative" id="dash-translate-wrapper">
                 <div id="google_translate_element" style="display:none;position:absolute"></div>
                 <button class="lang-pill" onclick="dashTogglePanel()" id="dash-translate-toggle">
-                    <img src="https://flagcdn.com/w40/fr.png" id="dash-flag" class="w-5 h-3.5 rounded object-cover shadow-sm" alt="FR">
-                    <span id="dash-lang-label" class="font-black">FR</span>
-                    <i class="fas fa-chevron-down text-[9px] text-gray-400" id="dash-caret"></i>
+                    <img src="https://flagcdn.com/w40/fr.png" id="dash-flag" style="width:20px;height:14px;border-radius:2px;object-fit:cover" alt="">
+                    <span id="dash-lang-label">FR</span>
+                    <i class="fas fa-chevron-down" style="font-size:8px;color:#94a3b8;transition:transform .2s" id="dash-caret"></i>
                 </button>
                 <div id="dash-translate-panel">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 mb-2">
-                        <i class="fas fa-globe mr-1 text-orange-400"></i> Language
+                    <p style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;padding:4px 4px 8px;display:flex;align-items:center;gap:6px">
+                        <i class="fas fa-globe" style="color:#f97316"></i> Language
                     </p>
                     <button class="lang-opt" id="dash-btn-en" onclick="dashSwitchLang('en')">
-                        <img src="https://flagcdn.com/w40/us.png" class="flag" alt="EN">
-                        <div><div class="font-bold">English</div><div class="text-[10px] font-normal text-gray-400">Original</div></div>
+                        <img src="https://flagcdn.com/w40/us.png" class="flag" alt="">
+                        <div><div style="font-weight:700">English</div><div style="font-size:10px;color:#94a3b8">Original</div></div>
                         <i class="fas fa-check chk hidden" id="dash-check-en"></i>
                     </button>
                     <button class="lang-opt" id="dash-btn-fr" onclick="dashSwitchLang('fr')">
-                        <img src="https://flagcdn.com/w40/fr.png" class="flag" alt="FR">
-                        <div><div class="font-bold">Français</div><div class="text-[10px] font-normal text-gray-400">French</div></div>
+                        <img src="https://flagcdn.com/w40/fr.png" class="flag" alt="">
+                        <div><div style="font-weight:700">Français</div><div style="font-size:10px;color:#94a3b8">French</div></div>
                         <i class="fas fa-check chk hidden" id="dash-check-fr"></i>
                     </button>
                     <button class="lang-opt" id="dash-btn-km" onclick="dashSwitchLang('km')">
-                        <img src="https://flagcdn.com/w40/kh.png" class="flag" alt="KH">
-                        <div><div class="font-bold">ខ្មែរ</div><div class="text-[10px] font-normal text-gray-400">Cambodian</div></div>
+                        <img src="https://flagcdn.com/w40/kh.png" class="flag" alt="">
+                        <div><div style="font-weight:700">ខ្មែរ</div><div style="font-size:10px;color:#94a3b8">Cambodian</div></div>
                         <i class="fas fa-check chk hidden" id="dash-check-km"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="hidden md:block text-right">
-                <p class="text-sm font-bold text-gray-800">{{ $sponsor->full_name }}</p>
-                <p class="text-xs text-gray-500">{{ $sponsor->email }}</p>
+            {{-- Sponsor chip (desktop only) --}}
+            <div class="sponsor-chip hidden md:flex">
+                <div class="sponsor-avatar">{{ strtoupper(substr($sponsor->first_name,0,1)) }}</div>
+                <div>
+                    <div class="sponsor-name">{{ $sponsor->full_name }}</div>
+                    <div class="sponsor-email">{{ $sponsor->email }}</div>
+                </div>
             </div>
+
+            {{-- Logout --}}
             <form method="POST" action="{{ route('sponsor.logout') }}">
                 @csrf
-                <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-lg transition">
-                    <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                <button class="logout-btn">
+                    <i class="fas fa-sign-out-alt" style="font-size:11px"></i>
+                    <span class="hidden sm:inline">Logout</span>
                 </button>
             </form>
         </div>
     </div>
 </header>
 
-<div class="max-w-7xl mx-auto px-4 py-8">
+{{-- ═══════════════════════════
+     PAGE BODY
+═══════════════════════════ --}}
+<div class="page-wrap">
 
-    {{-- ── Welcome banner ── --}}
-    <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-8 mb-8 text-white shadow-xl">
-        <div class="flex flex-col md:flex-row items-center gap-6">
-            <div class="w-20 h-20 rounded-2xl bg-white/20 flex items-center justify-center flex-shrink-0 shadow-lg">
-                <span class="text-4xl font-black">{{ strtoupper(substr($sponsor->first_name, 0, 1)) }}</span>
-            </div>
-            <div class="text-center md:text-left flex-1">
-                <h2 class="text-3xl md:text-4xl font-black mb-2">Welcome, {{ $sponsor->first_name }}!</h2>
-                <p class="opacity-90 mb-3">Thank you for your generous support.</p>
-                <div class="flex flex-wrap justify-center md:justify-start gap-2">
+    {{-- Welcome Hero --}}
+    <div class="welcome-hero">
+        <div class="hero-orb-1"></div>
+        <div class="hero-orb-2"></div>
+        <div class="hero-orb-3"></div>
+        <div class="hero-content">
+            <div class="hero-avatar">{{ strtoupper(substr($sponsor->first_name,0,1)) }}</div>
+            <div class="hero-text">
+                <h2>Welcome back, <em>{{ $sponsor->first_name }}</em>!</h2>
+                <p>Thank you for changing lives through your generous support.</p>
+                <div class="hero-badges">
                     @if($families->isNotEmpty())
-                    <span class="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-full text-sm font-bold">
-                        <i class="fas fa-home text-xs"></i> {{ $families->count() }} {{ Str::plural('Family', $families->count()) }}
+                    <span class="hero-badge">
+                        <i class="fas fa-home" style="font-size:11px;color:#fb923c"></i>
+                        {{ $families->count() }} {{ Str::plural('Family',$families->count()) }} Sponsored
                     </span>
                     @endif
                     @if($children->isNotEmpty())
-                    <span class="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-full text-sm font-bold">
-                        <i class="fas fa-child text-xs"></i> {{ $children->count() }} {{ Str::plural('Child', $children->count()) }}
+                    <span class="hero-badge">
+                        <i class="fas fa-child" style="font-size:11px;color:#fb923c"></i>
+                        {{ $children->count() }} {{ Str::plural('Child',$children->count()) }} Sponsored
                     </span>
                     @endif
                 </div>
@@ -196,919 +593,650 @@
         </div>
     </div>
 
-    {{-- ── Entity tabs (families + children) ── --}}
+    {{-- Entity Cards --}}
     @php $totalEntities = $families->count() + $children->count(); @endphp
-    @if($totalEntities > 1)
-    <div class="bg-white rounded-2xl shadow-sm mb-6 overflow-x-auto">
-        <div class="flex min-w-max px-2">
-            @foreach($families as $fi => $family)
-            <button type="button"
-                    class="entity-btn flex items-center gap-2 px-5 py-4 text-sm font-bold text-gray-500 hover:text-orange-500 whitespace-nowrap {{ $fi === 0 ? 'active' : '' }}"
-                    onclick="switchEntity({{ $fi }})">
-                <i class="fas fa-home text-xs"></i> {{ $family->name }}
-            </button>
-            @endforeach
-            @foreach($children as $ci => $child)
-            @php $eidx = $families->count() + $ci; @endphp
-            <button type="button"
-                    class="entity-btn flex items-center gap-2 px-5 py-4 text-sm font-bold text-gray-500 hover:text-orange-500 whitespace-nowrap {{ $eidx === 0 ? 'active' : '' }}"
-                    onclick="switchEntity({{ $eidx }})">
-                <i class="fas fa-child text-xs"></i> {{ $child->first_name }}
-            </button>
-            @endforeach
+
+    @if($totalEntities > 0)
+    <div class="sec-head reveal">
+        <h2 class="sec-title">
+            <span class="sec-title-icon" style="background:#fff7ed;color:#f97316"><i class="fas fa-heart"></i></span>
+            Your Sponsored {{ $totalEntities > 1 ? 'Ones' : ($families->isNotEmpty() ? 'Family' : 'Child') }}
+        </h2>
+        <p class="sec-sub">{{ $totalEntities > 1 ? 'Tap a card to view their updates, photos & documents' : 'View updates, photos & documents below' }}</p>
+    </div>
+
+    <div class="entities-grid" id="entity-cards">
+        @foreach($families as $fi => $family)
+        @php $eidx = $fi; @endphp
+        <div class="entity-card reveal stagger-{{ ($eidx % 4)+1 }} {{ ($totalEntities===1||$eidx===0)?'active-card':'' }}"
+             id="card-{{ $eidx }}" onclick="selectEntity({{ $eidx }})">
+            <div class="card-active-bar"></div>
+            @if($family->profile_photo)
+                <img src="{{ $family->profile_photo_url ?? asset($family->profile_photo) }}" class="card-photo" alt="{{ $family->name }}">
+            @else
+                <div class="card-photo-placeholder" style="background:linear-gradient(135deg,#fffbeb,#fef3c7)">
+                    <i class="fas fa-home" style="color:#fbbf24;opacity:.4"></i>
+                </div>
+            @endif
+            <div class="card-body">
+                <div class="card-type-badge" style="background:#fff7ed;color:#c2410c">
+                    <i class="fas fa-home" style="font-size:9px"></i> Family
+                </div>
+                <div class="card-name">{{ $family->name }}</div>
+                <div class="card-meta">
+                    @if($family->country)<span><i class="fas fa-map-marker-alt"></i> {{ $family->country }}</span>@endif
+                    <span style="font-family:monospace;font-size:9px;background:#f1f5f9;padding:1px 6px;border-radius:4px;color:#64748b">{{ $family->code }}</span>
+                </div>
+            </div>
+            <div class="card-stats">
+                <span class="card-stat-pill" style="background:#dcfce7;color:#166534"><i class="fas fa-newspaper" style="font-size:8px"></i> {{ $family->updates->count() }} Updates</span>
+                <span class="card-stat-pill" style="background:#dbeafe;color:#1e40af"><i class="fas fa-images" style="font-size:8px"></i> {{ $family->media->count() }} Media</span>
+                <span class="card-stat-pill" style="background:#fef9c3;color:#854d0e"><i class="fas fa-file" style="font-size:8px"></i> {{ $family->documents->count() }}</span>
+            </div>
         </div>
+        @endforeach
+
+        @foreach($children as $ci => $child)
+        @php $eidx = $families->count() + $ci; @endphp
+        <div class="entity-card reveal stagger-{{ ($eidx % 4)+1 }} {{ ($totalEntities===1||$eidx===0)?'active-card':'' }}"
+             id="card-{{ $eidx }}" onclick="selectEntity({{ $eidx }})">
+            <div class="card-active-bar"></div>
+            @if($child->profile_photo)
+                <img src="{{ asset($child->profile_photo) }}" class="card-photo" alt="{{ $child->first_name }}">
+            @else
+                <div class="card-photo-placeholder" style="background:linear-gradient(135deg,#fff7ed,#ffedd5)">
+                    <i class="fas fa-child" style="color:#fb923c;opacity:.4"></i>
+                </div>
+            @endif
+            <div class="card-body">
+                <div class="card-type-badge" style="background:#eff6ff;color:#1d4ed8">
+                    <i class="fas fa-child" style="font-size:9px"></i> Child
+                </div>
+                <div class="card-name">{{ $child->first_name }}</div>
+                <div class="card-meta">
+                    @if($child->country)<span><i class="fas fa-map-marker-alt"></i> {{ $child->country }}</span>@endif
+                    @if($child->age ?? null)<span><i class="fas fa-birthday-cake"></i> {{ $child->age }}y</span>@endif
+                    @if($child->gender)
+                    <span style="color:{{ strtolower($child->gender)==='female'?'#ec4899':'#3b82f6' }}">
+                        <i class="fas {{ strtolower($child->gender)==='female'?'fa-venus':'fa-mars' }}"></i>
+                    </span>
+                    @endif
+                </div>
+            </div>
+            <div class="card-stats">
+                <span class="card-stat-pill" style="background:#dcfce7;color:#166534"><i class="fas fa-newspaper" style="font-size:8px"></i> {{ $child->updates->count() }}</span>
+                <span class="card-stat-pill" style="background:#dbeafe;color:#1e40af"><i class="fas fa-images" style="font-size:8px"></i> {{ $child->media->count() }}</span>
+                <span class="card-stat-pill" style="background:#fef9c3;color:#854d0e"><i class="fas fa-file" style="font-size:8px"></i> {{ $child->documents->count() }}</span>
+            </div>
+        </div>
+        @endforeach
     </div>
     @endif
 
-    {{-- ═══════════════════════════════════════════ --}}
-    {{-- FAMILY PANELS                               --}}
-    {{-- ═══════════════════════════════════════════ --}}
+    {{-- ═══════════════════════════════════════
+         FAMILY PANELS
+    ═══════════════════════════════════════ --}}
     @foreach($families as $fi => $family)
     @php
+        $eidx = $fi; $panelId = "panel-{$eidx}";
         $fYears = collect();
-        foreach($family->updates  as $u) { $fYears->push(\Carbon\Carbon::parse($u->report_date ?? $u->created_at)->year); }
-        foreach($family->media    as $m) { $fYears->push($m->created_at->year); }
+        foreach($family->updates   as $u){ $fYears->push(\Carbon\Carbon::parse($u->report_date??$u->created_at)->year); }
+        foreach($family->media     as $m){ $fYears->push($m->created_at->year); }
         foreach($family->documents as $d){ $fYears->push($d->created_at->year); }
         $fYears = $fYears->unique()->sortDesc()->values();
-        $fLatestYear = $fYears->first() ?? now()->year;
-        $fPanelId = "ep-{$fi}";
     @endphp
-    <div class="entity-panel {{ ($totalEntities === 1 || $fi === 0) ? 'active' : '' }}" id="{{ $fPanelId }}">
+    <div class="detail-panel {{ ($totalEntities===1||$eidx===0)?'active':'' }}" id="{{ $panelId }}" style="margin-top:28px">
 
-        {{-- Family hero --}}
-        <div class="bg-white rounded-2xl shadow overflow-hidden mb-6">
-            <div class="flex flex-col sm:flex-row">
-                <div class="sm:w-56 h-48 sm:h-auto bg-orange-50 flex-shrink-0 flex items-center justify-center overflow-hidden">
-                    @if($family->profile_photo)
-                        <img src="{{ $family->profile_photo_url ?? asset($family->profile_photo) }}" class="w-full h-full object-cover">
-                    @else
-                        <i class="fas fa-home text-7xl text-orange-200"></i>
-                    @endif
-                </div>
-                <div class="p-6 flex-1">
-                    <h3 class="text-2xl font-black text-gray-800 mb-1">{{ $family->name }}</h3>
-                    <p class="text-sm text-gray-500 mb-3">
-                        @if($family->country)<i class="fas fa-map-marker-alt text-orange-400 mr-1"></i>{{ $family->country }} · @endif
-                        <span class="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">{{ $family->code }}</span>
-                    </p>
-                    @if($family->story)
-                    <p class="text-sm text-gray-600 leading-relaxed line-clamp-4">{{ $family->story }}</p>
-                    @endif
-                    <div class="flex flex-wrap gap-3 mt-4">
-                        <span class="flex items-center gap-1 text-xs font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
-                            <i class="fas fa-newspaper"></i> {{ $family->updates->count() }} Updates
-                        </span>
-                        <span class="flex items-center gap-1 text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
-                            <i class="fas fa-images"></i> {{ $family->media->where('type','photo')->count() }} Photos
-                        </span>
-                        <span class="flex items-center gap-1 text-xs font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full">
-                            <i class="fas fa-video"></i> {{ $family->media->where('type','video')->count() }} Videos
-                        </span>
-                        <span class="flex items-center gap-1 text-xs font-bold text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
-                            <i class="fas fa-file"></i> {{ $family->documents->count() }} Documents
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Year filter bar --}}
         @if($fYears->isNotEmpty())
-        <div class="flex items-center gap-2 mb-5 flex-wrap">
-            <span class="text-xs font-black text-gray-400 uppercase tracking-wide mr-1">Filter by year:</span>
-            <button onclick="switchYear('{{ $fPanelId }}', 'latest')"
-                    class="year-btn active px-4 py-1.5 rounded-full text-sm font-bold border border-orange-200 text-orange-600 bg-orange-50"
-                    data-panel="{{ $fPanelId }}" data-year="latest">
-                <i class="fas fa-star text-xs mr-1"></i> Latest
+        <div class="year-bar reveal">
+            <span class="year-bar-label">Year:</span>
+            <button class="year-pill active" data-panel="{{ $panelId }}" data-year="latest" onclick="switchYear('{{ $panelId }}','latest')">
+                <i class="fas fa-star" style="font-size:9px;margin-right:4px;color:inherit"></i> Latest
             </button>
             @foreach($fYears as $yr)
-            <button onclick="switchYear('{{ $fPanelId }}', '{{ $yr }}')"
-                    class="year-btn px-4 py-1.5 rounded-full text-sm font-bold border border-gray-200 text-gray-600 bg-white hover:border-orange-300 hover:text-orange-500"
-                    data-panel="{{ $fPanelId }}" data-year="{{ $yr }}">
-                {{ $yr }}
-            </button>
+            <button class="year-pill" data-panel="{{ $panelId }}" data-year="{{ $yr }}" onclick="switchYear('{{ $panelId }}','{{ $yr }}')">{{ $yr }}</button>
             @endforeach
         </div>
         @endif
 
-        {{-- Latest section --}}
-        <div class="year-section active" data-panel="{{ $fPanelId }}" data-section="latest">
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 space-y-5">
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-newspaper text-green-500"></i> Latest Updates
-                            <span class="ml-auto text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">NEW</span>
-                        </h3>
+        {{-- Latest --}}
+        <div class="year-section active" data-panel="{{ $panelId }}" data-section="latest">
+            <div class="content-grid">
+                <div>
+                    <div class="white-card reveal">
+                        <div class="wc-title">
+                            <span class="wc-icon" style="background:#f0fdf4;color:#22c55e"><i class="fas fa-newspaper"></i></span>
+                            Latest Updates <span class="wc-badge new-dot" style="background:#dcfce7;color:#166534"></span>
+                        </div>
                         @forelse($family->updates->sortByDesc('report_date')->take(3) as $update)
-                        <div class="mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
-                            <div class="flex items-start justify-between gap-2 mb-1.5">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    @if($update->title)
-                                    <h4 class="font-bold text-gray-800 text-sm">{{ $update->title }}</h4>
-                                    @endif
-                                    @if($update->type)
-                                    <span class="text-[10px] font-black px-2 py-0.5 rounded-full badge-{{ $update->type }} capitalize">{{ $update->type }}</span>
-                                    @endif
+                        <div class="update-item">
+                            <div class="update-head">
+                                <div>
+                                    @if($update->type)<span class="update-type-badge badge-{{ $update->type }}">{{ $update->type }}</span>@endif
+                                    @if($update->title)<span class="update-title">{{ $update->title }}</span>@endif
                                 </div>
-                                <span class="text-xs text-gray-400 flex-shrink-0">{{ \Carbon\Carbon::parse($update->report_date ?? $update->created_at)->format('M d, Y') }}</span>
+                                <span class="update-date">{{ \Carbon\Carbon::parse($update->report_date??$update->created_at)->format('M d, Y') }}</span>
                             </div>
-                            <p class="text-sm text-gray-600 leading-relaxed">{{ $update->content }}</p>
+                            <p class="update-body">{{ $update->content }}</p>
                         </div>
                         @empty
-                        <p class="text-gray-400 text-sm text-center py-4">No updates yet.</p>
+                        <p style="text-align:center;color:#94a3b8;font-size:13px;padding:24px 0">No updates yet.</p>
                         @endforelse
                     </div>
-
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-photo-film text-orange-500"></i> Latest Media
-                            <span class="ml-auto text-xs font-bold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full">NEW</span>
-                        </h3>
+                    <div class="white-card reveal" style="margin-top:14px">
+                        <div class="wc-title">
+                            <span class="wc-icon" style="background:#fff7ed;color:#f97316"><i class="fas fa-photo-film"></i></span>
+                            Latest Media <span class="wc-badge new-dot" style="background:#fff7ed;color:#ea580c"></span>
+                        </div>
                         @php $latestFMedia = $family->media->sortByDesc('created_at')->take(6); @endphp
                         @if($latestFMedia->isNotEmpty())
-                        <div class="grid grid-cols-3 gap-3">
+                        <div class="media-grid">
                             @foreach($latestFMedia as $m)
-                            <div class="media-thumb group relative aspect-square overflow-hidden rounded-xl cursor-pointer bg-gray-100"
-                                 onclick="openLightbox('{{ asset($m->file_path) }}', '{{ $m->type }}', '{{ addslashes($m->caption ?? '') }}', '{{ route('sponsor.download', ['type'=>'family_media','id'=>$m->id]) }}')">
-                                @if($m->type === 'video')
-                                    <video src="{{ asset($m->file_path) }}" class="w-full h-full object-cover pointer-events-none" muted playsinline></video>
-                                    <div class="absolute top-1.5 left-1.5 bg-black/60 text-white rounded-md px-1.5 py-0.5 text-[9px] font-bold flex items-center gap-1 z-10">
-                                        <i class="fas fa-play text-[7px]"></i> VIDEO
-                                    </div>
+                            <div class="media-thumb reveal-scale stagger-{{ ($loop->index%3)+1 }}"
+                                 onclick="openLightbox('{{ asset($m->file_path) }}','{{ $m->type }}','{{ addslashes($m->caption??"") }}','{{ route("sponsor.download",["type"=>"family_media","id"=>$m->id]) }}')">
+                                @if($m->type==='video')
+                                    <video src="{{ asset($m->file_path) }}" muted playsinline></video>
+                                    <div class="media-video-tag"><i class="fas fa-play" style="font-size:7px"></i> VIDEO</div>
                                 @else
-                                    <img src="{{ asset($m->file_path) }}" class="w-full h-full object-cover pointer-events-none group-hover:scale-110 transition duration-300">
+                                    <img src="{{ asset($m->file_path) }}" alt="">
                                 @endif
-                                <div class="play-overlay rounded-xl">
-                                    <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-{{ $m->type === 'video' ? 'play' : 'expand' }} text-orange-500 {{ $m->type === 'video' ? 'ml-0.5' : '' }}"></i>
-                                    </div>
-                                </div>
-                                @if($m->caption)
-                                <p class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] px-1.5 py-1 truncate pointer-events-none">{{ $m->caption }}</p>
-                                @endif
+                                <div class="media-overlay"><div class="media-play-btn"><i class="fas fa-{{ $m->type==='video'?'play':'expand' }}" style="{{ $m->type==='video'?'margin-left:2px':'' }}"></i></div></div>
+                                @if($m->caption)<div class="media-caption">{{ $m->caption }}</div>@endif
                             </div>
                             @endforeach
                         </div>
                         @else
-                        <p class="text-gray-400 text-sm text-center py-6"><i class="fas fa-images text-3xl text-gray-200 block mb-2"></i>No media yet.</p>
+                        <div style="text-align:center;padding:30px 0;color:#94a3b8">
+                            <i class="fas fa-images" style="font-size:32px;display:block;margin-bottom:8px;opacity:.25"></i>
+                            <p style="font-size:13px;font-weight:600">No media yet.</p>
+                        </div>
                         @endif
                     </div>
                 </div>
-                <div class="space-y-5">
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-base font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-file-pdf text-orange-500"></i> Documents
-                        </h3>
-                        @forelse($family->documents->sortByDesc('created_at')->take(5) as $doc)
-                        <div class="flex items-start gap-3 p-3 bg-gray-50 hover:bg-orange-50 rounded-xl mb-2 last:mb-0 transition group">
-                            <div class="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-file-pdf text-red-500 text-sm"></i>
+                <div>
+                    <div class="white-card reveal reveal-right">
+                        <div class="wc-title">
+                            <span class="wc-icon" style="background:#fef9c3;color:#854d0e"><i class="fas fa-folder-open"></i></span>
+                            Documents
+                        </div>
+                        @forelse($family->documents->sortByDesc('created_at')->take(8) as $doc)
+                        <div class="doc-item">
+                            <div class="doc-icon"><i class="fas fa-file-pdf"></i></div>
+                            <div class="doc-info">
+                                <div class="doc-name">{{ $doc->title }}</div>
+                                <div class="doc-meta">@if($doc->document_date){{ \Carbon\Carbon::parse($doc->document_date)->format('M d, Y') }}@endif @if($doc->type) · {{ strtoupper($doc->type) }}@endif</div>
                             </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-bold text-gray-800 truncate">{{ $doc->title }}</p>
-                                @if($doc->document_date)<p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($doc->document_date)->format('M d, Y') }}</p>@endif
-                                @if($doc->type)<span class="text-[10px] font-bold text-gray-400 uppercase">{{ $doc->type }}</span>@endif
-                            </div>
-                            <a href="{{ route('sponsor.download', ['type'=>'family_document','id'=>$doc->id]) }}"
-                               class="flex-shrink-0 w-8 h-8 bg-orange-100 hover:bg-orange-200 text-orange-500 rounded-full flex items-center justify-center transition" title="Download">
-                                <i class="fas fa-download text-xs"></i>
-                            </a>
+                            <a href="{{ route('sponsor.download',['type'=>'family_document','id'=>$doc->id]) }}" class="doc-dl"><i class="fas fa-download"></i></a>
                         </div>
                         @empty
-                        <p class="text-gray-400 text-sm text-center py-3">No documents yet.</p>
+                        <p style="text-align:center;color:#94a3b8;font-size:13px;padding:16px 0">No documents yet.</p>
                         @endforelse
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Per-year sections --}}
         @foreach($fYears as $yr)
         @php
-            $yMedia = $family->media->filter(fn($m) => $m->created_at->year == $yr)->sortByDesc('created_at');
-            $yDocs  = $family->documents->filter(fn($d) => $d->created_at->year == $yr)->sortByDesc('created_at');
-            $yPhotos = $yMedia->where('type','photo');
-            $yVideos = $yMedia->where('type','video');
+            $yFUpdates = $family->updates->filter(fn($u)=>\Carbon\Carbon::parse($u->report_date??$u->created_at)->year==$yr)->sortByDesc('report_date');
+            $yFMedia   = $family->media->filter(fn($m)=>$m->created_at->year==$yr)->sortByDesc('created_at');
+            $yFDocs    = $family->documents->filter(fn($d)=>$d->created_at->year==$yr)->sortByDesc('created_at');
+            $yFPhotos  = $yFMedia->where('type','photo');
+            $yFVideos  = $yFMedia->where('type','video');
         @endphp
-        <div class="year-section" data-panel="{{ $fPanelId }}" data-section="{{ $yr }}">
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 space-y-5">
-                    @php $yFUpdates = $family->updates->filter(fn($u) => \Carbon\Carbon::parse($u->report_date ?? $u->created_at)->year == $yr)->sortByDesc('report_date'); @endphp
+        <div class="year-section" data-panel="{{ $panelId }}" data-section="{{ $yr }}">
+            <div class="content-grid">
+                <div>
                     @if($yFUpdates->isNotEmpty())
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-newspaper text-green-500"></i> Updates · {{ $yr }}
-                            <span class="ml-auto text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">{{ $yFUpdates->count() }}</span>
-                        </h3>
-                        @php $fUpdateTypes = $yFUpdates->pluck('type')->filter()->unique()->values(); @endphp
-                        @if($fUpdateTypes->count() > 1)
-                        <div class="flex flex-wrap gap-1.5 mb-4">
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-wide self-center mr-1">Types:</span>
-                            @foreach($fUpdateTypes as $utype)
-                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full badge-{{ $utype }} capitalize">{{ $utype }}</span>
-                            @endforeach
-                        </div>
-                        @endif
+                    <div class="white-card">
+                        <div class="wc-title"><span class="wc-icon" style="background:#f0fdf4;color:#22c55e"><i class="fas fa-newspaper"></i></span> Updates · {{ $yr }} <span class="wc-badge" style="background:#dcfce7;color:#166534">{{ $yFUpdates->count() }}</span></div>
                         @foreach($yFUpdates as $update)
-                        <div class="mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
-                            <div class="flex items-start justify-between gap-2 mb-1.5">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    @if($update->title)
-                                    <h4 class="font-bold text-gray-800 text-sm">{{ $update->title }}</h4>
-                                    @endif
-                                    @if($update->type)
-                                    <span class="text-[10px] font-black px-2 py-0.5 rounded-full badge-{{ $update->type }} capitalize">{{ $update->type }}</span>
-                                    @endif
-                                </div>
-                                <span class="text-xs text-gray-400 flex-shrink-0">{{ \Carbon\Carbon::parse($update->report_date ?? $update->created_at)->format('M d, Y') }}</span>
-                            </div>
-                            <p class="text-sm text-gray-600 leading-relaxed">{{ $update->content }}</p>
+                        <div class="update-item">
+                            <div class="update-head"><div>@if($update->type)<span class="update-type-badge badge-{{ $update->type }}">{{ $update->type }}</span>@endif @if($update->title)<span class="update-title">{{ $update->title }}</span>@endif</div><span class="update-date">{{ \Carbon\Carbon::parse($update->report_date??$update->created_at)->format('M d, Y') }}</span></div>
+                            <p class="update-body">{{ $update->content }}</p>
                         </div>
                         @endforeach
                     </div>
                     @endif
-
-                    @if($yPhotos->isNotEmpty())
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-images text-blue-500"></i> Photos · {{ $yr }}
-                            <span class="ml-auto text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">{{ $yPhotos->count() }}</span>
-                        </h3>
-                        <div class="grid grid-cols-3 gap-3">
-                            @foreach($yPhotos as $photo)
-                            <div class="media-thumb group relative aspect-square overflow-hidden rounded-xl cursor-pointer bg-gray-100"
-                                 onclick="openLightbox('{{ asset($photo->file_path) }}', 'image', '{{ addslashes($photo->caption ?? '') }}', '{{ route('sponsor.download', ['type'=>'family_media','id'=>$photo->id]) }}')">
-                                <img src="{{ asset($photo->file_path) }}" class="w-full h-full object-cover pointer-events-none group-hover:scale-110 transition duration-300">
-                                <div class="play-overlay rounded-xl">
-                                    <div class="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow">
-                                        <i class="fas fa-expand text-orange-500 text-sm"></i>
-                                    </div>
-                                </div>
-                                @if($photo->caption)
-                                <p class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] px-1.5 py-1 truncate pointer-events-none">{{ $photo->caption }}</p>
-                                @endif
+                    @if($yFPhotos->isNotEmpty())
+                    <div class="white-card" style="margin-top:14px">
+                        <div class="wc-title"><span class="wc-icon" style="background:#eff6ff;color:#3b82f6"><i class="fas fa-images"></i></span> Photos · {{ $yr }} <span class="wc-badge" style="background:#dbeafe;color:#1e40af">{{ $yFPhotos->count() }}</span></div>
+                        <div class="media-grid">
+                            @foreach($yFPhotos as $p)
+                            <div class="media-thumb" onclick="openLightbox('{{ asset($p->file_path) }}','image','{{ addslashes($p->caption??"") }}','{{ route("sponsor.download",["type"=>"family_media","id"=>$p->id]) }}')">
+                                <img src="{{ asset($p->file_path) }}" alt=""><div class="media-overlay"><div class="media-play-btn"><i class="fas fa-expand"></i></div></div>@if($p->caption)<div class="media-caption">{{ $p->caption }}</div>@endif
                             </div>
                             @endforeach
                         </div>
                     </div>
                     @endif
-
-                    @if($yVideos->isNotEmpty())
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-video text-purple-500"></i> Videos · {{ $yr }}
-                            <span class="ml-auto text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">{{ $yVideos->count() }}</span>
-                        </h3>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                            @foreach($yVideos as $video)
-                            <div class="media-thumb group relative aspect-video overflow-hidden rounded-xl cursor-pointer bg-gray-900"
-                                 onclick="openLightbox('{{ asset($video->file_path) }}', 'video', '{{ addslashes($video->caption ?? '') }}', '{{ route('sponsor.download', ['type'=>'family_media','id'=>$video->id]) }}')">
-                                <video src="{{ asset($video->file_path) }}" class="w-full h-full object-cover pointer-events-none opacity-80" muted playsinline></video>
-                                <div class="play-overlay rounded-xl" style="opacity:1;background:rgba(0,0,0,.4)">
-                                    <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-play text-orange-500 ml-0.5"></i>
-                                    </div>
-                                </div>
-                                <div class="absolute top-1.5 left-1.5 bg-black/60 text-white rounded-md px-1.5 py-0.5 text-[9px] font-bold flex items-center gap-1">
-                                    <i class="fas fa-play text-[7px]"></i> VIDEO
-                                </div>
-                                @if($video->caption)
-                                <p class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] px-1.5 py-1 truncate">{{ $video->caption }}</p>
-                                @endif
+                    @if($yFVideos->isNotEmpty())
+                    <div class="white-card" style="margin-top:14px">
+                        <div class="wc-title"><span class="wc-icon" style="background:#faf5ff;color:#9333ea"><i class="fas fa-video"></i></span> Videos · {{ $yr }} <span class="wc-badge" style="background:#e9d5ff;color:#7c3aed">{{ $yFVideos->count() }}</span></div>
+                        <div class="media-grid">
+                            @foreach($yFVideos as $v)
+                            <div class="media-thumb" style="aspect-ratio:16/9" onclick="openLightbox('{{ asset($v->file_path) }}','video','{{ addslashes($v->caption??"") }}','{{ route("sponsor.download",["type"=>"family_media","id"=>$v->id]) }}')">
+                                <video src="{{ asset($v->file_path) }}" muted playsinline></video>
+                                <div class="media-video-tag"><i class="fas fa-play" style="font-size:7px"></i> VIDEO</div>
+                                <div class="media-overlay" style="opacity:1;background:rgba(0,0,0,.35)"><div class="media-play-btn"><i class="fas fa-play" style="margin-left:2px"></i></div></div>
+                                @if($v->caption)<div class="media-caption">{{ $v->caption }}</div>@endif
                             </div>
                             @endforeach
                         </div>
                     </div>
                     @endif
-
-                    @if($yFUpdates->isEmpty() && $yPhotos->isEmpty() && $yVideos->isEmpty())
-                    <div class="bg-white rounded-xl p-10 shadow text-center">
-                        <i class="fas fa-calendar text-4xl text-gray-200 mb-3 block"></i>
-                        <p class="text-gray-400 text-sm">No content for {{ $yr }}.</p>
+                    @if($yFUpdates->isEmpty()&&$yFPhotos->isEmpty()&&$yFVideos->isEmpty())
+                    <div class="white-card" style="text-align:center;padding:48px 24px">
+                        <i class="fas fa-calendar" style="font-size:38px;color:#e2e8f0;display:block;margin-bottom:12px"></i>
+                        <p style="color:#94a3b8;font-size:14px;font-weight:600">No content for {{ $yr }}.</p>
                     </div>
                     @endif
                 </div>
-                <div class="space-y-5">
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-base font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-folder text-yellow-500"></i> Documents · {{ $yr }}
-                            @if($yDocs->isNotEmpty())
-                            <span class="ml-auto text-xs font-bold text-yellow-700 bg-yellow-50 px-2 py-0.5 rounded-full">{{ $yDocs->count() }}</span>
-                            @endif
-                        </h3>
-                        @forelse($yDocs as $doc)
-                        <div class="flex items-start gap-3 p-3 bg-gray-50 hover:bg-orange-50 rounded-xl mb-2 last:mb-0 transition group">
-                            <div class="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-file-pdf text-red-500 text-sm"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-bold text-gray-800 truncate">{{ $doc->title }}</p>
-                                @if($doc->document_date)<p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($doc->document_date)->format('M d, Y') }}</p>@endif
-                                @if($doc->type)<span class="text-[10px] font-bold text-gray-400 uppercase">{{ $doc->type }}</span>@endif
-                            </div>
-                            <a href="{{ route('sponsor.download', ['type'=>'family_document','id'=>$doc->id]) }}"
-                               class="flex-shrink-0 w-8 h-8 bg-orange-100 hover:bg-orange-200 text-orange-500 rounded-full flex items-center justify-center transition">
-                                <i class="fas fa-download text-xs"></i>
-                            </a>
-                        </div>
+                <div>
+                    <div class="white-card">
+                        <div class="wc-title"><span class="wc-icon" style="background:#fef9c3;color:#854d0e"><i class="fas fa-folder-open"></i></span> Documents · {{ $yr }} @if($yFDocs->isNotEmpty())<span class="wc-badge" style="background:#fef9c3;color:#854d0e">{{ $yFDocs->count() }}</span>@endif</div>
+                        @forelse($yFDocs as $doc)
+                        <div class="doc-item"><div class="doc-icon"><i class="fas fa-file-pdf"></i></div><div class="doc-info"><div class="doc-name">{{ $doc->title }}</div><div class="doc-meta">@if($doc->document_date){{ \Carbon\Carbon::parse($doc->document_date)->format('M d, Y') }}@endif</div></div><a href="{{ route('sponsor.download',['type'=>'family_document','id'=>$doc->id]) }}" class="doc-dl"><i class="fas fa-download"></i></a></div>
                         @empty
-                        <p class="text-gray-400 text-sm text-center py-4">No documents for {{ $yr }}.</p>
+                        <p style="text-align:center;color:#94a3b8;font-size:13px;padding:16px 0">No documents for {{ $yr }}.</p>
                         @endforelse
                     </div>
                 </div>
             </div>
         </div>
         @endforeach
-
-    </div>{{-- /family entity panel --}}
+    </div>
     @endforeach
 
-    {{-- ═══════════════════════════════════════════ --}}
-    {{-- CHILD PANELS                                --}}
-    {{-- ═══════════════════════════════════════════ --}}
+    {{-- ═══════════════════════════════════════
+         CHILD PANELS
+    ═══════════════════════════════════════ --}}
     @foreach($children as $ci => $child)
     @php
-        $eidx = $families->count() + $ci;
-        $cPanelId = "ep-{$eidx}";
-
+        $eidx = $families->count()+$ci; $panelId = "panel-{$eidx}";
         $cYears = collect();
-        foreach($child->updates  as $u) { $cYears->push(\Carbon\Carbon::parse($u->report_date ?? $u->created_at)->year); }
-        foreach($child->media    as $m) { $cYears->push($m->created_at->year); }
+        foreach($child->updates   as $u){ $cYears->push(\Carbon\Carbon::parse($u->report_date??$u->created_at)->year); }
+        foreach($child->media     as $m){ $cYears->push($m->created_at->year); }
         foreach($child->documents as $d){ $cYears->push($d->created_at->year); }
         $cYears = $cYears->unique()->sortDesc()->values();
     @endphp
-    <div class="entity-panel {{ ($totalEntities === 1 || $eidx === 0) ? 'active' : '' }}" id="{{ $cPanelId }}">
+    <div class="detail-panel {{ ($totalEntities===1||$eidx===0)?'active':'' }}" id="{{ $panelId }}" style="margin-top:28px">
 
-        {{-- ── Child hero ── --}}
-        <div class="bg-white rounded-2xl shadow overflow-hidden mb-6">
-            <div class="flex flex-col sm:flex-row items-center gap-6 p-6">
-                <div class="w-32 h-32 rounded-2xl overflow-hidden border-4 border-orange-100 flex-shrink-0 shadow-md bg-orange-50 flex items-center justify-center">
-                    @if($child->profile_photo)
-                        <img src="{{ asset($child->profile_photo) }}" class="w-full h-full object-cover">
-                    @else
-                        <i class="fas fa-child text-5xl text-orange-200"></i>
-                    @endif
-                </div>
-                <div class="text-center sm:text-left flex-1">
-                    <div class="flex items-center gap-3 justify-center sm:justify-start flex-wrap mb-1">
-                        <h3 class="text-2xl font-black text-gray-800">{{ $child->first_name }}</h3>
-                        {{-- ── Has Family status badge ── --}}
-                        @if($child->has_family)
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-green-100 text-green-700 border border-green-200">
-                            <i class="fas fa-home text-[10px]"></i> Has Family
-                        </span>
-                        @else
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-red-100 text-red-600 border border-red-200">
-                            <i class="fas fa-home text-[10px]"></i> No Family
-                        </span>
-                        @endif
-                    </div>
-                    <p class="text-sm text-gray-500 mt-1">
-                        <i class="fas fa-birthday-cake text-orange-400 mr-1"></i>{{ $child->age }} years old ·
-                        <i class="fas fa-map-marker-alt text-orange-400 mx-1"></i>{{ $child->country }}
-                    </p>
-                    <span class="font-mono text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded inline-block mt-1">{{ $child->code }}</span>
-                    {{-- Stats row --}}
-                    <div class="flex flex-wrap gap-2 mt-3 justify-center sm:justify-start">
-                        <span class="text-xs font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
-                            <i class="fas fa-newspaper mr-1"></i>{{ $child->updates->count() }} Updates
-                        </span>
-                        <span class="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full">
-                            <i class="fas fa-images mr-1"></i>{{ $child->media->where('type','image')->count() + $child->media->where('type','photo')->count() }} Photos
-                        </span>
-                        <span class="text-xs font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full">
-                            <i class="fas fa-video mr-1"></i>{{ $child->media->where('type','video')->count() }} Videos
-                        </span>
-                        <span class="text-xs font-bold text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
-                            <i class="fas fa-file mr-1"></i>{{ $child->documents->count() }} Docs
-                        </span>
-                    </div>
-                </div>
-            </div>
-            @if($child->story)
-            <div class="px-6 pb-6 border-t border-gray-50 pt-4">
-                <p class="text-sm text-gray-600 leading-relaxed line-clamp-3">{{ $child->story }}</p>
-            </div>
-            @endif
-        </div>
-
-        {{-- Year filter bar --}}
         @if($cYears->isNotEmpty())
-        <div class="flex items-center gap-2 mb-5 flex-wrap">
-            <span class="text-xs font-black text-gray-400 uppercase tracking-wide mr-1">Filter by year:</span>
-            <button onclick="switchYear('{{ $cPanelId }}', 'latest')"
-                    class="year-btn active px-4 py-1.5 rounded-full text-sm font-bold border border-orange-200 text-orange-600 bg-orange-50"
-                    data-panel="{{ $cPanelId }}" data-year="latest">
-                <i class="fas fa-star text-xs mr-1"></i> Latest
+        <div class="year-bar reveal">
+            <span class="year-bar-label">Year:</span>
+            <button class="year-pill active" data-panel="{{ $panelId }}" data-year="latest" onclick="switchYear('{{ $panelId }}','latest')">
+                <i class="fas fa-star" style="font-size:9px;margin-right:4px;color:inherit"></i> Latest
             </button>
             @foreach($cYears as $yr)
-            <button onclick="switchYear('{{ $cPanelId }}', '{{ $yr }}')"
-                    class="year-btn px-4 py-1.5 rounded-full text-sm font-bold border border-gray-200 text-gray-600 bg-white hover:border-orange-300 hover:text-orange-500"
-                    data-panel="{{ $cPanelId }}" data-year="{{ $yr }}">
-                {{ $yr }}
-            </button>
+            <button class="year-pill" data-panel="{{ $panelId }}" data-year="{{ $yr }}" onclick="switchYear('{{ $panelId }}','{{ $yr }}')">{{ $yr }}</button>
             @endforeach
         </div>
         @endif
 
-        {{-- Latest section --}}
-        <div class="year-section active" data-panel="{{ $cPanelId }}" data-section="latest">
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 space-y-5">
-
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-newspaper text-green-500"></i> Latest Updates
-                            <span class="ml-auto text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">NEW</span>
-                        </h3>
+        {{-- Latest --}}
+        <div class="year-section active" data-panel="{{ $panelId }}" data-section="latest">
+            <div class="content-grid">
+                <div>
+                    <div class="white-card reveal">
+                        <div class="wc-title"><span class="wc-icon" style="background:#f0fdf4;color:#22c55e"><i class="fas fa-newspaper"></i></span> Latest Updates <span class="wc-badge new-dot" style="background:#dcfce7;color:#166534"></span></div>
                         @forelse($child->updates->sortByDesc('report_date')->take(3) as $update)
-                        <div class="mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
-                            <div class="flex items-start justify-between gap-2 mb-1.5">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    @if($update->title)
-                                    <h4 class="font-bold text-gray-800 text-sm">{{ $update->title }}</h4>
-                                    @endif
-                                    @if($update->type)
-                                    <span class="text-[10px] font-black px-2 py-0.5 rounded-full badge-{{ $update->type }} capitalize">{{ $update->type }}</span>
-                                    @endif
-                                </div>
-                                <span class="text-xs text-gray-400 flex-shrink-0">{{ \Carbon\Carbon::parse($update->report_date ?? $update->created_at)->format('M d, Y') }}</span>
-                            </div>
-                            <p class="text-sm text-gray-600 leading-relaxed">{{ $update->content }}</p>
+                        <div class="update-item">
+                            <div class="update-head"><div>@if($update->type)<span class="update-type-badge badge-{{ $update->type }}">{{ $update->type }}</span>@endif @if($update->title)<span class="update-title">{{ $update->title }}</span>@endif</div><span class="update-date">{{ \Carbon\Carbon::parse($update->report_date??$update->created_at)->format('M d, Y') }}</span></div>
+                            <p class="update-body">{{ $update->content }}</p>
                         </div>
                         @empty
-                        <p class="text-gray-400 text-sm text-center py-4">No updates yet.</p>
+                        <p style="text-align:center;color:#94a3b8;font-size:13px;padding:24px 0">No updates yet.</p>
                         @endforelse
                     </div>
-
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-photo-film text-orange-500"></i> Latest Media
-                        </h3>
+                    <div class="white-card reveal" style="margin-top:14px">
+                        <div class="wc-title"><span class="wc-icon" style="background:#fff7ed;color:#f97316"><i class="fas fa-photo-film"></i></span> Latest Media</div>
                         @php $latestCMedia = $child->media->sortByDesc('created_at')->take(6); @endphp
                         @if($latestCMedia->isNotEmpty())
-                        <div class="grid grid-cols-3 gap-3">
+                        <div class="media-grid">
                             @foreach($latestCMedia as $m)
-                            <div class="media-thumb group relative aspect-square overflow-hidden rounded-xl cursor-pointer bg-gray-100"
-                                 onclick="openLightbox('{{ asset($m->file_path) }}', '{{ $m->type }}', '{{ addslashes($m->caption ?? '') }}', '{{ route('sponsor.download', ['type'=>'media','id'=>$m->id]) }}')">
-                                @if($m->type === 'video')
-                                    <video src="{{ asset($m->file_path) }}" class="w-full h-full object-cover pointer-events-none" muted playsinline></video>
-                                    <div class="absolute top-1.5 left-1.5 bg-black/60 text-white rounded-md px-1.5 py-0.5 text-[9px] font-bold flex items-center gap-1 z-10">
-                                        <i class="fas fa-play text-[7px]"></i> VIDEO
-                                    </div>
+                            <div class="media-thumb reveal-scale stagger-{{ ($loop->index%3)+1 }}"
+                                 onclick="openLightbox('{{ asset($m->file_path) }}','{{ $m->type }}','{{ addslashes($m->caption??"") }}','{{ route("sponsor.download",["type"=>"media","id"=>$m->id]) }}')">
+                                @if($m->type==='video')
+                                    <video src="{{ asset($m->file_path) }}" muted playsinline></video>
+                                    <div class="media-video-tag"><i class="fas fa-play" style="font-size:7px"></i> VIDEO</div>
                                 @else
-                                    <img src="{{ asset($m->file_path) }}" class="w-full h-full object-cover pointer-events-none group-hover:scale-110 transition duration-300">
+                                    <img src="{{ asset($m->file_path) }}" alt="">
                                 @endif
-                                <div class="play-overlay rounded-xl">
-                                    <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-{{ $m->type === 'video' ? 'play' : 'expand' }} text-orange-500 {{ $m->type === 'video' ? 'ml-0.5' : '' }}"></i>
-                                    </div>
-                                </div>
-                                @if($m->caption)
-                                <p class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] px-1.5 py-1 truncate pointer-events-none">{{ $m->caption }}</p>
-                                @endif
+                                <div class="media-overlay"><div class="media-play-btn"><i class="fas fa-{{ $m->type==='video'?'play':'expand' }}" style="{{ $m->type==='video'?'margin-left:2px':'' }}"></i></div></div>
+                                @if($m->caption)<div class="media-caption">{{ $m->caption }}</div>@endif
                             </div>
                             @endforeach
                         </div>
                         @else
-                        <p class="text-gray-400 text-sm text-center py-6"><i class="fas fa-images text-3xl text-gray-200 block mb-2"></i>No media yet.</p>
+                        <div style="text-align:center;padding:30px 0;color:#94a3b8">
+                            <i class="fas fa-images" style="font-size:32px;display:block;margin-bottom:8px;opacity:.25"></i>
+                            <p style="font-size:13px;font-weight:600">No media yet.</p>
+                        </div>
                         @endif
                     </div>
-
                 </div>
-                <div class="space-y-5">
-                    {{-- ── Family info card (only shown when child has a family) ── --}}
+                <div>
                     @if($child->has_family && $child->family)
-                    <div class="bg-white rounded-xl p-5 shadow border-l-4 border-green-400">
-                        <h3 class="text-sm font-black text-gray-800 mb-3 flex items-center gap-2">
-                            <i class="fas fa-home text-green-500"></i> Family
-                        </h3>
-                        <div class="flex items-center gap-3">
+                    <div class="white-card reveal reveal-right" style="margin-bottom:14px">
+                        <div class="wc-title"><span class="wc-icon" style="background:#f0fdf4;color:#22c55e"><i class="fas fa-home"></i></span> Family</div>
+                        <div class="family-mini-card">
                             @if($child->family->profile_photo)
-                            <img src="{{ asset($child->family->profile_photo) }}" class="w-12 h-12 rounded-xl object-cover border-2 border-green-100 flex-shrink-0">
+                                <img src="{{ asset($child->family->profile_photo) }}" class="family-mini-photo" alt="">
                             @else
-                            <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0 border-2 border-green-100">
-                                <i class="fas fa-users text-green-400 text-lg"></i>
-                            </div>
+                                <div class="family-mini-icon"><i class="fas fa-users" style="color:#22c55e;font-size:18px"></i></div>
                             @endif
-                            <div class="min-w-0">
-                                <p class="font-bold text-gray-800 text-sm truncate">{{ $child->family->name }}</p>
-                                @if($child->family->country)
-                                <p class="text-xs text-gray-400"><i class="fas fa-map-marker-alt mr-1 text-orange-400 text-[10px]"></i>{{ $child->family->country }}</p>
-                                @endif
-                                @if($child->family->code)
-                                <p class="font-mono text-[10px] text-gray-400 mt-0.5">{{ $child->family->code }}</p>
-                                @endif
+                            <div style="min-width:0">
+                                <div style="font-size:13px;font-weight:800;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $child->family->name }}</div>
+                                @if($child->family->country)<div style="font-size:11px;color:#64748b;font-weight:600;margin-top:2px"><i class="fas fa-map-marker-alt" style="color:#f97316;font-size:9px"></i> {{ $child->family->country }}</div>@endif
                             </div>
                         </div>
                     </div>
                     @endif
-
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-base font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-file-pdf text-orange-500"></i> Documents
-                        </h3>
-                        @forelse($child->documents->sortByDesc('created_at')->take(5) as $doc)
-                        <div class="flex items-start gap-3 p-3 bg-gray-50 hover:bg-orange-50 rounded-xl mb-2 last:mb-0 transition group">
-                            <div class="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-file-pdf text-red-500 text-sm"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-bold text-gray-800 truncate">{{ $doc->title }}</p>
-                                @if($doc->document_date)<p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($doc->document_date)->format('M d, Y') }}</p>@endif
-                                @if($doc->type)<span class="text-[10px] font-bold uppercase text-gray-400">{{ $doc->type }}</span>@endif
-                            </div>
-                            <a href="{{ route('sponsor.download', ['type'=>'document','id'=>$doc->id]) }}"
-                               class="flex-shrink-0 w-8 h-8 bg-orange-100 hover:bg-orange-200 text-orange-500 rounded-full flex items-center justify-center transition">
-                                <i class="fas fa-download text-xs"></i>
-                            </a>
-                        </div>
+                    <div class="white-card reveal reveal-right">
+                        <div class="wc-title"><span class="wc-icon" style="background:#fef9c3;color:#854d0e"><i class="fas fa-folder-open"></i></span> Documents</div>
+                        @forelse($child->documents->sortByDesc('created_at')->take(8) as $doc)
+                        <div class="doc-item"><div class="doc-icon"><i class="fas fa-file-pdf"></i></div><div class="doc-info"><div class="doc-name">{{ $doc->title }}</div><div class="doc-meta">@if($doc->document_date){{ \Carbon\Carbon::parse($doc->document_date)->format('M d, Y') }}@endif @if($doc->type) · {{ strtoupper($doc->type) }}@endif</div></div><a href="{{ route('sponsor.download',['type'=>'document','id'=>$doc->id]) }}" class="doc-dl"><i class="fas fa-download"></i></a></div>
                         @empty
-                        <p class="text-gray-400 text-sm text-center py-3">No documents yet.</p>
+                        <p style="text-align:center;color:#94a3b8;font-size:13px;padding:16px 0">No documents yet.</p>
                         @endforelse
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Per-year sections for child --}}
         @foreach($cYears as $yr)
         @php
-            $yUpdates = $child->updates->filter(fn($u) => \Carbon\Carbon::parse($u->report_date ?? $u->created_at)->year == $yr)->sortByDesc('report_date');
-            $yMedia   = $child->media->filter(fn($m) => $m->created_at->year == $yr)->sortByDesc('created_at');
-            $yDocs    = $child->documents->filter(fn($d) => $d->created_at->year == $yr)->sortByDesc('created_at');
-            $yPhotos  = $yMedia->filter(fn($m) => in_array($m->type, ['image','photo']));
+            $yUpdates = $child->updates->filter(fn($u)=>\Carbon\Carbon::parse($u->report_date??$u->created_at)->year==$yr)->sortByDesc('report_date');
+            $yMedia   = $child->media->filter(fn($m)=>$m->created_at->year==$yr)->sortByDesc('created_at');
+            $yDocs    = $child->documents->filter(fn($d)=>$d->created_at->year==$yr)->sortByDesc('created_at');
+            $yPhotos  = $yMedia->filter(fn($m)=>in_array($m->type,['image','photo']));
             $yVideos  = $yMedia->where('type','video');
         @endphp
-        <div class="year-section" data-panel="{{ $cPanelId }}" data-section="{{ $yr }}">
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 space-y-5">
-
+        <div class="year-section" data-panel="{{ $panelId }}" data-section="{{ $yr }}">
+            <div class="content-grid">
+                <div>
                     @if($yUpdates->isNotEmpty())
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-newspaper text-green-500"></i> Updates · {{ $yr }}
-                            <span class="ml-auto text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">{{ $yUpdates->count() }}</span>
-                        </h3>
-                        @php $updateTypes = $yUpdates->pluck('type')->filter()->unique()->values(); @endphp
-                        @if($updateTypes->count() > 1)
-                        <div class="flex flex-wrap gap-1.5 mb-4">
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-wide self-center mr-1">Types:</span>
-                            @foreach($updateTypes as $utype)
-                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full badge-{{ $utype }} capitalize cursor-default">{{ $utype }}</span>
-                            @endforeach
-                        </div>
-                        @endif
+                    <div class="white-card">
+                        <div class="wc-title"><span class="wc-icon" style="background:#f0fdf4;color:#22c55e"><i class="fas fa-newspaper"></i></span> Updates · {{ $yr }} <span class="wc-badge" style="background:#dcfce7;color:#166534">{{ $yUpdates->count() }}</span></div>
                         @foreach($yUpdates as $update)
-                        <div class="mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
-                            <div class="flex items-start justify-between gap-2 mb-1.5">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    @if($update->title)
-                                    <h4 class="font-bold text-gray-800 text-sm">{{ $update->title }}</h4>
-                                    @endif
-                                    @if($update->type)
-                                    <span class="text-[10px] font-black px-2 py-0.5 rounded-full badge-{{ $update->type }} capitalize">{{ $update->type }}</span>
-                                    @endif
-                                </div>
-                                <span class="text-xs text-gray-400 flex-shrink-0">{{ \Carbon\Carbon::parse($update->report_date ?? $update->created_at)->format('M d, Y') }}</span>
-                            </div>
-                            <p class="text-sm text-gray-600 leading-relaxed">{{ $update->content }}</p>
-                        </div>
+                        <div class="update-item"><div class="update-head"><div>@if($update->type)<span class="update-type-badge badge-{{ $update->type }}">{{ $update->type }}</span>@endif @if($update->title)<span class="update-title">{{ $update->title }}</span>@endif</div><span class="update-date">{{ \Carbon\Carbon::parse($update->report_date??$update->created_at)->format('M d, Y') }}</span></div><p class="update-body">{{ $update->content }}</p></div>
                         @endforeach
                     </div>
                     @endif
-
                     @if($yPhotos->isNotEmpty())
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-images text-blue-500"></i> Photos · {{ $yr }}
-                            <span class="ml-auto text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">{{ $yPhotos->count() }}</span>
-                        </h3>
-                        <div class="grid grid-cols-3 gap-3">
-                            @foreach($yPhotos as $photo)
-                            <div class="media-thumb group relative aspect-square overflow-hidden rounded-xl cursor-pointer bg-gray-100"
-                                 onclick="openLightbox('{{ asset($photo->file_path) }}', 'image', '{{ addslashes($photo->caption ?? '') }}', '{{ route('sponsor.download', ['type'=>'media','id'=>$photo->id]) }}')">
-                                <img src="{{ asset($photo->file_path) }}" class="w-full h-full object-cover pointer-events-none group-hover:scale-110 transition duration-300">
-                                <div class="play-overlay rounded-xl">
-                                    <div class="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow">
-                                        <i class="fas fa-expand text-orange-500 text-sm"></i>
-                                    </div>
-                                </div>
-                                @if($photo->caption)
-                                <p class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] px-1.5 py-1 truncate pointer-events-none">{{ $photo->caption }}</p>
-                                @endif
+                    <div class="white-card" style="margin-top:14px">
+                        <div class="wc-title"><span class="wc-icon" style="background:#eff6ff;color:#3b82f6"><i class="fas fa-images"></i></span> Photos · {{ $yr }} <span class="wc-badge" style="background:#dbeafe;color:#1e40af">{{ $yPhotos->count() }}</span></div>
+                        <div class="media-grid">
+                            @foreach($yPhotos as $p)
+                            <div class="media-thumb" onclick="openLightbox('{{ asset($p->file_path) }}','image','{{ addslashes($p->caption??"") }}','{{ route("sponsor.download",["type"=>"media","id"=>$p->id]) }}')">
+                                <img src="{{ asset($p->file_path) }}" alt=""><div class="media-overlay"><div class="media-play-btn"><i class="fas fa-expand"></i></div></div>@if($p->caption)<div class="media-caption">{{ $p->caption }}</div>@endif
                             </div>
                             @endforeach
                         </div>
                     </div>
                     @endif
-
                     @if($yVideos->isNotEmpty())
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-video text-purple-500"></i> Videos · {{ $yr }}
-                            <span class="ml-auto text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">{{ $yVideos->count() }}</span>
-                        </h3>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                            @foreach($yVideos as $video)
-                            <div class="media-thumb group relative aspect-video overflow-hidden rounded-xl cursor-pointer bg-gray-900"
-                                 onclick="openLightbox('{{ asset($video->file_path) }}', 'video', '{{ addslashes($video->caption ?? '') }}', '{{ route('sponsor.download', ['type'=>'media','id'=>$video->id]) }}')">
-                                <video src="{{ asset($video->file_path) }}" class="w-full h-full object-cover pointer-events-none opacity-80" muted playsinline></video>
-                                <div class="play-overlay rounded-xl" style="opacity:1;background:rgba(0,0,0,.4)">
-                                    <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-play text-orange-500 ml-0.5"></i>
-                                    </div>
-                                </div>
-                                <div class="absolute top-1.5 left-1.5 bg-black/60 text-white rounded-md px-1.5 py-0.5 text-[9px] font-bold flex items-center gap-1">
-                                    <i class="fas fa-play text-[7px]"></i> VIDEO
-                                </div>
-                                @if($video->caption)
-                                <p class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] px-1.5 py-1 truncate">{{ $video->caption }}</p>
-                                @endif
+                    <div class="white-card" style="margin-top:14px">
+                        <div class="wc-title"><span class="wc-icon" style="background:#faf5ff;color:#9333ea"><i class="fas fa-video"></i></span> Videos · {{ $yr }} <span class="wc-badge" style="background:#e9d5ff;color:#7c3aed">{{ $yVideos->count() }}</span></div>
+                        <div class="media-grid">
+                            @foreach($yVideos as $v)
+                            <div class="media-thumb" style="aspect-ratio:16/9" onclick="openLightbox('{{ asset($v->file_path) }}','video','{{ addslashes($v->caption??"") }}','{{ route("sponsor.download",["type"=>"media","id"=>$v->id]) }}')">
+                                <video src="{{ asset($v->file_path) }}" muted playsinline></video><div class="media-video-tag"><i class="fas fa-play" style="font-size:7px"></i> VIDEO</div><div class="media-overlay" style="opacity:1;background:rgba(0,0,0,.35)"><div class="media-play-btn"><i class="fas fa-play" style="margin-left:2px"></i></div></div>@if($v->caption)<div class="media-caption">{{ $v->caption }}</div>@endif
                             </div>
                             @endforeach
                         </div>
                     </div>
                     @endif
-
-                    @if($yUpdates->isEmpty() && $yPhotos->isEmpty() && $yVideos->isEmpty())
-                    <div class="bg-white rounded-xl p-10 shadow text-center">
-                        <i class="fas fa-calendar text-4xl text-gray-200 mb-3 block"></i>
-                        <p class="text-gray-400 text-sm">No content for {{ $yr }}.</p>
+                    @if($yUpdates->isEmpty()&&$yPhotos->isEmpty()&&$yVideos->isEmpty())
+                    <div class="white-card" style="text-align:center;padding:48px 24px">
+                        <i class="fas fa-calendar" style="font-size:38px;color:#e2e8f0;display:block;margin-bottom:12px"></i>
+                        <p style="color:#94a3b8;font-size:14px;font-weight:600">No content for {{ $yr }}.</p>
                     </div>
                     @endif
-
                 </div>
-                <div class="space-y-5">
-                    {{-- ── Family info card in year view ── --}}
+                <div>
                     @if($child->has_family && $child->family)
-                    <div class="bg-white rounded-xl p-5 shadow border-l-4 border-green-400">
-                        <h3 class="text-sm font-black text-gray-800 mb-3 flex items-center gap-2">
-                            <i class="fas fa-home text-green-500"></i> Family
-                        </h3>
-                        <div class="flex items-center gap-3">
-                            @if($child->family->profile_photo)
-                            <img src="{{ asset($child->family->profile_photo) }}" class="w-12 h-12 rounded-xl object-cover border-2 border-green-100 flex-shrink-0">
-                            @else
-                            <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0 border-2 border-green-100">
-                                <i class="fas fa-users text-green-400 text-lg"></i>
-                            </div>
-                            @endif
-                            <div class="min-w-0">
-                                <p class="font-bold text-gray-800 text-sm truncate">{{ $child->family->name }}</p>
-                                @if($child->family->country)
-                                <p class="text-xs text-gray-400"><i class="fas fa-map-marker-alt mr-1 text-orange-400 text-[10px]"></i>{{ $child->family->country }}</p>
-                                @endif
-                            </div>
+                    <div class="white-card" style="margin-bottom:14px">
+                        <div class="wc-title"><span class="wc-icon" style="background:#f0fdf4;color:#22c55e"><i class="fas fa-home"></i></span> Family</div>
+                        <div class="family-mini-card">
+                            @if($child->family->profile_photo)<img src="{{ asset($child->family->profile_photo) }}" class="family-mini-photo" alt="">@else<div class="family-mini-icon"><i class="fas fa-users" style="color:#22c55e;font-size:18px"></i></div>@endif
+                            <div style="min-width:0"><div style="font-size:13px;font-weight:800;color:#0f172a">{{ $child->family->name }}</div>@if($child->family->country)<div style="font-size:11px;color:#64748b;font-weight:600;margin-top:2px"><i class="fas fa-map-marker-alt" style="color:#f97316;font-size:9px"></i> {{ $child->family->country }}</div>@endif</div>
                         </div>
                     </div>
                     @endif
-
-                    <div class="bg-white rounded-xl p-6 shadow">
-                        <h3 class="text-base font-black text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-folder text-yellow-500"></i> Documents · {{ $yr }}
-                            @if($yDocs->isNotEmpty())
-                            <span class="ml-auto text-xs font-bold text-yellow-700 bg-yellow-50 px-2 py-0.5 rounded-full">{{ $yDocs->count() }}</span>
-                            @endif
-                        </h3>
+                    <div class="white-card">
+                        <div class="wc-title"><span class="wc-icon" style="background:#fef9c3;color:#854d0e"><i class="fas fa-folder-open"></i></span> Documents · {{ $yr }} @if($yDocs->isNotEmpty())<span class="wc-badge" style="background:#fef9c3;color:#854d0e">{{ $yDocs->count() }}</span>@endif</div>
                         @forelse($yDocs as $doc)
-                        <div class="flex items-start gap-3 p-3 bg-gray-50 hover:bg-orange-50 rounded-xl mb-2 last:mb-0 transition group">
-                            <div class="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-file-pdf text-red-500 text-sm"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-bold text-gray-800 truncate">{{ $doc->title }}</p>
-                                @if($doc->document_date)<p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($doc->document_date)->format('M d, Y') }}</p>@endif
-                                @if($doc->type)<span class="text-[10px] font-bold uppercase text-gray-400">{{ $doc->type }}</span>@endif
-                            </div>
-                            <a href="{{ route('sponsor.download', ['type'=>'document','id'=>$doc->id]) }}"
-                               class="flex-shrink-0 w-8 h-8 bg-orange-100 hover:bg-orange-200 text-orange-500 rounded-full flex items-center justify-center transition">
-                                <i class="fas fa-download text-xs"></i>
-                            </a>
-                        </div>
+                        <div class="doc-item"><div class="doc-icon"><i class="fas fa-file-pdf"></i></div><div class="doc-info"><div class="doc-name">{{ $doc->title }}</div><div class="doc-meta">@if($doc->document_date){{ \Carbon\Carbon::parse($doc->document_date)->format('M d, Y') }}@endif</div></div><a href="{{ route('sponsor.download',['type'=>'document','id'=>$doc->id]) }}" class="doc-dl"><i class="fas fa-download"></i></a></div>
                         @empty
-                        <p class="text-gray-400 text-sm text-center py-4">No documents for {{ $yr }}.</p>
+                        <p style="text-align:center;color:#94a3b8;font-size:13px;padding:16px 0">No documents for {{ $yr }}.</p>
                         @endforelse
                     </div>
                 </div>
             </div>
         </div>
         @endforeach
-
-    </div>{{-- /child entity panel --}}
+    </div>
     @endforeach
 
-    {{-- Footer note --}}
-    <div class="mt-10 bg-orange-50 border-l-4 border-orange-500 rounded-lg p-6">
-        <p class="text-sm text-gray-700 leading-relaxed">
-            <i class="fas fa-info-circle text-orange-500 mr-2"></i>
+    {{-- Footer --}}
+    <div class="footer-note reveal">
+        <p style="font-size:13px;color:#374151;line-height:1.7;margin:0">
+            <i class="fas fa-heart" style="color:#f97316;margin-right:8px"></i>
             <strong>Thank you for your continued support!</strong> Your sponsorship makes a real difference.
-            Questions? Contact 
-            <a href="https://mail.google.com/mail/?view=cm&to=asso.desailespourgrandir@gmail.com"
-                target="_blank" rel="noopener"
-                class="text-orange-600 hover:underline font-bold">
-                    asso.desailespourgrandir@gmail.com
-            </a>
+            Questions? <a href="https://mail.google.com/mail/?view=cm&to=asso.desailespourgrandir@gmail.com" target="_blank" style="color:#f97316;font-weight:700;text-decoration:none">asso.desailespourgrandir@gmail.com</a>
         </p>
     </div>
-
 </div>
 
-{{-- ═══════════════════════════════════════════ --}}
-{{-- LIGHTBOX MODAL                              --}}
-{{-- ═══════════════════════════════════════════ --}}
-<div id="lightbox"
-     class="fixed inset-0 bg-black/95 backdrop-blur-sm z-[100] items-center justify-center p-4"
-     onclick="closeLightbox()">
+{{-- Mobile bottom bar --}}
+<div class="mobile-bottom-bar">
+    <div style="display:flex;align-items:center;gap:8px">
+        <div class="sponsor-avatar" style="width:30px;height:30px;border-radius:8px;font-size:12px">{{ strtoupper(substr($sponsor->first_name,0,1)) }}</div>
+        <span style="font-size:12px;font-weight:800;color:#0f172a">{{ $sponsor->first_name }}</span>
+    </div>
+    <form method="POST" action="{{ route('sponsor.logout') }}" style="margin:0">
+        @csrf
+        <button style="padding:7px 14px;border-radius:9px;background:#f1f5f9;border:none;cursor:pointer;font-size:11px;font-weight:700;color:#475569;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <i class="fas fa-sign-out-alt" style="font-size:10px"></i> Logout
+        </button>
+    </form>
+</div>
 
-    <div class="absolute top-0 left-0 right-0 flex items-center justify-between px-5 py-4 z-10" onclick="event.stopPropagation()">
-        <p id="lb-caption" class="text-white/80 text-sm font-bold truncate max-w-sm"></p>
-        <div class="flex items-center gap-2">
-            <a id="lb-download" href="#" download
-               class="flex items-center gap-1.5 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-bold rounded-lg transition">
-                <i class="fas fa-download text-xs"></i> Download
+{{-- Lightbox --}}
+<div id="lightbox" class="fixed inset-0 z-[100] items-center justify-center p-4"
+     style="background:rgba(0,0,0,.96);backdrop-filter:blur(10px)" onclick="closeLightbox()">
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;z-index:10" onclick="event.stopPropagation()">
+        <p id="lb-caption" style="color:rgba(255,255,255,.75);font-size:13px;font-weight:700;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></p>
+        <div style="display:flex;align-items:center;gap:8px">
+            <a id="lb-download" href="#" download style="display:flex;align-items:center;gap:5px;padding:7px 13px;background:rgba(255,255,255,.12);color:#fff;border-radius:9px;font-size:11px;font-weight:700;text-decoration:none;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
+                <i class="fas fa-download" style="font-size:10px"></i> <span class="hidden sm:inline">Download</span>
             </a>
-            <button onclick="closeLightbox()"
-                    class="w-10 h-10 bg-white/10 hover:bg-white/25 text-white rounded-full flex items-center justify-center transition">
+            <button onclick="closeLightbox()" style="width:36px;height:36px;background:rgba(255,255,255,.12);border:none;color:#fff;border-radius:9px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
                 <i class="fas fa-times"></i>
             </button>
         </div>
     </div>
-
-    <div onclick="event.stopPropagation()" class="max-w-5xl max-h-[80vh] flex items-center justify-center mt-10">
-        <img id="lb-img" src="" alt=""
-             class="max-w-full max-h-[80vh] rounded-xl shadow-2xl object-contain"
-             style="display:none;">
-        <video id="lb-video" src="" controls autoplay
-               class="max-w-full max-h-[80vh] rounded-xl shadow-2xl w-full"
-               style="display:none;">
-        </video>
+    <div id="lb-inner" onclick="event.stopPropagation()" style="display:flex;align-items:center;justify-content:center;margin-top:54px;max-height:calc(100vh - 90px);width:100%">
+        <img id="lb-img" src="" alt="" style="max-width:100%;max-height:calc(100vh - 90px);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.5);object-fit:contain;display:none">
+        <video id="lb-video" src="" controls autoplay style="max-width:100%;max-height:calc(100vh - 90px);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.5);display:none;width:100%"></video>
     </div>
-
-    <p class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/30 text-xs">Press ESC to close</p>
+    <p style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.2);font-size:11px;font-weight:600;white-space:nowrap">Press ESC or tap outside to close</p>
 </div>
 
 <script>
-// ── Entity (family/child) tabs ──
-function switchEntity(index) {
-    document.querySelectorAll('.entity-btn').forEach((b, i) => b.classList.toggle('active', i === index));
-    document.querySelectorAll('.entity-panel').forEach((p, i) => p.classList.toggle('active', i === index));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+// ── Scroll reveal ──
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            revealObserver.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+function initReveal() {
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-scale,.reveal-right').forEach(el => {
+        revealObserver.observe(el);
+    });
+}
+
+// ── Entity select ──
+function selectEntity(index) {
+    document.querySelectorAll('.entity-card').forEach((c, i) => c.classList.toggle('active-card', i === index));
+    document.querySelectorAll('.detail-panel').forEach((p, i) => {
+        if (i === index) {
+            p.classList.add('active');
+            setTimeout(() => initReveal(), 50);
+        } else {
+            p.classList.remove('active');
+        }
+    });
+    setTimeout(() => {
+        const panel = document.getElementById('panel-' + index);
+        if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
 }
 
 // ── Year filter ──
 function switchYear(panelId, year) {
-    document.querySelectorAll(`.year-btn[data-panel="${panelId}"]`).forEach(btn => {
+    document.querySelectorAll(`.year-pill[data-panel="${panelId}"]`).forEach(btn => {
         btn.classList.toggle('active', btn.dataset.year === String(year));
-        if (btn.classList.contains('active')) {
-            btn.classList.add('bg-orange-500','text-white','border-orange-500');
-            btn.classList.remove('bg-white','bg-orange-50','text-gray-600','text-orange-600','border-gray-200','border-orange-200');
-        } else {
-            btn.classList.remove('bg-orange-500','text-white','border-orange-500');
-            btn.classList.add('bg-white','text-gray-600','border-gray-200');
-        }
     });
     document.querySelectorAll(`.year-section[data-panel="${panelId}"]`).forEach(sec => {
         sec.classList.toggle('active', sec.dataset.section === String(year));
     });
+    setTimeout(() => initReveal(), 50);
 }
 
 // ── Lightbox ──
 function openLightbox(src, type, caption, downloadUrl) {
-    const lb      = document.getElementById('lightbox');
-    const img     = document.getElementById('lb-img');
-    const video   = document.getElementById('lb-video');
-    const capEl   = document.getElementById('lb-caption');
-    const dlBtn   = document.getElementById('lb-download');
+    const lb  = document.getElementById('lightbox');
+    const img = document.getElementById('lb-img');
+    const vid = document.getElementById('lb-video');
+    const inner = document.getElementById('lb-inner');
 
     if (type === 'video') {
-        video.src           = src;
-        video.style.display = 'block';
-        img.style.display   = 'none';
-        img.src             = '';
+        vid.src = src; vid.style.display = 'block';
+        img.style.display = 'none'; img.src = '';
     } else {
-        img.src             = src;
-        img.style.display   = 'block';
-        video.style.display = 'none';
-        video.pause();
-        video.src = '';
+        img.src = src; img.style.display = 'block';
+        vid.style.display = 'none'; vid.pause(); vid.src = '';
     }
-
-    capEl.textContent = caption || '';
-    dlBtn.href        = downloadUrl || src;
+    document.getElementById('lb-caption').textContent = caption || '';
+    document.getElementById('lb-download').href = downloadUrl || src;
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
+    inner.style.animation = 'none';
+    requestAnimationFrame(() => { inner.style.animation = 'scaleIn .25s cubic-bezier(.34,1.1,.64,1) both'; });
 }
-
 function closeLightbox() {
-    const lb    = document.getElementById('lightbox');
-    const video = document.getElementById('lb-video');
-    video.pause();
-    video.src           = '';
-    lb.classList.remove('open');
+    const vid = document.getElementById('lb-video');
+    vid.pause(); vid.src = '';
+    document.getElementById('lightbox').classList.remove('open');
     document.body.style.overflow = '';
 }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeLightbox();
-});
+// ── Touch swipe to close lightbox ──
+let tsY = 0;
+document.getElementById('lightbox').addEventListener('touchstart', e => { tsY = e.touches[0].clientY; }, {passive:true});
+document.getElementById('lightbox').addEventListener('touchend', e => {
+    if (e.changedTouches[0].clientY - tsY > 80) closeLightbox();
+}, {passive:true});
 
-// ── Init year buttons visual state ──
-document.querySelectorAll('.year-btn.active').forEach(btn => {
-    btn.classList.add('bg-orange-500','text-white','border-orange-500');
-    btn.classList.remove('bg-orange-50','text-orange-600','border-orange-200');
-});
-
-// ══ Language controller ══════════════════════════════════════════
-
+// ── Language ──
 const DASH_LANGS = {
-    en: { label:'EN', flag:'https://flagcdn.com/w40/us.png', name:'English' },
-    fr: { label:'FR', flag:'https://flagcdn.com/w40/fr.png', name:'Français' },
-    km: { label:'KM', flag:'https://flagcdn.com/w40/kh.png', name:'ខ្មែរ' }
+    en:{label:'EN',flag:'https://flagcdn.com/w40/us.png'},
+    fr:{label:'FR',flag:'https://flagcdn.com/w40/fr.png'},
+    km:{label:'KM',flag:'https://flagcdn.com/w40/kh.png'}
 };
 let dashCurrentLang = localStorage.getItem('gt_lang') || 'fr';
 
-function dashTriggerTranslate(targetLang) {
+function dashTriggerTranslate(lang) {
     return new Promise(resolve => {
         const exp = 'expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        document.cookie = 'googtrans=; ' + exp;
-        document.cookie = 'googtrans=; ' + exp + ' domain=' + location.hostname + ';';
-        document.cookie = 'googtrans=; ' + exp + ' domain=.' + location.hostname + ';';
-        if (targetLang === 'en') { resolve(); setTimeout(() => location.reload(), 80); return; }
-        const pair = '/en/' + targetLang;
-        document.cookie = 'googtrans=' + pair + '; path=/';
-        document.cookie = 'googtrans=' + pair + '; path=/; domain=' + location.hostname;
+        document.cookie = 'googtrans=; '+exp;
+        document.cookie = 'googtrans=; '+exp+' domain='+location.hostname+';';
+        document.cookie = 'googtrans=; '+exp+' domain=.'+location.hostname+';';
+        if (lang === 'en') { resolve(); setTimeout(()=>location.reload(),80); return; }
+        const pair = '/en/'+lang;
+        document.cookie = 'googtrans='+pair+'; path=/';
+        document.cookie = 'googtrans='+pair+'; path=/; domain='+location.hostname;
         const trySelect = tries => {
             const sel = document.querySelector('select.goog-te-combo');
-            if (sel) { sel.value = targetLang; sel.dispatchEvent(new Event('change')); resolve(); }
-            else if (tries > 0) setTimeout(() => trySelect(tries - 1), 200);
-            else { resolve(); setTimeout(() => location.reload(), 80); }
+            if (sel) { sel.value=lang; sel.dispatchEvent(new Event('change')); resolve(); }
+            else if (tries>0) setTimeout(()=>trySelect(tries-1),200);
+            else { resolve(); setTimeout(()=>location.reload(),80); }
         };
         trySelect(8);
     });
 }
-
 function dashUpdateUI(lang) {
-    const cfg = DASH_LANGS[lang] || DASH_LANGS.en;
-    const flagEl  = document.getElementById('dash-flag');
-    const labelEl = document.getElementById('dash-lang-label');
-    if (flagEl)  { flagEl.src = cfg.flag; flagEl.alt = cfg.label; }
-    if (labelEl) labelEl.textContent = cfg.label;
-    ['en','fr','km'].forEach(l => {
-        document.getElementById('dash-btn-' + l)?.classList.toggle('active', l === lang);
-        const chk = document.getElementById('dash-check-' + l);
-        if (chk) chk.classList.toggle('hidden', l !== lang);
+    const cfg = DASH_LANGS[lang]||DASH_LANGS.en;
+    const f = document.getElementById('dash-flag');
+    const l = document.getElementById('dash-lang-label');
+    if (f){f.src=cfg.flag;f.alt=cfg.label;}
+    if (l) l.textContent=cfg.label;
+    ['en','fr','km'].forEach(lc=>{
+        document.getElementById('dash-btn-'+lc)?.classList.toggle('active',lc===lang);
+        const chk=document.getElementById('dash-check-'+lc);
+        if(chk) chk.classList.toggle('hidden',lc!==lang);
     });
-    document.body.style.fontFamily = lang === 'km'
-        ? "'Hanuman','Battambang','Content','Montserrat',sans-serif"
-        : "'Montserrat',sans-serif";
-    dashCurrentLang = lang;
-    localStorage.setItem('gt_lang', lang);
+    document.body.style.fontFamily = lang==='km'
+        ? "'Hanuman','Battambang','Content','Plus Jakarta Sans',sans-serif"
+        : "'Plus Jakarta Sans',sans-serif";
+    dashCurrentLang=lang;
+    localStorage.setItem('gt_lang',lang);
 }
-
 async function dashSwitchLang(lang) {
-    if (lang === dashCurrentLang) { dashClosePanel(); return; }
-    dashUpdateUI(lang);
-    await dashTriggerTranslate(lang);
-    dashClosePanel();
+    if (lang===dashCurrentLang){dashClosePanel();return;}
+    dashUpdateUI(lang); await dashTriggerTranslate(lang); dashClosePanel();
 }
-
-function dashTogglePanel() {
-    const panel = document.getElementById('dash-translate-panel');
-    const caret = document.getElementById('dash-caret');
-    const open  = panel.classList.toggle('open');
-    if (caret) caret.style.transform = open ? 'rotate(180deg)' : '';
+function dashTogglePanel(){
+    const p=document.getElementById('dash-translate-panel');
+    const c=document.getElementById('dash-caret');
+    const o=p.classList.toggle('open');
+    if(c) c.style.transform=o?'rotate(180deg)':'';
 }
-function dashClosePanel() {
-    const p = document.getElementById('dash-translate-panel');
-    const c = document.getElementById('dash-caret');
-    if (p) p.classList.remove('open');
-    if (c) c.style.transform = '';
+function dashClosePanel(){
+    const p=document.getElementById('dash-translate-panel');
+    const c=document.getElementById('dash-caret');
+    if(p) p.classList.remove('open');
+    if(c) c.style.transform='';
 }
-document.addEventListener('click', e => {
-    const w = document.getElementById('dash-translate-wrapper');
-    if (w && !w.contains(e.target)) dashClosePanel();
+document.addEventListener('click',e=>{
+    const w=document.getElementById('dash-translate-wrapper');
+    if(w&&!w.contains(e.target)) dashClosePanel();
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const cookie = document.cookie.split(';').find(c => c.trim().startsWith('googtrans='));
-    const stored = localStorage.getItem('gt_lang');
-    if (cookie) {
-        const parts = cookie.split('/');
-        const cl = parts[parts.length - 1].trim();
-        if (cl && DASH_LANGS[cl]) { dashCurrentLang = cl; localStorage.setItem('gt_lang', cl); }
-    } else if (!stored) {
-        const pair = '/en/fr';
-        document.cookie = 'googtrans=' + pair + '; path=/';
-        document.cookie = 'googtrans=' + pair + '; path=/; domain=' + location.hostname;
-        localStorage.setItem('gt_lang', 'fr');
-        location.reload();
-        return;
+document.addEventListener('DOMContentLoaded',()=>{
+    // Init scroll reveal
+    initReveal();
+
+    // Card entrance stagger
+    document.querySelectorAll('.entity-card').forEach((card,i)=>{
+        card.style.animationDelay = (i*0.08)+'s';
+    });
+
+    // Language
+    const cookie=document.cookie.split(';').find(c=>c.trim().startsWith('googtrans='));
+    const stored=localStorage.getItem('gt_lang');
+    if (cookie){
+        const parts=cookie.split('/');
+        const cl=parts[parts.length-1].trim();
+        if(cl&&DASH_LANGS[cl]){dashCurrentLang=cl;localStorage.setItem('gt_lang',cl);}
+    } else if(!stored){
+        const pair='/en/fr';
+        document.cookie='googtrans='+pair+'; path=/';
+        document.cookie='googtrans='+pair+'; path=/; domain='+location.hostname;
+        localStorage.setItem('gt_lang','fr');
+        location.reload(); return;
     }
     dashUpdateUI(dashCurrentLang);
 });
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
 </body>
-</html>
+</html> 

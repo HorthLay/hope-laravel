@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Blade;
 use App\Helpers\NumberHelper;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,8 +37,20 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo \App\Helpers\NumberHelper::formatDuration($expression); ?>";
         });
 
-        //  if (config('app.env') === 'local') {
-        //     URL::forceScheme('https');
-        // }
+        View::share('settings', $this->loadSettings());
+
+         if (config('app.env') === 'local') {
+            URL::forceScheme('https');
+        }
+    }
+
+
+
+        private function loadSettings(): array
+    {
+        $settingsFile = storage_path('app/settings.json');
+        return file_exists($settingsFile)
+            ? (json_decode(file_get_contents($settingsFile), true) ?? [])
+            : [];
     }
 }
