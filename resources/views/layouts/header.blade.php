@@ -268,12 +268,6 @@ body { top: 0 !important; }
     padding: 8px 16px; position: sticky; top: 0; z-index: 1000;
     box-shadow: 0 2px 12px rgba(0,0,0,.25);
 }
-#mobile-nav-bar {
-    background: #fff; border-bottom: 3px solid #e5e7eb;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    overflow-x: auto; gap: 4px;
-}
 /* Mobile drawer */
 .mobile-menu-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:1090; }
 .mobile-menu-overlay.active { display:block; }
@@ -347,7 +341,7 @@ body { top: 0 !important; }
 
 /* ── Responsive visibility ── */
 @media (max-width: 1023px) { #util-bar, #logo-banner, #main-nav { display: none; } }
-@media (min-width: 1024px) { #mobile-topbar, #mobile-nav-bar { display: none; } }
+@media (min-width: 1024px) { #mobile-topbar { display: none; } }
 </style>
 
 {{-- ═══════════════════════════════════════════
@@ -553,28 +547,6 @@ body { top: 0 !important; }
     </div>
 </div>
 
-<div id="mobile-nav-bar">
-    @auth('sponsor')
-        <a href="{{ route('sponsor.dashboard') }}" class="flex items-center gap-1.5 py-3 text-xs font-black uppercase tracking-wide whitespace-nowrap flex-shrink-0" style="color:#f5c518">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-        <a href="{{ route('home') }}#news" class="py-3 text-xs font-black uppercase tracking-wide text-gray-700 hover:text-orange-500 whitespace-nowrap flex-shrink-0">News</a>
-        <form method="POST" action="{{ route('sponsor.logout') }}" style="display:inline;margin:0;flex-shrink:0;">
-            @csrf
-            <button type="submit" class="my-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-[11px] font-black uppercase rounded-md transition" style="border:none;cursor:pointer;">
-                <i class="fas fa-sign-out-alt mr-1"></i> Logout
-            </button>
-        </form>
-    @else
-        <a href="{{ route('home') }}#news"     class="py-3 text-xs font-black uppercase tracking-wide text-gray-700 hover:text-orange-500 whitespace-nowrap flex-shrink-0">News</a>
-        <a href="{{ route('home') }}#our-work" class="py-3 text-xs font-black uppercase tracking-wide text-gray-700 hover:text-orange-500 whitespace-nowrap flex-shrink-0">What We Do</a>
-        <a href="{{ route('sponsor.login') }}"
-           class="my-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-[11px] font-black uppercase rounded-md transition flex-shrink-0">
-            <i class="fas fa-heart mr-1"></i> Donate
-        </a>
-    @endauth
-</div>
-
 {{-- Mobile overlay --}}
 <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 
@@ -630,7 +602,30 @@ body { top: 0 !important; }
 
         {{-- ══ Accordion nav — 3 items only ══ --}}
         <nav>
-            {{-- ① What We Do --}}
+            {{-- ① Who We Are (now FIRST) --}}
+            <div class="mob-nav-item" id="mob-whoweare">
+                <div class="mob-nav-header" onclick="toggleMobMenu('mob-whoweare')">
+                    <i class="fas fa-users mob-nav-icon"></i>
+                    <span class="mob-nav-title" data-en="Who We Are" data-km="អំពីយើង" data-fr="Qui sommes-nous">Who We Are</span>
+                    <i class="fas fa-chevron-down mob-caret"></i>
+                </div>
+                <div class="mob-nav-body">
+                    <div class="mob-drop-title"><i class="fas fa-info-circle mr-1 text-orange-400"></i> Our Association</div>
+                    <a href="{{ route('about.presentation') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-dove"></i> About Us</a>
+                    <a href="{{ route('about.vision') }}"        class="mob-drop-link mobile-menu-link"><i class="fas fa-eye"></i> Vision & Ethics</a>
+                    <a href="{{ route('about.team') }}"          class="mob-drop-link mobile-menu-link"><i class="fas fa-users"></i> Our Team</a>
+                    <a href="{{ route('about.partners') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-handshake"></i> Partners</a>
+                    <div class="mob-drop-title mt-2"><i class="fas fa-heart mr-1 text-orange-400"></i> Sponsorship</div>
+                    <a href="{{ route('sponsor.child.file') }}"     class="mob-drop-link mobile-menu-link"><i class="fas fa-child"></i> Child Sponsorship</a>
+                    <a href="{{ route('sponsor.child.stories') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-book-open"></i> Child Stories</a>
+                    <a href="{{ route('sponsor.family.file') }}"    class="mob-drop-link mobile-menu-link"><i class="fas fa-home"></i> Family Sponsorship</a>
+                    <a href="{{ route('sponsor.family.stories') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-star"></i> Family Stories</a>
+                    <a href="{{ route('sponsor.faq') }}"            class="mob-drop-link mobile-menu-link"><i class="fas fa-question-circle"></i> FAQ</a>
+                    <div class="pb-2"></div>
+                </div>
+            </div>
+
+            {{-- ② What We Do (now SECOND) --}}
             <div class="mob-nav-item" id="mob-whatwedo">
                 <div class="mob-nav-header" onclick="toggleMobMenu('mob-whatwedo')">
                     <i class="fas fa-hands-helping mob-nav-icon"></i>
@@ -652,29 +647,6 @@ body { top: 0 !important; }
                     <div class="mob-drop-title mt-2"><i class="fas fa-city mr-1 text-orange-400"></i> Community</div>
                     <a href="{{ route('community.infrastructure') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-hard-hat"></i> Infrastructure</a>
                     <a href="{{ route('community.water') }}"          class="mob-drop-link mobile-menu-link"><i class="fas fa-tint"></i> Water & Sanitation</a>
-                    <div class="pb-2"></div>
-                </div>
-            </div>
-
-            {{-- ② Who We Are --}}
-            <div class="mob-nav-item" id="mob-whoweare">
-                <div class="mob-nav-header" onclick="toggleMobMenu('mob-whoweare')">
-                    <i class="fas fa-users mob-nav-icon"></i>
-                    <span class="mob-nav-title" data-en="Who We Are" data-km="អំពីយើង" data-fr="Qui sommes-nous">Who We Are</span>
-                    <i class="fas fa-chevron-down mob-caret"></i>
-                </div>
-                <div class="mob-nav-body">
-                    <div class="mob-drop-title"><i class="fas fa-info-circle mr-1 text-orange-400"></i> Our Association</div>
-                    <a href="{{ route('about.presentation') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-dove"></i> About Us</a>
-                    <a href="{{ route('about.vision') }}"        class="mob-drop-link mobile-menu-link"><i class="fas fa-eye"></i> Vision & Ethics</a>
-                    <a href="{{ route('about.team') }}"          class="mob-drop-link mobile-menu-link"><i class="fas fa-users"></i> Our Team</a>
-                    <a href="{{ route('about.partners') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-handshake"></i> Partners</a>
-                    <div class="mob-drop-title mt-2"><i class="fas fa-heart mr-1 text-orange-400"></i> Sponsorship</div>
-                    <a href="{{ route('sponsor.child.file') }}"     class="mob-drop-link mobile-menu-link"><i class="fas fa-child"></i> Child Sponsorship</a>
-                    <a href="{{ route('sponsor.child.stories') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-book-open"></i> Child Stories</a>
-                    <a href="{{ route('sponsor.family.file') }}"    class="mob-drop-link mobile-menu-link"><i class="fas fa-home"></i> Family Sponsorship</a>
-                    <a href="{{ route('sponsor.family.stories') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-star"></i> Family Stories</a>
-                    <a href="{{ route('sponsor.faq') }}"            class="mob-drop-link mobile-menu-link"><i class="fas fa-question-circle"></i> FAQ</a>
                     <div class="pb-2"></div>
                 </div>
             </div>

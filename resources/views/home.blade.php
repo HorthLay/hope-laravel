@@ -13,6 +13,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Hanuman&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     @include('css.style')
     <style>
@@ -123,11 +124,9 @@
         .contact-grid-home { display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px; align-items: start; }
         @media (max-width: 900px) { .contact-grid-home { grid-template-columns: 1fr; } }
 
-        /* Desktop-only right col */
         .contact-desktop-col { display: flex; flex-direction: column; gap: 20px; }
         @media (max-width: 767px) { .contact-desktop-col { display: none !important; } }
 
-        /* Mobile trigger button */
         .contact-mobile-trigger {
             display: none;
             align-items: center; justify-content: center; gap: 10px;
@@ -222,6 +221,191 @@
     </style>
 </head>
 <body>
+
+{{-- ═══════════════════════════════════════════════════════
+     MAINTENANCE MODE
+═══════════════════════════════════════════════════════ --}}
+@if(!empty($settings['maintenance_mode']) && $settings['maintenance_mode'])
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under Maintenance | {{ $settings['site_name'] ?? 'Hope & Impact' }}</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0f172a;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative;
+        }
+        .bg-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(80px); }
+        .bg-orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(249,115,22,.18) 0%, transparent 70%);
+            top: -150px; right: -100px;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        .bg-orb-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(251,191,36,.1) 0%, transparent 70%);
+            bottom: -120px; left: -80px;
+            animation: orbFloat 10s ease-in-out infinite reverse;
+        }
+        .bg-orb-3 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(59,130,246,.1) 0%, transparent 70%);
+            top: 40%; left: 50%;
+            animation: orbFloat3 12s ease-in-out infinite 2s;
+        }
+        @keyframes orbFloat      { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-30px) scale(1.05)} }
+        @keyframes orbFloat3     { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-55%) scale(1.05)} }
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+            background-size: 48px 48px; pointer-events: none;
+        }
+        .maint-card {
+            position: relative; z-index: 10;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.1);
+            backdrop-filter: blur(24px);
+            border-radius: 32px; padding: 52px 44px 48px;
+            max-width: 520px; width: calc(100% - 32px);
+            text-align: center;
+            box-shadow: 0 32px 96px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1);
+            animation: cardIn .7s cubic-bezier(.34,1.1,.64,1) both;
+        }
+        @keyframes cardIn { from{opacity:0;transform:translateY(32px) scale(.96)} to{opacity:1;transform:none} }
+        .gear-wrap {
+            width: 88px; height: 88px; border-radius: 24px; margin: 0 auto 28px;
+            background: linear-gradient(135deg, rgba(249,115,22,.25), rgba(234,88,12,.15));
+            border: 1px solid rgba(249,115,22,.3);
+            display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .gear-wrap::before {
+            content: ''; position: absolute; inset: -6px; border-radius: 28px;
+            border: 1px dashed rgba(249,115,22,.25);
+            animation: gearSpin 12s linear infinite;
+        }
+        @keyframes gearSpin { to{transform:rotate(360deg)} }
+        .gear-icon { font-size: 36px; color: #f97316; animation: gearSpin 6s linear infinite; }
+        .maint-label {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: rgba(249,115,22,.15); border: 1px solid rgba(249,115,22,.3);
+            color: #fb923c; font-size: 11px; font-weight: 800; letter-spacing: .1em;
+            text-transform: uppercase; padding: 5px 14px; border-radius: 99px; margin-bottom: 20px;
+            animation: pulseLbl 2s ease-in-out infinite;
+        }
+        @keyframes pulseLbl { 0%,100%{opacity:1} 50%{opacity:.65} }
+        .maint-label .dot { width: 7px; height: 7px; border-radius: 50%; background: #f97316; animation: pulseLbl 1.4s ease-in-out infinite; }
+        h1 { font-family: 'Instrument Serif', serif; font-size: clamp(26px,6vw,38px); color: #fff; line-height: 1.2; margin-bottom: 14px; }
+        h1 em { color: #fb923c; font-style: italic; }
+        .maint-desc { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 32px; font-weight: 500; }
+        .maint-features { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+        .maint-feat {
+            display: flex; align-items: center; gap: 7px;
+            background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+            border-radius: 10px; padding: 8px 14px;
+            font-size: 12px; font-weight: 700; color: rgba(255,255,255,.7);
+        }
+        .maint-feat i { font-size: 11px; color: #f97316; }
+        .maint-divider { height: 1px; background: linear-gradient(to right, transparent, rgba(255,255,255,.1), transparent); margin-bottom: 28px; }
+        .maint-contact { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .maint-contact a {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px; border-radius: 12px; text-decoration: none;
+            font-size: 13px; font-weight: 700; transition: all .2s; border: 1px solid;
+        }
+        .maint-contact a.primary {
+            background: linear-gradient(135deg,#f97316,#ea580c); border-color: transparent; color: #fff;
+            box-shadow: 0 4px 20px rgba(249,115,22,.35);
+        }
+        .maint-contact a.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(249,115,22,.45); }
+        .maint-contact a.secondary { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.7); }
+        .maint-contact a.secondary:hover { background: rgba(255,255,255,.1); color: #fff; }
+        .maint-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 32px; }
+        .maint-logo img { height: 52px; width: auto; filter: brightness(1.1); }
+        .maint-logo-name { font-size: 15px; font-weight: 900; color: #fff; text-align: left; }
+        .maint-logo-tag  { font-size: 11px; color: rgba(255,255,255,.4); font-weight: 600; text-align: left; }
+        .maint-footer { margin-top: 36px; font-size: 11px; color: rgba(255,255,255,.25); font-weight: 600; }
+        @media (max-width: 480px) {
+            .maint-card { padding: 36px 24px 32px; border-radius: 24px; }
+            .gear-wrap { width: 72px; height: 72px; border-radius: 20px; }
+            .gear-icon { font-size: 28px; }
+            .maint-feat { font-size: 11px; padding: 7px 11px; }
+            .maint-contact a { padding: 9px 14px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="maint-card">
+        @if(!empty($settings['logo']))
+        <div class="maint-logo">
+            <img src="{{ asset($settings['logo']) }}" alt="{{ $settings['site_name'] ?? '' }}">
+            <div>
+                <div class="maint-logo-name">{{ $settings['site_name'] ?? 'Hope & Impact' }}</div>
+                <div class="maint-logo-tag">{{ $settings['site_tagline'] ?? '' }}</div>
+            </div>
+        </div>
+        @else
+        <div style="font-size:15px;font-weight:900;color:#fff;margin-bottom:28px;opacity:.7">{{ $settings['site_name'] ?? 'Hope & Impact' }}</div>
+        @endif
+        <div class="maint-label"><span class="dot"></span> Under Maintenance</div>
+        <div class="gear-wrap"><i class="fas fa-cog gear-icon"></i></div>
+        <h1>We'll be <em>back soon!</em></h1>
+        <p class="maint-desc">Our website is currently undergoing scheduled maintenance and improvements. We apologize for the inconvenience and appreciate your patience.</p>
+        <div class="maint-features">
+            <div class="maint-feat"><i class="fas fa-wrench"></i> Updates in progress</div>
+            <div class="maint-feat"><i class="fas fa-shield-alt"></i> Securing systems</div>
+            <div class="maint-feat"><i class="fas fa-rocket"></i> Performance boost</div>
+        </div>
+        <div class="maint-divider"></div>
+        <p style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:16px;font-weight:600">Need urgent assistance?</p>
+        <div class="maint-contact">
+            @php
+                $mEmail    = $settings['contact_email'] ?? null;
+                $mWhatsapp = $settings['whatsapp_url']  ?? null;
+                $mFacebook = $settings['facebook_url']  ?? null;
+            @endphp
+            @if($mEmail)
+            <a href="https://mail.google.com/mail/?view=cm&to={{ $mEmail }}" target="_blank" class="primary">
+                <i class="fas fa-envelope"></i> Email Us
+            </a>
+            @endif
+            @if($mWhatsapp)
+            <a href="https://wa.me/{{ $mWhatsapp }}" target="_blank" class="secondary">
+                <i class="fab fa-whatsapp" style="color:#22c55e"></i> WhatsApp
+            </a>
+            @endif
+            @if($mFacebook)
+            <a href="{{ $mFacebook }}" target="_blank" class="secondary">
+                <i class="fab fa-facebook" style="color:#60a5fa"></i> Facebook
+            </a>
+            @endif
+            @if(!$mEmail && !$mWhatsapp && !$mFacebook)
+            <span style="font-size:12px;color:rgba(255,255,255,.35)">Contact information coming soon.</span>
+            @endif
+        </div>
+        <p class="maint-footer">&copy; {{ date('Y') }} {{ $settings['site_name'] ?? 'Hope & Impact' }} &middot; All rights reserved</p>
+    </div>
+</body>
+</html>
+<?php exit; ?>
+@endif
+{{-- ── END MAINTENANCE MODE ── --}}
 
 @include('layouts.loading')
 @include('layouts.header')
@@ -856,8 +1040,6 @@
 
 <section id="contact" class="contact-section">
     <div class="max-w-7xl mx-auto px-4">
-
-        {{-- Section header --}}
         <div class="text-center mb-12 reveal">
             <div class="inline-flex items-center gap-2 bg-orange-100 text-orange-600 text-xs font-black px-4 py-1.5 rounded-full mb-4 border border-orange-200">
                 <i class="fas fa-paper-plane text-[10px]"></i> Get In Touch
@@ -866,7 +1048,7 @@
             <p class="text-gray-500 text-lg max-w-xl mx-auto">Have questions or want to become a sponsor? Our team is ready to help you make a difference.</p>
         </div>
 
-        {{-- Mobile trigger button (hidden on desktop) --}}
+        {{-- Mobile trigger --}}
         <button class="contact-mobile-trigger reveal" onclick="openHomeContactModal()">
             <i class="fas fa-paper-plane"></i>
             <span>Contact Us</span>
@@ -874,7 +1056,6 @@
         </button>
 
         <div class="contact-grid-home" style="margin-top:24px;">
-
             {{-- LEFT: Why card --}}
             <div class="reveal-left">
                 <div class="contact-why-card">
@@ -909,97 +1090,67 @@
                 </div>
             </div>
 
-            {{-- RIGHT: Contact buttons — desktop only --}}
+            {{-- RIGHT: Contact buttons desktop --}}
             <div class="contact-desktop-col reveal-right">
                 <div class="contact-info-card">
                     <h3 class="text-xl font-black text-gray-900 mb-1">Reach Out to Our Team</h3>
                     <p class="text-gray-400 text-sm mb-6 leading-relaxed">Choose any channel below — we typically respond within a few hours.</p>
                     <div style="display:flex;flex-direction:column;gap:10px;">
-
                         @if($c_emailUrl)
                         <a href="{{ $c_emailUrl }}" target="_blank" class="contact-btn-home cb-email">
                             <div class="cbtn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
-                            <div class="cbtn-body">
-                                <div class="cbtn-title">Email Us</div>
-                                <div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div>
-                            </div>
+                            <div class="cbtn-body"><div class="cbtn-title">Email Us</div><div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div></div>
                             <i class="fas fa-external-link-alt cbtn-arrow"></i>
                         </a>
                         @endif
-
                         @if($c_whatsappUrl)
                         <a href="{{ $c_whatsappUrl }}" target="_blank" class="contact-btn-home cb-whatsapp">
                             <div class="cbtn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:22px"></i></div>
-                            <div class="cbtn-body">
-                                <div class="cbtn-title">WhatsApp</div>
-                                <div class="cbtn-sub">Chat with us instantly</div>
-                            </div>
+                            <div class="cbtn-body"><div class="cbtn-title">WhatsApp</div><div class="cbtn-sub">Chat with us instantly</div></div>
                             <i class="fas fa-external-link-alt cbtn-arrow"></i>
                         </a>
                         @endif
-
                         @if($c_telegramUrl)
                         <a href="{{ $c_telegramUrl }}" target="_blank" class="contact-btn-home cb-telegram">
                             <div class="cbtn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:22px"></i></div>
-                            <div class="cbtn-body">
-                                <div class="cbtn-title">Telegram</div>
-                                <div class="cbtn-sub">{{ $contactSettings['telegram_url'] ?? '' }}</div>
-                            </div>
+                            <div class="cbtn-body"><div class="cbtn-title">Telegram</div><div class="cbtn-sub">{{ $contactSettings['telegram_url'] ?? '' }}</div></div>
                             <i class="fas fa-external-link-alt cbtn-arrow"></i>
                         </a>
                         @endif
-
                         @if($c_facebookUrl)
                         <a href="{{ $c_facebookUrl }}" target="_blank" class="contact-btn-home cb-facebook">
                             <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb;font-size:22px"></i></div>
-                            <div class="cbtn-body">
-                                <div class="cbtn-title">Facebook</div>
-                                <div class="cbtn-sub">Message our official page</div>
-                            </div>
+                            <div class="cbtn-body"><div class="cbtn-title">Facebook</div><div class="cbtn-sub">Message our official page</div></div>
                             <i class="fas fa-external-link-alt cbtn-arrow"></i>
                         </a>
                         @endif
-
                         @if($c_instagramUrl)
                         <a href="{{ $c_instagramUrl }}" target="_blank" class="contact-btn-home cb-instagram">
                             <div class="cbtn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:22px"></i></div>
-                            <div class="cbtn-body">
-                                <div class="cbtn-title">Instagram</div>
-                                <div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div>
-                            </div>
+                            <div class="cbtn-body"><div class="cbtn-title">Instagram</div><div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div></div>
                             <i class="fas fa-external-link-alt cbtn-arrow"></i>
                         </a>
                         @endif
-
                         @if($c_youtubeUrl)
                         <a href="{{ $c_youtubeUrl }}" target="_blank" class="contact-btn-home cb-youtube">
                             <div class="cbtn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626;font-size:22px"></i></div>
-                            <div class="cbtn-body">
-                                <div class="cbtn-title">YouTube</div>
-                                <div class="cbtn-sub">Watch our impact stories</div>
-                            </div>
+                            <div class="cbtn-body"><div class="cbtn-title">YouTube</div><div class="cbtn-sub">Watch our impact stories</div></div>
                             <i class="fas fa-external-link-alt cbtn-arrow"></i>
                         </a>
                         @endif
-
                         @if($c_linkedinUrl)
                         <a href="{{ $c_linkedinUrl }}" target="_blank" class="contact-btn-home cb-linkedin">
                             <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:22px"></i></div>
-                            <div class="cbtn-body">
-                                <div class="cbtn-title">LinkedIn</div>
-                                <div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div>
-                            </div>
+                            <div class="cbtn-body"><div class="cbtn-title">LinkedIn</div><div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div></div>
                             <i class="fas fa-external-link-alt cbtn-arrow"></i>
                         </a>
                         @endif
-
                         @if(!$c_emailUrl && !$c_whatsappUrl && !$c_telegramUrl && !$c_facebookUrl && !$c_instagramUrl && !$c_youtubeUrl && !$c_linkedinUrl)
                         <div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;background:#f9fafb;border-radius:16px;">
                             <i class="fas fa-info-circle" style="margin-right:6px;color:#f97316"></i>
                             Contact links will appear once configured in settings.
                         </div>
                         @endif
-
                     </div>
                     <div class="mt-6 pt-5 border-t border-gray-100 text-center">
                         <p class="text-xs text-gray-400">
@@ -1009,7 +1160,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -1029,91 +1179,61 @@
             </button>
         </div>
         <div class="home-contact-modal-body">
-
             @if($c_emailUrl)
             <a href="{{ $c_emailUrl }}" target="_blank" class="contact-btn-home cb-email">
                 <div class="cbtn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
-                <div class="cbtn-body">
-                    <div class="cbtn-title">Email Us</div>
-                    <div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div>
-                </div>
+                <div class="cbtn-body"><div class="cbtn-title">Email Us</div><div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div></div>
                 <i class="fas fa-external-link-alt cbtn-arrow"></i>
             </a>
             @endif
-
             @if($c_whatsappUrl)
             <a href="{{ $c_whatsappUrl }}" target="_blank" class="contact-btn-home cb-whatsapp">
                 <div class="cbtn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:22px"></i></div>
-                <div class="cbtn-body">
-                    <div class="cbtn-title">WhatsApp</div>
-                    <div class="cbtn-sub">Chat with us instantly</div>
-                </div>
+                <div class="cbtn-body"><div class="cbtn-title">WhatsApp</div><div class="cbtn-sub">Chat with us instantly</div></div>
                 <i class="fas fa-external-link-alt cbtn-arrow"></i>
             </a>
             @endif
-
             @if($c_telegramUrl)
             <a href="{{ $c_telegramUrl }}" target="_blank" class="contact-btn-home cb-telegram">
                 <div class="cbtn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:22px"></i></div>
-                <div class="cbtn-body">
-                    <div class="cbtn-title">Telegram</div>
-                    <div class="cbtn-sub">@{{ $contactSettings['telegram_url'] ?? '' }}</div>
-                </div>
+                <div class="cbtn-body"><div class="cbtn-title">Telegram</div><div class="cbtn-sub">@{{ $contactSettings['telegram_url'] ?? '' }}</div></div>
                 <i class="fas fa-external-link-alt cbtn-arrow"></i>
             </a>
             @endif
-
             @if($c_facebookUrl)
             <a href="{{ $c_facebookUrl }}" target="_blank" class="contact-btn-home cb-facebook">
                 <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb;font-size:22px"></i></div>
-                <div class="cbtn-body">
-                    <div class="cbtn-title">Facebook</div>
-                    <div class="cbtn-sub">Message our official page</div>
-                </div>
+                <div class="cbtn-body"><div class="cbtn-title">Facebook</div><div class="cbtn-sub">Message our official page</div></div>
                 <i class="fas fa-external-link-alt cbtn-arrow"></i>
             </a>
             @endif
-
             @if($c_instagramUrl)
             <a href="{{ $c_instagramUrl }}" target="_blank" class="contact-btn-home cb-instagram">
                 <div class="cbtn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:22px"></i></div>
-                <div class="cbtn-body">
-                    <div class="cbtn-title">Instagram</div>
-                    <div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div>
-                </div>
+                <div class="cbtn-body"><div class="cbtn-title">Instagram</div><div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div></div>
                 <i class="fas fa-external-link-alt cbtn-arrow"></i>
             </a>
             @endif
-
             @if($c_youtubeUrl)
             <a href="{{ $c_youtubeUrl }}" target="_blank" class="contact-btn-home cb-youtube">
                 <div class="cbtn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626;font-size:22px"></i></div>
-                <div class="cbtn-body">
-                    <div class="cbtn-title">YouTube</div>
-                    <div class="cbtn-sub">Watch our impact stories</div>
-                </div>
+                <div class="cbtn-body"><div class="cbtn-title">YouTube</div><div class="cbtn-sub">Watch our impact stories</div></div>
                 <i class="fas fa-external-link-alt cbtn-arrow"></i>
             </a>
             @endif
-
             @if($c_linkedinUrl)
             <a href="{{ $c_linkedinUrl }}" target="_blank" class="contact-btn-home cb-linkedin">
                 <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:22px"></i></div>
-                <div class="cbtn-body">
-                    <div class="cbtn-title">LinkedIn</div>
-                    <div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div>
-                </div>
+                <div class="cbtn-body"><div class="cbtn-title">LinkedIn</div><div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div></div>
                 <i class="fas fa-external-link-alt cbtn-arrow"></i>
             </a>
             @endif
-
             @if(!$c_emailUrl && !$c_whatsappUrl && !$c_telegramUrl && !$c_facebookUrl && !$c_instagramUrl && !$c_youtubeUrl && !$c_linkedinUrl)
             <div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;background:#f9fafb;border-radius:16px;">
                 <i class="fas fa-info-circle" style="margin-right:6px;color:#f97316"></i>
                 Contact links will appear once configured in settings.
             </div>
             @endif
-
             <div style="margin-top:8px;padding-top:16px;border-top:1px solid #f3f4f6;text-align:center;">
                 <p style="font-size:12px;color:#9ca3af;">
                     Want to become a sponsor?
@@ -1129,7 +1249,7 @@
 @include('layouts.ads')
 
 <script>
-// ── Loader + popup ──────────────────────────────────────────────────────
+// ── Loader + popup ──────────────────────────────────
 window.addEventListener('load',()=>{
     setTimeout(()=>{
         document.getElementById('loader')?.classList.add('hidden');
@@ -1141,7 +1261,7 @@ document.getElementById('close-popup')?.addEventListener('click',()=>popup?.clas
 document.getElementById('remind-later')?.addEventListener('click',()=>popup?.classList.remove('active'));
 popup?.addEventListener('click',(e)=>{if(e.target===popup)popup.classList.remove('active');});
 
-// ── Mobile nav ──────────────────────────────────────────────────────────
+// ── Mobile nav ──────────────────────────────────────
 const mobileMenu=document.getElementById('mobile-menu'),mobileMenuOverlay=document.getElementById('mobile-menu-overlay');
 const openMenu=()=>{mobileMenu?.classList.add('active');mobileMenuOverlay?.classList.add('active');document.body.style.overflow='hidden';};
 const closeMenu=()=>{mobileMenu?.classList.remove('active');mobileMenuOverlay?.classList.remove('active');document.body.style.overflow='';};
@@ -1166,7 +1286,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     });
 });
 
-// ── Scroll-reveal ───────────────────────────────────────────────────────
+// ── Scroll-reveal ───────────────────────────────────
 const revealObs=new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
         if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); }
@@ -1180,7 +1300,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.scr
     revealObs.observe(el);
 });
 
-// ── Counter animation ───────────────────────────────────────────────────
+// ── Counter animation ───────────────────────────────
 document.querySelectorAll('.counter').forEach(el=>{
     const obs=new IntersectionObserver((entries)=>{
         entries.forEach(entry=>{
@@ -1194,7 +1314,7 @@ document.querySelectorAll('.counter').forEach(el=>{
     obs.observe(el);
 });
 
-// ── Progress bars ───────────────────────────────────────────────────────
+// ── Progress bars ───────────────────────────────────
 document.querySelectorAll('.progress-fill').forEach(el=>{
     const obs=new IntersectionObserver((entries)=>{
         entries.forEach(entry=>{
@@ -1206,7 +1326,7 @@ document.querySelectorAll('.progress-fill').forEach(el=>{
     obs.observe(el);
 });
 
-// ── Category filter — Latest News ───────────────────────────────────────
+// ── Category filter — News ──────────────────────────
 function filterNewsCat(catId, btn) {
     document.querySelectorAll('.news-cat-btn').forEach(b=>{
         b.classList.remove('active-cat-btn');
@@ -1229,7 +1349,7 @@ function filterNewsCat(catId, btn) {
     document.getElementById('news-grid')?.classList.toggle('hidden',shown===0);
 }
 
-// ── Home contact bottom sheet ───────────────────────────────────────────
+// ── Home contact bottom sheet ───────────────────────
 function openHomeContactModal() {
     document.getElementById('home-contact-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -1250,7 +1370,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHomeCon
     sheet.addEventListener('touchmove',  e => { if (e.touches[0].clientY - ty > 80) closeHomeContactModal(); }, { passive: true });
 })();
 
-// ── Tag filter — Most Read ──────────────────────────────────────────────
+// ── Tag filter — Most Read ──────────────────────────
 function filterTopTag(tagId, btn) {
     document.querySelectorAll('.top-tag-btn').forEach(b=>{b.classList.remove('active-tag-btn');b.classList.add('opacity-60');});
     btn.classList.add('active-tag-btn'); btn.classList.remove('opacity-60');

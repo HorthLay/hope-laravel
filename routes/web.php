@@ -27,6 +27,7 @@ use App\Http\Controllers\SponsorContactController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\SponsorDashboardController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\VerifyHumanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,11 @@ Route::get('/about',      [HomeController::class, 'about'])->name('about');
 Route::get('/privacy-policy',   [HomeController::class, 'privacy'])->name('privacy-policy');
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms-of-service');
 
+Route::get('/verify-human', [VerifyHumanController::class, 'show'])
+    ->name('verify.human');
+
+Route::post('/verify-human/submit', [VerifyHumanController::class, 'submit'])
+    ->name('verify.human.submit');
 
 
 Route::get('/sponsor',      [SponsorController::class, 'index'])->name('sponsor.children');

@@ -1,13 +1,15 @@
 {{-- resources/views/articles/show.blade.php --}}
+@if(!empty($settings['maintenance_mode']) && $settings['maintenance_mode'])
+@include('layouts.maintenance')
+<?php exit; ?>
+@endif
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>{{ $settings['site_name'] ?? 'Hope & Impact' }} | {{ $article->meta_title ?? $article->title }}  </title>
-    @if(!empty($settings['favicon']))
-    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
-    @endif
+    <title>{{ $settings['site_name'] ?? 'Hope & Impact' }} | {{ $article->meta_title ?? $article->title }}</title>
+    @if(!empty($settings['favicon']))<link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">@endif
     <meta name="description" content="{{ $article->meta_description ?? Str::limit(strip_tags($article->excerpt ?? $article->content ?? ''), 160) }}">
     @if($article->meta_keywords)<meta name="keywords" content="{{ $article->meta_keywords }}">@endif
     <meta property="og:title"       content="{{ $article->title }}">
@@ -46,7 +48,6 @@
     </style>
 </head>
 <body class="bg-gray-50">
-
 @include('layouts.header')
 
 {{-- BREADCRUMB --}}
@@ -134,12 +135,9 @@
                     <div class="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden hover:shadow-lg hover:border-orange-300 transition group flex flex-col">
                         <div class="h-36 bg-orange-50 overflow-hidden relative flex-shrink-0">
                             @if($family->profile_photo)
-                            <img src="{{ asset($family->profile_photo) }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                            <img src="{{ asset($family->profile_photo) }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             @else
-                            <div class="w-full h-full flex items-center justify-center">
-                                <i class="fas fa-home text-5xl text-orange-200"></i>
-                            </div>
+                            <div class="w-full h-full flex items-center justify-center"><i class="fas fa-home text-5xl text-orange-200"></i></div>
                             @endif
                             @if($family->country)
                             <span class="absolute top-3 right-3 px-2.5 py-1 bg-black/50 text-white text-[10px] font-bold rounded-full backdrop-blur-sm flex items-center gap-1">
@@ -150,9 +148,7 @@
                         <div class="p-5 flex flex-col flex-1">
                             <h3 class="font-black text-gray-800 text-lg leading-tight mb-3">{{ $family->name }}</h3>
                             @if($family->story)
-                            <p class="text-sm text-gray-600 leading-relaxed line-clamp-4 flex-1 mb-4">
-                                {{ strip_tags($family->story) }}
-                            </p>
+                            <p class="text-sm text-gray-600 leading-relaxed line-clamp-4 flex-1 mb-4">{{ strip_tags($family->story) }}</p>
                             @else
                             <div class="flex-1 mb-4"></div>
                             @endif
@@ -201,32 +197,22 @@
                                     @endif
                                     @if(!empty($child->country))
                                     <span class="text-white text-xs font-bold flex items-center gap-1">
-                                        <i class="fas fa-map-marker-alt text-orange-300 text-[10px]"></i>
-                                        {{ $child->country }}
+                                        <i class="fas fa-map-marker-alt text-orange-300 text-[10px]"></i>{{ $child->country }}
                                     </span>
                                     @endif
-                                   @if($child->has_family !== null)
+                                    @if($child->has_family !== null)
                                     <span class="text-white text-xs font-bold flex items-center gap-1">
                                         <i class="fas fa-home {{ $child->has_family ? 'text-green-300' : 'text-red-300' }} text-[10px]"></i>
                                         {{ $child->has_family ? 'Has Family' : 'No Family' }}
                                     </span>
-                                @else
-                                    <span class="text-white text-xs font-bold flex items-center gap-1">
-                                        <i class="fas fa-home text-gray-500 text-[10px]"></i>
-                                        No Info
-                                    </span>
-                                @endif
+                                    @endif
                                 </div>
                             </div>
                         </div>
                         <div class="p-5 flex flex-col flex-1">
-                            <h3 class="font-black text-gray-800 text-lg leading-tight mb-3">
-                                {{ $child->first_name }} {{ $child->last_name ?? '' }}
-                            </h3>
+                            <h3 class="font-black text-gray-800 text-lg leading-tight mb-3">{{ $child->first_name }} {{ $child->last_name ?? '' }}</h3>
                             @if(!empty($child->story))
-                            <p class="text-sm text-gray-600 leading-relaxed line-clamp-3 flex-1 mb-4">
-                                {{ Str::limit(strip_tags($child->story), 120) }}
-                            </p>
+                            <p class="text-sm text-gray-600 leading-relaxed line-clamp-3 flex-1 mb-4">{{ Str::limit(strip_tags($child->story), 120) }}</p>
                             @else
                             <div class="flex-1 mb-4"></div>
                             @endif
@@ -252,35 +238,73 @@
                 </div>
             </div>
             @endif
+{{-- Share + Back --}}
+<div class="mt-8 pt-6 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Share this story:</p>
+        <div class="flex flex-wrap gap-2">
 
-            {{-- Share + Back --}}
-            <div class="mt-8 pt-6 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Share this story:</p>
-                    <div class="flex flex-wrap gap-2">
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" rel="noopener"
-                           class="flex items-center gap-2 px-4 py-2 bg-[#1877f2] hover:bg-[#166fe5] text-white text-xs font-bold rounded-lg transition">
-                            <i class="fab fa-facebook-f"></i> Facebook
-                        </a>
-                        <a href="https://twitter.com/intent/tweet?text={{ urlencode($article->title) }}&url={{ urlencode(request()->fullUrl()) }}" target="_blank" rel="noopener"
-                           class="flex items-center gap-2 px-4 py-2 bg-black hover:bg-gray-800 text-white text-xs font-bold rounded-lg transition">
-                            <i class="fab fa-x-twitter"></i> X
-                        </a>
-                        <a href="https://wa.me/?text={{ urlencode($article->title.' '.request()->fullUrl()) }}" target="_blank" rel="noopener"
-                           class="flex items-center gap-2 px-4 py-2 bg-[#25d366] hover:bg-[#22bf5c] text-white text-xs font-bold rounded-lg transition">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </a>
-                        <button id="copyBtn"
-                                onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copyBtn').innerHTML='<i class=\'fas fa-check\'></i> Copied!';setTimeout(()=>document.getElementById('copyBtn').innerHTML='<i class=\'fas fa-link\'></i> Copy',2000)})"
-                                class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-lg transition">
-                            <i class="fas fa-link"></i> Copy
-                        </button>
-                    </div>
-                </div>
-                <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center gap-2 text-sm text-orange-500 hover:text-orange-600 font-semibold transition">
-                    <i class="fas fa-arrow-left"></i> Back to Home
-                </a>
-            </div>
+            {{-- Facebook — only if facebook_url is set in settings --}}
+            @if(!empty($settings['facebook_url']))
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}"
+               target="_blank" rel="noopener"
+               class="flex items-center gap-2 px-4 py-2 bg-[#1877f2] hover:bg-[#166fe5] text-white text-xs font-bold rounded-lg transition">
+                <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            @endif
+
+            {{-- X / Twitter — only if twitter_url is set in settings --}}
+            @if(!empty($settings['twitter_url']))
+            <a href="https://twitter.com/intent/tweet?text={{ urlencode($article->title) }}&url={{ urlencode(request()->fullUrl()) }}"
+               target="_blank" rel="noopener"
+               class="flex items-center gap-2 px-4 py-2 bg-black hover:bg-gray-800 text-white text-xs font-bold rounded-lg transition">
+                <i class="fab fa-x-twitter"></i> X
+            </a>
+            @endif
+
+            {{-- WhatsApp — only if whatsapp_url is set in settings --}}
+            @if(!empty($settings['whatsapp_url']))
+            <a href="https://wa.me/?text={{ urlencode($article->title.' '.request()->fullUrl()) }}"
+               target="_blank" rel="noopener"
+               class="flex items-center gap-2 px-4 py-2 bg-[#25d366] hover:bg-[#22bf5c] text-white text-xs font-bold rounded-lg transition">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            @endif
+
+            {{-- Telegram — only if telegram_url is set in settings --}}
+            @if(!empty($settings['telegram_url']))
+            <a href="https://t.me/share/url?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($article->title) }}"
+               target="_blank" rel="noopener"
+               class="flex items-center gap-2 px-4 py-2 bg-[#0088cc] hover:bg-[#0077b5] text-white text-xs font-bold rounded-lg transition">
+                <i class="fab fa-telegram"></i> Telegram
+            </a>
+            @endif
+
+            {{-- LinkedIn — only if linkedin_url is set in settings --}}
+            @if(!empty($settings['linkedin_url']))
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(request()->fullUrl()) }}"
+               target="_blank" rel="noopener"
+               class="flex items-center gap-2 px-4 py-2 bg-[#0a66c2] hover:bg-[#004182] text-white text-xs font-bold rounded-lg transition">
+                <i class="fab fa-linkedin-in"></i> LinkedIn
+            </a>
+            @endif
+
+            {{-- Copy link — always shown --}}
+            <button id="copyBtn"
+                    onclick="navigator.clipboard.writeText(window.location.href).then(()=>{
+                        document.getElementById('copyBtn').innerHTML='<i class=\'fas fa-check\'></i> Copied!';
+                        setTimeout(()=>document.getElementById('copyBtn').innerHTML='<i class=\'fas fa-link\'></i> Copy',2000)
+                    })"
+                    class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-lg transition">
+                <i class="fas fa-link"></i> Copy
+            </button>
+
+        </div>
+    </div>
+    <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center gap-2 text-sm text-orange-500 hover:text-orange-600 font-semibold transition">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+</div>
 
             {{-- Prev / Next --}}
             @if($prevArticle || $nextArticle)
@@ -323,7 +347,6 @@
         {{-- ══ SIDEBAR ══ --}}
         <aside class="w-full lg:w-80 flex-shrink-0 space-y-6">
 
-            {{-- Category --}}
             @if($article->category)
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Filed Under</p>
@@ -345,7 +368,6 @@
             </div>
             @endif
 
-            {{-- Sidebar: children quick list --}}
             @if($article->sponsoredChildren->isNotEmpty())
             <div class="bg-white rounded-2xl shadow-sm border border-orange-100 overflow-hidden">
                 <div class="bg-gradient-to-r from-orange-50 to-white px-5 py-3 border-b border-orange-100">
@@ -359,36 +381,21 @@
                     @php $cEncId = \Illuminate\Support\Facades\Crypt::encryptString((string)$child->id); @endphp
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-orange-100">
-                            <img src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}"
-                                 class="w-full h-full object-cover">
+                            <img src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}" class="w-full h-full object-cover">
                         </div>
-                     <div class="flex-1 min-w-0">
+                        <div class="flex-1 min-w-0">
                             <p class="text-sm font-bold text-gray-800 truncate">{{ $child->first_name }}</p>
-
-                            @if(!empty($child->age))
-                                <p class="text-xs text-gray-400">{{ $child->age }} yrs · {{ $child->country ?? '' }}</p>
-                            @endif
-
+                            @if(!empty($child->age))<p class="text-xs text-gray-400">{{ $child->age }} yrs · {{ $child->country ?? '' }}</p>@endif
                             @if($child->has_family !== null)
-                                <span class="text-xs font-bold flex items-center gap-1 
-                                    {{ $child->has_family ? 'text-green-500' : 'text-red-500' }}">
-                                    
-                                    <i class="fas fa-home text-[10px] 
-                                        {{ $child->has_family ? 'text-green-300' : 'text-red-300' }}"></i>
-
-                                    {{ $child->has_family ? 'Has Family' : 'No Family' }}
-                                </span>
+                            <span class="text-xs font-bold flex items-center gap-1 {{ $child->has_family ? 'text-green-500' : 'text-red-500' }}">
+                                <i class="fas fa-home text-[10px] {{ $child->has_family ? 'text-green-300' : 'text-red-300' }}"></i>
+                                {{ $child->has_family ? 'Has Family' : 'No Family' }}
+                            </span>
                             @endif
                         </div>
                         <div class="flex flex-col gap-1">
-                            <a href="{{ route('children.show', $cEncId) }}"
-                               class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">
-                                Detail
-                            </a>
-                            <a href="{{ route('sponsor.child', $cEncId) }}"
-                               class="px-2.5 py-1 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-black rounded-lg transition text-center">
-                                Sponsor
-                            </a>
+                            <a href="{{ route('children.show', $cEncId) }}" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">Detail</a>
+                            <a href="{{ route('sponsor.child', $cEncId) }}" class="px-2.5 py-1 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-black rounded-lg transition text-center">Sponsor</a>
                         </div>
                     </div>
                     @endforeach
@@ -396,7 +403,6 @@
             </div>
             @endif
 
-            {{-- Sidebar: families quick list --}}
             @if($article->families->isNotEmpty())
             <div class="bg-white rounded-2xl shadow-sm border border-orange-100 overflow-hidden">
                 <div class="bg-gradient-to-r from-orange-50 to-white px-5 py-3 border-b border-orange-100">
@@ -410,25 +416,16 @@
                     @php $fEncId = \Illuminate\Support\Facades\Crypt::encryptString((string)$family->id); @endphp
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 border-2 border-orange-100 bg-orange-50 flex items-center justify-center">
-                            @if($family->profile_photo)
-                            <img src="{{ asset($family->profile_photo) }}" class="w-full h-full object-cover">
-                            @else
-                            <i class="fas fa-home text-orange-300"></i>
-                            @endif
+                            @if($family->profile_photo)<img src="{{ asset($family->profile_photo) }}" class="w-full h-full object-cover">
+                            @else<i class="fas fa-home text-orange-300"></i>@endif
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-bold text-gray-800 truncate">{{ $family->name }}</p>
                             @if($family->country)<p class="text-xs text-gray-400">{{ $family->country }}</p>@endif
                         </div>
                         <div class="flex flex-col gap-1">
-                            <a href="{{ route('families.show', $fEncId) }}"
-                               class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">
-                                Detail
-                            </a>
-                            <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
-                               class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-black rounded-lg transition text-center">
-                                Sponsor
-                            </a>
+                            <a href="{{ route('families.show', $fEncId) }}" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">Detail</a>
+                            <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-black rounded-lg transition text-center">Sponsor</a>
                         </div>
                     </div>
                     @endforeach
@@ -436,7 +433,6 @@
             </div>
             @endif
 
-            {{-- Related articles --}}
             @if($related->isNotEmpty())
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Related Articles</p>
