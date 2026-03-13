@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Dashboard | {{ $sponsor->full_name }}</title>
+    <meta name="description" content="@yield('meta_description', $settings['meta_description'] ?? '')">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <meta name="robots" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">

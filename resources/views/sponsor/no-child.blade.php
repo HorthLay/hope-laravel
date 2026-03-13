@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Parrain | Association Des Ailes Pour Grandir</title>
+    <title>@yield('title', 'Hope & Impact') | {{ $settings['site_name'] ?? 'Hope & Impact' }}</title>
+    <meta name="description" content="@yield('meta_description', $settings['meta_description'] ?? '')">
+    @if(!empty($settings['favicon']))
+    <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
+    @endif
     <meta name="robots" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,8 +18,7 @@
     <script>
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'en,km,fr',
+            pageLanguage: 'en', includedLanguages: 'en,km,fr',
             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false, multilanguagePage: true
         }, 'google_translate_element');
@@ -24,8 +27,6 @@
 
     <style>
         body { font-family: 'Montserrat', sans-serif; top: 0 !important; }
-
-        /* ── Hide Google toolbar ── */
         .goog-te-banner-frame,.goog-te-balloon-frame,#goog-gt-tt,.goog-te-spinner-pos,.skiptranslate { display:none !important; }
         iframe.goog-te-banner-frame { display:none !important; }
 
@@ -38,7 +39,7 @@
             70%  { transform:scale(1.6); opacity:0; }
             100% { transform:scale(1.6); opacity:0; }
         }
-        .animate-card  { animation: floatUp .55s cubic-bezier(.34,1.36,.64,1) both; }
+        .animate-card { animation: floatUp .55s cubic-bezier(.34,1.36,.64,1) both; }
         .pulse-ring {
             position:absolute; inset:0; border-radius:9999px;
             border:3px solid #f97316;
@@ -55,7 +56,6 @@
             box-shadow:0 2px 8px rgba(0,0,0,.07);
         }
         .lang-pill:hover { border-color:#f97316; color:#f97316; box-shadow:0 4px 16px rgba(249,115,22,.15); }
-
         #nc-translate-panel {
             position:absolute; top:calc(100% + 8px); left:50%;
             transform:translateX(-50%) translateY(-6px);
@@ -65,7 +65,6 @@
             transition:all .22s cubic-bezier(.34,1.56,.64,1); z-index:9999;
         }
         #nc-translate-panel.open { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
-
         .lang-opt {
             display:flex; align-items:center; gap:9px;
             width:100%; padding:9px 10px; border-radius:9px;
@@ -77,21 +76,50 @@
         .lang-opt.active { background:linear-gradient(135deg,#fff7ed,#ffedd5); border-color:#f97316; color:#c2410c; }
         .lang-opt .flag  { width:22px; height:15px; object-fit:cover; border-radius:2px; box-shadow:0 1px 4px rgba(0,0,0,.15); flex-shrink:0; }
         .lang-opt .chk   { margin-left:auto; color:#f97316; font-size:10px; }
+
+        /* ── Contact rows ── */
+        .contact-row {
+            display:flex; align-items:center; gap:12px;
+            padding:11px 14px; border-radius:14px;
+            text-decoration:none; border:1.5px solid #f0f0f0;
+            background:#fafafa; transition:all .18s; cursor:pointer;
+            margin-bottom:8px;
+        }
+        .contact-row:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.09); }
+        .contact-row:last-child { margin-bottom:0; }
+        .contact-row .cr-icon {
+            width:38px; height:38px; border-radius:10px; flex-shrink:0;
+            display:flex; align-items:center; justify-content:center; font-size:17px;
+        }
+        .contact-row .cr-body { flex:1; min-width:0; }
+        .contact-row .cr-title { font-size:12px; font-weight:800; color:#1f2937; }
+        .contact-row .cr-sub   { font-size:11px; color:#9ca3af; margin-top:1px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .contact-row .cr-arrow { color:#d1d5db; font-size:10px; flex-shrink:0; transition:color .15s; }
+        .contact-row:hover .cr-arrow { color:#f97316; }
+        .contact-row.cr-email:hover     { background:#fff7ed; border-color:#fed7aa; }
+        .contact-row.cr-whatsapp:hover  { background:#f0fdf4; border-color:#bbf7d0; }
+        .contact-row.cr-telegram:hover  { background:#f0f9ff; border-color:#bae6fd; }
+        .contact-row.cr-facebook:hover  { background:#eff6ff; border-color:#bfdbfe; }
+        .contact-row.cr-instagram:hover { background:#fdf2f8; border-color:#f5d0fe; }
+        .contact-row.cr-phone:hover     { background:#f0fdf4; border-color:#bbf7d0; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col" style="background: linear-gradient(135deg,#fff7ed 0%,#ffedd5 40%,#fed7aa 100%);">
+<body class="min-h-screen flex flex-col" style="background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 40%,#fed7aa 100%);">
 
-{{-- Hidden Google Translate widget --}}
 <div id="google_translate_element" style="display:none;position:absolute"></div>
 
-{{-- ── Top bar: logo + lang ── --}}
-<header class="w-full px-6 py-4 flex items-center justify-between max-w-5xl mx-auto w-full">
+{{-- ── Top bar ── --}}
+<header class="w-full px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">
     <a href="{{ route('home') }}">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo"
-             style="height:56px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,0,0,.2));">
+        @if(!empty($settings['logo']))
+            <img src="{{ asset($settings['logo']) }}" alt="{{ $settings['site_name'] ?? 'Logo' }}"
+                 style="height:56px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,0,0,.2));">
+        @else
+            <img src="{{ asset('images/logo.png') }}" alt="Logo"
+                 style="height:56px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,0,0,.2));">
+        @endif
     </a>
 
-    {{-- Language dropdown --}}
     <div class="relative" id="nc-translate-wrapper">
         <button class="lang-pill" onclick="ncTogglePanel()">
             <img src="https://flagcdn.com/w40/fr.png" id="nc-flag" class="w-5 h-3.5 rounded object-cover shadow-sm" alt="FR">
@@ -121,31 +149,26 @@
     </div>
 </header>
 
-{{-- ── Main content ── --}}
+{{-- ── Main ── --}}
 <main class="flex-1 flex items-center justify-center px-4 py-8">
     <div class="w-full max-w-md animate-card">
 
-        {{-- Card --}}
         <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-orange-100">
 
             {{-- Orange top band --}}
             <div class="bg-gradient-to-r from-orange-500 to-orange-400 px-8 pt-10 pb-16 text-center relative">
-                {{-- Decorative circles --}}
                 <div class="absolute top-4 left-4 w-16 h-16 rounded-full bg-white/10"></div>
                 <div class="absolute top-10 right-6 w-8 h-8 rounded-full bg-white/10"></div>
                 <div class="absolute bottom-6 left-10 w-5 h-5 rounded-full bg-white/15"></div>
-
                 <h1 class="text-2xl md:text-3xl font-black text-white mb-1 relative z-10">
                     <span data-fr="Bienvenue," data-en="Welcome," data-km="សូមស្វាគមន៍,">Bienvenue,</span>
                     {{ $sponsor->first_name }}&nbsp;!
                 </h1>
                 <p class="text-white/80 text-sm font-medium relative z-10"
-                   data-fr="Espace Parrain" data-en="Sponsor Portal" data-km="តំបន់ឧបត្ថម្ភ">
-                    Espace Parrain
-                </p>
+                   data-fr="Espace Parrain" data-en="Sponsor Portal" data-km="តំបន់ឧបត្ថម្ភ">Espace Parrain</p>
             </div>
 
-            {{-- Icon bubble (overlaps the band) --}}
+            {{-- Icon bubble --}}
             <div class="flex justify-center -mt-10 mb-6 relative z-10">
                 <div class="relative">
                     <div class="pulse-ring"></div>
@@ -163,19 +186,110 @@
                     data-km="គណនីដំណើរការ កំពុងរង់ចាំការឧបត្ថម្ភ">
                     Compte activé, parrainage en attente
                 </h2>
-                <p class="text-gray-500 text-sm leading-relaxed mb-8"
+                <p class="text-gray-500 text-sm leading-relaxed mb-6"
                    data-fr="Votre compte est actif, mais aucun filleul ne vous a encore été assigné. Contactez-nous pour finaliser votre parrainage."
                    data-en="Your account is active, but no child has been assigned to you yet. Please contact us to complete your sponsorship."
                    data-km="គណនីរបស់អ្នកដំណើរការ ប៉ុន្តែមិនទាន់មានកុមារណាម្នាក់ត្រូវបានកំណត់ទៅអ្នកនៅឡើយ។ សូមទាក់ទងយើងដើម្បីបញ្ចប់ការឧបត្ថម្ភ។">
                     Votre compte est actif, mais aucun filleul ne vous a encore été assigné. Contactez-nous pour finaliser votre parrainage.
                 </p>
 
-                {{-- Contact button --}}
-                <a href="mailto:parrains@ailespourgrandir.org"
-                   class="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-sm uppercase tracking-wide rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 mb-3">
-                    <i class="fas fa-envelope text-sm"></i>
-                    <span data-fr="Contacter l'équipe" data-en="Contact our team" data-km="ទាក់ទងក្រុមការងាររបស់យើង">Contacter l'équipe</span>
-                </a>
+                {{-- ══ CONTACT CHANNELS FROM SETTINGS ══ --}}
+                @php
+                    $s_email     = $settings['contact_email']  ?? null;
+                    $s_whatsapp  = $settings['whatsapp_url']   ?? null;
+                    $s_telegram  = $settings['telegram_url']   ?? null;
+                    $s_facebook  = $settings['facebook_url']   ?? null;
+                    $s_instagram = $settings['instagram_url']  ?? null;
+                    $s_phone     = $settings['contact_phone']  ?? null;
+                    $s_any       = $s_email || $s_whatsapp || $s_telegram || $s_facebook || $s_instagram || $s_phone;
+                @endphp
+
+                @if($s_any)
+                <div class="mb-6 text-left">
+                    <p class="text-[11px] font-black text-gray-400 uppercase tracking-wider mb-3 text-center"
+                       data-fr="Contactez-nous via" data-en="Reach us via" data-km="ទាក់ទងយើងតាម">
+                        Contactez-nous via
+                    </p>
+
+                    @if($s_email)
+                    <a href="https://mail.google.com/mail/?view=cm&to={{ $s_email }}&subject={{ urlencode('Parrainage — ' . ($sponsor->first_name ?? '') . ' ' . ($sponsor->last_name ?? '')) }}"
+                       target="_blank" class="contact-row cr-email">
+                        <div class="cr-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
+                        <div class="cr-body">
+                            <div class="cr-title" data-fr="Envoyer un email" data-en="Send an email" data-km="ផ្ញើអ៊ីមែល">Envoyer un email</div>
+                            <div class="cr-sub">{{ $s_email }}</div>
+                        </div>
+                        <i class="fas fa-external-link-alt cr-arrow"></i>
+                    </a>
+                    @endif
+
+                    @if($s_whatsapp)
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $s_whatsapp) }}?text={{ urlencode('Bonjour, je suis ' . ($sponsor->first_name ?? '') . ' ' . ($sponsor->last_name ?? '') . '. Je souhaite finaliser mon parrainage.') }}"
+                       target="_blank" class="contact-row cr-whatsapp">
+                        <div class="cr-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:19px"></i></div>
+                        <div class="cr-body">
+                            <div class="cr-title">WhatsApp</div>
+                            <div class="cr-sub" data-fr="Message instantané" data-en="Instant message" data-km="សារភ្លាមៗ">Message instantané</div>
+                        </div>
+                        <i class="fas fa-external-link-alt cr-arrow"></i>
+                    </a>
+                    @endif
+
+                    @if($s_telegram)
+                    <a href="https://t.me/{{ ltrim($s_telegram, '@') }}" target="_blank" class="contact-row cr-telegram">
+                        <div class="cr-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:19px"></i></div>
+                        <div class="cr-body">
+                            <div class="cr-title">Telegram</div>
+                            <div class="cr-sub">{{ $s_telegram }}</div>
+                        </div>
+                        <i class="fas fa-external-link-alt cr-arrow"></i>
+                    </a>
+                    @endif
+
+                    @if($s_facebook)
+                    <a href="{{ $s_facebook }}" target="_blank" class="contact-row cr-facebook">
+                        <div class="cr-icon" style="background:#eff6ff"><i class="fab fa-facebook-messenger" style="color:#2563eb;font-size:19px"></i></div>
+                        <div class="cr-body">
+                            <div class="cr-title">Facebook Messenger</div>
+                            <div class="cr-sub" data-fr="Écrivez-nous sur Facebook" data-en="Message us on Facebook" data-km="ផ្ញើសារតាម Facebook">Écrivez-nous sur Facebook</div>
+                        </div>
+                        <i class="fas fa-external-link-alt cr-arrow"></i>
+                    </a>
+                    @endif
+
+                    @if($s_instagram)
+                    <a href="{{ $s_instagram }}" target="_blank" class="contact-row cr-instagram">
+                        <div class="cr-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:19px"></i></div>
+                        <div class="cr-body">
+                            <div class="cr-title">Instagram</div>
+                            <div class="cr-sub" data-fr="Envoyez un DM" data-en="Send a DM" data-km="ផ្ញើ DM">Envoyez un DM</div>
+                        </div>
+                        <i class="fas fa-external-link-alt cr-arrow"></i>
+                    </a>
+                    @endif
+
+                    @if($s_phone)
+                    <a href="tel:{{ preg_replace('/\s+/', '', $s_phone) }}" class="contact-row cr-phone">
+                        <div class="cr-icon" style="background:#f0fdf4"><i class="fas fa-phone" style="color:#16a34a"></i></div>
+                        <div class="cr-body">
+                            <div class="cr-title" data-fr="Appeler" data-en="Call us" data-km="ហៅទូរស័ព្ទ">Appeler</div>
+                            <div class="cr-sub">{{ $s_phone }}</div>
+                        </div>
+                        <i class="fas fa-phone-alt cr-arrow" style="color:#16a34a"></i>
+                    </a>
+                    @endif
+                </div>
+                @else
+                {{-- Fallback if nothing configured in settings --}}
+                <div class="mb-6 bg-orange-50 border border-orange-100 rounded-2xl p-4 text-sm text-orange-700 font-medium">
+                    <i class="fas fa-info-circle mr-2 text-orange-400"></i>
+                    <span data-fr="Aucun contact configuré pour le moment."
+                          data-en="No contact configured yet."
+                          data-km="មិនមានទំនាក់ទំនងដែលបានកំណត់ទេ។">
+                        Aucun contact configuré pour le moment.
+                    </span>
+                </div>
+                @endif
 
                 {{-- Back to site --}}
                 <a href="{{ route('home') }}"
@@ -184,7 +298,7 @@
                     <span data-fr="Retour au site" data-en="Back to site" data-km="ត្រលប់ទៅគេហទំព័រ">Retour au site</span>
                 </a>
 
-                {{-- Divider --}}
+                {{-- Logout --}}
                 <div class="border-t border-gray-100 pt-5">
                     <form method="POST" action="{{ route('sponsor.logout') }}">
                         @csrf
@@ -198,15 +312,12 @@
             </div>
         </div>
 
-        {{-- Footer note --}}
         <p class="text-center text-xs text-orange-700/60 font-medium mt-6">
-            © {{ date('Y') }} Association Des Ailes Pour Grandir
+            © {{ date('Y') }} {{ $settings['site_name'] ?? 'Association Des Ailes Pour Grandir' }}
         </p>
-
     </div>
 </main>
 
-{{-- ══ Language controller ══ --}}
 <script>
 const NC_LANGS = {
     fr: { label:'Français', flag:'https://flagcdn.com/w40/fr.png' },

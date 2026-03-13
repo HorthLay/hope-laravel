@@ -43,10 +43,10 @@ body { top: 0 !important; }
 .util-link:hover { color: #fff; }
 
 /* ══════════════════════════════════════════════
-   2. LOGO BANNER
+   2. LOGO BANNER  ← taller
 ══════════════════════════════════════════════ */
 #logo-banner {
-    position: relative; overflow: hidden; min-height: 160px;
+    position: relative; overflow: hidden; min-height: 210px;
     background-image: url("{{ asset('images/image.jpg') }}");
     background-size: cover; background-position: center 40%;
     background-color: #1a2e3b;
@@ -63,11 +63,11 @@ body { top: 0 !important; }
 }
 .banner-inner {
     max-width: 1280px; margin: 0 auto; padding: 0 24px;
-    min-height: 160px; display: flex; align-items: center; justify-content: space-between;
+    min-height: 210px; display: flex; align-items: center; justify-content: space-between;
     position: relative; z-index: 2;
 }
 .logo-img {
-    height: 160px; width: auto; display: block;
+    height: 200px; width: auto; display: block;
     filter: brightness(1.18) saturate(1.25) drop-shadow(0 0 18px rgba(249,115,22,.65)) drop-shadow(0 4px 22px rgba(0,0,0,.70));
     transition: filter .25s, transform .25s;
 }
@@ -101,8 +101,8 @@ body { top: 0 !important; }
 }
 .nav-links {
     display: flex; align-items: stretch;
-    justify-content: flex-start;
-    flex: 0 0 auto;
+    justify-content: center;
+    flex: 1;
     gap: 0;
 }
 
@@ -204,25 +204,30 @@ body { top: 0 !important; }
 
 /* ── CTA buttons — always at far right ── */
 .nav-ctas {
-    display: flex; align-items: stretch;
+    display: flex; align-items: center; gap: 8px;
     flex-shrink: 0;
     margin-left: auto;
+    padding: 0 16px;
     border-left: 1px solid #e5e7eb;
 }
 .nav-cta-sponsor {
-    display: flex; align-items: center; gap: 8px;
-    padding: 0 22px; height: 52px; background: #f5c518; color: #1a1a1a;
-    font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em;
-    text-decoration: none; transition: background .2s; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 16px; background: #f5c518; color: #1a1a1a;
+    font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em;
+    border-radius: 6px; text-decoration: none;
+    transition: background .2s, transform .15s; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(245,197,24,.35);
 }
-.nav-cta-sponsor:hover { background: #e6b800; color: #1a1a1a; }
+.nav-cta-sponsor:hover { background: #e6b800; color: #1a1a1a; transform: translateY(-1px); }
 .nav-cta-donate {
-    display: flex; align-items: center; gap: 8px;
-    padding: 0 22px; height: 52px; background: #2ecc71; color: #fff;
-    font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em;
-    text-decoration: none; transition: background .2s; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 16px; background: #2ecc71; color: #fff;
+    font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em;
+    border-radius: 6px; text-decoration: none;
+    transition: background .2s, transform .15s; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(46,204,113,.35);
 }
-.nav-cta-donate:hover { background: #27ae60; color: #fff; }
+.nav-cta-donate:hover { background: #27ae60; color: #fff; transform: translateY(-1px); }
 
 /* ══════════════════════════════════════════════
    4. LANGUAGE SWITCHER (desktop)
@@ -419,7 +424,32 @@ body { top: 0 !important; }
     <div class="nav-inner">
         <nav class="nav-links">
 
-            {{-- ① WHAT WE DO — 3-column mega dropdown --}}
+            {{-- ① WHO WE ARE — 2-column mega dropdown --}}
+            <div class="nav-item">
+                <span class="nav-item-link">
+                    <span data-en="Who We Are" data-km="អំពីយើង" data-fr="Qui sommes-nous">Who We Are</span>
+                    <i class="fas fa-chevron-down nav-caret"></i>
+                </span>
+                <div class="mega-drop">
+                    <div class="drop-col">
+                        <div class="drop-col-title"><i class="fas fa-info-circle mr-1 text-orange-400"></i> Our Association</div>
+                        <a href="{{ route('about.presentation') }}"        class="drop-link"><i class="fas fa-dove"></i> About Us</a>
+                        <a href="{{ route('about.vision') }}"              class="drop-link"><i class="fas fa-eye"></i> Vision & Ethics</a>
+                        <a href="{{ route('about.team') }}"                class="drop-link"><i class="fas fa-users"></i> Our Team</a>
+                        <a href="{{ route('about.partners') }}"            class="drop-link"><i class="fas fa-handshake"></i> Partners</a>
+                    </div>
+                    <div class="drop-col">
+                        <div class="drop-col-title"><i class="fas fa-heart mr-1 text-orange-400"></i> Sponsorship</div>
+                        <a href="{{ route('sponsor.child.file') }}"        class="drop-link"><i class="fas fa-child"></i> Child Sponsorship</a>
+                        <a href="{{ route('sponsor.child.stories') }}"     class="drop-link"><i class="fas fa-book-open"></i> Child Stories</a>
+                        <a href="{{ route('sponsor.family.file') }}"       class="drop-link"><i class="fas fa-home"></i> Family Sponsorship</a>
+                        <a href="{{ route('sponsor.family.stories') }}"    class="drop-link"><i class="fas fa-star"></i> Family Stories</a>
+                        <a href="{{ route('sponsor.faq') }}"               class="drop-link"><i class="fas fa-question-circle"></i> FAQ</a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ② WHAT WE DO — 3-column mega dropdown --}}
             <div class="nav-item">
                 <span class="nav-item-link">
                     <span data-en="What We Do" data-km="អ្វីដែលយើងធ្វើ" data-fr="Ce que nous faisons">What We Do</span>
@@ -449,38 +479,12 @@ body { top: 0 !important; }
                 </div>
             </div>
 
-            {{-- ② WHO WE ARE — 2-column mega dropdown --}}
-            <div class="nav-item">
-                <span class="nav-item-link">
-                    <span data-en="Who We Are" data-km="អំពីយើង" data-fr="Qui sommes-nous">Who We Are</span>
-                    <i class="fas fa-chevron-down nav-caret"></i>
-                </span>
-                <div class="mega-drop">
-                    <div class="drop-col">
-                        <div class="drop-col-title"><i class="fas fa-info-circle mr-1 text-orange-400"></i> Our Association</div>
-                        <a href="{{ route('about.presentation') }}"        class="drop-link"><i class="fas fa-dove"></i> About Us</a>
-                        <a href="{{ route('about.vision') }}"              class="drop-link"><i class="fas fa-eye"></i> Vision & Ethics</a>
-                        <a href="{{ route('about.team') }}"                class="drop-link"><i class="fas fa-users"></i> Our Team</a>
-                        <a href="{{ route('about.partners') }}"            class="drop-link"><i class="fas fa-handshake"></i> Partners</a>
-                    </div>
-                    <div class="drop-col">
-                        <div class="drop-col-title"><i class="fas fa-heart mr-1 text-orange-400"></i> Sponsorship</div>
-                        <a href="{{ route('sponsor.child.file') }}"        class="drop-link"><i class="fas fa-child"></i> Child Sponsorship</a>
-                        <a href="{{ route('sponsor.child.stories') }}"     class="drop-link"><i class="fas fa-book-open"></i> Child Stories</a>
-                        <a href="{{ route('sponsor.family.file') }}"       class="drop-link"><i class="fas fa-home"></i> Family Sponsorship</a>
-                        <a href="{{ route('sponsor.family.stories') }}"    class="drop-link"><i class="fas fa-star"></i> Family Stories</a>
-                        <a href="{{ route('sponsor.faq') }}"               class="drop-link"><i class="fas fa-question-circle"></i> FAQ</a>
-                    </div>
-                </div>
-            </div>
-
             {{-- ③ SUPPORT US — right-anchored to prevent overflow --}}
             <div class="nav-item">
                 <span class="nav-item-link">
                     <span data-en="Support Us" data-km="គាំទ្រយើង" data-fr="Nous soutenir">Support Us</span>
                     <i class="fas fa-chevron-down nav-caret"></i>
                 </span>
-                {{-- drop-right anchors to right edge of nav item, never clips --}}
                 <div class="mega-drop drop-right">
                     <div class="drop-col">
                         <div class="drop-col-title"><i class="fas fa-hand-holding-heart mr-1 text-orange-400"></i> Give</div>
@@ -508,7 +512,7 @@ body { top: 0 !important; }
                 </a>
                 <form method="POST" action="{{ route('sponsor.logout') }}" style="display:inline;margin:0;">
                     @csrf
-                    <button type="submit" class="nav-cta-donate" style="border:none;cursor:pointer;height:52px;">
+                    <button type="submit" class="nav-cta-donate" style="border:none;cursor:pointer;">
                         <i class="fas fa-sign-out-alt text-base"></i>
                         <span data-en="Logout" data-km="ចាកចេញ" data-fr="Déconnexion">Logout</span>
                     </button>
@@ -600,9 +604,9 @@ body { top: 0 !important; }
         </div>
         @endif
 
-        {{-- ══ Accordion nav — 3 items only ══ --}}
+        {{-- ══ Accordion nav — 3 items ══ --}}
         <nav>
-            {{-- ① Who We Are (now FIRST) --}}
+            {{-- ① Who We Are --}}
             <div class="mob-nav-item" id="mob-whoweare">
                 <div class="mob-nav-header" onclick="toggleMobMenu('mob-whoweare')">
                     <i class="fas fa-users mob-nav-icon"></i>
@@ -625,7 +629,7 @@ body { top: 0 !important; }
                 </div>
             </div>
 
-            {{-- ② What We Do (now SECOND) --}}
+            {{-- ② What We Do --}}
             <div class="mob-nav-item" id="mob-whatwedo">
                 <div class="mob-nav-header" onclick="toggleMobMenu('mob-whatwedo')">
                     <i class="fas fa-hands-helping mob-nav-icon"></i>

@@ -468,7 +468,7 @@
        WEB AUDIO — synthesized sounds, zero external files
     ═══════════════════════════════════════════════════════════ */
     let _ctx  = null;
-    let sfxOn = localStorage.getItem('adminSfx') !== 'off'; // remembers preference
+    let sfxOn = localStorage.getItem('adminSfx') !== 'off';
 
     function _getCtx() {
         if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -482,6 +482,8 @@
         document.getElementById('sfxToggle').classList.toggle('off', !sfxOn);
         document.getElementById('sfxIcon').className = sfxOn ? 'fas fa-bell' : 'fas fa-bell-slash';
         if (sfxOn) { _getCtx(); _playClick(); }
+        // Cancel any speech if toggling off
+        if (!sfxOn && window.speechSynthesis) window.speechSynthesis.cancel();
     }
 
     /* ── Tiny UI click ── */
@@ -573,12 +575,57 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
+       AI VOICE — Web Speech API speaks "Success!" on success alert
+       Uses the best available neural voice (Google/Microsoft/Siri)
+    ═══════════════════════════════════════════════════════════ */
+    function speakSuccess() {
+        if (!sfxOn) return;
+        if (!window.speechSynthesis) return;
+
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        const utter        = new SpeechSynthesisUtterance('Success!');
+        utter.rate         = 0.92;   // slightly slower = more natural/confident
+        utter.pitch        = 1.15;   // slightly upbeat tone
+        utter.volume       = 0.9;
+
+        const doSpeak = () => {
+            const voices = window.speechSynthesis.getVoices();
+
+            // Priority: Google Neural > Microsoft Neural > Apple > any English
+            const preferred =
+                voices.find(v => /Google US English/i.test(v.name))          ||
+                voices.find(v => /Google UK English Female/i.test(v.name))   ||
+                voices.find(v => /Microsoft.*Natural/i.test(v.name) && /en/i.test(v.lang)) ||
+                voices.find(v => /Microsoft Aria|Microsoft Jenny|Microsoft Guy/i.test(v.name)) ||
+                voices.find(v => /Samantha|Karen|Daniel|Moira/i.test(v.name)) ||
+                voices.find(v => /en[-_]US/i.test(v.lang))                   ||
+                voices.find(v => /en/i.test(v.lang));
+
+            if (preferred) utter.voice = preferred;
+
+            // Delay slightly so it plays AFTER the chime finishes (chime is ~0.85s)
+            setTimeout(() => window.speechSynthesis.speak(utter), 900);
+        };
+
+        // Voices load asynchronously on first page load — handle both cases
+        if (window.speechSynthesis.getVoices().length === 0) {
+            window.speechSynthesis.addEventListener('voiceschanged', doSpeak, { once: true });
+        } else {
+            doSpeak();
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
        ALERT DISMISS
     ═══════════════════════════════════════════════════════════ */
     function dismissAlert(id) {
         const el = document.getElementById(id);
         if (!el) return;
         _playClick();
+        // Stop any ongoing speech when manually dismissed
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
         el.style.transition = 'opacity .3s, transform .3s';
         el.style.opacity = '0';
         el.style.transform = 'translateX(16px)';
@@ -595,8 +642,8 @@
 
         @if(session('success'))
         setTimeout(() => {
-            playSoundSuccess();
-            // Auto-dismiss after 5s
+            playSoundSuccess();   // chime plays immediately
+            speakSuccess();       // AI voice says "Success!" ~900ms after chime
             setTimeout(() => dismissAlert('flashSuccess'), 5000);
         }, 350);
         @endif
@@ -604,7 +651,6 @@
         @if(session('error'))
         setTimeout(() => {
             playSoundError();
-            // Auto-dismiss after 6s
             setTimeout(() => dismissAlert('flashError'), 6000);
         }, 350);
         @endif

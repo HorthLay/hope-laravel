@@ -97,7 +97,8 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                     <p class="text-white/85 text-lg max-w-xl">Your family sponsorship could transform a household forever.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
-                    <a href="{{ route('sponsor.families') }}" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-black rounded-xl hover:bg-orange-50 transition shadow-lg justify-center">
+                    <a href="{{ route('sponsor.children', ['tab' => 'families']) }}" 
+                    class="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-black rounded-xl hover:bg-orange-50 transition shadow-lg justify-center">
                         <i class="fas fa-heart"></i> Sponsor a Family
                     </a>
                     <a href="{{ route('support.donate') }}" class="inline-flex items-center gap-3 px-8 py-4 border-2 border-white/50 text-white font-black rounded-xl hover:bg-white/10 transition justify-center">
