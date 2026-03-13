@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\TrackSiteVisit::class, // Track site visits
-             \App\Http\Middleware\VerifyHuman::class,
+            //  \App\Http\Middleware\VerifyHuman::class,
         ],
 
         'api' => [
@@ -68,6 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminAuthenticate::class,
         'sponsor.auth' => \App\Http\Middleware\SponsorAuth::class,
-        'verify.human'     => \App\Http\Middleware\VerifyHuman::class,
+        // 'verify.human'     => \App\Http\Middleware\VerifyHuman::class,
     ];
 }

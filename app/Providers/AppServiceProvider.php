@@ -39,9 +39,9 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('settings', $this->loadSettings());
 
-         if (config('app.env') === 'local') {
-            URL::forceScheme('https');
-        }
+        //  if (config('app.env') === 'local') {
+        //     URL::forceScheme('https');
+        // }
     }
 
 

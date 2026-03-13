@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class SettingController extends Controller
 {
-    public function index()
+      public function index()
     {
         $settings = $this->getSettings();
         return view('admin.settings.index', compact('settings'));
@@ -18,36 +18,26 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            // General Settings
             'site_name'         => 'nullable|string|max:255',
             'site_tagline'      => 'nullable|string|max:500',
             'site_description'  => 'nullable|string|max:1000',
             'contact_email'     => 'nullable|email|max:255',
             'contact_phone'     => 'nullable|string|max:50',
             'address'           => 'nullable|string|max:500',
-
-            // Social Media (WhatsApp, Telegram, Instagram, YouTube, LinkedIn only)
             'whatsapp_url'      => 'nullable|string|max:255',
             'telegram_url'      => 'nullable|string|max:255',
             'instagram_url'     => 'nullable|url|max:255',
             'youtube_url'       => 'nullable|url|max:255',
             'linkedin_url'      => 'nullable|url|max:255',
             'facebook_url'      => 'nullable|url|max:255',
-
-            // Sponsor / Account Details
             'account_name'      => 'nullable|string|max:255',
             'account_bank'      => 'nullable|string|max:255',
-
-            // SEO Settings
             'meta_title'        => 'nullable|string|max:255',
             'meta_description'  => 'nullable|string|max:500',
             'meta_keywords'     => 'nullable|string|max:500',
-
-            // Images
-            'logo'              => 'nullable|image|mimes:jpeg,jpg,png,svg|max:2048',
-            'favicon'           => 'nullable|image|mimes:ico,png|max:512',
-
-            // Other Settings
+            // Accept any image type — we'll convert to WebP ourselves
+            'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif,webp,svg|max:4096',
+            'favicon'           => 'nullable|image|mimes:ico,png,webp|max:512',
             'timezone'          => 'nullable|string|max:50',
             'date_format'       => 'nullable|string|max:50',
             'articles_per_page' => 'nullable|integer|min:1|max:100',
@@ -55,17 +45,17 @@ class SettingController extends Controller
             'maintenance_mode'  => 'nullable|boolean',
         ]);
 
-        // Handle logo upload
         if ($request->hasFile('logo')) {
             $validated['logo'] = $this->handleImageUpload($request->file('logo'), 'logo');
         }
 
-        // Handle favicon upload
         if ($request->hasFile('favicon')) {
-            $validated['favicon'] = $this->handleImageUpload($request->file('favicon'), 'favicon');
+            // Favicon: keep as PNG if .ico, convert to WebP otherwise
+            $validated['favicon'] = $this->handleImageUpload(
+                $request->file('favicon'), 'favicon', 90, forceWebp: false
+            );
         }
 
-        // Checkboxes send nothing when unchecked — default to false
         $validated['enable_comments']  = $request->boolean('enable_comments');
         $validated['maintenance_mode'] = $request->boolean('maintenance_mode');
 
@@ -76,7 +66,16 @@ class SettingController extends Controller
             ->with('success', 'Settings updated successfully!');
     }
 
-    protected function handleImageUpload($file, $type)
+    /**
+     * Upload an image and convert it to WebP (unless it's an SVG or ICO).
+     *
+     * @param  \Illuminate\Http\UploadedFile  $file
+     * @param  string  $type        Key name used for filename (e.g. 'logo')
+     * @param  int     $quality     WebP quality 0–100
+     * @param  bool    $forceWebp   Set false to keep original format for favicons/SVGs
+     * @return string               Path relative to public/ — e.g. "uploads/settings/logo_abc.webp"
+     */
+    protected function handleImageUpload($file, string $type, int $quality = 85, bool $forceWebp = true): string
     {
         $uploadPath = public_path('uploads/settings');
 
@@ -84,25 +83,61 @@ class SettingController extends Controller
             File::makeDirectory($uploadPath, 0755, true);
         }
 
-        // Delete old file if exists
+        // Delete old file
         $settings = $this->getSettings();
-        if (isset($settings[$type]) && File::exists(public_path($settings[$type]))) {
+        if (!empty($settings[$type]) && File::exists(public_path($settings[$type]))) {
             File::delete(public_path($settings[$type]));
         }
 
-        $extension = $file->getClientOriginalExtension();
-        $filename  = $type . '_' . time() . '.' . $extension;
-        $file->move($uploadPath, $filename);
+        $mime = $file->getMimeType();
+
+        // SVG and ICO can't be converted — store as-is
+        $skipConvert = in_array($mime, ['image/svg+xml', 'image/x-icon', 'image/vnd.microsoft.icon'])
+                    || !$forceWebp;
+
+        if ($skipConvert) {
+            $ext      = $file->getClientOriginalExtension();
+            $filename = $type . '_' . time() . '.' . $ext;
+            $file->move($uploadPath, $filename);
+            return 'uploads/settings/' . $filename;
+        }
+
+        // ── Convert to WebP ────────────────────────────────
+        $filename = $type . '_' . time() . '.webp';
+        $savePath = $uploadPath . '/' . $filename;
+
+        $source = match(true) {
+            str_contains($mime, 'jpeg') => imagecreatefromjpeg($file->getRealPath()),
+            str_contains($mime, 'png')  => $this->createFromPng($file->getRealPath()),
+            str_contains($mime, 'gif')  => imagecreatefromgif($file->getRealPath()),
+            str_contains($mime, 'webp') => imagecreatefromwebp($file->getRealPath()),
+            default                     => throw new \RuntimeException("Unsupported image type: {$mime}"),
+        };
+
+        imagewebp($source, $savePath, $quality);
+        imagedestroy($source);
 
         return 'uploads/settings/' . $filename;
     }
 
-    protected function getSettings()
+    /**
+     * Create a true-color GD image from PNG, preserving transparency.
+     */
+    private function createFromPng(string $path): \GdImage
+    {
+        $img = imagecreatefrompng($path);
+        imagepalettetotruecolor($img);
+        imagealphablending($img, true);
+        imagesavealpha($img, true);
+        return $img;
+    }
+
+    protected function getSettings(): array
     {
         $settingsFile = storage_path('app/settings.json');
 
         if (File::exists($settingsFile)) {
-            return json_decode(File::get($settingsFile), true);
+            return json_decode(File::get($settingsFile), true) ?? [];
         }
 
         return [
@@ -133,12 +168,12 @@ class SettingController extends Controller
         ];
     }
 
-    protected function saveSettings($newSettings)
+    protected function saveSettings(array $newSettings): void
     {
         $settingsFile    = storage_path('app/settings.json');
         $currentSettings = $this->getSettings();
-        $settings        = array_merge($currentSettings, $newSettings);
-        File::put($settingsFile, json_encode($settings, JSON_PRETTY_PRINT));
+        $merged          = array_merge($currentSettings, $newSettings);
+        File::put($settingsFile, json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 
     public function clearCache()
