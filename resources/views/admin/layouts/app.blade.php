@@ -340,6 +340,9 @@
             <a href="{{ route('admin.sponsors.index') }}" class="nav-item {{ request()->routeIs('admin.sponsors.*') ? 'active' : '' }}">
                 <i class="fas fa-hand-holding-heart"></i><span class="font-medium">Sponsors</span>
             </a>
+            <a href="{{ route('admin.emails.index') }}" class="nav-item {{ request()->routeIs('admin.emails.*') ? 'active' : '' }}">
+            <i class="fas fa-envelope"></i><span class="font-medium">Email</span>
+            </a>
 
             @if($isSuperAdmin || $isAdmin)
                 <div class="nav-group-title">User Management</div>

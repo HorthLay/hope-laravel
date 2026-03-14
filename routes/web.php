@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminEmailController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
@@ -203,6 +204,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/admin/family-members/{member}/edit', [FamilyMemberController::class, 'edit'])->name('admin.family-members.edit');
         Route::put('/admin/family-members/{member}', [FamilyMemberController::class, 'update'])->name('admin.family-members.update');
         Route::delete('/admin/family-members/{member}', [FamilyMemberController::class, 'destroy'])->name('admin.family-members.destroy');
+
+        // Email Management
+        Route::get('/emails',         [AdminEmailController::class, 'index'])->name('admin.emails.index');
+        Route::post('/emails/preview',[AdminEmailController::class, 'preview'])->name('admin.emails.preview');
+        Route::post('/emails/send',   [AdminEmailController::class, 'send'])->name('admin.emails.send');
             // ======== END OF ADMIN ROUTES ==========
     });
 });
