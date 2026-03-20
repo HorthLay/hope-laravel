@@ -10,6 +10,7 @@ use App\Http\Controllers\ChildDocumentController;
 use App\Http\Controllers\ChildMediaController;
 use App\Http\Controllers\ChildrenController;
 use App\Http\Controllers\ChildUpdateController;
+use App\Http\Controllers\DonateVignetteController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\FamilyDocumentController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\FamilyUpdateController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\ProjectAdminController;
 use App\Http\Controllers\PublicChildController;
 use App\Http\Controllers\PublicFamilyController;
 use App\Http\Controllers\ReportController;
@@ -29,8 +31,12 @@ use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\SponsorDashboardController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\VerifyHumanController;
+use App\Models\DonationProject;
+use App\Models\Family;
+use App\Models\FamilyMember;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -209,6 +215,23 @@ Route::prefix('admin')->group(function () {
         Route::get('/emails',         [AdminEmailController::class, 'index'])->name('admin.emails.index');
         Route::post('/emails/preview',[AdminEmailController::class, 'preview'])->name('admin.emails.preview');
         Route::post('/emails/send',   [AdminEmailController::class, 'send'])->name('admin.emails.send');
+
+
+        // Projects Management 
+         Route::get('donation-projects',[ProjectAdminController::class, 'index'])->name('admin.donation-projects.index');
+
+        Route::get('donation-projects/create',[ProjectAdminController::class, 'create'])->name('admin.donation-projects.create');
+
+        Route::post('donation-projects',[ProjectAdminController::class, 'store'])->name('admin.donation-projects.store');
+
+        Route::get('donation-projects/{donationProject}/edit',[ProjectAdminController::class, 'edit'])->name('admin.donation-projects.edit');
+
+        Route::put('donation-projects/{donationProject}',[ProjectAdminController::class, 'update'])->name('admin.donation-projects.update');
+
+        Route::delete('donation-projects/{donationProject}',[ProjectAdminController::class, 'destroy'])->name('admin.donation-projects.destroy');
+
+        // Drag-to-reorder (AJAX POST)
+        Route::post('donation-projects/reorder',[ProjectAdminController::class, 'reorder'])->name('admin.donation-projects.reorder');
             // ======== END OF ADMIN ROUTES ==========
     });
 });
@@ -247,7 +270,54 @@ Route::prefix('our-actions/childhood')->name('childhood.')->group(function () {
     Route::get('/health-nutrition',      fn() => view('pages.childhood.health-nutrition'))    ->name('health');
     Route::get('/education',             fn() => view('pages.childhood.education'))           ->name('education');
     Route::get('/personal-development',  fn() => view('pages.childhood.personal-development'))->name('development');
-    Route::get('/childrens-homes',       fn() => view('pages.childhood.childrens-homes'))     ->name('homes');
+   
+       Route::get('/childrens-homes', function (Illuminate\Http\Request $request) {
+ 
+        $familyQuery = Family::withCount('members')
+            ->where('is_active', true)
+            ->latest();
+ 
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $familyQuery->where(fn ($q) => $q
+                ->where('name',    'like', "%$s%")
+                ->orWhere('code',  'like', "%$s%")
+                ->orWhere('story', 'like', "%$s%")
+            );
+        }
+ 
+        if ($request->filled('country')) {
+            $familyQuery->where('country', $request->country);
+        }
+ 
+        $families = $familyQuery->paginate(12, ['*'], 'fpage')->withQueryString();
+ 
+        $familyCountries = Family::where('is_active', true)
+            ->whereNotNull('country')
+            ->distinct()
+            ->orderBy('country')
+            ->pluck('country');
+ 
+        $familyStats = [
+            'total'     => Family::where('is_active', true)->count(),
+            'sponsored' => Family::where('is_active', true)->whereHas('sponsors')->count(),
+            'waiting'   => Family::where('is_active', true)->whereDoesntHave('sponsors')->count(),
+            'members'   => FamilyMember::where('is_active', true)->count(),
+        ];
+ 
+        $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+            ? json_decode(file_get_contents($settingsFile), true)
+            : [];
+ 
+        return view('pages.childhood.childrens-homes', compact(
+            'families',
+            'familyCountries',
+            'familyStats',
+            'settings'
+        ));
+ 
+    })->name('homes');
 });
 
 // ══════════════════════════════════════════════════════════════
@@ -290,7 +360,8 @@ Route::prefix('sponsor')->name('sponsor.')->group(function () {
     // FAQ
     Route::get('/faq',                   fn() => view('pages.sponsorship.faq'))               ->name('faq');
 });
-
+Route::get('/donate/project/{donationProject}/vignette', [DonateVignetteController::class, 'show'])
+     ->name('donate.project.vignette');
 // ══════════════════════════════════════════════════════════════
 // SUPPORT US
 // ══════════════════════════════════════════════════════════════
@@ -300,7 +371,12 @@ Route::prefix('support')->name('support.')->group(function () {
     Route::get('/projects',              fn() => view('pages.support.ongoing-projects'))      ->name('projects');
 
     // Donations
-    Route::get('/donate',                fn() => view('pages.support.donate'))                ->name('donate');
+   // Donations — pass active projects to view
+    Route::get('/donate', function () {
+        $donationProjects = DonationProject::active()->get();
+    return view('pages.support.donate', compact('donationProjects'));})->name('donate');
+
+    
     // Route::get('/donate-ifi',            fn() => view('pages.support.donate-ifi'))            ->name('donate-ifi');
     Route::get('/bequests',              fn() => view('pages.support.bequests'))              ->name('bequests');
     Route::get('/fundraiser',            fn() => view('pages.support.fundraiser'))            ->name('fundraiser');
@@ -315,6 +391,6 @@ Route::prefix('support')->name('support.')->group(function () {
     Route::get('/corporate-foundations', fn() => view('pages.support.corporate-foundations')) ->name('corporate');
 
     // Tax
-    Route::get('/tax-benefits',          fn() => view('pages.support.tax-benefits'))          ->name('tax-benefits');
+    // Route::get('/tax-benefits',          fn() => view('pages.support.tax-benefits'))          ->name('tax-benefits');
 });
 Auth::routes(['verify'=>true]);

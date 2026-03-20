@@ -43,10 +43,12 @@ body { top: 0 !important; }
 .util-link:hover { color: #fff; }
 
 /* ══════════════════════════════════════════════
-   2. LOGO BANNER  ← taller
+   2. LOGO BANNER — shorter height
 ══════════════════════════════════════════════ */
 #logo-banner {
-    position: relative; overflow: hidden; min-height: 210px;
+    position: relative; overflow: hidden;
+    /* ✅ Reduced from 280px → 190px */
+    min-height: 190px;
     background-image: url("{{ asset('images/image.jpg') }}");
     background-size: cover; background-position: center 40%;
     background-color: #1a2e3b;
@@ -62,12 +64,19 @@ body { top: 0 !important; }
     background: radial-gradient(ellipse at 14% 55%, rgba(249,115,22,.45) 0%, transparent 38%);
 }
 .banner-inner {
-    max-width: 1280px; margin: 0 auto; padding: 0 24px;
-    min-height: 210px; display: flex; align-items: center; justify-content: space-between;
+    max-width: 1280px; margin: 0 auto;
+    /* ✅ Matches shorter banner */
+    min-height: 190px;
+    display: flex; align-items: center; justify-content: space-between;
+    /* ✅ Less top padding so content stays centered in shorter banner */
+    padding: 12px 80px 0;
     position: relative; z-index: 2;
 }
+
+/* ── Logo image — BIGGER ── */
 .logo-img {
-    height: 200px; width: auto; display: block;
+    /* ✅ Increased from 200px → 240px */
+    height: 240px; width: auto; display: block;
     filter: brightness(1.18) saturate(1.25) drop-shadow(0 0 18px rgba(249,115,22,.65)) drop-shadow(0 4px 22px rgba(0,0,0,.70));
     transition: filter .25s, transform .25s;
 }
@@ -75,6 +84,7 @@ body { top: 0 !important; }
     filter: brightness(1.28) saturate(1.35) drop-shadow(0 0 28px rgba(249,115,22,.85)) drop-shadow(0 6px 28px rgba(0,0,0,.65));
     transform: translateY(-3px) scale(1.03);
 }
+
 .subscribe-btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 11px 20px; background: #2ecc71; color: #fff;
@@ -86,7 +96,7 @@ body { top: 0 !important; }
 .subscribe-btn:hover { background: #27ae60; transform: translateY(-1px); color: #fff; }
 
 /* ══════════════════════════════════════════════
-   3. MAIN NAV — with mega dropdown
+   3. MAIN NAV — shorter height
 ══════════════════════════════════════════════ */
 #main-nav {
     background: #fff;
@@ -114,7 +124,8 @@ body { top: 0 !important; }
 }
 .nav-item-link {
     display: flex; align-items: center; gap: 5px;
-    padding: 0 18px; height: 52px;
+    /* ✅ Reduced from 68px → 52px */
+    padding: 0 20px; height: 52px;
     font-size: 12px; font-weight: 800;
     text-transform: uppercase; letter-spacing: .06em;
     color: #1e3a4a; text-decoration: none;
@@ -157,9 +168,7 @@ body { top: 0 !important; }
     z-index: 2000;
     display: flex; gap: 32px;
 }
-/* Right-align dropdowns that would overflow */
 .mega-drop.drop-right { left: auto; right: 0; }
-
 .nav-item:hover .mega-drop { opacity: 1; visibility: visible; transform: translateY(0); }
 
 /* ── Dropdown column ── */
@@ -180,10 +189,7 @@ body { top: 0 !important; }
     border-bottom: 1px dashed #f3f4f6;
 }
 .drop-link:last-child { border-bottom: none; }
-.drop-link:hover {
-    background: #fff7ed; color: #ea580c;
-    padding-left: 16px;
-}
+.drop-link:hover { background: #fff7ed; color: #ea580c; padding-left: 16px; }
 .drop-link i { width: 14px; text-align: center; color: #f97316; font-size: 11px; flex-shrink:0; }
 
 /* ── Small single-col dropdown ── */
@@ -273,7 +279,6 @@ body { top: 0 !important; }
     padding: 8px 16px; position: sticky; top: 0; z-index: 1000;
     box-shadow: 0 2px 12px rgba(0,0,0,.25);
 }
-/* Mobile drawer */
 .mobile-menu-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:1090; }
 .mobile-menu-overlay.active { display:block; }
 .mobile-menu {
@@ -285,7 +290,6 @@ body { top: 0 !important; }
 }
 .mobile-menu.active { right: 0; }
 
-/* Mobile nav items with accordion */
 .mob-nav-item { border-bottom: 1px solid #f3f4f6; }
 .mob-nav-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -299,21 +303,14 @@ body { top: 0 !important; }
 .mob-nav-header:hover, .mob-nav-header.mob-active { background: #fff7ed; color: #f97316; }
 .mob-nav-icon { color: #f97316; width: 18px; text-align: center; font-size: 13px; flex-shrink:0; }
 .mob-nav-title { flex: 1; }
-.mob-caret {
-    font-size: 10px; color: #9ca3af;
-    transition: transform .25s ease;
-    flex-shrink:0;
-}
+.mob-caret { font-size: 10px; color: #9ca3af; transition: transform .25s ease; flex-shrink:0; }
 .mob-nav-item.open .mob-caret { transform: rotate(180deg); }
-
-/* Accordion body */
 .mob-nav-body {
     max-height: 0; overflow: hidden;
     transition: max-height .32s cubic-bezier(.4,0,.2,1);
     background: #fafafa;
 }
 .mob-nav-item.open .mob-nav-body { max-height: 800px; }
-
 .mob-drop-section { padding: 6px 0 6px 16px; }
 .mob-drop-title {
     font-size: 9px; font-weight: 900; letter-spacing: .12em;
@@ -331,7 +328,6 @@ body { top: 0 !important; }
 .mob-drop-link:hover, .mob-drop-link:active { background: #fff7ed; color: #ea580c; }
 .mob-drop-link i { width: 16px; text-align: center; color: #f97316; font-size: 11px; flex-shrink:0; }
 
-/* Mobile language */
 #translate-panel-mobile { background: #f9fafb; border-radius: 12px; padding: 12px; margin-bottom: 14px; }
 .mobile-lang-btn {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;
@@ -405,6 +401,7 @@ body { top: 0 !important; }
     </div>
 </div>
 
+{{-- ══ LOGO BANNER ══ --}}
 <div id="logo-banner">
     <div class="banner-inner">
         <a href="{{ route('home') }}" class="logo-mark flex items-center gap-4 text-decoration-none">
@@ -413,7 +410,10 @@ body { top: 0 !important; }
         <div class="flex items-center gap-3">
             <a href="{{ route('sponsor.children') }}" class="subscribe-btn">
                 <i class="fas fa-heart text-sm"></i>
-                <span>Sponsor For Children</span>
+                <span
+                    data-en="Sponsor a Child"
+                    data-km="ឧបត្ថម្ភកុមារ"
+                    data-fr="Parrain d'Enfants">Sponsor a Child</span>
             </a>
         </div>
     </div>
@@ -424,7 +424,7 @@ body { top: 0 !important; }
     <div class="nav-inner">
         <nav class="nav-links">
 
-            {{-- ① WHO WE ARE — 2-column mega dropdown --}}
+            {{-- ① WHO WE ARE --}}
             <div class="nav-item">
                 <span class="nav-item-link">
                     <span data-en="Who We Are" data-km="អំពីយើង" data-fr="Qui sommes-nous">Who We Are</span>
@@ -449,7 +449,7 @@ body { top: 0 !important; }
                 </div>
             </div>
 
-            {{-- ② WHAT WE DO — 3-column mega dropdown --}}
+            {{-- ② WHAT WE DO --}}
             <div class="nav-item">
                 <span class="nav-item-link">
                     <span data-en="What We Do" data-km="អ្វីដែលយើងធ្វើ" data-fr="Ce que nous faisons">What We Do</span>
@@ -479,7 +479,7 @@ body { top: 0 !important; }
                 </div>
             </div>
 
-            {{-- ③ SUPPORT US — right-anchored to prevent overflow --}}
+            {{-- ③ SUPPORT US --}}
             <div class="nav-item">
                 <span class="nav-item-link">
                     <span data-en="Support Us" data-km="គាំទ្រយើង" data-fr="Nous soutenir">Support Us</span>
@@ -504,6 +504,8 @@ body { top: 0 !important; }
             </div>
 
         </nav>
+
+        {{-- ── CTA buttons ── --}}
         <div class="nav-ctas">
             @auth('sponsor')
                 <a href="{{ route('sponsor.dashboard') }}" class="nav-cta-sponsor">
@@ -520,12 +522,12 @@ body { top: 0 !important; }
             @else
                 <a href="{{ route('sponsor.contact') }}" class="nav-cta-sponsor">
                     <i class="fas fa-child text-base"></i>
-                    <span data-en="Sponsor a Child" data-km="ឧបត្ថម្ភកុមារ" data-fr="Parrainer">Sponsor a Child</span>
+                    <span data-en="Sponsor a Child" data-km="ឧបត្ថម្ភកុមារ" data-fr="Je parraine">Sponsor a Child</span>
                 </a>
-                <a href="{{ route('sponsor.login') }}" class="nav-cta-donate">
+                <button id="openHaOverlay" class="nav-cta-donate" style="border:none;cursor:pointer;">
                     <i class="fas fa-heart text-base"></i>
-                    <span data-en="Donate" data-km="ចូល" data-fr="Donation">Donate</span>
-                </a>
+                    <span data-en="Donate" data-km="បរិច្ចាគ" data-fr="Je donne">Donate</span>
+                </button>
             @endauth
         </div>
     </div>
@@ -542,7 +544,8 @@ body { top: 0 !important; }
     <div class="flex items-center gap-2">
         <a href="{{ route('sponsor.children') }}"
            class="flex items-center gap-1.5 px-3 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-[11px] font-black uppercase rounded-lg transition">
-            <i class="fas fa-child text-xs"></i> Sponsor
+            <i class="fas fa-child text-xs"></i>
+            <span data-en="Sponsor" data-km="ឧបត្ថម្ភ" data-fr="Parrainer">Sponsor</span>
         </a>
         <button id="mobile-menu-btn"
                 class="text-white/80 hover:text-white p-2 rounded-lg hover:bg-white/10 transition">
@@ -551,13 +554,11 @@ body { top: 0 !important; }
     </div>
 </div>
 
-{{-- Mobile overlay --}}
 <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 
-{{-- ══ MOBILE DRAWER with accordion menus ══ --}}
+{{-- ══ MOBILE DRAWER ══ --}}
 <div id="mobile-menu" class="mobile-menu">
     <div class="p-5">
-        {{-- Header --}}
         <div class="flex items-center justify-between mb-5 pb-4 border-b border-gray-100">
             <a href="{{ route('home') }}">
                 <img src="{{ $logoPath }}" alt="{{ $siteName }}"
@@ -568,7 +569,6 @@ body { top: 0 !important; }
             </button>
         </div>
 
-        {{-- Language panel --}}
         <div id="translate-panel-mobile">
             <p class="text-[10px] font-bold text-gray-500 flex items-center gap-1.5 uppercase tracking-wide mb-3">
                 <i class="fas fa-globe text-orange-500 text-xs"></i>
@@ -592,7 +592,6 @@ body { top: 0 !important; }
             </button>
         </div>
 
-        {{-- Social icons --}}
         @if($fbUrl || $igUrl || $ytUrl || $tgUrl || $waUrl || $liUrl)
         <div class="flex gap-2 mb-4">
             @if($fbUrl)<a href="{{ $fbUrl }}" target="_blank" class="w-9 h-9 bg-gray-100 hover:bg-orange-500 hover:text-white text-gray-600 rounded-full flex items-center justify-center transition text-sm"><i class="fab fa-facebook-f"></i></a>@endif
@@ -604,7 +603,6 @@ body { top: 0 !important; }
         </div>
         @endif
 
-        {{-- ══ Accordion nav — 3 items ══ --}}
         <nav>
             {{-- ① Who We Are --}}
             <div class="mob-nav-item" id="mob-whoweare">
@@ -678,7 +676,6 @@ body { top: 0 !important; }
             </div>
         </nav>
 
-        {{-- CTA buttons --}}
         <div class="space-y-2.5 mt-5">
             @auth('sponsor')
                 <a href="{{ route('sponsor.dashboard') }}"
@@ -701,13 +698,12 @@ body { top: 0 !important; }
                    class="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-sm uppercase tracking-wide"
                    style="background:#f5c518;color:#1a1a1a">
                     <i class="fas fa-child"></i>
-                    <span data-en="Sponsor a Child" data-km="ឧបត្ថម្ភកុមារ" data-fr="Parrainer">Sponsor a Child</span>
+                    <span data-en="Sponsor a Child" data-km="ឧបត្ថម្ភកុមារ" data-fr="Je parraine">Sponsor a Child</span>
                 </a>
-                <a href="{{ route('sponsor.login') }}"
-                   class="flex items-center justify-center gap-2 w-full py-3.5 bg-green-500 hover:bg-green-600 text-white rounded-xl font-black text-sm uppercase tracking-wide transition">
+                <button id="openHaOverlayMobile" class="flex items-center justify-center gap-2 w-full py-3.5 bg-green-500 hover:bg-green-600 text-white rounded-xl font-black text-sm uppercase tracking-wide transition" style="border:none;cursor:pointer;">
                     <i class="fas fa-heart"></i>
-                    <span data-en="Donate" data-km="ចូល" data-fr="Donation">Donate</span>
-                </a>
+                    <span data-en="Donate" data-km="បរិច្ចាគ" data-fr="Je donne">Donate</span>
+                </button>
             @endauth
         </div>
     </div>
@@ -717,7 +713,6 @@ body { top: 0 !important; }
      SCRIPTS
 ═══════════════════════════════════════════ --}}
 <script>
-// ── Mobile accordion ──────────────────────────────────────────────────
 function toggleMobMenu(id) {
     const item = document.getElementById(id);
     if (!item) return;
@@ -725,7 +720,6 @@ function toggleMobMenu(id) {
     document.querySelectorAll('.mob-nav-item.open').forEach(el => el.classList.remove('open'));
     if (!isOpen) item.classList.add('open');
 }
-
 function openMobileMenu() {
     document.getElementById('mobile-menu')?.classList.add('active');
     document.getElementById('mobile-menu-overlay')?.classList.add('active');
@@ -741,7 +735,6 @@ document.getElementById('close-menu')?.addEventListener('click', closeMobileMenu
 document.getElementById('mobile-menu-overlay')?.addEventListener('click', closeMobileMenu);
 document.querySelectorAll('.mobile-menu-link').forEach(l => l.addEventListener('click', closeMobileMenu));
 
-// ── Google Translate ─────────────────────────────────────────────────
 function googleTranslateElementInit() {
     new google.translate.TranslateElement({
         pageLanguage:'en', includedLanguages:'en,km,fr',
@@ -749,7 +742,6 @@ function googleTranslateElementInit() {
         autoDisplay: false, multilanguagePage: true
     }, 'google_translate_element');
 }
-
 function triggerGoogleTranslate(targetLang) {
     return new Promise(resolve => {
         const expiry = 'expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -769,14 +761,12 @@ function triggerGoogleTranslate(targetLang) {
         trySelect(8);
     });
 }
-
 const LANGS = {
     en: { label:'EN', flag:'https://flagcdn.com/w40/us.png', name:'English' },
     km: { label:'KM', flag:'https://flagcdn.com/w40/kh.png', name:'ខ្មែរ' },
     fr: { label:'FR', flag:'https://flagcdn.com/w40/fr.png', name:'Français' }
 };
 let currentLang = localStorage.getItem('gt_lang') || 'fr';
-
 function updateLangUI(lang) {
     const cfg = LANGS[lang] || LANGS.en;
     const flagEl  = document.getElementById('desktop-flag');
@@ -801,14 +791,12 @@ function updateLangUI(lang) {
     currentLang = lang;
     localStorage.setItem('gt_lang', lang);
 }
-
 async function switchLanguage(lang) {
     if (lang === currentLang) { closeTranslatePanel(); return; }
     updateLangUI(lang);
     await triggerGoogleTranslate(lang);
     closeTranslatePanel();
 }
-
 function autoDetectAndTranslate() {
     const order = ['en','km','fr'];
     const next  = order[(order.indexOf(currentLang) + 1) % order.length];
@@ -822,7 +810,6 @@ function autoDetectAndTranslate() {
         if (btnM) btnM.innerHTML = '<i class="fas fa-magic text-xs"></i> ' + (LANGS[next]?.name || next.toUpperCase());
     });
 }
-
 function toggleTranslatePanel() {
     const panel = document.getElementById('translate-panel');
     const caret = document.getElementById('translate-caret');
@@ -835,12 +822,10 @@ function closeTranslatePanel() {
     if (p) p.classList.remove('open');
     if (c) c.style.transform = '';
 }
-
 document.addEventListener('click', e => {
     const w = document.getElementById('translate-wrapper');
     if (w && !w.contains(e.target)) closeTranslatePanel();
 });
-
 document.addEventListener('DOMContentLoaded', () => {
     const cookie = document.cookie.split(';').find(c => c.trim().startsWith('googtrans='));
     const stored = localStorage.getItem('gt_lang');
@@ -859,4 +844,57 @@ document.addEventListener('DOMContentLoaded', () => {
     updateLangUI(currentLang);
 });
 </script>
+{{-- ═══════════════════════════════════════════
+     HELLOASSO DONATION MODAL
+═══════════════════════════════════════════ --}}
+<div id="haWidgetModal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;backdrop-filter:blur(15px) brightness(0.5);z-index:2147483647;">
+    <button id="closeHaWidgetBtn" style="position:absolute;top:.5rem;right:1.5rem;z-index:2147483648;background:#EFEFF4;border:none;border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <line x1="6" y1="6" x2="18" y2="18" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18" y1="6" x2="6" y2="18" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <div style="position:relative;width:100%;max-width:950px;height:100%;overflow:hidden;">
+        <iframe
+            id="haWidget"
+            src="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1/widget?view=overlay"
+            style="width:100%;height:100%;border:none;border-radius:8px;">
+        </iframe>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal    = document.getElementById('haWidgetModal');
+    const closeBtn = document.getElementById('closeHaWidgetBtn');
+    const body     = document.body;
+
+    function openModal() {
+        modal.style.display = 'flex';
+        body.style.overflow = 'hidden';
+        body.style.overscrollBehaviorY = 'none';
+    }
+    function closeModal() {
+        modal.style.display = 'none';
+        body.style.overflow = '';
+        body.style.overscrollBehaviorY = '';
+    }
+
+    // Desktop nav button
+    document.getElementById('openHaOverlay')?.addEventListener('click', openModal);
+    // Mobile drawer button
+    document.getElementById('openHaOverlayMobile')?.addEventListener('click', () => {
+        closeMobileMenu();
+        openModal();
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    closeBtn.addEventListener('mouseenter', () => closeBtn.style.background = '#E0E0E8');
+    closeBtn.addEventListener('mouseleave', () => closeBtn.style.background = '#EFEFF4');
+
+    // Close on backdrop click
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+});
+</script>
+
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>

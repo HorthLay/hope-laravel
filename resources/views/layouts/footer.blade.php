@@ -6,7 +6,7 @@
                   @if(!empty($settings['logo']))
                     <img src="{{ asset($settings['logo']) }}" 
                         alt="{{ $settings['site_name'] ?? 'Logo' }}" 
-                        class="h-[70px] w-auto object-contain">
+                        class="h-[150px] w-auto object-contain">
                 @else
                     <div class="w-[70px] h-[70px] bg-gradient-to-br from-[#f4b630] to-[#e0a500] rounded-full flex items-center justify-center">
                         <i class="fas fa-heart text-white text-2xl"></i>

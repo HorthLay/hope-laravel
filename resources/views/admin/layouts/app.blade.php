@@ -344,6 +344,10 @@
             <i class="fas fa-envelope"></i><span class="font-medium">Email</span>
             </a>
 
+              <a href="{{ route('admin.donation-projects.index') }}" class="nav-item {{ request()->routeIs('admin.donation-projects.*') ? 'active' : '' }}">
+            <i class="fas fa-project-diagram"></i><span class="font-medium">Project</span>
+            </a>
+
             @if($isSuperAdmin || $isAdmin)
                 <div class="nav-group-title">User Management</div>
                 @if($isSuperAdmin)

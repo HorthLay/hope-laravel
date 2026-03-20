@@ -65,7 +65,7 @@
             max-width:1200px; margin:0 auto; padding:12px 20px;
             display:flex; align-items:center; justify-content:space-between; gap:12px;
         }
-        .header-logo { height:56px; width:auto; transition:opacity .2s; }
+        .header-logo { height:100px; width:auto; transition:opacity .2s; }
         .header-logo:hover { opacity:.8; }
         .header-right { display:flex; align-items:center; gap:10px; }
 

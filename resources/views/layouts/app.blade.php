@@ -321,6 +321,9 @@
 @include('layouts.navigation')
 @include('layouts.ads')
 
+{{-- ════ COOKIE CONSENT ════ --}}
+@include('layouts.cookie-consent')
+
 <script>
 // ── Loader ──────────────────────────────────────────────────────────────
 window.addEventListener('load',()=>{

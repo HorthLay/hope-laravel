@@ -419,10 +419,23 @@
     <img id="hero-fallback" src="{{ asset('images/cambodia-bg.jpg') }}" alt="Children in Cambodia">
     <div id="hero-overlay"></div>
     <div id="hero-content">
-        <h1>Sponsor a child today</h1>
-        <p>And change a life with the gift of education</p>
-        <a href="{{ route('sponsor.children') }}" class="hero-sponsor-btn">
-            <i class="fas fa-child"></i> Sponsor a Child Now
+        <h1 data-en="Sponsor a child today"
+                    data-km="ឧបត្ថម្ភកុមារនៅថ្ងៃនេះ"
+                    data-fr="Parrainez dès aujourd'hui">Sponsor a child today</h1>
+        <p 
+        
+        data-en="And change a life with the gift of education"
+                    data-km="ហើយផ្លាស់ប្តូរជីវិតជាមួយនឹងអំណោយនៃការអប់រំ"
+                    data-fr="Changez une vie pour toujours."
+        >And change a life with the gift of education</p>
+        <a href="{{ route('sponsor.children') }}" class="hero-sponsor-btn"
+        data-en="Sponsor a child Now"
+                    data-km="ឧបត្ថម្ភកុមារនៅថ្ងៃនេះ"
+                    data-fr="m'engage!"
+        
+        >
+            <i class="fas fa-child"></i> 
+            Sponsor a Child Now
         </a>
     </div>
     <div id="hero-scroll"><i class="fas fa-chevron-down"></i><span>Scroll</span></div>
@@ -653,7 +666,7 @@
                            class="flex items-center justify-center gap-1 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-bold rounded-xl transition">
                             <i class="fas fa-eye text-[9px]"></i> View
                         </a>
-                        <a href="{{ route('sponsor.family', $fEncId) }}"
+                        <a href="#"
                            class="flex items-center justify-center gap-1 py-2 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold rounded-xl transition">
                             <i class="fas fa-hands-helping text-[9px]"></i> Sponsor
                         </a>
@@ -666,52 +679,6 @@
 </section>
 @endif
 
-{{-- ═══════ WHY CHOOSE US ═══════ --}}
-<section class="section bg-gray-50">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-8 md:mb-12 reveal">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Why Choose Us</h2>
-            <p class="text-base md:text-lg text-gray-600 max-w-3xl mx-auto">Trusted by thousands of donors worldwide for our transparency and commitment</p>
-        </div>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            @foreach([
-                ['icon'=>'fas fa-shield-alt','bg'=>'orange','label'=>'100% Transparent','desc'=>'Full accountability on how your donations are used'],
-                ['icon'=>'fas fa-certificate','bg'=>'blue','label'=>'Certified NGO','desc'=>'Internationally recognized and accredited organization'],
-                ['icon'=>'fas fa-hand-holding-heart','bg'=>'green','label'=>'Direct Impact','desc'=>'Your support directly reaches children in need'],
-                ['icon'=>'fas fa-users','bg'=>'purple','label'=>'Strong Network','desc'=>'1000+ local volunteers ensuring quality programs'],
-            ] as $i => $h)
-            <div class="bg-white rounded-xl p-4 md:p-6 shadow-md hover:shadow-xl transition-all reveal text-center stagger-{{ $i+1 }}">
-                <div class="w-12 h-12 md:w-16 md:h-16 bg-{{ $h['bg'] }}-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
-                    <i class="{{ $h['icon'] }} text-{{ $h['bg'] }}-600 text-xl md:text-3xl"></i>
-                </div>
-                <h3 class="text-sm md:text-lg font-bold text-gray-800 mb-2">{{ $h['label'] }}</h3>
-                <p class="text-xs md:text-sm text-gray-600">{{ $h['desc'] }}</p>
-            </div>
-            @endforeach
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6">
-            @foreach([
-                ['bg'=>'orange','icon'=>'fas fa-envelope','label'=>'Monthly Updates','desc'=>'Receive letters and photos from your sponsored child'],
-                ['bg'=>'blue','icon'=>'fas fa-globe','label'=>'Global Reach','desc'=>'Operating in 7 countries across Southeast Asia'],
-                ['bg'=>'green','icon'=>'fas fa-heart','label'=>'Long-term Support','desc'=>"Follow children's progress throughout their education",'span'=>true],
-            ] as $i => $e)
-            <div class="bg-gradient-to-br from-{{ $e['bg'] }}-50 to-{{ $e['bg'] }}-100 rounded-xl p-4 md:p-6 shadow-md hover:shadow-xl transition-all reveal {{ isset($e['span'])?'col-span-2 md:col-span-1':'' }} stagger-{{ $i+1 }}">
-                <div class="flex items-start gap-3">
-                    <div class="w-10 h-10 md:w-12 md:h-12 bg-{{ $e['bg'] }}-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <i class="{{ $e['icon'] }} text-white text-sm md:text-lg"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-sm md:text-base font-bold text-gray-800 mb-1">{{ $e['label'] }}</h4>
-                        <p class="text-xs md:text-sm text-gray-600">{{ $e['desc'] }}</p>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-{{-- ═══════ OUR WORK ═══════ --}}
 <section id="our-work" class="section bg-white py-12 md:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8 md:mb-12 reveal">
@@ -720,14 +687,14 @@
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             @foreach([
-                ['img'=>'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600','overlay'=>'1958','title'=>'66 years of experience','desc'=>"Since 1958, we've been transforming children's lives through a network of over 1,000 local volunteers."],
-                ['img'=>'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600','overlay'=>'MISSION','title'=>'Education and Support','desc'=>'We educate and train young people to improve their living conditions and build themselves intellectually.'],
-                ['img'=>'https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=600','overlay'=>'84%','title'=>'Impact of Donations','desc'=>'84% of funds raised go directly to our education programs. Over 95,000 children benefit from our work every year.'],
-                ['img'=>'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=600','overlay'=>'IDEAS','title'=>'IDEAS Label 2024','desc'=>"We've been awarded the IDEAS label for good governance, transparency, and monitoring the effectiveness of our actions."],
+                ['img'=>'images/children/image-1.jpg','overlay'=>'1958','title'=>'66 years of experience','desc'=>"Since 1958, we've been transforming children's lives through a network of over 1,000 local volunteers."],
+                ['img'=>'images/children/image-2.jpg','overlay'=>'MISSION','title'=>'Education and Support','desc'=>'We educate and train young people to improve their living conditions and build themselves intellectually.'],
+                ['img'=>'images/children/image-3.jpg','overlay'=>'84%','title'=>'Impact of Donations','desc'=>'84% of funds raised go directly to our education programs. Over 95,000 children benefit from our work every year.'],
+                ['img'=>'images/children/image-4.jpg','overlay'=>'IDEAS','title'=>'IDEAS Label 2024','desc'=>"We've been awarded the IDEAS label for good governance, transparency, and monitoring the effectiveness of our actions."],
             ] as $i => $card)
             <div class="card reveal bg-white rounded-xl shadow-lg overflow-hidden stagger-{{ $i+1 }}">
                 <div class="relative">
-                    <img src="{{ $card['img'] }}" alt="{{ $card['title'] }}" class="w-full h-64 object-cover">
+                    <img src="{{ asset($card['img']) }}" alt="{{ $card['title'] }}" class="w-full h-64 object-cover">
                     <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
                         <h3 class="text-5xl md:text-6xl font-black text-white text-center px-2">{{ $card['overlay'] }}</h3>
                     </div>
@@ -1247,6 +1214,9 @@
 @include('layouts.footer')
 @include('layouts.navigation')
 @include('layouts.ads')
+
+{{-- ════ COOKIE CONSENT ════ --}}
+@include('layouts.cookie-consent')
 
 <script>
 // ── Loader + popup ──────────────────────────────────
