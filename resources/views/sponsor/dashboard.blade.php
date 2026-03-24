@@ -660,6 +660,7 @@
                 <div class="card-meta">
                     @if($child->country)<span><i class="fas fa-map-marker-alt"></i> {{ $child->country }}</span>@endif
                     @if($child->age ?? null)<span><i class="fas fa-birthday-cake"></i> {{ $child->age }}y</span>@endif
+                    <span style="font-family:monospace;font-size:9px;background:#f1f5f9;padding:1px 6px;border-radius:4px;color:#64748b">{{ $child->code }}</span>
                     @if($child->gender)
                     <span style="color:{{ strtolower($child->gender)==='female'?'#ec4899':'#3b82f6' }}">
                         <i class="fas {{ strtolower($child->gender)==='female'?'fa-venus':'fa-mars' }}"></i>

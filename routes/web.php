@@ -361,7 +361,8 @@ Route::prefix('sponsor')->name('sponsor.')->group(function () {
     Route::get('/faq',                   fn() => view('pages.sponsorship.faq'))               ->name('faq');
 });
 Route::get('/donate/project/{donationProject}/vignette', [DonateVignetteController::class, 'show'])
-     ->name('donate.project.vignette');
+     ->name('Children in This Article
+');
 // ══════════════════════════════════════════════════════════════
 // SUPPORT US
 // ══════════════════════════════════════════════════════════════

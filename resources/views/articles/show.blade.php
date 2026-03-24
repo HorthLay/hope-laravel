@@ -395,7 +395,7 @@
                         </div>
                         <div class="flex flex-col gap-1">
                             <a href="{{ route('children.show', $cEncId) }}" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">Detail</a>
-                            <a href="{{ route('sponsor.child', $cEncId) }}" class="px-2.5 py-1 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-black rounded-lg transition text-center">Sponsor</a>
+                            <a href="{{ url('/support/donate') }}" class="px-2.5 py-1 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-black rounded-lg transition text-center">Sponsor</a>
                         </div>
                     </div>
                     @endforeach
@@ -425,7 +425,7 @@
                         </div>
                         <div class="flex flex-col gap-1">
                             <a href="{{ route('families.show', $fEncId) }}" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">Detail</a>
-                            <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-black rounded-lg transition text-center">Sponsor</a>
+                            <a href="{{ url('/support/donate') }}" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-black rounded-lg transition text-center">Sponsor</a>
                         </div>
                     </div>
                     @endforeach
