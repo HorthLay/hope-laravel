@@ -147,6 +147,24 @@
                         </div>
                         <div class="p-5 flex flex-col flex-1">
                             <h3 class="font-black text-gray-800 text-lg leading-tight mb-3">{{ $family->name }}</h3>
+                           @if($family->code)
+                                <div class="flex-1 mb-4">
+                                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition">
+                                        <p class="text-sm font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+                                            Family Code
+                                        </p>
+                                        <p class="text-lg font-bold text-gray-800 leading-relaxed break-words">
+                                            {{ $family->code }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="flex-1 mb-4 flex items-center justify-center border border-dashed border-gray-300 rounded-xl p-4">
+                                    <p class="text-gray-400 text-sm italic">
+                                        No code available
+                                    </p>
+                                </div>
+                            @endif
                             @if($family->story)
                             <p class="text-sm text-gray-600 leading-relaxed line-clamp-4 flex-1 mb-4">{{ strip_tags($family->story) }}</p>
                             @else
@@ -211,6 +229,27 @@
                         </div>
                         <div class="p-5 flex flex-col flex-1">
                             <h3 class="font-black text-gray-800 text-lg leading-tight mb-3">{{ $child->first_name }} {{ $child->last_name ?? '' }}</h3>
+
+
+                             @if($child->code)
+                                <div class="flex-1 mb-4">
+                                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition">
+                                        <p class="text-sm font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+                                            Children Code
+                                        </p>
+                                        <p class="text-lg font-bold text-gray-800 leading-relaxed break-words">
+                                            {{ $child->code }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="flex-1 mb-4 flex items-center justify-center border border-dashed border-gray-300 rounded-xl p-4">
+                                    <p class="text-gray-400 text-sm italic">
+                                        No code available
+                                    </p>
+                                </div>
+                            @endif
+
                             @if(!empty($child->story))
                             <p class="text-sm text-gray-600 leading-relaxed line-clamp-3 flex-1 mb-4">{{ Str::limit(strip_tags($child->story), 120) }}</p>
                             @else
@@ -385,6 +424,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-bold text-gray-800 truncate">{{ $child->first_name }}</p>
+                            <p class="text-xs text-black-400">{{ $child->code }}</p>
                             @if(!empty($child->age))<p class="text-xs text-gray-400">{{ $child->age }} yrs · {{ $child->country ?? '' }}</p>@endif
                             @if($child->has_family !== null)
                             <span class="text-xs font-bold flex items-center gap-1 {{ $child->has_family ? 'text-green-500' : 'text-red-500' }}">
@@ -421,6 +461,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-bold text-gray-800 truncate">{{ $family->name }}</p>
+                            <p class="text-xs text-black-400">{{ $family->code }}</p>
                             @if($family->country)<p class="text-xs text-gray-400">{{ $family->country }}</p>@endif
                         </div>
                         <div class="flex flex-col gap-1">
