@@ -1,66 +1,297 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/images/logo.png" width="160" alt="Hope & Impact Logo" />
 </p>
 
-## About Laravel
+<h1 align="center">Hope & Impact — Des Ailes pour Grandir</h1>
+<p align="center">
+  <strong>NGO Sponsorship & Donation Platform · Cambodia</strong><br>
+  Built with Laravel · Tailwind CSS · Alpine.js
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-11.x-red?logo=laravel" alt="Laravel">
+  <img src="https://img.shields.io/badge/PHP-8.5-blue?logo=php" alt="PHP">
+  <img src="https://img.shields.io/badge/MySQL-8.0-orange?logo=mysql" alt="MySQL">
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📖 About the Project
 
-## Learning Laravel
+**Hope & Impact** (originally *Des Ailes pour Grandir* — "Wings to Grow") is a full-stack NGO web platform supporting vulnerable children and families in Cambodia. The platform enables child and family sponsorships, donation project management, multilingual content, and a complete admin back-office.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+> "Safeguarding every child's right to safety, dignity, and a future free from exploitation."
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ✨ Features
 
-## Laravel Sponsors
+### 🌐 Public Site
+- **Home page** — dynamic hero, stats, impact sections
+- **Childhood pages** — Protection, Health & Nutrition, Education, Personal Development, Children's Homes
+- **Family pages** — Housing & Family Stability, family listings with search & filter
+- **Sponsor pages** — Browse children & families, filtered grid with pagination
+- **Donation page** — HelloAsso embedded widget per project, campaign card modal
+- **Fundraiser page** — Solidarity fundraiser guide with 6 campaign types
+- **Multilingual** — FR / EN / KM (Khmer) via `data-fr/en/km` attributes + Google Translate integration
+- **Particle animations** — Night sky → dawn canvas (stars, shooting stars, light rays) on key pages
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 🔐 Admin Panel
+- **Dashboard** — live stats, recent activity
+- **Children management** — CRUD with image upload, profile photo, sponsorship status
+- **Family management** — CRUD, family members, documents, media
+- **Sponsor management** — sponsor profiles, linked children & families
+- **Donation projects** — CRUD with HelloAsso widget/vignette URL management, badge colors
+- **Email management** — Trilingual email templates (account created, password reset), sponsor search, live preview, send
+- **Settings** — `storage/app/settings.json` — site name, logo, favicon, meta tags, social links
 
-### Premium Partners
+### 💳 Sponsorship System
+- Encrypted route IDs (`Crypt::encryptString`) for public URLs
+- Sponsor ↔ Child (many-to-many via `sponsor_child`)
+- Sponsor ↔ Family (many-to-many via `sponsor_family`)
+- `PublicChildController` / `PublicFamilyController` — detail pages
+- `SponsorController` — listing + sponsorship form pages
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## 🏗️ Tech Stack
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Layer | Technology |
+|---|---|
+| Framework | Laravel 11.x |
+| PHP | 8.5 |
+| Database | MySQL 8.0 |
+| CSS | Tailwind CSS (CDN) |
+| JS | Alpine.js, Vanilla JS |
+| Fonts | Cormorant Garamond, Outfit, Fraunces, Plus Jakarta Sans |
+| Icons | Font Awesome 6 |
+| Payments | HelloAsso (iframe embed) |
+| Mail | Laravel Mailable + SMTP |
+| Storage | Local (`public/uploads/`) |
+| Dev environment | XAMPP (macOS Apple Silicon) |
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📁 Project Structure
 
-## Security Vulnerabilities
+```
+hope-laravel/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Admin/
+│   │   │   │   ├── AdminEmailController.php
+│   │   │   │   ├── ProjectAdminController.php
+│   │   │   │   └── ...
+│   │   │   ├── PublicChildController.php
+│   │   │   ├── PublicFamilyController.php
+│   │   │   └── SponsorController.php
+│   ├── Mail/
+│   │   ├── SponsorAccountCreated.php
+│   │   └── SponsorPasswordReset.php
+│   └── Models/
+│       ├── Family.php
+│       ├── FamilyMember.php
+│       ├── SponsoredChild.php
+│       ├── Sponsor.php
+│       ├── DonationProject.php
+│       └── ...
+├── resources/views/
+│   ├── layouts/
+│   │   ├── app.blade.php
+│   │   ├── header.blade.php
+│   │   └── footer.blade.php
+│   ├── pages/
+│   │   ├── childhood/
+│   │   │   ├── protection.blade.php
+│   │   │   ├── health-nutrition.blade.php
+│   │   │   ├── education.blade.php
+│   │   │   ├── personal-development.blade.php
+│   │   │   └── childrens-homes.blade.php
+│   │   ├── families/
+│   │   │   └── housing.blade.php
+│   │   └── support/
+│   │       ├── donate.blade.php
+│   │       └── fundraiser.blade.php
+│   ├── sponsor/
+│   │   ├── index.blade.php
+│   │   ├── children-show.blade.php
+│   │   └── families-show.blade.php
+│   └── admin/
+│       └── emails/
+│           └── index.blade.php
+├── storage/app/
+│   └── settings.json          ← site-wide settings
+└── public/
+    └── uploads/
+        ├── children/           ← child profile photos
+        ├── families/           ← family profile photos
+        └── projects/           ← donation project images
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## ⚙️ Installation
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Requirements
+- PHP >= 8.2
+- Composer
+- MySQL 8.0
+- Node.js (optional, for assets)
+
+### Steps
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-org/hope-laravel.git
+cd hope-laravel
+
+# 2. Install dependencies
+composer install
+
+# 3. Copy environment file
+cp .env.example .env
+
+# 4. Generate app key
+php artisan key:generate
+
+# 5. Configure your .env
+# DB_DATABASE=hope_laravel
+# DB_USERNAME=root
+# DB_PASSWORD=
+
+# 6. Run migrations
+php artisan migrate
+
+# 7. Seed initial data (optional)
+php artisan db:seed
+
+# 8. Create storage directories
+mkdir -p public/uploads/children
+mkdir -p public/uploads/families
+mkdir -p public/uploads/projects
+
+# 9. Fix storage permissions (XAMPP / macOS)
+chmod -R 775 storage bootstrap/cache
+sudo chown -R $(whoami):staff storage bootstrap/cache
+
+# 10. Serve the application
+php artisan serve
+```
+
+---
+
+## 🔑 Environment Variables
+
+Key variables to configure in `.env`:
+
+```env
+APP_NAME="Hope & Impact"
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=hope_laravel
+DB_USERNAME=root
+DB_PASSWORD=
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=your@email.com
+MAIL_PASSWORD=yourpassword
+MAIL_FROM_ADDRESS=noreply@desailespourgrandir.org
+MAIL_FROM_NAME="Des Ailes pour Grandir"
+```
+
+---
+
+## 🗃️ Key Database Tables
+
+| Table | Description |
+|---|---|
+| `sponsored_children` | Child profiles (name, code, country, story, photo, is_active) |
+| `sponsors` | Sponsor profiles (name, email, country) |
+| `sponsor_child` | Pivot: sponsor ↔ child |
+| `families` | Family profiles (name, code, country, story, photo) |
+| `family_members` | Members of a family (name, relationship, phone, email) |
+| `sponsor_family` | Pivot: sponsor ↔ family |
+| `donation_projects` | HelloAsso fundraising projects (title FR/EN/KM, widget URL) |
+| `family_updates` | Field reports for families |
+
+---
+
+## 🖼️ Image Conventions
+
+All images are stored in `public/uploads/` — **no Storage symlink required**.
+
+```blade
+{{-- Correct usage --}}
+<img src="{{ asset($child->profile_photo) }}">
+
+{{-- Fallback --}}
+{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}
+```
+
+Upload path in controllers:
+```php
+$file->move(public_path('uploads/children'), $filename);
+```
+
+---
+
+## 🌍 Multilingual Support
+
+Pages support **French · English · Khmer** via inline `data-` attributes:
+
+```html
+<span
+  data-fr="Accueil"
+  data-en="Home"
+  data-km="ទំព័រដើម">Home</span>
+```
+
+Language is applied via JavaScript:
+```js
+window.applyPageLang = function(lang) {
+    document.querySelectorAll('[data-fr],[data-en],[data-km]').forEach(el => {
+        const val = el.getAttribute('data-' + lang);
+        if (val !== null) el.innerHTML = val;
+    });
+};
+```
+
+---
+
+## 🎨 Design System
+
+| Element | Value |
+|---|---|
+| Primary color | `#f97316` (orange) |
+| Accent | `#f59e0b` (amber) |
+| Admin navy | `#0f172a` |
+| Primary fonts | Cormorant Garamond, Fraunces |
+| Body fonts | Outfit, Plus Jakarta Sans, DM Sans |
+| Icon library | Font Awesome 6 |
+| Settings path | `storage/app/settings.json` |
+
+---
+
+## 🔒 Security
+
+- Route IDs are encrypted with `Crypt::encryptString()` — IDs are never exposed in URLs
+- Admin routes protected by auth middleware
+- Image uploads validated by MIME type and extension
+- All user input passed through `e()` / `Str::limit()` in Blade
+
+---
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+<p align="center">Built with ❤️ for the children of Cambodia · <a href="https://www.desailespourgrandir.org">desailespourgrandir.org</a></p>
