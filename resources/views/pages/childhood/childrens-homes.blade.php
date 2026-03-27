@@ -19,13 +19,14 @@
 @keyframes floatUp {0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes pulse   {0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes shimmer {from{background-position:-200% 0}to{background-position:200% 0}}
-@keyframes slideR  {from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
 
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
 .reveal.in{opacity:1;transform:none}
 .d1{transition-delay:.07s}.d2{transition-delay:.15s}.d3{transition-delay:.23s}.d4{transition-delay:.31s}
 
-/* ── Hero ── */
+/* ══════════════════════════════
+   HERO
+══════════════════════════════ */
 .ch-hero{position:relative;overflow:hidden;background:var(--navy);min-height:100vh;display:flex;align-items:center;}
 .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.2) saturate(1.4);}
 .hero-grad{position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,16,31,.97) 0%,rgba(6,16,31,.62) 55%,rgba(249,115,22,.14) 100%);}
@@ -34,13 +35,19 @@
 .ring-b{width:340px;height:340px;bottom:8%;left:-70px;border-color:rgba(249,115,22,.06);animation:driftL 10s ease-in-out infinite;}
 .ring-c{width:180px;height:180px;top:35%;right:22%;background:radial-gradient(circle,rgba(249,115,22,.07),transparent 70%);border:none;animation:floatUp 8s ease-in-out infinite;}
 
-/* Floating tags */
+/* Floating tags — desktop only */
 .float-tag{position:absolute;z-index:3;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);backdrop-filter:blur(8px);white-space:nowrap;pointer-events:none;}
 .ft1{top:20%;right:7%;animation:floatUp 7s ease-in-out infinite;}
 .ft2{top:42%;right:3%;animation:floatUp 9s 1.2s ease-in-out infinite;}
 .ft3{bottom:24%;right:11%;animation:floatUp 8s 2.5s ease-in-out infinite;}
 
-.hero-inner{position:relative;z-index:2;padding:120px 20px 100px;max-width:1280px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 460px;gap:64px;align-items:center;}
+/* Hero inner: 2-col desktop, 1-col mobile */
+.hero-inner{
+    position:relative;z-index:2;
+    padding:120px 20px 100px;
+    max-width:1280px;margin:0 auto;width:100%;
+    display:grid;grid-template-columns:1fr 460px;gap:64px;align-items:center;
+}
 
 .breadcrumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:28px;}
 .breadcrumb a{color:rgba(255,255,255,.32);text-decoration:none;transition:color .2s;}
@@ -50,7 +57,7 @@
 .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--or);margin-bottom:22px;}
 .eyebrow-line{width:32px;height:2px;background:var(--or);border-radius:2px;}
 
-.hero-h1{font-family:'Fraunces',serif;font-size:clamp(2.8rem,5.5vw,4.8rem);font-weight:900;line-height:1.02;color:#fff;letter-spacing:-.03em;margin-bottom:22px;}
+.hero-h1{font-family:'Fraunces',serif;font-size:clamp(2.2rem,5.5vw,4.8rem);font-weight:900;line-height:1.02;color:#fff;letter-spacing:-.03em;margin-bottom:22px;}
 .hero-h1 em{font-style:italic;background:linear-gradient(90deg,#f97316,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 
 .hero-sub{font-family:'Plus Jakarta Sans',sans-serif;font-size:.975rem;color:rgba(255,255,255,.5);line-height:1.82;max-width:460px;margin-bottom:38px;}
@@ -60,36 +67,42 @@
 .hero-btn .arr{transition:transform .2s;}
 .hero-btn:hover .arr{transform:translateX(4px);}
 
-/* Right: image collage */
+/* Hero image collage */
 .hero-collage{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;height:480px;}
 .col-img{position:relative;overflow:hidden;border-radius:18px;box-shadow:0 12px 36px rgba(0,0,0,.35);}
 .col-img:nth-child(1){grid-row:span 2;border-radius:22px;}
-.col-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.16,1,.3,1);}
+.col-img img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;transition:transform .7s cubic-bezier(.16,1,.3,1);}
 .col-img:hover img{transform:scale(1.07);}
 .col-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(6,16,31,.55) 100%);}
 .col-badge{position:absolute;bottom:12px;left:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);background:rgba(6,16,31,.6);border:1px solid rgba(255,255,255,.12);padding:5px 11px;border-radius:999px;backdrop-filter:blur(6px);}
 
-/* ── Section tag ── */
+/* ══════════════════════════════
+   SECTION TAG
+══════════════════════════════ */
 .sec-tag{display:inline-flex;align-items:center;gap:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:999px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);color:var(--or-d);}
-.dot-p{width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.8s ease-in-out infinite;}
+.dot-p{width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.8s ease-in-out infinite;flex-shrink:0;}
 
-/* ── Support cards ── */
+/* ══════════════════════════════
+   SUPPORT CARDS
+══════════════════════════════ */
 .support-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
 .sup-card{background:#fff;border-radius:22px;overflow:hidden;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.06);display:flex;flex-direction:column;transition:transform .38s cubic-bezier(.16,1,.3,1),box-shadow .38s;}
 .sup-card:hover{transform:translateY(-6px);box-shadow:0 24px 56px rgba(0,0,0,.12);}
-.sup-img{position:relative;height:340px;overflow:hidden;flex-shrink:0;}
-.sup-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.16,1,.3,1);display:block;}
+.sup-img{position:relative;overflow:hidden;flex-shrink:0;}
+.sup-img img{width:100%;height:100%;object-fit:cover;object-position:center 20%;transition:transform .7s cubic-bezier(.16,1,.3,1);display:block;}
 .sup-card:hover .sup-img img{transform:scale(1.07);}
 .sup-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(6,16,31,.5) 100%);pointer-events:none;}
 .sup-num{position:absolute;top:16px;left:16px;z-index:2;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--or),var(--or-d));color:#fff;font-family:'Fraunces',serif;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(249,115,22,.5);transition:transform .25s;}
 .sup-card:hover .sup-num{transform:rotate(-8deg) scale(1.12);}
-.sup-body{padding:26px 28px 30px;flex:1;display:flex;flex-direction:column;}
+.sup-body{padding:22px 22px 26px;flex:1;display:flex;flex-direction:column;}
 .sup-cat{display:inline-flex;align-items:center;gap:5px;font-family:'Plus Jakarta Sans',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 11px;border-radius:999px;width:fit-content;margin-bottom:10px;}
-.sup-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:900;color:var(--ink);line-height:1.22;margin-bottom:10px;transition:color .2s;}
+.sup-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;color:var(--ink);line-height:1.22;margin-bottom:8px;transition:color .2s;}
 .sup-card:hover .sup-title{color:var(--or-d);}
-.sup-desc{font-family:'Plus Jakarta Sans',sans-serif;font-size:.86rem;color:var(--muted);line-height:1.78;flex:1;}
+.sup-desc{font-family:'Plus Jakarta Sans',sans-serif;font-size:.84rem;color:var(--muted);line-height:1.75;flex:1;}
 
-/* ── Location cards ── */
+/* ══════════════════════════════
+   LOCATION / FAMILY CARDS
+══════════════════════════════ */
 .loc-card{
     position:relative;border-radius:24px;overflow:hidden;
     background:#fff;border:1px solid #f1f5f9;
@@ -98,30 +111,30 @@
     display:flex;flex-direction:column;
 }
 .loc-card:hover{transform:translateY(-7px);box-shadow:0 28px 64px rgba(0,0,0,.13);}
-.loc-img{position:relative;height:260px;overflow:hidden;flex-shrink:0;}
-.loc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.16,1,.3,1);}
+.loc-img{position:relative;overflow:hidden;flex-shrink:0;}
+.loc-img img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;transition:transform .7s cubic-bezier(.16,1,.3,1);}
 .loc-card:hover .loc-img img{transform:scale(1.08);}
 .loc-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(6,16,31,.7) 100%);}
-.loc-city{position:absolute;bottom:0;left:0;right:0;padding:20px 24px;}
+.loc-city{position:absolute;bottom:0;left:0;right:0;padding:16px 20px;}
 .loc-city-tag{font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:4px;}
-.loc-city-name{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:900;color:#fff;line-height:1;}
+.loc-city-name{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:900;color:#fff;line-height:1;}
 .loc-icon{
-    position:absolute;top:18px;right:18px;
-    width:40px;height:40px;border-radius:12px;
+    position:absolute;top:14px;right:14px;
+    width:38px;height:38px;border-radius:12px;
     background:linear-gradient(135deg,var(--or),var(--or-d));
     display:flex;align-items:center;justify-content:center;
-    color:#fff;font-size:16px;
+    color:#fff;font-size:15px;
     box-shadow:0 4px 14px rgba(249,115,22,.45);
     transition:transform .25s;
 }
 .loc-card:hover .loc-icon{transform:scale(1.15) rotate(-5deg);}
-.loc-body{padding:26px 28px 30px;flex:1;display:flex;flex-direction:column;}
-.loc-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--or);margin-bottom:10px;}
-.loc-desc{font-family:'Plus Jakarta Sans',sans-serif;font-size:.875rem;color:var(--muted);line-height:1.78;flex:1;margin-bottom:20px;}
+.loc-body{padding:20px 22px 24px;flex:1;display:flex;flex-direction:column;}
+.loc-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--or);margin-bottom:8px;}
+.loc-desc{font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;color:var(--muted);line-height:1.75;flex:1;margin-bottom:18px;}
 .loc-btn{
     display:inline-flex;align-items:center;gap:8px;
     font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
-    padding:12px 22px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;
+    padding:11px 20px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;
     background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;
     box-shadow:0 4px 16px rgba(34,197,94,.3);
     transition:transform .2s,box-shadow .2s;
@@ -129,101 +142,130 @@
 }
 .loc-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(34,197,94,.45);color:#fff;}
 
-/* ── Quote band ── */
-.quote-band{position:relative;overflow:hidden;background:var(--ink);padding:80px 20px;}
+/* ══════════════════════════════
+   QUOTE BAND
+══════════════════════════════ */
+.quote-band{position:relative;overflow:hidden;background:var(--ink);padding:72px 20px;}
 .qb-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(249,115,22,.09) 0%,transparent 60%);}
 .qb-decor{position:absolute;right:-40px;top:50%;transform:translateY(-50%);font-family:'Fraunces',serif;font-size:26rem;font-weight:900;color:rgba(255,255,255,.022);line-height:1;pointer-events:none;user-select:none;}
-.q-text{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(1.35rem,3vw,2rem);font-weight:700;color:#fff;line-height:1.48;max-width:740px;position:relative;z-index:1;}
+.q-text{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(1.15rem,2.8vw,2rem);font-weight:700;color:#fff;line-height:1.48;max-width:740px;position:relative;z-index:1;}
 .q-text span{color:var(--or);}
 .q-src{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-top:18px;position:relative;z-index:1;}
 
-/* ── CTA ── */
-.cta-outer{background:var(--cream);padding:80px 20px;}
-.cta-inner{max-width:1100px;margin:0 auto;background:linear-gradient(135deg,#ea580c,#f97316 55%,#f59e0b);border-radius:32px;padding:72px 56px;position:relative;overflow:hidden;}
+/* ══════════════════════════════
+   CTA
+══════════════════════════════ */
+.cta-outer{background:var(--cream);padding:64px 16px;}
+.cta-inner{max-width:1100px;margin:0 auto;background:linear-gradient(135deg,#ea580c,#f97316 55%,#f59e0b);border-radius:28px;padding:56px 40px;position:relative;overflow:hidden;}
 .cta-inner::before{content:'';position:absolute;inset:0;background-image:url('{{ asset('images/cambodia-bg.jpg') }}');background-size:cover;opacity:.06;}
 .cta-orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;}
 .cta-o1{width:360px;height:360px;background:rgba(255,255,255,.1);top:-100px;right:-80px;}
 .cta-o2{width:240px;height:240px;background:rgba(0,0,0,.1);bottom:-60px;left:5%;}
 
-/* ── Member strip inside family card ── */
-.member-strip{
-    display:flex;flex-wrap:wrap;gap:8px;
-    padding:14px 16px;
-    background:#f8fafc;
-    border-top:1px solid #f1f5f9;
-}
-.member-chip{
-    display:flex;align-items:center;gap:7px;
-    background:#fff;border:1px solid #e8edf2;
-    border-radius:12px;padding:6px 10px 6px 6px;
-    transition:border-color .18s,transform .18s,box-shadow .18s;
-    flex:1;min-width:120px;max-width:calc(50% - 4px);
-}
-.member-chip:hover{
-    border-color:rgba(249,115,22,.3);
-    transform:translateY(-1px);
-    box-shadow:0 4px 12px rgba(0,0,0,.07);
-}
-.member-avatar{
-    width:32px;height:32px;border-radius:10px;
-    object-fit:cover;flex-shrink:0;
-    background:#f1f5f9;display:flex;align-items:center;justify-content:center;
-    font-size:13px;overflow:hidden;
-}
+/* ══════════════════════════════
+   MEMBER STRIP
+══════════════════════════════ */
+.member-strip{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;background:#f8fafc;border-top:1px solid #f1f5f9;}
+.member-chip{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid #e8edf2;border-radius:12px;padding:6px 10px 6px 6px;transition:border-color .18s,transform .18s,box-shadow .18s;flex:1;min-width:120px;max-width:calc(50% - 4px);}
+.member-chip:hover{border-color:rgba(249,115,22,.3);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.07);}
+.member-avatar{width:30px;height:30px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:13px;overflow:hidden;}
 .member-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
 .member-info{min-width:0;flex:1;}
-.member-name{
-    font-family:'Plus Jakarta Sans',sans-serif;
-    font-size:11px;font-weight:700;color:var(--ink);
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-    line-height:1.2;
-}
-.member-role{
-    font-family:'Plus Jakarta Sans',sans-serif;
-    font-size:9.5px;font-weight:600;color:var(--muted);
-    text-transform:capitalize;line-height:1.3;
-}
-.member-more{
-    display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(245,158,11,.08));
-    border:1px solid rgba(249,115,22,.2);
-    border-radius:12px;padding:6px 10px;
-    font-family:'Plus Jakarta Sans',sans-serif;
-    font-size:10px;font-weight:800;color:var(--or);
-    white-space:nowrap;
-}
-.member-strip-head{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:10px 16px 0;
-}
-.member-strip-label{
-    font-family:'Plus Jakarta Sans',sans-serif;
-    font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
-    color:var(--muted);
-}
-.member-count-badge{
-    font-family:'Plus Jakarta Sans',sans-serif;
-    font-size:9px;font-weight:800;
-    background:#f1f5f9;color:var(--muted);
-    padding:2px 8px;border-radius:999px;
-}
+.member-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
+.member-role{font-family:'Plus Jakarta Sans',sans-serif;font-size:9.5px;font-weight:600;color:var(--muted);text-transform:capitalize;line-height:1.3;}
+.member-more{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(245,158,11,.08));border:1px solid rgba(249,115,22,.2);border-radius:12px;padding:6px 10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;color:var(--or);white-space:nowrap;}
+.member-strip-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 0;}
+.member-strip-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
+.member-count-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:800;background:#f1f5f9;color:var(--muted);padding:2px 8px;border-radius:999px;}
 
-@media(max-width:480px){
-    .member-chip{min-width:100%;max-width:100%;}
-}
-@media(max-width:768px){
-    .ch-hero{min-height:auto;}
-    .hero-inner{padding:80px 16px 64px;}
-    .ring-a,.ring-b,.ring-c{display:none;}
+/* ══════════════════════════════
+   RESPONSIVE — TABLET  ≤ 900px
+══════════════════════════════ */
+@media(max-width:900px){
+    .hero-inner{
+        grid-template-columns:1fr;
+        gap:40px;
+        padding:100px 20px 64px;
+    }
     .hero-collage{height:320px;}
-    .support-grid{grid-template-columns:1fr;}
+    .float-tag{display:none;}
+    .ring-a,.ring-b,.ring-c{display:none;}
     .qb-decor{display:none;}
 }
+
+/* ══════════════════════════════
+   RESPONSIVE — MOBILE  ≤ 640px
+══════════════════════════════ */
 @media(max-width:640px){
-    .hero-collage{grid-template-columns:1fr;grid-template-rows:auto;height:auto;gap:8px;}
-    .col-img:nth-child(1){grid-row:span 1;height:200px;}
-    .col-img:nth-child(2),.col-img:nth-child(3){height:140px;}
-    .cta-inner{padding:48px 20px;border-radius:22px;}
+
+    /* Hero */
+    .ch-hero{min-height:auto;}
+    .hero-inner{padding:80px 16px 48px;gap:28px;}
+    .breadcrumb{font-size:9px;gap:5px;margin-bottom:18px;}
+    .hero-sub{font-size:.875rem;margin-bottom:28px;}
+    .hero-btn{padding:13px 22px;font-size:.82rem;width:100%;justify-content:center;}
+
+    /* Collage: horizontal 3-col strip on mobile */
+    .hero-collage{
+        grid-template-columns:1fr 1fr 1fr;
+        grid-template-rows:1fr;
+        height:180px;
+        gap:8px;
+    }
+    .col-img:nth-child(1){grid-row:span 1;}
+    .col-badge{display:none;}
+
+    /* Support section */
+    .support-section-pad{padding:56px 0 64px !important;}
+    .support-grid{grid-template-columns:1fr;gap:16px;}
+    .sup-img{height:200px;}
+    .sup-body{padding:16px 16px 20px;}
+    .sup-title{font-size:1.05rem;}
+    .sup-desc{font-size:.82rem;}
+
+    /* Stats bar: 2×2 on mobile */
+    .stats-bar{grid-template-columns:repeat(2,1fr) !important;}
+
+    /* Families section */
+    .families-section-pad{padding:52px 0 64px !important;}
+    .loc-img{height:200px !important;}
+    .loc-body{padding:14px 16px 18px;}
+    .loc-city-name{font-size:1.2rem;}
+    .loc-btn{width:100%;justify-content:center;padding:12px 16px;}
+    .loc-desc{font-size:.82rem;margin-bottom:14px;}
+
+    /* Member chips: full width on very small */
+    .member-chip{min-width:100%;max-width:100%;}
+    .member-strip{padding:10px 12px;gap:6px;}
+
+    /* Search bar */
+    .search-bar-wrap{flex-direction:column !important;}
+    .search-bar-wrap input,.search-bar-wrap select{width:100% !important;}
+    .search-bar-wrap button,.search-bar-wrap a{width:100%;justify-content:center;}
+
+    /* Quote */
+    .quote-band{padding:52px 16px;}
+    .q-text{font-size:1.1rem;}
+
+    /* CTA */
+    .cta-outer{padding:40px 12px;}
+    .cta-inner{padding:36px 20px;border-radius:22px;}
+    .cta-inner .cta-btn-wrap{flex-direction:column !important;}
+    .cta-inner .cta-btn-wrap a{width:100%;justify-content:center;}
+
+    /* Section header stacks */
+    .section-header-row{flex-direction:column !important;align-items:flex-start !important;gap:12px !important;}
+    .section-header-row p{max-width:100% !important;}
+}
+
+/* ══════════════════════════════
+   RESPONSIVE — XS  ≤ 380px
+══════════════════════════════ */
+@media(max-width:380px){
+    .hero-collage{height:140px;}
+    .hero-btn{font-size:.78rem;padding:12px 18px;}
+    .sup-img{height:170px;}
+    .loc-img{height:180px !important;}
 }
 </style>
 
@@ -302,15 +344,15 @@
 </section>
 
 {{-- ══ SUPPORT SECTION ══ --}}
-<section style="background:var(--cream);padding:80px 0 96px;">
+<section class="support-section-pad" style="background:var(--cream);padding:80px 0 96px;">
     <div class="max-w-7xl mx-auto px-4">
 
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 reveal">
+        <div class="section-header-row reveal" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:40px;">
             <div>
                 <div class="sec-tag mb-4"><span class="dot-p"></span>
                     <span data-fr="Notre Soutien" data-en="Our Support" data-km="ការគាំទ្ររបស់យើង">Our Support</span>
                 </div>
-                <h2 style="font-family:'Fraunces',serif;font-size:clamp(2rem,4.5vw,3rem);font-weight:900;color:var(--ink);line-height:1.1;letter-spacing:-.02em;">
+                <h2 style="font-family:'Fraunces',serif;font-size:clamp(1.7rem,4.5vw,3rem);font-weight:900;color:var(--ink);line-height:1.1;letter-spacing:-.02em;">
                     <span data-fr="Comment nous soutenons les" data-en="How We Support" data-km="របៀបដែលយើងគាំទ្រ">How We Support</span><br>
                     <span style="background:linear-gradient(90deg,#f97316,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;"
                           data-fr="Maisons d'Enfants" data-en="Children's Homes" data-km="មណ្ឌលកុមារ">Children's Homes</span>
@@ -331,9 +373,7 @@
                 'icon'  => 'fas fa-hands-helping',
                 'color' => '#fff7ed','ic' => '#f97316',
                 'cat_fr'=> 'Soutien Structurel','cat_en'=> 'Structural Support','cat_km'=> 'ការគាំទ្រផ្នែករចនាសម្ព័ន្ធ',
-                'title_fr'=>'Soutien aux Structures',
-                'title_en'=>'Supporting the Structures',
-                'title_km'=>'ការគាំទ្រដល់ស្ថាប័ន',
+                'title_fr'=>'Soutien aux Structures','title_en'=>'Supporting the Structures','title_km'=>'ការគាំទ្រដល់ស្ថាប័ន',
                 'desc_en' => "Children's homes and orphanages play a central role in protecting and supporting vulnerable children. Des Ailes pour Grandir supports these institutions by working closely with their staff, providing guidance, monitoring, and operational assistance to strengthen their capacity to meet children's needs.",
                 'desc_fr' => "Les Maisons d'Enfants et les orphelinats jouent un rôle central dans la protection et l'accompagnement des enfants vulnérables. Des Ailes pour Grandir soutient ces institutions en travaillant étroitement avec leur personnel, en apportant conseils, suivi et assistance opérationnelle.",
                 'desc_km' => "មណ្ឌលកុមារ និងផ្ទះកុមារអនាថាដើរតួនាទីសំខាន់ក្នុងការការពារ និងជួយដល់កុមារងាយរងគ្រោះ។",
@@ -343,9 +383,7 @@
                 'icon'  => 'fas fa-chalkboard-teacher',
                 'color' => '#eff6ff','ic' => '#3b82f6',
                 'cat_fr'=> 'Formation','cat_en'=> 'Training','cat_km'=> 'ការបណ្តុះបណ្តាល',
-                'title_fr'=>'Formation du Personnel',
-                'title_en'=>'Staff Training',
-                'title_km'=>'ការបណ្តុះបណ្តាលបុគ្គលិក',
+                'title_fr'=>'Formation du Personnel','title_en'=>'Staff Training','title_km'=>'ការបណ្តុះបណ្តាលបុគ្គលិក',
                 'desc_en' => "The quality of care is essential for children's well-being and development. We fund and organize training for staff to improve their skills in education, child protection, health, and psychosocial support.",
                 'desc_fr' => "La qualité de la prise en charge est essentielle au bien-être et au développement des enfants. Nous finançons et organisons des formations pour le personnel afin d'améliorer leurs compétences en matière d'éducation, de protection de l'enfance et de santé.",
                 'desc_km' => "គុណភាពនៃការថែទាំគឺមានសារៈសំខាន់សម្រាប់សុខុមាលភាព និងការអភិវឌ្ឍន៍របស់កុមារ។",
@@ -355,9 +393,7 @@
                 'icon'  => 'fas fa-boxes',
                 'color' => '#f0fdf4','ic' => '#22c55e',
                 'cat_fr'=> 'Ressources','cat_en'=> 'Resources','cat_km'=> 'ធនធាន',
-                'title_fr'=>'Fourniture de Matériel',
-                'title_en'=>'Materials & Resources',
-                'title_km'=>'ការផ្តល់សម្ភារៈ',
+                'title_fr'=>'Fourniture de Matériel','title_en'=>'Materials & Resources','title_km'=>'ការផ្តល់សម្ភារៈ',
                 'desc_en' => "A well-equipped and suitable environment is crucial for children's development. Des Ailes pour Grandir provides educational materials, sanitation equipment, and essential resources, ensuring a safe, stimulating, and comfortable setting for children.",
                 'desc_fr' => "Un environnement bien équipé et adapté est crucial pour le développement des enfants. Des Ailes pour Grandir fournit du matériel pédagogique, des équipements sanitaires et des ressources essentielles.",
                 'desc_km' => "បរិស្ថានដែលបំពាក់ល្អ គឺមានសារៈសំខាន់សម្រាប់ការអភិវឌ្ឍន៍របស់កុមារ។",
@@ -367,9 +403,7 @@
                 'icon'  => 'fas fa-heart',
                 'color' => '#faf5ff','ic' => '#a855f7',
                 'cat_fr'=> 'Bien-être','cat_en'=> 'Well-being','cat_km'=> 'សុខុមាលភាព',
-                'title_fr'=>'Bien-être des Enfants',
-                'title_en'=>"Children's Well-being",
-                'title_km'=>'ការលើកកម្ពស់សុខុមាលភាពកុមារ',
+                'title_fr'=>'Bien-être des Enfants','title_en'=>"Children's Well-being",'title_km'=>'ការលើកកម្ពស់សុខុមាលភាពកុមារ',
                 'desc_en' => "Beyond material and educational support, our work with children's homes aims to create a protective, warm, and caring environment where each child can grow safely, develop skills, and thrive fully.",
                 'desc_fr' => "Au-delà du soutien matériel et éducatif, notre travail avec les Maisons d'Enfants vise à créer un environnement protecteur, chaleureux et bienveillant où chaque enfant peut grandir en sécurité et s'épanouir.",
                 'desc_km' => "លើសពីការគាំទ្រផ្នែកសម្ភារៈ និងការអប់រំ ការងាររបស់យើងជាមួយមណ្ឌលកុមារ មានគោលបំណងបង្កើតបរិស្ថានការពារ ក្តៅក្រហាយ។",
@@ -380,7 +414,7 @@
         <div class="support-grid">
             @foreach($supports as $i => $s)
             <div class="sup-card reveal d{{ $i+1 }}">
-                <div class="sup-img">
+                <div class="sup-img" style="height:280px;">
                     <img src="{{ asset($s['img']) }}" alt="{{ $s['title_en'] }}" loading="lazy">
                     <div class="sup-num">{{ $i+1 }}</div>
                 </div>
@@ -401,17 +435,17 @@
 </section>
 
 {{-- ══ FAMILIES SECTION ══ --}}
-<section id="families" style="background:#f8fafc;padding:80px 0 96px;">
+<section id="families" class="families-section-pad" style="background:#f8fafc;padding:80px 0 96px;">
     <div class="max-w-7xl mx-auto px-4">
 
         {{-- Header --}}
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 reveal">
+        <div class="section-header-row reveal" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px;">
             <div>
                 <div class="sec-tag mb-4" style="display:inline-flex;">
                     <span class="dot-p"></span>
                     <span data-fr="Nos Familles" data-en="Our Families" data-km="គ្រួសាររបស់យើង">Our Families</span>
                 </div>
-                <h2 style="font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:900;color:var(--ink);letter-spacing:-.02em;line-height:1.1;">
+                <h2 style="font-family:'Fraunces',serif;font-size:clamp(1.7rem,4vw,2.8rem);font-weight:900;color:var(--ink);letter-spacing:-.02em;line-height:1.1;">
                     <span data-fr="Les Familles que" data-en="The Families We" data-km="គ្រួសារ​ដែល​យើង">The Families We</span><br>
                     <span style="background:linear-gradient(90deg,#f97316,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;"
                           data-fr="Nous Soutenons" data-en="Support" data-km="គាំទ្រ">Support</span>
@@ -425,19 +459,19 @@
             </p>
         </div>
 
-        {{-- Stats bar --}}
-        <div class="reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e2e8f0;border-radius:18px;overflow:hidden;margin-bottom:32px;">
+        {{-- Stats bar: 4-col desktop, 2×2 mobile --}}
+        <div class="stats-bar reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e2e8f0;border-radius:18px;overflow:hidden;margin-bottom:28px;">
             @foreach([
                 ['fas fa-users','#fff7ed','#f97316', $familyStats['total'],   ['fr'=>'Familles actives','en'=>'Active Families','km'=>'គ្រួសារ​សកម្ម']],
                 ['fas fa-heart','#f0fdf4','#22c55e', $familyStats['sponsored'],['fr'=>'Familles parrainées','en'=>'Sponsored','km'=>'មានឧបត្ថម្ភ']],
                 ['fas fa-clock','#fffbeb','#f59e0b', $familyStats['waiting'], ['fr'=>'En attente','en'=>'Waiting','km'=>'រង់ចាំ']],
                 ['fas fa-child','#faf5ff','#a855f7', $familyStats['members'], ['fr'=>'Membres','en'=>'Members','km'=>'សមាជិក']],
             ] as [$ico,$bg,$clr,$num,$lbl])
-            <div style="background:#fff;padding:20px 16px;text-align:center;transition:background .18s;" onmouseover="this.style.background='{{ $bg }}'" onmouseout="this.style.background='#fff'">
-                <div style="width:40px;height:40px;border-radius:12px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;margin:0 auto 8px;">
-                    <i class="{{ $ico }}" style="color:{{ $clr }};font-size:15px;"></i>
+            <div style="background:#fff;padding:18px 12px;text-align:center;transition:background .18s;" onmouseover="this.style.background='{{ $bg }}'" onmouseout="this.style.background='#fff'">
+                <div style="width:38px;height:38px;border-radius:12px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;margin:0 auto 8px;">
+                    <i class="{{ $ico }}" style="color:{{ $clr }};font-size:14px;"></i>
                 </div>
-                <div style="font-family:'Fraunces',serif;font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,{{ $clr }},#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;">{{ $num }}</div>
+                <div style="font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,{{ $clr }},#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;">{{ $num }}</div>
                 <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;"
                      data-fr="{{ $lbl['fr'] }}" data-en="{{ $lbl['en'] }}" data-km="{{ $lbl['km'] }}">{{ $lbl['en'] }}</div>
             </div>
@@ -445,9 +479,10 @@
         </div>
 
         {{-- Search + filter bar --}}
-        <form method="GET" action="{{ route('childhood.homes') }}#families" class="reveal"
-              style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;align-items:center;">
-            <div style="flex:1;min-width:220px;position:relative;">
+        <form method="GET" action="{{ route('childhood.homes') }}#families"
+              class="search-bar-wrap reveal"
+              style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;align-items:center;">
+            <div style="flex:1;min-width:200px;position:relative;">
                 <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:12px;pointer-events:none;"></i>
                 <input type="text" name="search" value="{{ request('search') }}"
                        placeholder="{{ __('Search family name or story…') }}"
@@ -466,7 +501,7 @@
             </select>
             @endif
             <button type="submit"
-                    style="padding:12px 24px;border-radius:12px;background:linear-gradient(135deg,var(--or),var(--or-d));color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(249,115,22,.35);transition:transform .18s,box-shadow .18s;white-space:nowrap;"
+                    style="padding:12px 22px;border-radius:12px;background:linear-gradient(135deg,var(--or),var(--or-d));color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(249,115,22,.35);transition:transform .18s,box-shadow .18s;white-space:nowrap;"
                     onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 22px rgba(249,115,22,.45)'"
                     onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(249,115,22,.35)'">
                 <i class="fas fa-search mr-1"></i>
@@ -493,11 +528,13 @@
         </p>
         @endif
 
-        {{-- Family grid --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {{-- Family grid: 1-col mobile, 2-col sm, 3-col lg --}}
+        <div style="display:grid;grid-template-columns:repeat(1,1fr);gap:20px;"
+             class="sm:grid-cols-2 lg:grid-cols-3"
+             id="family-grid">
             @forelse($families as $family)
             <div class="loc-card reveal">
-                <div class="loc-img">
+                <div class="loc-img" style="height:230px;">
                     <img src="{{ $family->profile_photo_url }}" alt="{{ $family->name }}" loading="lazy">
                     <div class="loc-img-overlay"></div>
 
@@ -508,12 +545,10 @@
                         <div class="loc-city-name">{{ $family->name }}</div>
                     </div>
 
-                    {{-- Home icon --}}
                     <div class="loc-icon"><i class="fas fa-home"></i></div>
 
-                    {{-- Sponsorship status badge --}}
                     @if($family->sponsors_count ?? $family->sponsors()->exists())
-                    <div style="position:absolute;bottom:60px;left:16px;z-index:2;font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:800;padding:4px 10px;border-radius:999px;background:rgba(34,197,94,.9);color:#fff;backdrop-filter:blur(4px);">
+                    <div style="position:absolute;bottom:60px;left:14px;z-index:2;font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:800;padding:4px 10px;border-radius:999px;background:rgba(34,197,94,.9);color:#fff;backdrop-filter:blur(4px);">
                         <i class="fas fa-heart mr-1" style="font-size:8px;"></i>
                         <span data-fr="Parrainée" data-en="Sponsored" data-km="មានឧបត្ថម្ភ">Sponsored</span>
                     </div>
@@ -521,7 +556,6 @@
                 </div>
 
                 <div class="loc-body">
-                    {{-- Country --}}
                     <div class="loc-label">
                         @if($family->country)
                         <i class="fas fa-map-marker-alt mr-1"></i> {{ $family->country }}
@@ -533,7 +567,6 @@
                         @endif
                     </div>
 
-                    {{-- Story --}}
                     @if($family->story)
                     <p class="loc-desc">{{ Str::limit($family->story, 130) }}</p>
                     @else
@@ -548,7 +581,7 @@
                     </a>
                 </div>
 
-                {{-- ── Members strip ── --}}
+                {{-- Members strip --}}
                 @if($family->relationLoaded('members') && $family->members->count())
                 @php
                     $visibleMembers = $family->members->take(4);
@@ -569,7 +602,7 @@
                             <img src="{{ asset($member->profile_photo) }}" alt="{{ $member->name }}">
                             @else
                             <div style="width:100%;height:100%;background:linear-gradient(135deg,#f1f5f9,#e2e8f0);display:flex;align-items:center;justify-content:center;">
-                                <i class="fas fa-user" style="color:#94a3b8;font-size:12px;"></i>
+                                <i class="fas fa-user" style="color:#94a3b8;font-size:11px;"></i>
                             </div>
                             @endif
                         </div>
@@ -590,7 +623,7 @@
                 @endif
             </div>
             @empty
-            <div class="col-span-3 text-center py-20" style="color:var(--muted);">
+            <div style="grid-column:1/-1;text-align:center;padding:64px 16px;color:var(--muted);">
                 <div style="width:72px;height:72px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;">🏠</div>
                 <p style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;margin-bottom:6px;"
                    data-fr="Aucune famille trouvée." data-en="No families found." data-km="រកមិនឃើញគ្រួសារ។">No families found.</p>
@@ -634,13 +667,13 @@
     <div class="cta-inner">
         <div class="cta-orb cta-o1"></div>
         <div class="cta-orb cta-o2"></div>
-        <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
-            <div class="text-white text-center lg:text-left">
+        <div class="relative z-10" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px;">
+            <div class="text-white" style="flex:1;min-width:240px;">
                 <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:12px;">
                     <i class="fas fa-home mr-1"></i>
                     <span data-fr="Soutenir les Foyers" data-en="Support the Homes" data-km="គាំទ្រមណ្ឌល">Support the Homes</span>
                 </p>
-                <h2 style="font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:12px;"
+                <h2 style="font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:12px;"
                     data-fr="Agissez Aujourd'hui" data-en="Make a Difference Today" data-km="ធ្វើសកម្មភាពថ្ងៃនេះ">
                     Make a Difference<br><em style="font-style:italic;">Today</em>
                 </h2>
@@ -649,16 +682,16 @@
                     Your support funds safe homes, staff training, and daily care for vulnerable children.
                 </p>
             </div>
-            <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
+            <div class="cta-btn-wrap" style="display:flex;flex-wrap:wrap;gap:12px;flex-shrink:0;width:100%;max-width:420px;">
                 <a href="{{ route('sponsor.children') }}"
-                   style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 36px;background:#fff;color:#ea580c;font-family:'Plus Jakarta Sans',sans-serif;font-size:.875rem;font-weight:800;border-radius:16px;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.18);transition:transform .22s,box-shadow .22s;"
+                   style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 28px;background:#fff;color:#ea580c;font-family:'Plus Jakarta Sans',sans-serif;font-size:.875rem;font-weight:800;border-radius:16px;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.18);transition:transform .22s,box-shadow .22s;white-space:nowrap;"
                    onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 18px 44px rgba(0,0,0,.25)'"
                    onmouseout="this.style.transform='';this.style.boxShadow='0 10px 32px rgba(0,0,0,.18)'">
                     <i class="fas fa-heart"></i>
                     <span data-fr="Parrainer un Enfant" data-en="Sponsor a Child" data-km="ឧបត្ថម្ភកុមារ">Sponsor a Child</span>
                 </a>
                 <a href="{{ route('support.donate') }}"
-                   style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 36px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:.875rem;font-weight:800;border-radius:16px;text-decoration:none;transition:background .2s,border-color .2s;"
+                   style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 28px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:.875rem;font-weight:800;border-radius:16px;text-decoration:none;transition:background .2s,border-color .2s;white-space:nowrap;"
                    onmouseover="this.style.background='rgba(255,255,255,.22)';this.style.borderColor='rgba(255,255,255,.6)'"
                    onmouseout="this.style.background='rgba(255,255,255,.12)';this.style.borderColor='rgba(255,255,255,.3)'">
                     <i class="fas fa-hand-holding-heart"></i>
@@ -671,10 +704,32 @@
 
 <script>
 (function(){
+    /* Scroll reveal */
     var o = new IntersectionObserver(function(entries){
         entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); o.unobserve(e.target); }});
     },{threshold:.07,rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.reveal').forEach(function(el){ o.observe(el); });
+
+    /* Family grid responsive columns via JS (fallback for browsers without CSS grid subgrid) */
+    function setFamilyGrid(){
+        var g = document.getElementById('family-grid');
+        if(!g) return;
+        var w = window.innerWidth;
+        if(w >= 1024)      g.style.gridTemplateColumns = 'repeat(3,1fr)';
+        else if(w >= 640)  g.style.gridTemplateColumns = 'repeat(2,1fr)';
+        else               g.style.gridTemplateColumns = 'repeat(1,1fr)';
+    }
+    setFamilyGrid();
+    window.addEventListener('resize', setFamilyGrid);
+
+    /* Stats bar 2×2 on mobile */
+    function setStatsBar(){
+        var s = document.querySelector('.stats-bar');
+        if(!s) return;
+        s.style.gridTemplateColumns = window.innerWidth < 640 ? 'repeat(2,1fr)' : 'repeat(4,1fr)';
+    }
+    setStatsBar();
+    window.addEventListener('resize', setStatsBar);
 
     /* Language switcher */
     var lang = (typeof localStorage !== 'undefined' && localStorage.getItem('gt_lang')) || 'en';

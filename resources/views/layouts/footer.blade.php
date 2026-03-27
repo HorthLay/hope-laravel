@@ -115,8 +115,8 @@
         <div class="pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
             <p>
                 © {{ date('Y') }} {{ $settings['site_name'] ?? 'Hope & Impact' }}. All rights reserved.
-                | <a href="#" class="hover:text-[#f4b630]">Privacy Policy</a>
-                | <a href="#" class="hover:text-[#f4b630]">Terms</a>
+                | <a href="{{ route('privacy') }}" class="hover:text-[#f4b630]">Privacy Policy</a>
+                | <a href="{{ route('terms') }}" class="hover:text-[#f4b630]">Terms</a>
             </p>
         </div>
     </div>

@@ -361,8 +361,7 @@ Route::prefix('sponsor')->name('sponsor.')->group(function () {
     Route::get('/faq',                   fn() => view('pages.sponsorship.faq'))               ->name('faq');
 });
 Route::get('/donate/project/{donationProject}/vignette', [DonateVignetteController::class, 'show'])
-     ->name('Children in This Article
-');
+     ->name('Children in This Article');
 // ══════════════════════════════════════════════════════════════
 // SUPPORT US
 // ══════════════════════════════════════════════════════════════
@@ -394,4 +393,9 @@ Route::prefix('support')->name('support.')->group(function () {
     // Tax
     // Route::get('/tax-benefits',          fn() => view('pages.support.tax-benefits'))          ->name('tax-benefits');
 });
+
+
+
+Route::get('/terms',[HomeController::class,'terms'])  ->name('terms');
+Route::get('/privacy', [HomeController::class,'privacy'])->name('privacy');
 Auth::routes(['verify'=>true]);

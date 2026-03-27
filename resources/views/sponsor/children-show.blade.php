@@ -9,7 +9,7 @@
     <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
     @if(!empty($settings['favicon']))
     <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
-     @endif
+    @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Hanuman&display=swap" rel="stylesheet">
@@ -19,9 +19,35 @@
         body { font-family: 'Montserrat', sans-serif; }
         .fade-in { animation: fadeIn .5s ease; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-        .photo-hero { position: relative; height: 380px; overflow: hidden; }
-        @media(max-width:640px) { .photo-hero { height: 260px; } }
         .sticky-cta { position: sticky; top: 16px; }
+
+        /* ── Hero photo ── */
+        .photo-hero {
+            position: relative;
+            width: 100%;
+            /* Mobile: tall portrait — fills the frame with the child's face */
+            aspect-ratio: 3 / 4;
+            max-height: 480px;
+            overflow: hidden;
+        }
+        @media (min-width: 640px) {
+            /* Tablet: square-ish crop */
+            .photo-hero { aspect-ratio: 4 / 3; max-height: 440px; }
+        }
+        @media (min-width: 1024px) {
+            /* Desktop: fixed tall height — avoids 16/9 squishing portrait photos */
+            .photo-hero { aspect-ratio: unset; height: 460px; max-height: 460px; }
+        }
+
+        .photo-hero img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Focus slightly above center — keeps faces in frame on all crops */
+            object-position: center 20%;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -205,6 +231,7 @@
 </html>
 <?php exit; ?>
 @endif
+
 @include('layouts.header')
 
 {{-- BREADCRUMB --}}
@@ -220,111 +247,120 @@
 
 @php $encId = \Illuminate\Support\Facades\Crypt::encryptString((string)$child->id); @endphp
 
-<div class="max-w-5xl mx-auto px-4 py-8 fade-in">
-    <div class="flex flex-col lg:flex-row gap-8">
+<div class="max-w-5xl mx-auto px-4 py-6 sm:py-8 fade-in">
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
 
         {{-- ══ LEFT ══ --}}
-        <div class="flex-1 min-w-0 space-y-6">
+        <div class="flex-1 min-w-0 space-y-5 sm:space-y-6">
 
             {{-- PHOTO HERO --}}
             <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
-                <div class="photo-hero relative w-full aspect-[4/5] md:aspect-[16/9] rounded-3xl overflow-hidden shadow-xl">
 
-    <img 
-        src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}"
-        alt="{{ $child->first_name }}"
-        class="absolute inset-0 w-full h-full object-cover object-top"
-    >
+                {{-- ── Responsive portrait → landscape photo ── --}}
+                <div class="photo-hero">
+                    <img
+                        src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}"
+                        alt="{{ $child->first_name }}"
+                    >
 
-    <!-- Gradient Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    {{-- Gradient overlay --}}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
 
-    @if(!empty($child->gender))
-    <div class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-lg
-        {{ strtolower($child->gender) === 'female' ? 'bg-pink-500' : 'bg-blue-500' }}">
-        <i class="fas {{ strtolower($child->gender) === 'female' ? 'fa-venus' : 'fa-mars' }} text-white text-sm"></i>
-    </div>
-    @endif
+                    {{-- Gender badge --}}
+                    @if(!empty($child->gender))
+                    <div class="absolute top-4 right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-lg
+                        {{ strtolower($child->gender) === 'female' ? 'bg-pink-500' : 'bg-blue-500' }}">
+                        <i class="fas {{ strtolower($child->gender) === 'female' ? 'fa-venus' : 'fa-mars' }} text-white text-sm"></i>
+                    </div>
+                    @endif
 
-    <div class="absolute bottom-0 left-0 right-0 p-6">
-        <h1 class="text-3xl md:text-4xl font-black text-white leading-tight mb-2">
-            {{ $child->first_name }} {{ $child->last_name ?? '' }}
-        </h1>
+                    {{-- Name + badges at bottom --}}
+                    <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                        <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight mb-2">
+                            {{ $child->first_name }} {{ $child->last_name ?? '' }}
+                        </h1>
 
-        <div class="flex flex-wrap items-center gap-2">
-            
-            @if(!empty($child->code))
-            <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full font-mono">
-                {{ $child->code }}
-            </span>
-            @endif
+                        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                            @if(!empty($child->code))
+                            <span class="bg-white/20 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full font-mono">
+                                {{ $child->code }}
+                            </span>
+                            @endif
 
-            @if(!empty($child->age) || !empty($child->date_of_birth))
-            <span class="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                <i class="fas fa-birthday-cake text-orange-300 text-[10px]"></i>
-                {{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth)->age }} years old
-            </span>
-            @endif
+                            @if(!empty($child->age) || !empty($child->date_of_birth))
+                            <span class="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full">
+                                <i class="fas fa-birthday-cake text-orange-300 text-[9px]"></i>
+                                {{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth)->age }} years old
+                            </span>
+                            @endif
 
-            @if(!empty($child->country))
-            <span class="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                <i class="fas fa-map-marker-alt text-orange-300 text-[10px]"></i>
-                {{ $child->country }}
-            </span>
-            @endif
+                            @if(!empty($child->country))
+                            <span class="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full">
+                                <i class="fas fa-map-marker-alt text-orange-300 text-[9px]"></i>
+                                {{ $child->country }}
+                            </span>
+                            @endif
 
-            @if(!empty($child->has_family))
-             <span class="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                <i class="fas fa-home text-green-300 text-[10px]"></i>
-                Has Family
-            </span>
-            @endif
-        
-
-        </div>
-    </div>
-
-</div>
+                            @if(!empty($child->has_family))
+                            <span class="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full">
+                                <i class="fas fa-home text-green-300 text-[9px]"></i>
+                                Has Family
+                            </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                {{-- /photo-hero --}}
 
                 {{-- Quick stats --}}
                 <div class="grid grid-cols-3 divide-x divide-gray-100 border-t border-gray-100">
-                    <div class="py-4 text-center">
-                        <p class="text-xs text-gray-400 font-medium mb-0.5">Age</p>
-                        <p class="font-black text-gray-800">
+                    <div class="py-3 sm:py-4 text-center">
+                        <p class="text-[10px] sm:text-xs text-gray-400 font-medium mb-0.5">Age</p>
+                        <p class="font-black text-gray-800 text-sm sm:text-base">
                             {{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth ?? now())->age }}
-                            <span class="font-normal text-sm text-gray-500">yrs</span>
+                            <span class="font-normal text-xs sm:text-sm text-gray-500">yrs</span>
                         </p>
                     </div>
-                 <div class="py-4 text-center">
-                    <p class="text-xs text-gray-400 font-medium mb-0.5">Has Family</p>
-
-                    <p class="font-black {{ $child->has_family ? 'text-green-600' : 'text-red-600' }}">
-                        {{ $child->has_family ? 'Yes' : 'No' }}
-                    </p>
-                </div>
-                    <div class="py-4 text-center">
-                        <p class="text-xs text-gray-400 font-medium mb-0.5">Status</p>
+                    <div class="py-3 sm:py-4 text-center">
+                        <p class="text-[10px] sm:text-xs text-gray-400 font-medium mb-0.5">Has Family</p>
+                        <p class="font-black text-sm sm:text-base {{ $child->has_family ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $child->has_family ? 'Yes' : 'No' }}
+                        </p>
+                    </div>
+                    <div class="py-3 sm:py-4 text-center">
+                        <p class="text-[10px] sm:text-xs text-gray-400 font-medium mb-0.5">Status</p>
                         @if($child->is_sponsored)
-                        <span class="inline-flex items-center gap-1 text-green-600 font-black text-sm">
+                        <span class="inline-flex items-center gap-1 text-green-600 font-black text-xs sm:text-sm">
                             <i class="fas fa-check-circle text-xs"></i> Sponsored
                         </span>
                         @else
-                        <span class="inline-flex items-center gap-1 text-orange-500 font-black text-sm">
+                        <span class="inline-flex items-center gap-1 text-orange-500 font-black text-xs sm:text-sm">
                             <i class="fas fa-clock text-xs"></i> Waiting
                         </span>
                         @endif
                     </div>
                 </div>
             </div>
+            {{-- /PHOTO HERO card --}}
+
+            {{-- ── Mobile-only sponsor CTA (shown below hero on mobile, hidden on lg) ── --}}
+            <div class="lg:hidden">
+                <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
+                   target="_blank" rel="noopener"
+                   class="flex items-center justify-center gap-2 w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-base rounded-2xl transition shadow-md shadow-orange-200">
+                    <i class="fas fa-heart animate-pulse"></i>
+                    Sponsor {{ $child->first_name }} — $30/month
+                </a>
+            </div>
 
             {{-- MY STORY --}}
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 sm:p-6">
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-2xl bg-orange-100 flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-2xl bg-orange-100 flex items-center justify-center flex-shrink-0">
                         <i class="fas fa-book-open text-orange-500"></i>
                     </div>
                     <div>
-                        <h2 class="text-xl font-black text-gray-800">My Story</h2>
+                        <h2 class="text-lg sm:text-xl font-black text-gray-800">My Story</h2>
                         <p class="text-xs text-gray-400">About {{ $child->first_name }}</p>
                     </div>
                 </div>
@@ -390,8 +426,8 @@
         </div>
         {{-- /LEFT --}}
 
-        {{-- ══ RIGHT SIDEBAR ══ --}}
-        <div class="w-full lg:w-72 flex-shrink-0">
+        {{-- ══ RIGHT SIDEBAR (hidden on mobile — CTA shown inline above instead) ══ --}}
+        <div class="hidden lg:block w-72 flex-shrink-0">
             <div class="sticky-cta space-y-4">
 
                 {{-- SPONSOR CARD --}}
@@ -421,6 +457,7 @@
                     </ul>
 
                     <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
+                       target="_blank" rel="noopener"
                        class="block w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-center rounded-2xl transition shadow-md shadow-orange-200 text-base">
                         <i class="fas fa-heart mr-2"></i> Sponsor {{ $child->first_name }} Now
                     </a>
@@ -439,17 +476,26 @@
         </div>
 
     </div>
+
+    {{-- Mobile back link --}}
+    <div class="lg:hidden mt-4">
+        <a href="{{ route('sponsor.children') }}"
+           class="flex items-center justify-center gap-2 py-3 bg-white hover:bg-gray-50 border border-gray-200 text-gray-600 font-bold text-sm rounded-2xl transition w-full">
+            <i class="fas fa-arrow-left text-xs"></i> Back to All Children
+        </a>
+    </div>
 </div>
 
 {{-- BOTTOM CTA --}}
-<section class="bg-gradient-to-br from-orange-500 to-orange-600 py-14 mt-8">
+<section class="bg-gradient-to-br from-orange-500 to-orange-600 py-12 sm:py-14 mt-6 sm:mt-8">
     <div class="max-w-3xl mx-auto px-4 text-center text-white">
-        <h2 class="text-2xl md:text-3xl font-black mb-3">Ready to Change {{ $child->first_name }}'s Life?</h2>
-        <p class="text-white/90 text-base mb-6 max-w-lg mx-auto">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-black mb-3">Ready to Change {{ $child->first_name }}'s Life?</h2>
+        <p class="text-white/90 text-sm sm:text-base mb-6 max-w-lg mx-auto">
             Every month your support gives {{ $child->first_name }} access to education, meals, healthcare, and hope.
         </p>
-        <a href="{{ route('sponsor.child', $encId) }}"
-           class="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 hover:bg-orange-50 font-black text-base rounded-2xl transition shadow-lg">
+        <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
+           target="_blank" rel="noopener"
+           class="inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 bg-white text-orange-600 hover:bg-orange-50 font-black text-sm sm:text-base rounded-2xl transition shadow-lg">
             <i class="fas fa-heart text-orange-500"></i>
             Sponsor {{ $child->first_name }} — $30/month
         </a>

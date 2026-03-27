@@ -224,11 +224,24 @@
             transform:scaleX(0); transform-origin:left;
             transition:transform .3s cubic-bezier(.34,1.2,.64,1);
         }
-        .card-photo { width:100%; height:175px; object-fit:cover; object-position:top; display:block; transition:transform .4s ease; }
+        .card-photo {
+            width:100%;
+            /* Taller + smart crop: portrait ratio shows more of the subject */
+            aspect-ratio: 4 / 3;
+            max-height: 200px;
+            object-fit: cover;
+            /* 20% from top = centers on face, not background */
+            object-position: center 20%;
+            display: block;
+            transition: transform .4s ease;
+        }
+
         .entity-card:hover .card-photo { transform:scale(1.04); }
         .card-photo-placeholder {
-            width:100%; height:175px;
-            display:flex; align-items:center; justify-content:center; font-size:48px;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            max-height: 200px;
+            display: flex; align-items: center; justify-content: center; font-size: 48px;
         }
         .card-body { padding:14px 16px 10px; }
         .card-type-badge {

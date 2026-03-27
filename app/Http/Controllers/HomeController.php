@@ -266,12 +266,20 @@ class HomeController extends Controller
 
     public function privacy()
     {
-        return view('pages.privacy-policy');
+        $settingsFile = storage_path('app/settings.json');
+        $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
+        return view('pages.privacy-policy',compact('settings'));
     }
 
     public function terms()
     {
-        return view('pages.terms-of-service');
+         $settingsFile = storage_path('app/settings.json');
+         $settings = file_exists($settingsFile)
+        ? json_decode(file_get_contents($settingsFile), true)
+        : [];
+        return view('pages.terms-of-service',compact('settings'));
     }
 
   

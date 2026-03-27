@@ -494,7 +494,7 @@ body { top: 0 !important; }
                     <div class="drop-col">
                         <div class="drop-col-title"><i class="fas fa-star mr-1 text-orange-400"></i> Get Involved</div>
                         <a href="{{ route('support.fundraiser') }}"        class="drop-link"><i class="fas fa-bullhorn"></i> Start a Fundraiser</a>
-                        <a href="{{ route('support.event') }}"             class="drop-link"><i class="fas fa-calendar-star"></i> Solidarity Event</a>
+                        <a href="{{ route('support.event') }}"             class="drop-link"><i class="fa-solid fa-calendar-alt"></i> Solidarity Event</a>
                         <a href="{{ route('support.patron') }}"            class="drop-link"><i class="fas fa-award"></i> Become a Patron</a>
                         <a href="{{ route('support.foundations') }}"       class="drop-link"><i class="fas fa-building"></i> Foundations</a>
                         <a href="{{ route('support.corporate') }}"         class="drop-link"><i class="fas fa-city"></i> Corporate Partners</a>
@@ -666,7 +666,7 @@ body { top: 0 !important; }
                     <a href="{{ route('support.bequests') }}"    class="mob-drop-link mobile-menu-link"><i class="fas fa-scroll"></i> Bequests</a>
                     <div class="mob-drop-title mt-2"><i class="fas fa-star mr-1 text-orange-400"></i> Get Involved</div>
                     <a href="{{ route('support.fundraiser') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-bullhorn"></i> Start a Fundraiser</a>
-                    <a href="{{ route('support.event') }}"       class="mob-drop-link mobile-menu-link"><i class="fas fa-calendar-star"></i> Solidarity Event</a>
+                    <a href="{{ route('support.event') }}"       class="mob-drop-link mobile-menu-link"><i class="fa-solid fa-calendar-alt"></i> Solidarity Event</a>
                     <a href="{{ route('support.patron') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-award"></i> Become a Patron</a>
                     <a href="{{ route('support.foundations') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-building"></i> Foundations</a>
                     <a href="{{ route('support.corporate') }}"   class="mob-drop-link mobile-menu-link"><i class="fas fa-city"></i> Corporate Partners</a>

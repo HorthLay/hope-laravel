@@ -195,12 +195,22 @@
                         </td>
 
                         {{-- Sponsor --}}
-                        <td class="px-4 py-3">
-                            @if($child->sponsor)
-                                <span class="text-xs font-bold text-green-600 flex items-center gap-1">
-                                    <i class="fas fa-check-circle text-green-400 text-[10px]"></i>
-                                    {{ $child->sponsor->name ?? 'Assigned' }}
-                                </span>
+                                <td class="px-4 py-3">
+                         @if($child->sponsors->isNotEmpty())
+                                <div class="flex flex-col gap-1">
+                                    @foreach($child->sponsors->take(2) as $sponsor)
+                                        <span class="text-xs font-bold text-green-600 flex items-center gap-1">
+                                            <i class="fas fa-check-circle text-green-400 text-[10px]"></i>
+                                            {{ $sponsor->full_name ?? 'Assigned' }}
+                                        </span>
+                                    @endforeach
+
+                                    @if($child->sponsors->count() > 2)
+                                        <span class="text-xs text-blue-500 font-bold">
+                                            +{{ $child->sponsors->count() - 2 }} more
+                                        </span>
+                                    @endif
+                                </div>
                             @else
                                 <span class="text-xs text-gray-400 italic">No sponsor</span>
                             @endif
