@@ -441,10 +441,10 @@ body { top: 0 !important; }
                     <div class="drop-col">
                         <div class="drop-col-title"><i class="fas fa-heart mr-1 text-orange-400"></i> Sponsorship</div>
                         <a href="{{ route('sponsor.child.file') }}"        class="drop-link"><i class="fas fa-child"></i> Child Sponsorship</a>
-                        <a href="{{ route('sponsor.child.stories') }}"     class="drop-link"><i class="fas fa-book-open"></i> Child Stories</a>
+                        <a href="{{ route('sponsor.child.stories') }}"     class="drop-link"><i class="fas fa-book-open"></i> <p data-en="Child Stories" data-km="ប្រវិត្តក្មេង" data-fr="TÉMOIGNAGES D'ENFANTS">Child Stories</p></a>
                         <a href="{{ route('sponsor.family.file') }}"       class="drop-link"><i class="fas fa-home"></i> Family Sponsorship</a>
-                        <a href="{{ route('sponsor.family.stories') }}"    class="drop-link"><i class="fas fa-star"></i> Family Stories</a>
-                        <a href="{{ route('sponsor.faq') }}"               class="drop-link"><i class="fas fa-question-circle"></i> FAQ</a>
+                        <a href="{{ route('sponsor.family.stories') }}"    class="drop-link"><i class="fas fa-star"></i><p data-en="Family Stories" data-fr="TÉMOIGNAGES DE FAMILLES" data-km="ប្រវិត្តគ្រួសារ" >Family Stories</p></a>
+                        <a href="{{ route('sponsor.faq') }}"               class="drop-link"><i class="fas fa-question-circle"></i>FAQ</a>
                     </div>
                 </div>
             </div>
@@ -457,7 +457,7 @@ body { top: 0 !important; }
                 </span>
                 <div class="mega-drop">
                     <div class="drop-col">
-                        <div class="drop-col-title"><i class="fas fa-child mr-1 text-orange-400"></i> Childhood</div>
+                        <div class="drop-col-title"><i class="fas fa-child mr-1 text-orange-400"></i> <p data-km="Childhood" data-fr="PÔLE ENFANCE" data-en="Childhood">Childhood</p></div>
                         <a href="{{ route('childhood.protection') }}"      class="drop-link"><i class="fas fa-shield-alt"></i> Child Protection</a>
                         <a href="{{ route('childhood.health') }}"          class="drop-link"><i class="fas fa-heartbeat"></i> Health & Nutrition</a>
                         <a href="{{ route('childhood.education') }}"       class="drop-link"><i class="fas fa-graduation-cap"></i> Education</a>
@@ -465,15 +465,15 @@ body { top: 0 !important; }
                         <a href="{{ route('childhood.homes') }}"           class="drop-link"><i class="fas fa-home"></i> Children's Homes</a>
                     </div>
                     <div class="drop-col">
-                        <div class="drop-col-title"><i class="fas fa-home mr-1 text-orange-400"></i> Families</div>
-                        <a href="{{ route('families.housing') }}"          class="drop-link"><i class="fas fa-house-user"></i> Housing Stability</a>
+                        <div class="drop-col-title"><i class="fas fa-home mr-1 text-orange-400"></i><p data-en="Families" data-km="គ្រួសារ" data-fr="PÔLE FAMILLE">Families</p></div>
+                        <a href="{{ route('families.housing') }}"          class="drop-link"><i class="fas fa-house-user"></i> <p data-en="Housing Stability" data-fr="HABITAT" data-km="ស្ថេរភាពលំនៅដ្ឋាន">Housing Stability</p></a>
                         <a href="{{ route('families.training') }}"         class="drop-link"><i class="fas fa-briefcase"></i> Training & Employment</a>
                         <a href="{{ route('families.financial') }}"        class="drop-link"><i class="fas fa-coins"></i> Financial Support</a>
                         <a href="{{ route('families.health') }}"           class="drop-link"><i class="fas fa-stethoscope"></i> Family Health</a>
                     </div>
                     <div class="drop-col">
-                        <div class="drop-col-title"><i class="fas fa-city mr-1 text-orange-400"></i> Community</div>
-                        <a href="{{ route('community.infrastructure') }}"  class="drop-link"><i class="fas fa-hard-hat"></i> Infrastructure</a>
+                        <div class="drop-col-title"><i class="fas fa-city mr-1 text-orange-400"></i> <p data-fr="PÔLE COMMUNAUTÉ" data-en="Community" data-km="សហគមន៍">Community</p></div>
+                        <a href="{{ route('community.infrastructure') }}"  class="drop-link"><i class="fas fa-hard-hat"></i> <p data-km="ហេដ្ឋារចនាសម្ព័ន្ធ" data-fr="INFRASTRUCTURES" data-en="Infrastructure">Infrastructure</p></a>
                         <a href="{{ route('community.water') }}"           class="drop-link"><i class="fas fa-tint"></i> Water & Sanitation</a>
                     </div>
                 </div>
@@ -487,13 +487,13 @@ body { top: 0 !important; }
                 </span>
                 <div class="mega-drop drop-right">
                     <div class="drop-col">
-                        <div class="drop-col-title"><i class="fas fa-hand-holding-heart mr-1 text-orange-400"></i> Give</div>
+                        <div class="drop-col-title"><i class="fas fa-hand-holding-heart mr-1 text-orange-400"></i><p data-en="Give" data-km="បរិច្ចាក" data-fr="DONNEZ">Give</p></div>
                         <a href="{{ route('support.donate') }}"            class="drop-link"><i class="fas fa-credit-card"></i> Make a Donation</a>
-                        <a href="{{ route('support.bequests') }}"          class="drop-link"><i class="fas fa-scroll"></i> Bequests</a>
+                        <a href="{{ route('support.bequests') }}"          class="drop-link"><i class="fas fa-scroll"></i> <p data-fr="Legs">Bequests</p></a>
                     </div>
                     <div class="drop-col">
                         <div class="drop-col-title"><i class="fas fa-star mr-1 text-orange-400"></i> Get Involved</div>
-                        <a href="{{ route('support.fundraiser') }}"        class="drop-link"><i class="fas fa-bullhorn"></i> Start a Fundraiser</a>
+                        <a href="{{ route('support.fundraiser') }}"        class="drop-link"><i class="fas fa-bullhorn"></i> <p data-fr="Lancez une collecte de fonds" data-en="Start a Fundraiser">Start a Fundraiser</p></a>
                         <a href="{{ route('support.event') }}"             class="drop-link"><i class="fa-solid fa-calendar-alt"></i> Solidarity Event</a>
                         <a href="{{ route('support.patron') }}"            class="drop-link"><i class="fas fa-award"></i> Become a Patron</a>
                         <a href="{{ route('support.foundations') }}"       class="drop-link"><i class="fas fa-building"></i> Foundations</a>
@@ -525,7 +525,7 @@ body { top: 0 !important; }
                     <span data-en="Sponsor a Child" data-km="ឧបត្ថម្ភកុមារ" data-fr="Je parraine">Sponsor a Child</span>
                 </a>
                 <button id="openHaOverlay" class="nav-cta-donate" style="border:none;cursor:pointer;">
-                    <i class="fas fa-heart text-base"></i>
+                    <i class="fas fa-hand-holding-heart text-base"></i>
                     <span data-en="Donate" data-km="បរិច្ចាគ" data-fr="Je donne">Donate</span>
                 </button>
             @endauth
@@ -619,9 +619,9 @@ body { top: 0 !important; }
                     <a href="{{ route('about.partners') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-handshake"></i> Partners</a>
                     <div class="mob-drop-title mt-2"><i class="fas fa-heart mr-1 text-orange-400"></i> Sponsorship</div>
                     <a href="{{ route('sponsor.child.file') }}"     class="mob-drop-link mobile-menu-link"><i class="fas fa-child"></i> Child Sponsorship</a>
-                    <a href="{{ route('sponsor.child.stories') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-book-open"></i> Child Stories</a>
+                    <a href="{{ route('sponsor.child.stories') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-book-open"></i><p data-en="Child Stories" data-km="ប្រវិត្តក្មេង" data-fr="TÉMOIGNAGES D'ENFANTS">Child Stories</p></a>
                     <a href="{{ route('sponsor.family.file') }}"    class="mob-drop-link mobile-menu-link"><i class="fas fa-home"></i> Family Sponsorship</a>
-                    <a href="{{ route('sponsor.family.stories') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-star"></i> Family Stories</a>
+                    <a href="{{ route('sponsor.family.stories') }}" class="mob-drop-link mobile-menu-link" ><i class="fas fa-star"></i><p data-en="Family Stories" data-fr="TÉMOIGNAGES DE FAMILLES" data-km="ប្រវិត្តគ្រួសារ" >Family Stories</p></a>
                     <a href="{{ route('sponsor.faq') }}"            class="mob-drop-link mobile-menu-link"><i class="fas fa-question-circle"></i> FAQ</a>
                     <div class="pb-2"></div>
                 </div>
@@ -635,19 +635,19 @@ body { top: 0 !important; }
                     <i class="fas fa-chevron-down mob-caret"></i>
                 </div>
                 <div class="mob-nav-body">
-                    <div class="mob-drop-title"><i class="fas fa-child mr-1 text-orange-400"></i> Childhood</div>
+                    <div class="mob-drop-title"><i class="fas fa-child mr-1 text-orange-400"></i><p data-km="Childhood" data-fr="PÔLE ENFANCE" data-en="Childhood">Childhood</p></div>
                     <a href="{{ route('childhood.protection') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-shield-alt"></i> Child Protection</a>
                     <a href="{{ route('childhood.health') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-heartbeat"></i> Health & Nutrition</a>
                     <a href="{{ route('childhood.education') }}"   class="mob-drop-link mobile-menu-link"><i class="fas fa-graduation-cap"></i> Education</a>
                     <a href="{{ route('childhood.development') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-seedling"></i> Personal Development</a>
-                    <a href="{{ route('childhood.homes') }}"       class="mob-drop-link mobile-menu-link"><i class="fas fa-home"></i> Children's Homes</a>
-                    <div class="mob-drop-title mt-2"><i class="fas fa-home mr-1 text-orange-400"></i> Families</div>
-                    <a href="{{ route('families.housing') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-house-user"></i> Housing Stability</a>
+                    <a href="{{ route('childhood.homes') }}"       class="mob-drop-link mobile-menu-link"​><i class="fas fa-home"></i><p data-fr="MAISONS D'ENFANTS" data-en="Children's Homes" data-km="ផ្ទះរបស់កុមារ"> Children's Homes</p></a>
+                    <div class="mob-drop-title mt-2"><i class="fas fa-home mr-1 text-orange-400"></i> <p data-en="Families" data-km="គ្រួសារ" data-fr="PÔLE FAMILLE">Families</p></div>
+                    <a href="{{ route('families.housing') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-house-user"></i> <p data-en="Housing Stability" data-fr="HABITAT" data-km="ស្ថេរភាពលំនៅដ្ឋាន">Housing Stability</p></a>
                     <a href="{{ route('families.training') }}"     class="mob-drop-link mobile-menu-link"><i class="fas fa-briefcase"></i> Training & Employment</a>
                     <a href="{{ route('families.financial') }}"    class="mob-drop-link mobile-menu-link"><i class="fas fa-coins"></i> Financial Support</a>
                     <a href="{{ route('families.health') }}"       class="mob-drop-link mobile-menu-link"><i class="fas fa-stethoscope"></i> Family Health</a>
-                    <div class="mob-drop-title mt-2"><i class="fas fa-city mr-1 text-orange-400"></i> Community</div>
-                    <a href="{{ route('community.infrastructure') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-hard-hat"></i> Infrastructure</a>
+                    <div class="mob-drop-title mt-2"><i class="fas fa-city mr-1 text-orange-400"></i> <p data-fr="PÔLE COMMUNAUTÉ" data-en="Community" data-km="សហគមន៍">Community</p></div>
+                    <a href="{{ route('community.infrastructure') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-hard-hat"></i> <p data-km="ហេដ្ឋារចនាសម្ព័ន្ធ" data-fr="INFRASTRUCTURES" data-en="Infrastructure">Infrastructure</p></a>
                     <a href="{{ route('community.water') }}"          class="mob-drop-link mobile-menu-link"><i class="fas fa-tint"></i> Water & Sanitation</a>
                     <div class="pb-2"></div>
                 </div>
@@ -661,11 +661,11 @@ body { top: 0 !important; }
                     <i class="fas fa-chevron-down mob-caret"></i>
                 </div>
                 <div class="mob-nav-body">
-                    <div class="mob-drop-title"><i class="fas fa-hand-holding-heart mr-1 text-orange-400"></i> Give</div>
+                    <div class="mob-drop-title"><i class="fas fa-hand-holding-heart mr-1 text-orange-400"></i> <p data-en="Give" data-km="បរិច្ចាក" data-fr="DONNEZ">Give</p></div>
                     <a href="{{ route('support.donate') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-credit-card"></i> Make a Donation</a>
-                    <a href="{{ route('support.bequests') }}"    class="mob-drop-link mobile-menu-link"><i class="fas fa-scroll"></i> Bequests</a>
+                    <a href="{{ route('support.bequests') }}"    class="mob-drop-link mobile-menu-link"><i class="fas fa-scroll"></i> <p data-fr="Legs">Bequests</p></a>
                     <div class="mob-drop-title mt-2"><i class="fas fa-star mr-1 text-orange-400"></i> Get Involved</div>
-                    <a href="{{ route('support.fundraiser') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-bullhorn"></i> Start a Fundraiser</a>
+                    <a href="{{ route('support.fundraiser') }}"  class="mob-drop-link mobile-menu-link"><i class="fas fa-bullhorn"></i> <p data-fr="Lancez une collecte de fonds" data-en="Start a Fundraiser">Start a Fundraiser</p></a>
                     <a href="{{ route('support.event') }}"       class="mob-drop-link mobile-menu-link"><i class="fa-solid fa-calendar-alt"></i> Solidarity Event</a>
                     <a href="{{ route('support.patron') }}"      class="mob-drop-link mobile-menu-link"><i class="fas fa-award"></i> Become a Patron</a>
                     <a href="{{ route('support.foundations') }}" class="mob-drop-link mobile-menu-link"><i class="fas fa-building"></i> Foundations</a>
@@ -701,7 +701,7 @@ body { top: 0 !important; }
                     <span data-en="Sponsor a Child" data-km="ឧបត្ថម្ភកុមារ" data-fr="Je parraine">Sponsor a Child</span>
                 </a>
                 <button id="openHaOverlayMobile" class="flex items-center justify-center gap-2 w-full py-3.5 bg-green-500 hover:bg-green-600 text-white rounded-xl font-black text-sm uppercase tracking-wide transition" style="border:none;cursor:pointer;">
-                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-hand-holding-heart"></i>
                     <span data-en="Donate" data-km="បរិច្ចាគ" data-fr="Je donne">Donate</span>
                 </button>
             @endauth

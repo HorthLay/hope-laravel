@@ -125,7 +125,7 @@
                 <div class="flex items-center gap-3 mb-6">
                     <div class="h-0.5 flex-1 bg-gradient-to-r from-orange-400 to-transparent rounded-full"></div>
                     <h2 class="text-lg font-black text-gray-800 flex items-center gap-2 whitespace-nowrap">
-                        <i class="fas fa-home text-orange-500"></i> Families in This Story
+                        <i class="fas fa-home text-orange-500"></i> Families in This Article
                     </h2>
                     <div class="h-0.5 flex-1 bg-gradient-to-l from-orange-400 to-transparent rounded-full"></div>
                 </div>
@@ -193,7 +193,7 @@
                 <div class="flex items-center gap-3 mb-6">
                     <div class="h-0.5 flex-1 bg-gradient-to-r from-orange-400 to-transparent rounded-full"></div>
                     <h2 class="text-lg font-black text-gray-800 flex items-center gap-2 whitespace-nowrap">
-                        <i class="fas fa-child text-orange-500"></i> Children in This Story
+                        <i class="fas fa-child text-orange-500"></i> Children in This Article
                     </h2>
                     <div class="h-0.5 flex-1 bg-gradient-to-l from-orange-400 to-transparent rounded-full"></div>
                 </div>

@@ -14,7 +14,7 @@
                 @endif
                 </div>
 
-                <p class="text-gray-400 text-sm mb-4">
+                <p class="text-gray-400 text-sm mb-4" data-fr="Une association humanitaire qui vient en aide aux enfants orphelins et vulnérables du Cambodge.">
                     {{ $settings['site_description'] ?? '' }}
                 </p>
 
@@ -76,8 +76,9 @@
             <div>
                 <h4 class="font-bold text-lg mb-4">Get Involved</h4>
                 <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="{{ route('sponsor.children') }}" class="hover:text-[#f4b630] transition">Sponsor a Child</a></li>
-                    <li><a href="{{ route('sponsor.login') }}" class="hover:text-[#f4b630] transition">Donate</a></li>
+                    <li><a href="{{ route('sponsor.children') }}" class="hover:text-[#f4b630] transition" data-fr="Parrainer un enfant">Sponsor a Child</a></li>
+                    <li><a href="{{ route('sponsor.children') }}?tab=families" class="hover:text-[#f4b630] transition" data-fr="Parrainer une famille">Sponsor a Families</a></li>
+                    <li><a href="{{ route('sponsor.login') }}" class="hover:text-[#f4b630] transition" data-fr="Faire un don">Donate</a></li>
                 </ul>
             </div>
 

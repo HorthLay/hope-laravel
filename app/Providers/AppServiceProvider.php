@@ -4,9 +4,11 @@ namespace App\Providers;
 // use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use App\Helpers\NumberHelper;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Http\Request;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -39,9 +41,12 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('settings', $this->loadSettings());
 
-         if (config('app.env') === 'local') {
-            URL::forceScheme('https');
-        }
+        //  if (config('app.env') === 'local') {
+        //     URL::forceScheme('https');
+        // }
+
+
+     
     }
 
 

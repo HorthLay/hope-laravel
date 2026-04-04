@@ -58,7 +58,10 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             <i class="fas fa-users text-xs"></i> The People Behind the Mission
         </div>
         <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-4" style="animation:fadeUp .9s ease both">
-            Governance <span class="text-gradient">&amp; Our Team</span>
+            <span data-fr="Gouvernance">Governance</span>
+            <span class="text-gradient">
+                &amp; <span data-fr="équipes">Our Team</span>
+            </span>
         </h1>
         <p class="text-lg text-white/80 font-medium max-w-xl" style="animation:fadeUp .9s .15s ease both">
             From the streets of Phnom Penh to Paris — a team united by one belief: every child deserves a chance.
@@ -78,21 +81,24 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             @foreach([
                 [
                     'photo'=>'photo_julien.jpg', 'flag'=>'🇰🇭',
-                    'name'=>'Julien', 'role'=>'Founder & President',
+                    'name'=>'Julien',
+                    'role'=>'<span data-fr="Fondateur & Président">Founder & President</span>',
                     'color'=>'orange', 'icon'=>'fas fa-star',
                     'desc'=>'Based in Cambodia, Julien designs, oversees, and leads field actions in collaboration with local stakeholders. The heart and driving force of Des Ailes pour Grandir.',
                     'quote'=>'Every child we help is a small victory for humanity.',
                 ],
                 [
                     'photo'=>'photo_fanny.jpg', 'flag'=>'🇫🇷',
-                    'name'=>'Fanny', 'role'=>'Treasurer',
+                    'name'=>'Fanny',
+                    'role'=>'<span data-fr="Trésorière">Treasurer</span>',
                     'color'=>'blue', 'icon'=>'fas fa-chart-bar',
                     'desc'=>"Fanny ensures the association's accounts are accurately maintained, guaranteeing rigorous financial management and full transparency for our donors.",
                     'quote'=>'Every euro must reach the children who need it most.',
                 ],
                 [
                     'photo'=>'photo_mickaela.jpg', 'flag'=>'🇫🇷',
-                    'name'=>'Mickaëla', 'role'=>'Events Manager',
+                    'name'=>'Mickaëla',
+                    'role'=>'<span data-fr="Responsable événementiel">Events Manager</span>',
                     'color'=>'green', 'icon'=>'fas fa-calendar-star',
                     'desc'=>"Mickaëla plans, organizes, and coordinates the association's fundraising events — the essential engine that keeps our programs running.",
                     'quote'=>'Great events build the bridges that change lives.',
@@ -117,7 +123,9 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 </div>
                 <div class="p-7">
                     <h3 class="text-xl font-black text-gray-900">{{ $person['name'] }}</h3>
-                    <p class="text-sm font-black text-{{ $person['color'] }}-500 mb-3 uppercase tracking-wide">{{ $person['role'] }}</p>
+                    <p class="text-sm font-black text-{{ $person['color'] }}-500 mb-3 uppercase tracking-wide">
+                        {!! $person['role'] !!}
+                    </p>
                     <p class="text-sm text-gray-500 leading-relaxed mb-4">{{ $person['desc'] }}</p>
                     <div class="border-l-4 border-{{ $person['color'] }}-300 pl-4">
                         <p class="text-xs text-gray-500 italic">"{{ $person['quote'] }}"</p>
