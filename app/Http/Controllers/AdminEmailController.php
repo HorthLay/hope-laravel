@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\SponsorPasswordReset;
 use App\Models\Sponsor;
 use Illuminate\Http\Request;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use SponsorAccountCreated;
 
 class AdminEmailController extends Controller
