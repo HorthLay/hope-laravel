@@ -80,26 +80,26 @@ class SponsorController extends Controller
     // ──────────────────────────────────────────────────────────────────
     //  SPONSOR A CHILD FORM  →  route('sponsor.child')
     // ──────────────────────────────────────────────────────────────────
-    public function sponsorChild(string $encId)
-    {
-        $child = SponsoredChild::where('is_active', true)
-            ->findOrFail($this->decryptId($encId));
+    // public function sponsorChild(string $encId)
+    // {
+    //     $child = SponsoredChild::where('is_active', true)
+    //         ->findOrFail($this->decryptId($encId));
 
-        return view('sponsor.child-form', compact('child'));
-    }
+    //     return view('sponsor.child-form', compact('child'));
+    // }
 
     // ──────────────────────────────────────────────────────────────────
     //  SPONSOR A FAMILY FORM  →  route('sponsor.family')
     // ──────────────────────────────────────────────────────────────────
-    public function sponsorFamily(string $encId)
-    {
-        $family = Family::where('is_active', true)
-            ->with(['members', 'children' => fn ($q) => $q->where('is_active', true)])
-            ->withCount('members')
-            ->findOrFail($this->decryptId($encId));
+    // public function sponsorFamily(string $encId)
+    // {
+    //     $family = Family::where('is_active', true)
+    //         ->with(['members', 'children' => fn ($q) => $q->where('is_active', true)])
+    //         ->withCount('members')
+    //         ->findOrFail($this->decryptId($encId));
 
-        return view('sponsor.family-form', compact('family'));
-    }
+    //     return view('sponsor.family-form', compact('family'));
+    // }
 
     // ──────────────────────────────────────────────────────────────────
     //  HELPER

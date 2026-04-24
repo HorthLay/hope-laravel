@@ -170,7 +170,7 @@
                             @else
                             <div class="flex-1 mb-4"></div>
                             @endif
-                            <div class="grid grid-cols-2 gap-2 mt-auto">
+                            {{-- <div class="grid grid-cols-2 gap-2 mt-auto">
                                 <a href="{{ route('families.show', $fEncId) }}"
                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
                                     <i class="fas fa-eye text-gray-500"></i> View Detail
@@ -179,7 +179,7 @@
                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl transition shadow-sm">
                                     <i class="fas fa-hands-helping text-xs"></i> {{ $family->name }}
                                 </a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     @endforeach
@@ -255,7 +255,7 @@
                             @else
                             <div class="flex-1 mb-4"></div>
                             @endif
-                            <div class="grid grid-cols-2 gap-2 mt-auto">
+                            {{-- <div class="grid grid-cols-2 gap-2 mt-auto">
                                 <a href="{{ route('children.show', $cEncId) }}"
                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
                                     <i class="fas fa-eye text-gray-500"></i> View Detail
@@ -264,7 +264,7 @@
                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl transition shadow-sm">
                                     <i class="fas fa-heart text-xs"></i> {{ $child->first_name }}
                                 </a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     @endforeach
@@ -433,10 +433,10 @@
                             </span>
                             @endif
                         </div>
-                        <div class="flex flex-col gap-1">
+                        {{-- <div class="flex flex-col gap-1">
                             <a href="{{ route('children.show', $cEncId) }}" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">Detail</a>
                             <a href="{{ url('/support/donate') }}" class="px-2.5 py-1 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-black rounded-lg transition text-center">Sponsor</a>
-                        </div>
+                        </div> --}}
                     </div>
                     @endforeach
                 </div>
@@ -464,10 +464,10 @@
                             <p class="text-xs text-black-400">{{ $family->code }}</p>
                             @if($family->country)<p class="text-xs text-gray-400">{{ $family->country }}</p>@endif
                         </div>
-                        <div class="flex flex-col gap-1">
+                        {{-- <div class="flex flex-col gap-1">
                             <a href="{{ route('families.show', $fEncId) }}" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-black rounded-lg transition text-center">Detail</a>
                             <a href="{{ url('/support/donate') }}" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-black rounded-lg transition text-center">Sponsor</a>
-                        </div>
+                        </div> --}}
                     </div>
                     @endforeach
                 </div>

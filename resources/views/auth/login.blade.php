@@ -346,7 +346,7 @@
 <div class="left">
     {{-- Background video (same as homepage) --}}
     <video id="bgVideo" autoplay muted loop playsinline preload="auto"
-           poster="{{ asset('images/cambodia-bg.jpg') }}">
+           poster="{{ asset('images/logo.png') }}">
         <source src="{{ asset('project/videos/video.mp4') }}" type="video/mp4">
     </video>
 

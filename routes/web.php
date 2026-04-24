@@ -74,6 +74,7 @@ Route::get('/articles/{slug}',       [HomeController::class, 'articleDetails'])-
 Route::get('/categories/{category}', [HomeController::class, 'categoryArticles'])->name('category.articles');
 Route::get('/login/sponsor', [SponsorAuthController::class, 'showLogin'])->name('sponsor.login');
 Route::post('/login/sponsor', [SponsorAuthController::class, 'login']);
+Route::get('/sponsor/locked',[SponsorAuthController::class,'showLocked'])->name('sponsor.login.locked');
 
 Route::prefix('admin')->group(function () {
         Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
