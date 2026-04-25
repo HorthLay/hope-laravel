@@ -1,473 +1,747 @@
 {{-- resources/views/sponsor/index.blade.php --}}
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="fr">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Histoire - Parrainage | {{ $settings['site_name'] ?? 'Hope & Impact' }}</title>
     <meta name="description" content="{{ $settings['meta_description'] ?? $settings['site_description'] ?? '' }}">
-    
+
     @if(!empty($settings['favicon']))
     <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
     @endif
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-    @include('css.style')
-    
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .story-wrapper {
-            position: relative;
-            min-height: calc(100dvh - 140px);
-            display: flex;
-            flex-direction: column;
-            overflow: visible;
-        }
-
-        .scene {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem 1.25rem 7rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease-in-out;
-            overflow-y: auto;
-        }
-
-        .scene.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .scene-inner {
+        html, body {
             width: 100%;
-            max-width: 48rem;
-            text-align: center;
+            height: 100%;
+            overflow: hidden;
+            background: #080c11;
+            color: white;
+            font-family: 'Inter', sans-serif;
         }
 
-        .nav-buttons {
-            position: absolute;
-            bottom: 1.25rem;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.75rem;
-            z-index: 10;
-            padding: 0 1rem;
-        }
-
-        /* ── Progress dots ── */
-        .progress-dots {
-            position: absolute;
-            bottom: 5.25rem;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 10;
-            padding: 0 1rem;
-            overflow: visible;
-        }
-
-        .dot {
-            height: 8px;
-            width: 8px;
-            min-width: 8px;
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.35);
-            transition: background 0.4s ease, width 0.4s ease, min-width 0.4s ease;
-            flex-shrink: 0;
-        }
-
-        .dot.active {
-            background: #fff;
-            width: 28px;
-            min-width: 28px;
-        }
-
-        /* ── Background slider ── */
+        /* ── Background images ── */
         .bg-slide {
-            position: absolute;
+            position: fixed;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
             opacity: 0;
             transition: opacity 2s ease-in-out;
+            z-index: 0;
         }
+        .bg-slide.active { opacity: 1; }
 
-        .bg-slide.active {
-            opacity: 1;
+        /* ── Dark overlay + grain ── */
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 9, 14, 0.62);
+            z-index: 1;
         }
-
-        /* ── Sound toggle button ── */
-        .sound-btn {
+        .bg-overlay::after {
+            content: '';
             position: absolute;
-            top: 1.25rem;
-            right: 1.25rem;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* ── Stage ── */
+        .stage {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+        }
+
+        /* ── Scenes ── */
+        .scene {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 8% 5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s ease;
+            overflow-y: auto;
+        }
+        .scene.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .scene-inner {
+            max-width: 680px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ── Typography ── */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 500;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            margin-bottom: 1.5rem;
+        }
+
+        .scene-p {
+            font-size: clamp(0.9rem, 2vw, 1.15rem);
+            line-height: 2;
+            font-weight: 300;
+            opacity: 0.88;
+            margin-bottom: 1.5rem;
+        }
+        .scene-p strong { font-weight: 600; color: #fff; }
+        .scene-p .size-lg {
+            font-size: 1.6em;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+        .scene-p .size-xl {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            display: block;
+            margin-top: 0.25em;
+        }
+
+        /* ── Per-scene action button ── */
+        .scene-action {
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease 0.65s, transform 0.8s ease 0.65s;
+        }
+        .scene.active .scene-action {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-scene {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 30px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: transparent;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s, color 0.3s, transform 0.2s;
+            text-decoration: none;
+        }
+        .btn-scene:hover {
+            background: white;
+            color: #080c11;
+            border-color: white;
+            transform: translateY(-1px);
+        }
+        .btn-scene.primary {
+            background: white;
+            color: #080c11;
+            border-color: white;
+            font-weight: 600;
+        }
+        .btn-scene.primary:hover {
+            background: rgba(255,255,255,0.88);
+            transform: translateY(-1px);
+        }
+
+        .btn-hint {
+            font-size: 12px;
+            opacity: 0.4;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+
+        /* ── Progress bar ── */
+        .progress-wrap {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(55%, 480px);
+            height: 1.5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.9));
+            border-radius: 999px;
+            transition: width 1s ease;
+        }
+
+        /* ── Corner buttons ── */
+        .corner-btn {
+            position: fixed;
+            top: 1.4rem;
             z-index: 20;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: background 0.25s, transform 0.2s;
             color: white;
-            font-size: 14px;
+            font-size: 13px;
+            text-decoration: none;
         }
-
-        .sound-btn:hover {
-            background: rgba(255, 255, 255, 0.28);
+        .corner-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
             transform: scale(1.08);
         }
+        .corner-btn.left  { left: 1.4rem; }
+        .corner-btn.right { right: 1.4rem; }
 
-        /* ── Soundwave bars animation ── */
+        /* ── Translate wrapper (center top) ── */
+        #translate-wrapper {
+            position: fixed;
+            top: 1.4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+
+        /* ── Pill trigger button ── */
+        #translate-toggle {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 14px 5px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: background 0.25s, border-color 0.25s;
+            white-space: nowrap;
+        }
+        #translate-toggle:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+        #translate-toggle img {
+            width: 20px;
+            height: 14px;
+            border-radius: 3px;
+            object-fit: cover;
+        }
+        #translate-caret {
+            font-size: 9px;
+            opacity: 0.55;
+            transition: transform 0.25s;
+        }
+        #translate-wrapper.open #translate-caret {
+            transform: rotate(180deg);
+        }
+
+        /* ── Dropdown panel ── */
+        #translate-panel {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 210px;
+            background: rgba(14, 20, 30, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 12px 10px 10px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.55);
+        }
+        #translate-wrapper.open #translate-panel {
+            display: block;
+            animation: panelIn 0.2s ease;
+        }
+        @keyframes panelIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ── Panel header ── */
+        #translate-panel .panel-header {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #translate-panel .panel-header i {
+            color: #f97316;
+        }
+
+        /* ── Language option buttons ── */
+        .lang-option-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 8px;
+            border-radius: 9px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.75);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            text-align: left;
+        }
+        .lang-option-btn:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        .lang-option-btn.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .lang-option-btn .flag {
+            width: 22px;
+            height: 15px;
+            border-radius: 3px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .lang-option-btn .check {
+            margin-left: auto;
+            font-size: 11px;
+            color: #f97316;
+        }
+        .lang-option-btn .check.hidden { display: none; }
+        .lang-option-btn .lang-sub {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.35);
+            margin-top: 1px;
+        }
+
+        /* ── Auto translate button ── */
+        #auto-translate-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(249,115,22,0.35);
+            background: rgba(249,115,22,0.08);
+            color: #fb923c;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            letter-spacing: 0.02em;
+        }
+        #auto-translate-btn:hover {
+            background: rgba(249,115,22,0.18);
+            border-color: rgba(249,115,22,0.55);
+        }
+
+        /* ── Panel divider ── */
+        .panel-divider {
+            margin: 8px 0;
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* ── Soundwave ── */
         .soundwave {
             display: flex;
             align-items: center;
             gap: 2px;
             height: 16px;
         }
-
         .soundwave span {
             display: block;
-            width: 3px;
+            width: 2.5px;
             border-radius: 2px;
             background: white;
             animation: wave 0.8s ease-in-out infinite;
-            transform-origin: bottom;
+            transform-origin: center;
         }
-
-        .soundwave span:nth-child(1) { height: 6px;  animation-delay: 0s;    }
-        .soundwave span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
-        .soundwave span:nth-child(3) { height: 10px; animation-delay: 0.3s;  }
-        .soundwave span:nth-child(4) { height: 14px; animation-delay: 0.45s; }
-        .soundwave span:nth-child(5) { height: 6px;  animation-delay: 0.6s;  }
+        .soundwave span:nth-child(1) { height: 5px;  animation-delay: 0s;    }
+        .soundwave span:nth-child(2) { height: 13px; animation-delay: 0.15s; }
+        .soundwave span:nth-child(3) { height: 9px;  animation-delay: 0.3s;  }
+        .soundwave span:nth-child(4) { height: 13px; animation-delay: 0.45s; }
+        .soundwave span:nth-child(5) { height: 5px;  animation-delay: 0.6s;  }
 
         @keyframes wave {
-            0%, 100% { transform: scaleY(1);   }
-            50%       { transform: scaleY(0.3); }
+            0%, 100% { transform: scaleY(1);    }
+            50%       { transform: scaleY(0.25); }
         }
-
         .soundwave.paused span {
             animation-play-state: paused;
-            transform: scaleY(0.3);
+            transform: scaleY(0.25);
         }
 
-        /* ── Autoplay nudge toast ── */
-        .autoplay-toast {
-            position: absolute;
-            top: 1.25rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-
-        .autoplay-toast.show {
-            opacity: 1;
-        }
-
-        /* ── Mobile typography ── */
-        @media (max-width: 480px) {
-            .scene-h1-lg { font-size: 1.75rem; line-height: 1.2; }
-            .scene-h1-md { font-size: 1.5rem;  line-height: 1.2; }
-            .scene-p     { font-size: 0.9rem;  line-height: 1.75; }
+        /* ── Mobile ── */
+        @media (max-width: 500px) {
+            .scene            { padding: 4.5rem 7% 4rem; }
+            .progress-wrap    { width: 70%; }
+            h1                { font-size: 1.7rem; }
+            .scene-p          { font-size: 0.875rem; line-height: 1.9; }
+            .scene-p .size-lg { font-size: 1.35em; }
+            .scene-p .size-xl { font-size: 1.7em; }
         }
     </style>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
+<body>
 
-@include('layouts.header')
-
-{{-- Hidden audio element --}}
 <audio id="bg-music" loop preload="auto">
     <source src="{{ asset('music/sound-1.mp3') }}" type="audio/mpeg">
 </audio>
 
-<main class="flex-grow relative text-white">
-    <!-- Background Image Slider -->
-    <div id="bg-slider" class="absolute inset-0 z-0 overflow-hidden bg-black"></div>
-    <!-- Dark overlay -->
-    <div class="absolute inset-0 bg-black/55 z-0"></div>
+<!-- Background images -->
+<div id="bg-slider"></div>
 
-    <div class="story-wrapper max-w-5xl mx-auto w-full relative z-10">
+<!-- Overlay -->
+<div class="bg-overlay"></div>
 
-        <!-- ══ SOUND TOGGLE ══ -->
-        <button class="sound-btn" id="sound-btn" onclick="toggleSound()" title="Toggle music">
-            <div class="soundwave paused" id="soundwave">
-                <span></span><span></span><span></span><span></span><span></span>
+<!-- Back to home -->
+<a href="{{ url('/') }}" class="corner-btn left" title="Retour">
+    <i class="fas fa-arrow-left"></i>
+</a>
+
+<!-- Translate / Language switcher -->
+<div id="translate-wrapper">
+    <button id="translate-toggle" onclick="toggleTranslatePanel()">
+        <img src="https://flagcdn.com/w40/fr.png" id="desktop-flag" alt="FR">
+        <span id="desktop-lang-label">FR</span>
+        <i class="fas fa-chevron-down" id="translate-caret"></i>
+    </button>
+    <div id="translate-panel">
+        <div class="panel-header">
+            <i class="fas fa-globe"></i> Language
+        </div>
+        <button class="lang-option-btn" id="btn-en" onclick="switchLanguage('en')">
+            <img src="https://flagcdn.com/w40/us.png" class="flag" alt="EN">
+            <div>
+                <div>English</div>
+                <div class="lang-sub">Original</div>
             </div>
+            <i class="fas fa-check check hidden" id="check-en"></i>
         </button>
-
-        <!-- ══ AUTOPLAY TOAST ══ -->
-        <div class="autoplay-toast" id="autoplay-toast">
-            <i class="fas fa-music text-orange-300"></i>
-            <span id="toast-text" data-fr="Appuyez pour activer la musique" data-en="Tap to enable music" data-km="ចុចដើម្បីបើកតន្ត្រី">
-                Appuyez pour activer la musique
-            </span>
-        </div>
-
-        <!-- ══ SCENE 1 ══ -->
-        <div class="scene active">
-            <div class="scene-inner">
-                <h1 class="scene-h1-lg text-3xl md:text-5xl lg:text-6xl font-black mb-5 leading-tight drop-shadow-sm"
-                    data-fr="Il existe des histoires qui avancent doucement"
-                    data-en="There are stories that move forward slowly"
-                    data-km="មានរឿងរ៉ាវដែលឈានទៅមុខយ៉ាងយឺតៗ">
-                    Il existe des histoires qui avancent doucement
-                </h1>
-                <p class="scene-p text-sm md:text-xl lg:text-2xl font-medium leading-relaxed opacity-90"
-                   data-fr="Des vies discrètes.<br>Qui grandissent sans bruit.<br><br>Mais qui avancent malgré tout."
-                   data-en="Quiet lives.<br>Growing without noise.<br><br>But moving forward nonetheless."
-                   data-km="ជីវិតស្ងៀមស្ងាត់។<br>លូតលាស់ដោយគ្មានសំឡេង។<br><br>តែនៅតែបន្តដំណើរទៅមុខ។">
-                    Des vies discrètes.<br>Qui grandissent sans bruit.<br><br>Mais qui avancent malgré tout.
-                </p>
+        <button class="lang-option-btn" id="btn-km" onclick="switchLanguage('km')">
+            <img src="https://flagcdn.com/w40/kh.png" class="flag" alt="KM">
+            <div>
+                <div>ខ្មែរ (Khmer)</div>
+                <div class="lang-sub">Cambodian</div>
             </div>
-        </div>
-
-        <!-- ══ SCENE 2 ══ -->
-        <div class="scene">
-            <div class="scene-inner">
-                <p class="scene-p text-sm md:text-xl lg:text-2xl font-medium leading-relaxed opacity-90 mb-5"
-                   data-fr="Certaines de ces histoires restent invisibles.<br><br>Pourtant, elles cherchent déjà quelque chose."
-                   data-en="Some of these stories remain invisible.<br><br>Yet, they are already looking for something."
-                   data-km="រឿងខ្លះនៅតែមើលមិនឃើញ។<br><br>ប៉ុន្តែពួកវាបាននឹងកំពុងស្វែងរកអ្វីមួយរួចហើយ។">
-                    Certaines de ces histoires restent invisibles.<br><br>
-                    Pourtant, elles cherchent déjà quelque chose.
-                </p>
-                <h1 class="scene-h1-md text-3xl md:text-6xl font-black leading-tight drop-shadow-sm"
-                    data-fr="Une présence."
-                    data-en="A presence."
-                    data-km="វត្តមានមួយ។">
-                    Une présence.
-                </h1>
+            <i class="fas fa-check check hidden" id="check-km"></i>
+        </button>
+        <button class="lang-option-btn active" id="btn-fr" onclick="switchLanguage('fr')">
+            <img src="https://flagcdn.com/w40/fr.png" class="flag" alt="FR">
+            <div>
+                <div>Français</div>
+                <div class="lang-sub">French</div>
             </div>
-        </div>
-
-        <!-- ══ SCENE 3 ══ -->
-        <div class="scene">
-            <div class="scene-inner">
-                <h1 class="scene-h1-md text-2xl md:text-5xl font-black mb-5 leading-tight drop-shadow-sm"
-                    data-fr="Un chemin approche"
-                    data-en="A path approaches"
-                    data-km="ផ្លូវមួយកំពុងមកដល់">
-                    Un chemin approche
-                </h1>
-                <p class="scene-p text-xs md:text-lg lg:text-xl font-medium leading-relaxed opacity-90"
-                   data-fr="Un enfant grandit.<br><br>Chaque jour.<br>Avec patience.<br>Avec simplicité.<br><br>Il apprend à comprendre le monde autour de lui.<br><br>Et sans le dire.<br>Il attend.<br><br>Quelqu'un.<br>Une présence stable.<br>Une main qui ne disparaît pas.<br><br>Ce moment n'est pas encore arrivé.<br><br>Mais il approche."
-                   data-en="A child grows.<br><br>Every day.<br>With patience.<br>With simplicity.<br><br>Learning to understand the world around them.<br><br>And without saying it.<br>Waiting.<br><br>For someone.<br>A stable presence.<br>A hand that does not disappear.<br><br>This moment has not yet arrived.<br><br>But it is approaching."
-                   data-km="ក្មេងម្នាក់ធំធាត់។<br><br>រៀងរាល់ថ្ងៃ។<br>ដោយភាពអត់ធ្មត់។<br>ដោយភាពសាមញ្ញ។<br><br>រៀនយល់ពីពិភពលោកជុំវិញខ្លួន។<br><br>ហើយដោយមិននិយាយ។<br>រង់ចាំ។<br><br>នរណាម្នាក់។<br>វត្តមានដ៏រឹងមាំមួយ។<br>ដៃមួយដែលមិនបាត់បង់។<br><br>ពេលវេលានេះមិនទាន់មកដល់ទេ។<br><br>ប៉ុន្តែវាកំពុងខិតចូលមក។">
-                    Un enfant grandit.<br><br>
-                    Chaque jour.<br>Avec patience.<br>Avec simplicité.<br><br>
-                    Il apprend à comprendre le monde autour de lui.<br><br>
-                    Et sans le dire.<br>Il attend.<br><br>
-                    Quelqu'un.<br>Une présence stable.<br>Une main qui ne disparaît pas.<br><br>
-                    Ce moment n'est pas encore arrivé.<br><br>Mais il approche.
-                </p>
-            </div>
-        </div>
-
-        <!-- ══ SCENE 4 ══ -->
-        <div class="scene">
-            <div class="scene-inner">
-                <p class="scene-p text-sm md:text-xl lg:text-2xl font-medium leading-relaxed opacity-90 mb-5"
-                   data-fr="Bientôt.<br><br>Deux chemins vont se rencontrer."
-                   data-en="Soon.<br><br>Two paths will meet."
-                   data-km="ឆាប់ៗនេះ។<br><br>ផ្លូវពីរនឹងជួបគ្នា។">
-                    Bientôt.<br><br>Deux chemins vont se rencontrer.
-                </p>
-                <h1 class="scene-h1-md text-3xl md:text-6xl font-black leading-tight drop-shadow-sm"
-                    data-fr="Le vôtre. Et le sien."
-                    data-en="Yours. And theirs."
-                    data-km="ផ្លូវរបស់អ្នក។ និងផ្លូវរបស់គេ។">
-                    Le vôtre. Et le sien.
-                </h1>
-            </div>
-        </div>
-
-        <!-- ══ SCENE 5 ══ -->
-        <div class="scene">
-            <div class="scene-inner">
-                <p class="scene-p text-sm md:text-xl lg:text-2xl font-medium leading-relaxed opacity-90"
-                   data-fr="Ce lien ne transforme pas tout immédiatement.<br><br>Mais il change la manière dont un enfant traverse ses jours."
-                   data-en="This bond does not transform everything immediately.<br><br>But it changes the way a child goes through their days."
-                   data-km="ចំណងនេះមិនអាចផ្លាស់ប្តូរអ្វីៗភ្លាមៗនោះទេ។<br><br>ប៉ុន្តែវាផ្លាស់ប្តូររបៀបដែលក្មេងម្នាក់ឆ្លងកាត់ជីវិតប្រចាំថ្ងៃរបស់គេ។">
-                    Ce lien ne transforme pas tout immédiatement.<br><br>
-                    Mais il change la manière dont un enfant traverse ses jours.
-                </p>
-            </div>
-        </div>
-
-        <!-- ══ SCENE 6 ══ -->
-        <div class="scene">
-            <div class="scene-inner">
-                <h1 class="scene-h1-lg text-4xl md:text-6xl font-black mb-5 leading-tight drop-shadow-sm"
-                    data-fr="Merci"
-                    data-en="Thank you"
-                    data-km="សូមអរគុណ">
-                    Merci
-                </h1>
-                <p class="scene-p text-sm md:text-xl lg:text-2xl font-medium leading-relaxed opacity-90"
-                   data-fr="Une histoire vient de commencer.<br><br>Sans bruit.<br>Mais déjà réelle."
-                   data-en="A story has just begun.<br><br>Without noise.<br>But already real."
-                   data-km="រឿងមួយទើបតែចាប់ផ្តើម។<br><br>ដោយគ្មានសំឡេង។<br>ប៉ុន្តែក្លាយជាការពិតរួចទៅហើយ។">
-                    Une histoire vient de commencer.<br><br>
-                    Sans bruit.<br>Mais déjà réelle.
-                </p>
-            </div>
-        </div>
-
-        <!-- ══ PROGRESS DOTS ══ -->
-        <div class="progress-dots" id="progress-dots"></div>
-
-        <!-- ══ NAV BUTTONS ══ -->
-        <div class="nav-buttons">
-            <button onclick="prev()"
-                class="px-4 md:px-6 py-2.5 md:py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-full backdrop-blur-sm border border-white/40 transition flex items-center gap-2 text-sm md:text-base">
-                <i class="fas fa-arrow-left text-xs md:text-sm"></i>
-                <span class="hidden sm:inline" id="prev-text"
-                      data-fr="Précédent" data-en="Previous" data-km="ត្រឡប់ក្រោយ">Précédent</span>
-            </button>
-            <button onclick="next()" id="next-btn"
-                class="px-4 md:px-6 py-2.5 md:py-3 bg-white text-orange-500 hover:bg-gray-100 font-bold rounded-full shadow-lg transition flex items-center gap-2 text-sm md:text-base">
-                <span id="next-text"
-                      data-fr="Continuer" data-en="Continue" data-km="បន្តទៀត">Continuer</span>
-                <i class="fas fa-arrow-right text-xs md:text-sm" id="next-icon"></i>
-            </button>
-        </div>
-
+            <i class="fas fa-check check" id="check-fr"></i>
+        </button>
+        <hr class="panel-divider">
+        <button id="auto-translate-btn" onclick="autoDetectAndTranslate()">
+            <i class="fas fa-magic" style="font-size:10px"></i> Auto Translate
+        </button>
     </div>
-</main>
+</div>
 
-@include('layouts.footer')
-@include('layouts.navigation')
+<!-- Sound toggle -->
+<button class="corner-btn right" id="sound-btn" onclick="toggleSound()" title="Musique">
+    <div class="soundwave paused" id="soundwave">
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+</button>
+
+<!-- Stage -->
+<div class="stage" id="stage">
+
+    <!-- ══ SCENE 1 ══ -->
+    <div class="scene active">
+        <div class="scene-inner">
+            <h1 data-fr="Il existe des histoires qui avancent doucement."
+                data-en="There are stories that move forward quietly."
+                data-km="មានរឿងរ៉ាវដែលឈានទៅមុខយ៉ាងស្ងៀម។">
+                Il existe des histoires qui avancent doucement.
+            </h1>
+            <p class="scene-p"
+               data-fr="Sans éclat. Sans bruit.<br>Portées seulement par le passage du temps.<br><br>Des vies discrètes.<br>Construites dans l'ombre des jours.<br>Et pourtant, elles grandissent quand même."
+               data-en="Without brilliance. Without noise.<br>Carried only by the passing of time.<br><br>Discreet lives.<br>Built in the shadow of days.<br>And yet, they grow nonetheless."
+               data-km="គ្មានពន្លឺ។ គ្មានសំឡេង។<br>ត្រូវបានផ្ទុកតែដោយការហូរចូលនៃពេលវេលា។<br><br>ជីវិតដ៏ស្ងៀមស្ងាត់។<br>ត្រូវបានសាងសង់នៅក្នុងស្រមោលនៃថ្ងៃ។<br>ប៉ុន្តែនៅតែលូតលាស់។">
+                Sans éclat. Sans bruit.<br>
+                Portées seulement par le passage du temps.<br><br>
+                Des vies discrètes.<br>
+                Construites dans l'ombre des jours.<br>
+                Et pourtant, elles grandissent quand même.
+            </p>
+            <div class="scene-action">
+                <button class="btn-scene" onclick="goTo(1)">
+                    <span data-fr="Découvrir l'histoire" data-en="Discover the story" data-km="រកឃើញរឿង">Découvrir l'histoire</span>
+                    <i class="fas fa-arrow-right" style="font-size:11px;opacity:0.7"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ SCENE 2 ══ -->
+    <div class="scene">
+        <div class="scene-inner">
+            <p class="scene-p"
+               data-fr="Certaines de ces histoires passent inaperçues.<br><br>Elles n'ont pas encore de place dans le regard du monde.<br>Et pourtant, elles cherchent déjà. Doucement. Inévitablement."
+               data-en="Some of these stories go unnoticed.<br><br>They do not yet have a place in the world's gaze.<br>And yet, they are already searching. Gently. Inevitably."
+               data-km="រឿងខ្លះមិនត្រូវបានគេកត់សម្គាល់ទេ។<br><br>ពួកគេមិនទាន់មានកន្លែងក្នុងការចាប់អារម្មណ៍របស់ពិភពលោក។<br>ប៉ុន្តែពួកគេបានស្វែងរករួចហើយ។ ស្ងប់ស្ងាត់។">
+                Certaines de ces histoires passent inaperçues.<br><br>
+                Elles n'ont pas encore de place dans le regard du monde.<br>
+                Et pourtant, elles cherchent déjà. Doucement. Inévitablement.
+            </p>
+            <h1 data-fr="Une présence."
+                data-en="A presence."
+                data-km="វត្តមានមួយ។">
+                Une présence.
+            </h1>
+            <div class="scene-action">
+                <button class="btn-scene" onclick="goTo(2)">
+                    <span data-fr="Aller plus loin" data-en="Go further" data-km="ទៅឆ្ងាយជាងនេះ">Aller plus loin</span>
+                    <i class="fas fa-arrow-right" style="font-size:11px;opacity:0.7"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ SCENE 3 ══ -->
+    <div class="scene">
+        <div class="scene-inner">
+            <h1 data-fr="Un chemin approche."
+                data-en="A path is approaching."
+                data-km="ផ្លូវមួយកំពុងខិតចូលមក។">
+                Un chemin approche.
+            </h1>
+            <p class="scene-p"
+               data-fr="Un enfant grandit, un peu plus chaque jour.<br>Dans le silence des petites choses. Dans la force des moments simples.<br><br>Et sans le dire, il attend.<br>Une main tendue. Une main qui reste.<br><br><strong>C'est peut-être déjà vous qu'il attend.</strong>"
+               data-en="A child is growing, a little more each day.<br>In the silence of small things. In the strength of simple moments.<br><br>And without saying it, he waits.<br>A hand extended. A hand that stays.<br><br><strong>Perhaps it is already you he is waiting for.</strong>"
+               data-km="ក្មេងម្នាក់កំពុងធំធាត់ ខ្លាំងជារៀងរាល់ថ្ងៃ។<br>នៅក្នុងភាពស្ងៀមនៃរឿងតូចៗ។<br><br>ហើយដោយមិននិយាយ គេរង់ចាំ។<br>ដៃដែលលាតចេញ។ ដៃដែលនៅជាប់។<br><br><strong>ប្រហែលជាអ្នកគឺជាអ្នកដែលគេរង់ចាំ។</strong>">
+                Un enfant grandit, un peu plus chaque jour.<br>
+                Dans le silence des petites choses. Dans la force des moments simples.<br><br>
+                Et sans le dire, il attend.<br>
+                Une main tendue. Une main qui reste.<br><br>
+                <strong>C'est peut-être déjà vous qu'il attend.</strong>
+            </p>
+            <div class="scene-action">
+                <button class="btn-scene" onclick="goTo(3)">
+                    <span data-fr="Se rapprocher de lui" data-en="Move closer to him" data-km="ជិតដល់គាត់">Se rapprocher de lui</span>
+                    <i class="fas fa-arrow-right" style="font-size:11px;opacity:0.7"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ SCENE 4 ══ -->
+    <div class="scene">
+        <div class="scene-inner">
+            <p class="scene-p"
+               data-fr='<span class="size-lg">Bientôt,</span><br>deux chemins vont se rencontrer.<br><span class="size-xl">Le vôtre. Et le sien.</span>'
+               data-en='<span class="size-lg">Soon,</span><br>two paths will meet.<br><span class="size-xl">Yours. And his.</span>'
+               data-km='<span class="size-lg">ឆាប់ៗ,</span><br>ផ្លូវពីរនឹងជួបគ្នា។<br><span class="size-xl">ផ្លូវរបស់អ្នក។ និងផ្លូវរបស់គេ។</span>'>
+                <span class="size-lg">Bientôt,</span><br>
+                deux chemins vont se rencontrer.<br>
+                <span class="size-xl">Le vôtre. Et le sien.</span>
+            </p>
+            <div class="scene-action">
+                <button class="btn-scene" onclick="goTo(4)">
+                    <span data-fr="Comprendre ce lien" data-en="Understand this bond" data-km="យល់ពីចំណងនេះ">Comprendre ce lien</span>
+                    <i class="fas fa-arrow-right" style="font-size:11px;opacity:0.7"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ SCENE 5 ══ -->
+    <div class="scene">
+        <div class="scene-inner">
+            <p class="scene-p"
+               data-fr="Ce lien ne transforme pas tout immédiatement.<br><br>Mais il change la manière dont un enfant traverse ses jours.<br><br>Parfois, <strong>tout commence par une décision très simple.</strong>"
+               data-en="This bond does not change everything immediately.<br><br>But it changes the way a child moves through their days.<br><br>Sometimes, <strong>everything begins with a very simple decision.</strong>"
+               data-km="ចំណងនេះមិនផ្លាស់ប្តូរអ្វីៗគ្រប់យ៉ាងភ្លាមៗ។<br><br>ប៉ុន្តែវាផ្លាស់ប្តូររបៀបដែលក្មេងម្នាក់ដំណើរកាត់ជីវិត។<br><br>ពេលខ្លះ <strong>អ្វីៗគ្រប់យ៉ាងចាប់ផ្តើមដោយការសម្រេចចិត្តសាមញ្ញ។</strong>">
+                Ce lien ne transforme pas tout immédiatement.<br><br>
+                Mais il change la manière dont un enfant traverse ses jours.<br><br>
+                Parfois, <strong>tout commence par une décision très simple.</strong>
+            </p>
+            <div class="scene-action">
+                <button class="btn-scene" onclick="goTo(5)">
+                    <span data-fr="Commencer cette histoire" data-en="Begin this story" data-km="ចាប់ផ្តើមរឿងនេះ">Commencer cette histoire</span>
+                    <i class="fas fa-arrow-right" style="font-size:11px;opacity:0.7"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ SCENE 6 ══ -->
+    <div class="scene">
+        <div class="scene-inner">
+            <h1 data-fr="Un enfant vous attend."
+                data-en="A child is waiting for you."
+                data-km="ក្មេងម្នាក់កំពុងរង់ចាំអ្នក។">
+                Un enfant vous attend.
+            </h1>
+            <p class="scene-p"
+               data-fr="Sans encore le savoir.<br>Mais prêt à avancer avec <strong>vous</strong>."
+               data-en="Without yet knowing it.<br>But ready to move forward with <strong>you</strong>."
+               data-km="ដោយមិនទាន់ដឹងនៅឡើយ។<br>ប៉ុន្តែរួចរាល់ដើម្បីឈានទៅមុខជាមួយ <strong>អ្នក</strong>។">
+                Sans encore le savoir.<br>
+                Mais prêt à avancer avec <strong>vous</strong>.
+            </p>
+            <div class="scene-action">
+                <a href="{{ route('sponsor.contact') }}" class="btn-scene primary">
+                    <span data-fr="Je commence le parrainage"
+                          data-en="I begin the sponsorship"
+                          data-km="ខ្ញុំចាប់ផ្តើមការឧបត្ថម្ភ">Je commence le parrainage</span>
+                </a>
+                <p class="btn-hint"
+                   data-fr="L'enfant vous sera présenté après inscription."
+                   data-en="The child will be revealed after registration."
+                   data-km="ក្មេងនឹងត្រូវបានបង្ហាញបន្ទាប់ពីការចុះឈ្មោះ។">
+                    L'enfant vous sera présenté après inscription.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /stage -->
+
+<!-- Progress bar -->
+<div class="progress-wrap">
+    <div class="progress-fill" id="progress-fill"></div>
+</div>
 
 <script>
-    let current = 0;
-    const scenes    = document.querySelectorAll(".scene");
-    const nextText  = document.getElementById("next-text");
-    const nextIcon  = document.getElementById("next-icon");
-    const dotsWrap  = document.getElementById("progress-dots");
-    const music     = document.getElementById("bg-music");
-    const soundwave = document.getElementById("soundwave");
-    const toast     = document.getElementById("autoplay-toast");
-    let   isPlaying = false;
+    let current    = 0;
+    const scenes       = document.querySelectorAll(".scene");
+    const progressFill = document.getElementById("progress-fill");
+    const music        = document.getElementById("bg-music");
+    const soundwave    = document.getElementById("soundwave");
+    let   isPlaying    = false;
+    let   userMuted    = false;
 
-    /* ── Language helper ── */
-    function getLang() {
-        const htmlLang = document.documentElement.lang.split('-')[0];
-        return ['fr', 'en', 'km'].includes(htmlLang) ? htmlLang : 'fr';
+    /* ── Language config ── */
+    const langConfig = {
+        fr: { flag: 'https://flagcdn.com/w40/fr.png', label: 'FR' },
+        en: { flag: 'https://flagcdn.com/w40/us.png', label: 'EN' },
+        km: { flag: 'https://flagcdn.com/w40/kh.png', label: 'KM' },
+    };
+
+    let currentLang = localStorage.getItem('hi_lang') || 'fr';
+
+    function switchLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('hi_lang', lang);
+        document.documentElement.lang = lang;
+
+        // Update pill
+        const cfg = langConfig[lang];
+        document.getElementById('desktop-flag').src = cfg.flag;
+        document.getElementById('desktop-flag').alt = cfg.label;
+        document.getElementById('desktop-lang-label').textContent = cfg.label;
+
+        // Update option buttons
+        ['en', 'km', 'fr'].forEach(l => {
+            const btn   = document.getElementById('btn-' + l);
+            const check = document.getElementById('check-' + l);
+            btn.classList.toggle('active', l === lang);
+            check.classList.toggle('hidden', l !== lang);
+        });
+
+        translateApp();
+        closeTranslatePanel();
     }
 
     function translateApp() {
-        const lang = getLang();
         document.querySelectorAll('[data-fr]').forEach(el => {
-            if (el.hasAttribute('data-' + lang)) {
-                el.innerHTML = el.getAttribute('data-' + lang);
+            if (el.hasAttribute('data-' + currentLang)) {
+                el.innerHTML = el.getAttribute('data-' + currentLang);
             }
         });
     }
 
-    /* ── Sound toggle ── */
-    function toggleSound() {
-        if (isPlaying) {
-            music.pause();
-            isPlaying = false;
-            soundwave.classList.add('paused');
-        } else {
-            music.volume = 0.45;
-            music.play().then(() => {
-                isPlaying = true;
-                soundwave.classList.remove('paused');
-                hideToast();
-            }).catch(() => {
-                // Autoplay still blocked — user must interact again
-            });
-        }
+    /* ── Translate panel toggle ── */
+    function toggleTranslatePanel() {
+        document.getElementById('translate-wrapper').classList.toggle('open');
     }
 
-    /* ── Toast helpers ── */
-    function showToast() {
-        translateApp(); // ensure toast text is translated
-        toast.classList.add('show');
+    function closeTranslatePanel() {
+        document.getElementById('translate-wrapper').classList.remove('open');
     }
 
-    function hideToast() {
-        toast.classList.remove('show');
+    // Close on outside click
+    document.addEventListener('click', function(e) {
+        const wrapper = document.getElementById('translate-wrapper');
+        if (!wrapper.contains(e.target)) closeTranslatePanel();
+    });
+
+    /* ── Auto detect language ── */
+    function autoDetectAndTranslate() {
+        const browserLang = (navigator.language || navigator.userLanguage || 'fr').toLowerCase().slice(0, 2);
+        const supported   = ['fr', 'en', 'km'];
+        const detected    = supported.includes(browserLang) ? browserLang : 'fr';
+        switchLanguage(detected);
     }
 
-    /* ── Attempt autoplay on first load ── */
-    window.addEventListener('load', () => {
-        music.volume = 0.45;
-        music.play().then(() => {
-            isPlaying = true;
-            soundwave.classList.remove('paused');
-        }).catch(() => {
-            // Autoplay blocked by browser — show nudge toast
-            showToast();
-        });
-    });
-
-    /* ── Fade volume on page leave ── */
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            music.volume = 0;
-        } else if (isPlaying) {
-            music.volume = 0.45;
-        }
-    });
-
-    /* ── Build progress dots ── */
-    const dots = [];
-    scenes.forEach((_, i) => {
-        const d = document.createElement('div');
-        d.className = 'dot' + (i === 0 ? ' active' : '');
-        dotsWrap.appendChild(d);
-        dots.push(d);
-    });
-
-    /* ── Background slider ── */
-    const TOTAL_IMAGES    = 4;
+    /* ── Background images ── */
     const sliderContainer = document.getElementById('bg-slider');
     const bgSlides        = [];
     const sceneToImageMap = [0, 0, 1, 2, 2, 3];
 
-    for (let i = 1; i <= TOTAL_IMAGES; i++) {
-        const img = document.createElement('img');
-        img.src   = `{{ asset('images/hand/image-') }}${i}.jpg`;
+    for (let i = 1; i <= 4; i++) {
+        const img     = document.createElement('img');
+        img.src       = `{{ asset('images/hand/image-') }}${i}.jpg`;
         img.className = 'bg-slide';
         sliderContainer.appendChild(img);
         bgSlides.push(img);
+    }
+
+    /* ── Progress ── */
+    function updateProgress(index) {
+        const pct = scenes.length > 1 ? (index / (scenes.length - 1)) * 100 : 0;
+        progressFill.style.width = pct + '%';
     }
 
     /* ── Show scene ── */
@@ -475,53 +749,75 @@
         scenes.forEach(s => s.classList.remove("active"));
         if (scenes[index]) scenes[index].classList.add("active");
 
-        if (bgSlides.length > 0) {
-            bgSlides.forEach(img => img.classList.remove("active"));
-            const mi = sceneToImageMap[index] ?? 0;
-            if (bgSlides[mi]) bgSlides[mi].classList.add("active");
-        }
+        bgSlides.forEach(img => img.classList.remove("active"));
+        const mi = sceneToImageMap[index] ?? 0;
+        if (bgSlides[mi]) bgSlides[mi].classList.add("active");
 
-        dots.forEach((d, i) => d.classList.toggle('active', i === index));
-
-        const isLast = index === scenes.length - 1;
-        nextText.setAttribute('data-fr', isLast ? 'Terminer'  : 'Continuer');
-        nextText.setAttribute('data-en', isLast ? 'Finish'    : 'Continue');
-        nextText.setAttribute('data-km', isLast ? 'បញ្ចប់'    : 'បន្តទៀត');
-        nextIcon.classList.toggle("fa-arrow-right", !isLast);
-        nextIcon.classList.toggle("fa-check",       isLast);
-
+        current = index;
+        updateProgress(index);
         translateApp();
     }
 
-    function next() {
-        if (current < scenes.length - 1) { current++; show(current); }
-        else { window.location.href = "{{ route('sponsor.contact') }}"; }
+    function goTo(index) {
+        if (index >= 0 && index < scenes.length) show(index);
     }
 
-    function prev() {
-        if (current > 0) { current--; show(current); }
-    }
-
-    /* ── Swipe support ── */
-    let touchStartX = 0;
-    document.querySelector('.story-wrapper').addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-        // First touch = good moment to start audio if blocked
-        if (!isPlaying) {
+    /* ── Sound ── */
+    function toggleSound() {
+        if (isPlaying) {
+            music.pause();
+            isPlaying = false;
+            userMuted = true;
+            soundwave.classList.add('paused');
+        } else {
+            userMuted = false;
+            music.volume = 0.4;
             music.play().then(() => {
                 isPlaying = true;
                 soundwave.classList.remove('paused');
-                hideToast();
             }).catch(() => {});
         }
+    }
+
+    function startMusic() {
+        if (isPlaying || userMuted) return;
+        music.volume = 0.4;
+        music.play().then(() => {
+            isPlaying = true;
+            soundwave.classList.remove('paused');
+            ['click','touchstart','keydown','scroll','mousemove'].forEach(evt => {
+                document.removeEventListener(evt, startMusic);
+            });
+        }).catch(() => {});
+    }
+
+    window.addEventListener('load', startMusic);
+    ['click','touchstart','keydown','scroll','mousemove'].forEach(evt => {
+        document.addEventListener(evt, startMusic, { passive: true });
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (!userMuted) music.volume = document.hidden ? 0 : (isPlaying ? 0.4 : 0);
+    });
+
+    /* ── Swipe ── */
+    let touchStartX = 0;
+    document.getElementById('stage').addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
-    document.querySelector('.story-wrapper').addEventListener('touchend', e => {
+    document.getElementById('stage').addEventListener('touchend', e => {
         const diff = touchStartX - e.changedTouches[0].screenX;
-        if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
+        if (Math.abs(diff) > 50) diff > 0 ? goTo(current + 1) : goTo(current - 1);
     }, { passive: true });
 
+    /* ── Keyboard ── */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(current - 1);
+    });
+
     /* ── Init ── */
-    translateApp();
+    switchLanguage(currentLang);
     show(0);
 </script>
 

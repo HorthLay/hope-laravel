@@ -162,6 +162,110 @@
 }
 .modal-close:hover{background:#e5e7eb}
 .modal-body{padding:18px 20px 28px}
+
+/* ══════════════════════════════════════════════
+   HELLOASSO IFRAME SECTION
+══════════════════════════════════════════════ */
+.ha-section {
+    background: #f9fafb;
+    border-top: 1px solid #f1f5f9;
+    padding: 64px 0 72px;
+}
+.ha-section-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.ha-section-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+.ha-section-header .ha-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 16px;
+    border-radius: 999px;
+    background: rgba(249,115,22,.10);
+    border: 1px solid rgba(249,115,22,.25);
+    color: #ea580c;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+.ha-section-header h2 {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 900;
+    color: #1f2937;
+    margin: 0 0 10px;
+    line-height: 1.2;
+}
+.ha-section-header p {
+    font-size: 14px;
+    color: #6b7280;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+.ha-frame-wrap {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 8px 40px rgba(0,0,0,.07);
+    overflow: hidden;
+    position: relative;
+}
+.ha-frame-wrap::before {
+    content: '';
+    display: block;
+    height: 4px;
+    background: linear-gradient(90deg, #f97316, #ea580c, #fb923c);
+    border-radius: 24px 24px 0 0;
+}
+.ha-frame-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: #fff;
+    z-index: 2;
+    transition: opacity .4s ease, visibility .4s ease;
+}
+.ha-frame-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.ha-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #fed7aa;
+    border-top-color: #f97316;
+    border-radius: 50%;
+    animation: spin .75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.ha-frame-loader p {
+    font-size: 12px;
+    color: #9ca3af;
+    font-weight: 600;
+}
+#haWidget {
+    display: block;
+    width: 100%;
+    border: none;
+    min-height: 750px;
+}
+@media (max-width: 640px) {
+    .ha-section { padding: 44px 0 52px; }
+    .ha-frame-wrap { border-radius: 16px; }
+    #haWidget { min-height: 680px; }
+}
 </style>
 
 {{-- HERO --}}
@@ -185,7 +289,43 @@
 </section>
 
 <div class="wave-divider" style="background:#f9fafb"><svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,30 C360,55 1080,5 1440,30 L1440,0 L0,0 Z" fill="#ffffff"/></svg></div>
+{{-- ══════════════════════════════════════════
+     HELLOASSO REGISTRATION SECTION
+══════════════════════════════════════════ --}}
+<section class="ha-section">
+    <div class="ha-section-inner">
+        <div class="ha-section-header reveal">
+            <div class="ha-pill">
+                <i class="fas fa-heart" style="font-size:9px"></i>
+                Online Registration
+            </div>
+            <h2>Register directly online</h2>
+            <p>Complete your sponsor registration securely in just a few minutes via our HelloAsso partner platform.</p>
+        </div>
 
+        <div class="ha-frame-wrap reveal stagger-1">
+            {{-- Loading overlay --}}
+            <div class="ha-frame-loader" id="ha-loader">
+                <div class="ha-spinner"></div>
+                <p>Loading registration form…</p>
+            </div>
+
+            <iframe
+                id="haWidget"
+                allowtransparency="true"
+                scrolling="auto"
+                src="https://www.helloasso.com/associations/des-ailes-pour-grandir/adhesions/devenir-parraine-marraine-ou-etoiledefamille/widget"
+                style="width:100%;border:none;min-height:750px;display:block;"
+                onload="haWidgetLoaded(this)"
+            ></iframe>
+        </div>
+
+        <p class="text-center text-xs text-gray-400 mt-4" style="line-height:1.7">
+            <i class="fas fa-lock mr-1 text-green-400"></i>
+            Secure payment powered by <strong>HelloAsso</strong> &mdash; a French nonprofit platform. Your data is protected.
+        </p>
+    </div>
+</section>
 {{-- MAIN CONTENT --}}
 <section class="bg-white py-14 md:py-20">
     <div class="max-w-5xl mx-auto px-4">
@@ -390,9 +530,11 @@
     </div>
 </section>
 
+
+
 {{-- Bottom CTA Banner --}}
-<section class="bg-white pb-20">
-    <div class="max-w-5xl mx-auto px-4">
+<section class="bg-white pb-20 pt-0">
+    <div class="max-width-5xl mx-auto px-4" style="max-width:80rem">
         <div class="bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 rounded-3xl p-10 md:p-14 relative overflow-hidden reveal">
             <div class="absolute inset-0 opacity-10" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}');background-size:cover;"></div>
             <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
@@ -520,6 +662,20 @@
     const o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');o.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
     document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>o.observe(el));
 })();
+
+// ── HelloAsso iframe ──────────────────────────────────────
+function haWidgetLoaded(iframe) {
+    // Hide the loading overlay
+    document.getElementById('ha-loader').classList.add('hidden');
+
+    // Listen for height messages from HelloAsso
+    window.addEventListener('message', function(e) {
+        const dataHeight = e.data && e.data.height;
+        if (dataHeight && dataHeight > parseFloat(iframe.style.minHeight || 0)) {
+            iframe.style.minHeight = dataHeight + 'px';
+        }
+    });
+}
 
 // ── Bottom sheet modal ────────────────────────────────────
 function openContactModal() {
