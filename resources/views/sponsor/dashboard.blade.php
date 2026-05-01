@@ -100,6 +100,7 @@
         height: 3px; background: var(--brand); border-radius: 3px 3px 0 0;
     }
     .hdr-right { display: flex; align-items: center; gap: 10px; }
+
     /* Language pill */
     .lang-pill {
         display: inline-flex; align-items: center; gap: 6px;
@@ -126,6 +127,95 @@
     .lang-opt.active { background: linear-gradient(135deg,var(--orange-lt),#ffe4c0); border-color: var(--orange); color: #b45309; }
     .lang-opt .flag { width: 22px; height: 15px; object-fit: cover; object-position: center 20%;border-radius: 3px; }
     .lang-opt .chk { margin-left: auto; color: var(--orange); font-size: 10px; }
+
+    /* ── NOTIFICATION DROPDOWN ── */
+    .notif-btn {
+        position: relative; width: 38px; height: 38px;
+        background: #fff; border: 1px solid var(--border);
+        border-radius: 11px; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--muted); font-size: 15px; transition: all .18s;
+        font-family: inherit;
+    }
+    .notif-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .notif-badge {
+        position: absolute; top: -5px; right: -5px;
+        width: 18px; height: 18px; background: var(--orange);
+        border-radius: 50%; color: #fff; font-size: 9px; font-weight: 900;
+        display: flex; align-items: center; justify-content: center;
+        border: 2px solid var(--bg); line-height: 1;
+    }
+    .notif-panel {
+        position: absolute; top: calc(100% + 10px); right: 0;
+        width: 340px; background: #fff; border-radius: 18px;
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 60px rgba(0,0,0,.13);
+        opacity: 0; visibility: hidden;
+        transform: translateY(-8px) scale(.97);
+        transition: all .22s cubic-bezier(.34,1.3,.64,1);
+        z-index: 999; overflow: hidden;
+    }
+    .notif-panel.open { opacity: 1; visibility: visible; transform: none; }
+    .notif-header {
+        padding: 14px 16px 0; border-bottom: 1px solid var(--border);
+    }
+    .notif-title-row {
+        display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    }
+    .notif-tabs { display: flex; }
+    .ntab {
+        flex: 1; padding: 8px 10px; font-size: 12px; font-weight: 700;
+        border: none; background: none; cursor: pointer; font-family: inherit;
+        color: var(--muted); border-bottom: 2px solid transparent;
+        transition: color .18s, border-color .18s;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .ntab.active { color: var(--orange); border-bottom-color: var(--orange); }
+    .ntab .ntab-count {
+        background: var(--brand-lt); color: var(--orange);
+        border-radius: 999px; padding: 1px 7px; font-size: 10px; font-weight: 800;
+    }
+    .ntab:not(.active) .ntab-count { background: #f1f5f9; color: var(--muted); }
+    .notif-body { max-height: 320px; overflow-y: auto; scrollbar-width: thin; }
+    .notif-pane { display: none; }
+    .notif-pane.active { display: block; }
+    .nitem {
+        padding: 12px 16px; display: flex; gap: 11px; align-items: flex-start;
+        border-bottom: 1px solid var(--border); transition: background .15s; cursor: pointer;
+    }
+    .nitem:last-child { border-bottom: none; }
+    .nitem:hover { background: #fafaf8; }
+    .nitem.unread { background: #fffbf6; }
+    .nitem-icon {
+        width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+    .nitem-icon.child  { background: var(--brand-lt); color: var(--brand); }
+    .nitem-icon.family { background: #dbeafe; color: #1e40af; }
+    .nitem-icon.doc    { background: #fee2e2; color: #ef4444; }
+    .nitem-content { flex: 1; min-width: 0; }
+    .nitem-meta { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; flex-wrap: wrap; }
+    .nitem-entity { font-size: 11px; color: var(--muted); font-weight: 600; }
+    .nitem-date   { font-size: 11px; color: var(--muted); }
+    .nitem-title  { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nitem-text   { font-size: 12px; color: var(--muted); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .nitem-dot    { width: 7px; height: 7px; background: var(--orange); border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .nitem-dl {
+        width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
+        background: #f3f2ee; color: var(--muted); border: none;
+        display: flex; align-items: center; justify-content: center;
+        text-decoration: none; transition: all .18s; font-size: 11px; cursor: pointer;
+    }
+    .nitem-dl:hover { background: var(--orange); color: #fff; transform: scale(1.08); }
+    .notif-footer {
+        padding: 11px 16px; border-top: 1px solid var(--border);
+        text-align: center;
+    }
+    .notif-footer a {
+        font-size: 12px; color: var(--orange); font-weight: 700;
+        text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: color .18s;
+    }
+    .notif-footer a:hover { color: #d97000; }
 
     /* Sponsor chip */
     .sponsor-chip {
@@ -532,111 +622,45 @@
         .hero-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
         .hero-portrait { grid-column: 1; grid-row: 1; aspect-ratio: 3/4; max-height: 340px; }
         .impact-card { grid-column: 2; grid-row: 1; }
-        .hero-info-col {
-            justify-content: flex-start !important;
-            padding-top: 8px;
-        }
+        .hero-info-col { justify-content: flex-start !important; padding-top: 8px; }
         .hdr-nav { display: none; }
     }
     @media (max-width:640px) {
-        /* fix hero layout for single column */
-        .hero-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }
-        .hero-portrait {
-            aspect-ratio: 16/10;
-            max-height: 260px;
-            border-radius: 18px;
-            grid-column: 1;
-            grid-row: 1;
-        }
-        .hero-info-col {
-        justify-content: flex-start !important;
-        padding-top: 8px;
-        }
-        .impact-card {
-            grid-column: 1;
-            grid-row: 3;
-            padding: 20px;
-        }
-
-        /* entity tabs: horizontal scroll */
-        .entity-tabs {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 6px;
-            gap: 10px;
-            margin-left: -14px;
-            margin-right: -14px;
-            padding-left: 14px;
-            padding-right: 14px;
-        }
+        .hero-grid { grid-template-columns: 1fr; gap: 16px; }
+        .hero-portrait { aspect-ratio: 16/10; max-height: 260px; border-radius: 18px; grid-column: 1; grid-row: 1; }
+        .hero-info-col { justify-content: flex-start !important; padding-top: 8px; }
+        .impact-card { grid-column: 1; grid-row: 3; padding: 20px; }
+        .entity-tabs { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 6px; gap: 10px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px; }
         .entity-tabs::-webkit-scrollbar { display: none; }
-        .entity-tab {
-            flex: 0 0 auto;
-            scroll-snap-align: start;
-            min-width: 160px;
-        }
-
-        /* year bar improvements */
-        .year-bar {
-            margin-left: -14px;
-            margin-right: -14px;
-            padding-left: 14px;
-            padding-right: 14px;
-        }
-
-        /* card padding */
+        .entity-tab { flex: 0 0 auto; scroll-snap-align: start; min-width: 160px; }
+        .year-bar { margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px; }
         .wcard { padding: 18px 16px; }
         .spons-card { padding: 18px 16px; }
-
-        /* hero text */
         .hero-name { font-size: 32px; margin-bottom: 16px; }
         .hero-info-main { font-size: 14px; }
         .hero-info-sub { font-size: 12px; }
         .hero-info-list { gap: 12px; }
         .hero-info-icon { font-size: 13px; }
         .since-badge { font-size: 12px; }
-
-        /* quote card */
         .quote-card { padding: 14px 16px; }
         .quote-text { font-size: 13px; }
-
-        /* page wrap — extra bottom padding for mob-bar */
         .pw { padding: 18px 14px 100px; }
-
-        /* show mobile bar */
         .mob-bar { display: flex; }
-
-        /* hide desktop sponsor chip */
         .sponsor-chip { display: none !important; }
-
-        /* header tweaks */
         .header-inner { padding: 0 14px; height: 60px; }
         .hdr-logo { height: 46px; }
-
-        /* media/photo grids — 2 cols on phone */
         .media-grid, .photo-gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-
-        /* footer banner */
         .footer-banner { min-height: 200px; margin-top: 24px; }
         .footer-banner-content { flex-direction: column; align-items: flex-start; gap: 12px; padding: 24px 20px; }
         .fbc-text h2 { font-size: 20px; }
         .fbc-icon { font-size: 28px !important; }
-
-        /* footer links */
         .site-footer-inner { flex-direction: column; gap: 16px; text-align: center; }
         .site-footer-links { justify-content: center; flex-wrap: wrap; gap: 12px; }
         .site-footer-socials { justify-content: center; }
-
-        /* timeline thumb smaller on mobile */
         .tl-thumb { width: 52px; height: 52px; }
-
-        /* sponsorship table mobile tweaks */
         .spons-table td { font-size: 12.5px; }
+        /* notification panel on mobile */
+        .notif-panel { width: calc(100vw - 28px); right: -14px; }
     }
     @media (max-width:400px) {
         .entity-tab { padding: 9px 12px; font-size: 12px; min-width: 140px; }
@@ -664,7 +688,7 @@
             <a href="{{ route('sponsor.dashboard') }}" class="hdr-nav-link active">
                 <i class="fas fa-user-friends" style="font-size:12px"></i> My Child
             </a>
-            <a href="{{ route('sponsor.contact') ?? '#' }}" class="hdr-nav-link">
+            <a href="{{ route('sponsor.messages.home') ?? '#' }}" class="hdr-nav-link">
                 <i class="far fa-envelope" style="font-size:12px"></i> Messages
             </a>
             <a href="{{ route('support.donate') }}" class="hdr-nav-link">
@@ -676,6 +700,7 @@
         </nav>
 
         <div class="hdr-right">
+
             {{-- Language --}}
             <div style="position:relative" id="dash-translate-wrapper">
                 <div id="google_translate_element" style="display:none;position:absolute"></div>
@@ -703,6 +728,161 @@
                         <div><div style="font-weight:700">ខ្មែរ</div><div style="font-size:10px;color:#9ca3af">Cambodian</div></div>
                         <i class="fas fa-check chk hidden" id="dash-check-km"></i>
                     </button>
+                </div>
+            </div>
+
+            {{-- ── NOTIFICATION BELL ── --}}
+            @php
+                $allUpdates = collect();
+                foreach($children as $child) {
+                    foreach($child->updates as $u) {
+                        $allUpdates->push([
+                            'type'     => 'child',
+                            'name'     => $child->first_name,
+                            'photo'    => $child->profile_photo,
+                            'upd_type' => $u->type ?? 'general',
+                            'title'    => $u->title ?? '',
+                            'content'  => $u->content,
+                            'date'     => \Carbon\Carbon::parse($u->report_date ?? $u->created_at),
+                            'sort'     => \Carbon\Carbon::parse($u->report_date ?? $u->created_at)->timestamp,
+                        ]);
+                    }
+                }
+                foreach($families as $family) {
+                    foreach($family->updates as $u) {
+                        $allUpdates->push([
+                            'type'     => 'family',
+                            'name'     => Str::words($family->name, 1, ''),
+                            'photo'    => $family->profile_photo,
+                            'upd_type' => $u->type ?? 'general',
+                            'title'    => $u->title ?? '',
+                            'content'  => $u->content,
+                            'date'     => \Carbon\Carbon::parse($u->report_date ?? $u->created_at),
+                            'sort'     => \Carbon\Carbon::parse($u->report_date ?? $u->created_at)->timestamp,
+                        ]);
+                    }
+                }
+                $allUpdates = $allUpdates->sortByDesc('sort')->take(8)->values();
+
+                $allDocs = collect();
+                foreach($children as $child) {
+                    foreach($child->documents as $d) {
+                        $allDocs->push([
+                            'entity'  => 'child',
+                            'name'    => $child->first_name,
+                            'title'   => $d->title,
+                            'date'    => $d->document_date ? \Carbon\Carbon::parse($d->document_date) : $d->created_at,
+                            'sort'    => ($d->document_date ? \Carbon\Carbon::parse($d->document_date) : $d->created_at)->timestamp,
+                            'dl_url'  => route('sponsor.download', ['type' => 'document', 'id' => $d->id]),
+                        ]);
+                    }
+                }
+                foreach($families as $family) {
+                    foreach($family->documents as $d) {
+                        $allDocs->push([
+                            'entity'  => 'family',
+                            'name'    => Str::words($family->name, 1, ''),
+                            'title'   => $d->title,
+                            'date'    => $d->document_date ? \Carbon\Carbon::parse($d->document_date) : $d->created_at,
+                            'sort'    => ($d->document_date ? \Carbon\Carbon::parse($d->document_date) : $d->created_at)->timestamp,
+                            'dl_url'  => route('sponsor.download', ['type' => 'family_document', 'id' => $d->id]),
+                        ]);
+                    }
+                }
+                $allDocs    = $allDocs->sortByDesc('sort')->take(6)->values();
+                $notifTotal = $allUpdates->count() + $allDocs->count();
+            @endphp
+
+            <div style="position:relative" id="notif-wrapper">
+                <button class="notif-btn" onclick="toggleNotif()" id="notif-btn" aria-label="Notifications">
+                    <i class="far fa-bell"></i>
+                    @if($notifTotal > 0)
+                    <span class="notif-badge">{{ $notifTotal > 9 ? '9+' : $notifTotal }}</span>
+                    @endif
+                </button>
+
+                <div class="notif-panel" id="notif-panel">
+
+                    {{-- Header --}}
+                    <div class="notif-header">
+                        <div class="notif-title-row">
+                            <span style="font-size:14px;font-weight:700;font-family:'Lora',serif;color:var(--dark)">Notifications</span>
+                            <button onclick="markAllRead()" style="font-size:11px;color:var(--orange);font-weight:700;background:none;border:none;cursor:pointer;font-family:inherit;padding:0">Mark all read</button>
+                        </div>
+                        <div class="notif-tabs">
+                            <button class="ntab active" id="ntab-updates" onclick="switchNotifTab('updates')">
+                                <i class="fas fa-bell" style="font-size:10px"></i> Updates
+                                <span class="ntab-count">{{ $allUpdates->count() }}</span>
+                            </button>
+                            <button class="ntab" id="ntab-docs" onclick="switchNotifTab('docs')">
+                                <i class="far fa-folder" style="font-size:10px"></i> Documents
+                                <span class="ntab-count">{{ $allDocs->count() }}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Body --}}
+                    <div class="notif-body">
+
+                        {{-- Updates pane --}}
+                        <div class="notif-pane active" id="npane-updates">
+                            @forelse($allUpdates as $i => $upd)
+                            <div class="nitem {{ $i < 3 ? 'unread' : '' }}">
+                                <div class="nitem-icon {{ $upd['type'] }}">
+                                    <i class="fas {{ $upd['type'] === 'family' ? 'fa-home' : 'fa-child' }}"></i>
+                                </div>
+                                <div class="nitem-content">
+                                    <div class="nitem-meta">
+                                        <span class="type-badge badge-{{ $upd['upd_type'] }}">{{ $upd['upd_type'] }}</span>
+                                        <span class="nitem-entity">{{ $upd['name'] }}</span>
+                                        <span class="nitem-date">· {{ $upd['date']->format('M d, Y') }}</span>
+                                    </div>
+                                    @if($upd['title'])
+                                    <div class="nitem-title">{{ $upd['title'] }}</div>
+                                    @endif
+                                    <div class="nitem-text">{{ $upd['content'] }}</div>
+                                </div>
+                                @if($i < 3)<div class="nitem-dot"></div>@endif
+                            </div>
+                            @empty
+                            <div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:13px">
+                                <i class="far fa-bell-slash" style="font-size:24px;display:block;margin-bottom:8px;opacity:.4"></i>
+                                No updates yet.
+                            </div>
+                            @endforelse
+                        </div>
+
+                        {{-- Documents pane --}}
+                        <div class="notif-pane" id="npane-docs">
+                            @forelse($allDocs as $doc)
+                            <div class="nitem" style="align-items:center">
+                                <div class="nitem-icon doc">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="nitem-content">
+                                    <div class="nitem-title">{{ $doc['title'] }}</div>
+                                    <div style="font-size:11px;color:var(--muted);font-weight:600;margin-top:2px">
+                                        PDF · {{ $doc['name'] }} · {{ $doc['date']->format('M Y') }}
+                                    </div>
+                                </div>
+                                <a href="{{ $doc['dl_url'] }}" class="nitem-dl" download onclick="event.stopPropagation()" title="Download">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            @empty
+                            <div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:13px">
+                                <i class="far fa-folder-open" style="font-size:24px;display:block;margin-bottom:8px;opacity:.4"></i>
+                                No documents yet.
+                            </div>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <div class="notif-footer">
+                        <a href="{{ route('sponsor.dashboard') }}">
+                            View all on dashboard <i class="fas fa-chevron-down" style="font-size:9px"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -786,8 +966,7 @@
     <div class="entity-panel {{ ($totalEntities===1||$eidx===0)?'active':'' }}" id="{{ $pid }}">
 
         {{-- ── HERO ── --}}
-        <div class="hero-grid anim-up" style="">
-            {{-- Portrait --}}
+        <div class="hero-grid anim-up">
             <div class="hero-portrait">
                 @if($family->profile_photo)
                     <img src="{{ $family->profile_photo_url ?? asset($family->profile_photo) }}" alt="{{ $family->name }}">
@@ -796,7 +975,6 @@
                 @endif
             </div>
 
-            {{-- Info --}}
             <div class="hero-info-col anim-left d2" style="display:flex;flex-direction:column;justify-content:flex-start;padding-top:8px;">
                 @if($sponsorSince)
                 <div class="since-badge">
@@ -831,7 +1009,6 @@
                 @endif
             </div>
 
-            {{-- Impact --}}
             <div class="impact-card anim-sc d3">
                 <div class="impact-icon-wrap" style="animation:floatY 3s ease-in-out infinite">
                     <i class="fas fa-mountain-sun"></i>
@@ -868,7 +1045,6 @@
         <div class="y-sec active" data-panel="{{ $pid }}" data-section="latest">
             <div class="c-grid">
                 <div>
-                    {{-- About --}}
                     <div class="wcard reveal reveal-l">
                         <h3 class="wcard-title"><i class="far fa-user" style="color:var(--muted)"></i> About {{ Str::words($family->name,1,'') }}</h3>
                         @if($family->description ?? null)
@@ -876,7 +1052,6 @@
                         @else
                         <p class="about-text">{{ $family->story }}</p>
                         @endif
-                        {{-- <a href="{{ route('sponsor.family.stories') }}" class="see-more">See more about this family <i class="fas fa-chevron-down" style="font-size:10px"></i></a> --}}
                         @php $galleryMedia = $family->media->where('type','photo')->take(5); @endphp
                         @if($galleryMedia->isNotEmpty())
                         <div class="photo-gallery">
@@ -894,7 +1069,6 @@
                         @endif
                     </div>
 
-                    {{-- Updates --}}
                     <div class="wcard reveal" style="margin-top:16px">
                         <h3 class="wcard-title">
                             <span style="width:24px;height:24px;border-radius:50%;background:var(--brand-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -936,7 +1110,6 @@
                 </div>
 
                 <div>
-                    {{-- Sponsorship Details --}}
                     <div class="spons-card reveal reveal-r">
                         <div class="spons-sun"></div>
                         <h3 class="wcard-title" style="position:relative;z-index:1;margin-bottom:16px">
@@ -958,7 +1131,6 @@
                         <div class="spons-bg"></div>
                     </div>
 
-                    {{-- Documents --}}
                     <div class="wcard reveal reveal-r" style="margin-top:16px">
                         <h3 class="wcard-title">
                             <i class="far fa-folder" style="color:var(--muted)"></i> Documents
@@ -1087,7 +1259,6 @@
 
         {{-- ── HERO ── --}}
         <div class="hero-grid anim-up">
-            {{-- Portrait --}}
             <div class="hero-portrait">
                 @if($child->profile_photo)
                     <img src="{{ asset($child->profile_photo) }}" alt="{{ $child->first_name }}">
@@ -1096,7 +1267,6 @@
                 @endif
             </div>
 
-            {{-- Info --}}
             <div class="hero-info-col anim-left d2" style="display:flex;flex-direction:column;justify-content:flex-start;padding-top:8px;">
                 @if($sponsorSince)
                 <div class="since-badge">
@@ -1130,7 +1300,7 @@
                         </div>
                     </li>
                     @endif
-                          @if($child->code)
+                    @if($child->code)
                     <li class="hero-info-item">
                         <i class="fas fa-hashtag hero-info-icon"></i>
                         <div><div class="hero-info-main" style="font-family:monospace;font-size:13px">{{ $child->code }}</div></div>
@@ -1162,7 +1332,6 @@
                 @endif
             </div>
 
-            {{-- Impact --}}
             <div class="impact-card anim-sc d3">
                 <div class="impact-icon-wrap" style="animation:floatY 3s ease-in-out infinite">
                     <i class="fas fa-mountain-sun"></i>
@@ -1199,7 +1368,6 @@
         <div class="y-sec active" data-panel="{{ $pid }}" data-section="latest">
             <div class="c-grid">
                 <div>
-                    {{-- About --}}
                     <div class="wcard reveal reveal-l">
                         <h3 class="wcard-title"><i class="far fa-user" style="color:var(--muted)"></i> About {{ $child->first_name }}</h3>
                         @if($child->biography ?? ($child->description ?? null))
@@ -1207,7 +1375,6 @@
                         @else
                         <p class="about-text">{{ $child->story }}</p>
                         @endif
-                        {{-- <a href="{{ route('sponsor.child.stories') }}" class="see-more">See more about {{ $child->first_name }} <i class="fas fa-chevron-down" style="font-size:10px"></i></a> --}}
                         @php $galleryPhotos = $child->media->where('type','photo')->take(5); @endphp
                         @if($galleryPhotos->isNotEmpty())
                         <div class="photo-gallery">
@@ -1225,7 +1392,6 @@
                         @endif
                     </div>
 
-                    {{-- Updates --}}
                     <div class="wcard reveal" style="margin-top:16px">
                         <h3 class="wcard-title">
                             <span style="width:24px;height:24px;border-radius:50%;background:var(--brand-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -1265,7 +1431,6 @@
                 </div>
 
                 <div>
-                    {{-- Family mini --}}
                     @if(($child->has_family ?? false) && $child->family)
                     <div class="wcard reveal reveal-r" style="margin-bottom:16px">
                         <h3 class="wcard-title"><i class="fas fa-home" style="color:var(--brand)"></i> Family</h3>
@@ -1283,7 +1448,6 @@
                     </div>
                     @endif
 
-                    {{-- Sponsorship Details --}}
                     <div class="spons-card reveal reveal-r">
                         <div class="spons-sun"></div>
                         <h3 class="wcard-title" style="position:relative;z-index:1;margin-bottom:16px">
@@ -1305,7 +1469,6 @@
                         <div class="spons-bg"></div>
                     </div>
 
-                    {{-- Documents --}}
                     <div class="wcard reveal reveal-r" style="margin-top:16px">
                         <h3 class="wcard-title"><i class="far fa-folder" style="color:var(--muted)"></i> Documents</h3>
                         <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Access letters and documents<br>related to {{ $child->first_name }}'s sponsorship.</p>
@@ -1417,28 +1580,28 @@
     </div>
     @endforeach
 
-{{-- ── FOOTER BANNER — single, dynamic ── --}}
-<div class="footer-banner reveal" style="animation-delay:.1s">
-    <div class="footer-banner-bg" id="footer-banner-bg"></div>
-    <div class="footer-banner-overlay"></div>
-    <div class="footer-banner-content">
-        <i class="far fa-heart fbc-icon"></i>
-        <div class="fbc-text">
-            <h2>Your support changes<br><span id="footer-banner-name">their</span> life and builds<br>their future.</h2>
-            <p>Thank you for being there! <i class="fas fa-heart" style="color:var(--orange)"></i></p>
+    {{-- ── FOOTER BANNER ── --}}
+    <div class="footer-banner reveal" style="animation-delay:.1s">
+        <div class="footer-banner-bg" id="footer-banner-bg"></div>
+        <div class="footer-banner-overlay"></div>
+        <div class="footer-banner-content">
+            <i class="far fa-heart fbc-icon"></i>
+            <div class="fbc-text">
+                <h2>Your support changes<br><span id="footer-banner-name">their</span> life and builds<br>their future.</h2>
+                <p>Thank you for being there! <i class="fas fa-heart" style="color:var(--orange)"></i></p>
+            </div>
         </div>
     </div>
-</div>
 
-{{-- DATA lookup for JS --}}
-<div id="entity-banner-data" style="display:none">
-    @foreach($families as $fi => $family)
-    <span data-idx="{{ $fi }}" data-name="{{ Str::words($family->name,1,'') }}" data-photo="{{ $family->profile_photo ? asset($family->profile_photo_url ?? $family->profile_photo) : '' }}"></span>
-    @endforeach
-    @foreach($children as $ci => $child)
-    <span data-idx="{{ $families->count()+$ci }}" data-name="{{ $child->first_name }}" data-photo="{{ $child->profile_photo ? asset($child->profile_photo) : '' }}"></span>
-    @endforeach
-</div>
+    {{-- DATA lookup for JS --}}
+    <div id="entity-banner-data" style="display:none">
+        @foreach($families as $fi => $family)
+        <span data-idx="{{ $fi }}" data-name="{{ Str::words($family->name,1,'') }}" data-photo="{{ $family->profile_photo ? asset($family->profile_photo_url ?? $family->profile_photo) : '' }}"></span>
+        @endforeach
+        @foreach($children as $ci => $child)
+        <span data-idx="{{ $families->count()+$ci }}" data-name="{{ $child->first_name }}" data-photo="{{ $child->profile_photo ? asset($child->profile_photo) : '' }}"></span>
+        @endforeach
+    </div>
 
     {{-- ── SIMPLE FOOTER ── --}}
     <footer style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border)">
@@ -1464,7 +1627,7 @@
         <i class="fas fa-user-friends"></i>
         <span>My Child</span>
     </a>
-    <a href="{{ route('sponsor.contact') ?? '#' }}" class="mob-nav-item">
+    <a href="{{ route('sponsor.messages.home') }}" class="mob-nav-item">
         <i class="far fa-envelope"></i>
         <span>Messages</span>
     </a>
@@ -1511,72 +1674,107 @@
 /* ── Panels ── */
 const panels = document.querySelectorAll('.entity-panel');
 const tabs   = document.querySelectorAll('.entity-tab');
-function selectEntity(idx){
-    panels.forEach((p,i)=>p.classList.toggle('active',i===idx));
-    tabs.forEach((t,i)=>t.classList.toggle('active',i===idx));
-    setTimeout(()=>{
-        initReveal();
-        document.getElementById('panel-'+idx)?.scrollIntoView({behavior:'smooth',block:'start'});
-    },60);
-}
-document.querySelectorAll('.entity-panel').forEach((p,i)=>{
-    p.style.display = p.classList.contains('active') ? 'block' : 'none';
-});
-document.addEventListener('DOMContentLoaded',()=>{
-    panels.forEach(p=>{ p.style.display=p.classList.contains('active')?'block':'none'; });
-});
-/* patch — override display via CSS class */
-const style=document.createElement('style');
-style.textContent=`.entity-panel{display:none!important}.entity-panel.active{display:block!important}`;
+
+const style = document.createElement('style');
+style.textContent = `.entity-panel{display:none!important}.entity-panel.active{display:block!important}`;
 document.head.appendChild(style);
 
 /* ── Year filter ── */
-function switchYear(pid,year){
-    document.querySelectorAll(`.y-pill[data-panel="${pid}"]`).forEach(b=>b.classList.toggle('active',b.dataset.year===String(year)));
-    document.querySelectorAll(`.y-sec[data-panel="${pid}"]`).forEach(s=>s.classList.toggle('active',s.dataset.section===String(year)));
-    setTimeout(initReveal,50);
+function switchYear(pid, year) {
+    document.querySelectorAll(`.y-pill[data-panel="${pid}"]`).forEach(b => b.classList.toggle('active', b.dataset.year === String(year)));
+    document.querySelectorAll(`.y-sec[data-panel="${pid}"]`).forEach(s => s.classList.toggle('active', s.dataset.section === String(year)));
+    setTimeout(initReveal, 50);
 }
 
 /* ── Scroll reveal ── */
-const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');ro.unobserve(e.target);}});},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-function initReveal(){document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-s').forEach(el=>{if(!el.classList.contains('v'))ro.observe(el);});}
-document.addEventListener('DOMContentLoaded',initReveal);
+const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); ro.unobserve(e.target); } });
+}, { threshold: .08, rootMargin: '0px 0px -30px 0px' });
+function initReveal() {
+    document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-s').forEach(el => { if (!el.classList.contains('v')) ro.observe(el); });
+}
+document.addEventListener('DOMContentLoaded', initReveal);
 
 /* ── Lightbox ── */
-function openLightbox(src,type,caption,dlUrl){
-    const lb=document.getElementById('lightbox'),img=document.getElementById('lb-img'),vid=document.getElementById('lb-video'),inner=document.getElementById('lb-inner');
-    type==='video'?(vid.src=src,vid.style.display='block',img.style.display='none',img.src=''):(img.src=src,img.style.display='block',vid.style.display='none',vid.pause&&vid.pause(),vid.src='');
-    document.getElementById('lb-caption').textContent=caption||'';
-    document.getElementById('lb-download').href=dlUrl||src;
-    lb.classList.add('open');document.body.style.overflow='hidden';
-    inner.style.animation='none';requestAnimationFrame(()=>{inner.style.animation='scaleUp .25s cubic-bezier(.34,1.1,.64,1) both';});
+function openLightbox(src, type, caption, dlUrl) {
+    const lb = document.getElementById('lightbox'), img = document.getElementById('lb-img'), vid = document.getElementById('lb-video'), inner = document.getElementById('lb-inner');
+    type === 'video' ? (vid.src = src, vid.style.display = 'block', img.style.display = 'none', img.src = '') : (img.src = src, img.style.display = 'block', vid.style.display = 'none', vid.pause && vid.pause(), vid.src = '');
+    document.getElementById('lb-caption').textContent = caption || '';
+    document.getElementById('lb-download').href = dlUrl || src;
+    lb.classList.add('open'); document.body.style.overflow = 'hidden';
+    inner.style.animation = 'none'; requestAnimationFrame(() => { inner.style.animation = 'scaleUp .25s cubic-bezier(.34,1.1,.64,1) both'; });
 }
-function closeLightbox(){const vid=document.getElementById('lb-video');vid.pause&&vid.pause();vid.src='';document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
-let tsY=0;
-document.getElementById('lightbox').addEventListener('touchstart',e=>{tsY=e.touches[0].clientY;},{passive:true});
-document.getElementById('lightbox').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-tsY>80)closeLightbox();},{passive:true});
+function closeLightbox() {
+    const vid = document.getElementById('lb-video'); vid.pause && vid.pause(); vid.src = '';
+    document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeNotif(); } });
+let tsY = 0;
+document.getElementById('lightbox').addEventListener('touchstart', e => { tsY = e.touches[0].clientY; }, { passive: true });
+document.getElementById('lightbox').addEventListener('touchend', e => { if (e.changedTouches[0].clientY - tsY > 80) closeLightbox(); }, { passive: true });
 
 /* ── Language ── */
-const DLANG={en:{label:'EN',flag:'https://flagcdn.com/w40/us.png'},fr:{label:'FR',flag:'https://flagcdn.com/w40/fr.png'},km:{label:'KM',flag:'https://flagcdn.com/w40/kh.png'}};
-let dLang=localStorage.getItem('gt_lang')||'fr';
-function dashTriggerTranslate(l){return new Promise(res=>{const exp='expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';document.cookie='googtrans=; '+exp;document.cookie='googtrans=; '+exp+' domain='+location.hostname+';';document.cookie='googtrans=; '+exp+' domain=.'+location.hostname+';';if(l==='en'){res();setTimeout(()=>location.reload(),80);return;}const pair='/en/'+l;document.cookie='googtrans='+pair+'; path=/';document.cookie='googtrans='+pair+'; path=/; domain='+location.hostname;const tryS=t=>{const s=document.querySelector('select.goog-te-combo');if(s){s.value=l;s.dispatchEvent(new Event('change'));res();}else if(t>0)setTimeout(()=>tryS(t-1),200);else{res();setTimeout(()=>location.reload(),80);}};tryS(8);});}
-function dashUpdateUI(l){const c=DLANG[l]||DLANG.en;const f=document.getElementById('dash-flag'),lb=document.getElementById('dash-lang-label');if(f){f.src=c.flag;f.alt=c.label;}if(lb)lb.textContent=c.label;['en','fr','km'].forEach(x=>{document.getElementById('dash-btn-'+x)?.classList.toggle('active',x===l);const ch=document.getElementById('dash-check-'+x);if(ch)ch.classList.toggle('hidden',x!==l);});document.body.style.fontFamily=l==='km'?"'Hanuman','Battambang','Content','Plus Jakarta Sans',sans-serif":"'Plus Jakarta Sans',sans-serif";dLang=l;localStorage.setItem('gt_lang',l);}
-async function dashSwitchLang(l){if(l===dLang){dashClosePanel();return;}dashUpdateUI(l);await dashTriggerTranslate(l);dashClosePanel();}
-function dashTogglePanel(){const p=document.getElementById('dash-translate-panel'),c=document.getElementById('dash-caret');const o=p.classList.toggle('open');if(c)c.style.transform=o?'rotate(180deg)':'';}
-function dashClosePanel(){const p=document.getElementById('dash-translate-panel'),c=document.getElementById('dash-caret');if(p)p.classList.remove('open');if(c)c.style.transform='';}
-document.addEventListener('click',e=>{const w=document.getElementById('dash-translate-wrapper');if(w&&!w.contains(e.target))dashClosePanel();});
-
-document.addEventListener('DOMContentLoaded',()=>{
-    const ck=document.cookie.split(';').find(c=>c.trim().startsWith('googtrans='));const st=localStorage.getItem('gt_lang');
-    if(ck){const pts=ck.split('/');const cl=pts[pts.length-1].trim();if(cl&&DLANG[cl]){dLang=cl;localStorage.setItem('gt_lang',cl);}}
-    else if(!st){const pair='/en/fr';document.cookie='googtrans='+pair+'; path=/';document.cookie='googtrans='+pair+'; path=/; domain='+location.hostname;localStorage.setItem('gt_lang','fr');location.reload();return;}
-    dashUpdateUI(dLang);
-    /* stagger entity tab entrance */
-    document.querySelectorAll('.entity-tab').forEach((t,i)=>{t.style.opacity='0';t.style.transform='translateY(16px)';setTimeout(()=>{t.style.transition='opacity .4s ease,transform .4s ease';t.style.opacity='1';t.style.transform='none';},i*80+80);});
+const DLANG = { en: { label: 'EN', flag: 'https://flagcdn.com/w40/us.png' }, fr: { label: 'FR', flag: 'https://flagcdn.com/w40/fr.png' }, km: { label: 'KM', flag: 'https://flagcdn.com/w40/kh.png' } };
+let dLang = localStorage.getItem('gt_lang') || 'fr';
+function dashTriggerTranslate(l) {
+    return new Promise(res => {
+        const exp = 'expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'googtrans=; ' + exp; document.cookie = 'googtrans=; ' + exp + ' domain=' + location.hostname + ';'; document.cookie = 'googtrans=; ' + exp + ' domain=.' + location.hostname + ';';
+        if (l === 'en') { res(); setTimeout(() => location.reload(), 80); return; }
+        const pair = '/en/' + l; document.cookie = 'googtrans=' + pair + '; path=/'; document.cookie = 'googtrans=' + pair + '; path=/; domain=' + location.hostname;
+        const tryS = t => { const s = document.querySelector('select.goog-te-combo'); if (s) { s.value = l; s.dispatchEvent(new Event('change')); res(); } else if (t > 0) setTimeout(() => tryS(t - 1), 200); else { res(); setTimeout(() => location.reload(), 80); } }; tryS(8);
+    });
+}
+function dashUpdateUI(l) {
+    const c = DLANG[l] || DLANG.en; const f = document.getElementById('dash-flag'), lb = document.getElementById('dash-lang-label');
+    if (f) { f.src = c.flag; f.alt = c.label; } if (lb) lb.textContent = c.label;
+    ['en', 'fr', 'km'].forEach(x => { document.getElementById('dash-btn-' + x)?.classList.toggle('active', x === l); const ch = document.getElementById('dash-check-' + x); if (ch) ch.classList.toggle('hidden', x !== l); });
+    document.body.style.fontFamily = l === 'km' ? "'Hanuman','Battambang','Content','Plus Jakarta Sans',sans-serif" : "'Plus Jakarta Sans',sans-serif";
+    dLang = l; localStorage.setItem('gt_lang', l);
+}
+async function dashSwitchLang(l) { if (l === dLang) { dashClosePanel(); return; } dashUpdateUI(l); await dashTriggerTranslate(l); dashClosePanel(); }
+function dashTogglePanel() {
+    const p = document.getElementById('dash-translate-panel'), c = document.getElementById('dash-caret');
+    const o = p.classList.toggle('open'); if (c) c.style.transform = o ? 'rotate(180deg)' : '';
+    if (o) closeNotif(); // close notif if opening lang panel
+}
+function dashClosePanel() { const p = document.getElementById('dash-translate-panel'), c = document.getElementById('dash-caret'); if (p) p.classList.remove('open'); if (c) c.style.transform = ''; }
+document.addEventListener('click', e => {
+    const w = document.getElementById('dash-translate-wrapper'); if (w && !w.contains(e.target)) dashClosePanel();
+    const nw = document.getElementById('notif-wrapper'); if (nw && !nw.contains(e.target)) closeNotif();
 });
 
-// Banner data lookup
+document.addEventListener('DOMContentLoaded', () => {
+    const ck = document.cookie.split(';').find(c => c.trim().startsWith('googtrans=')); const st = localStorage.getItem('gt_lang');
+    if (ck) { const pts = ck.split('/'); const cl = pts[pts.length - 1].trim(); if (cl && DLANG[cl]) { dLang = cl; localStorage.setItem('gt_lang', cl); } }
+    else if (!st) { const pair = '/en/fr'; document.cookie = 'googtrans=' + pair + '; path=/'; document.cookie = 'googtrans=' + pair + '; path=/; domain=' + location.hostname; localStorage.setItem('gt_lang', 'fr'); location.reload(); return; }
+    dashUpdateUI(dLang);
+    document.querySelectorAll('.entity-tab').forEach((t, i) => { t.style.opacity = '0'; t.style.transform = 'translateY(16px)'; setTimeout(() => { t.style.transition = 'opacity .4s ease,transform .4s ease'; t.style.opacity = '1'; t.style.transform = 'none'; }, i * 80 + 80); });
+});
+
+/* ── Notification Dropdown ── */
+function toggleNotif() {
+    const panel = document.getElementById('notif-panel');
+    const isOpen = panel.classList.toggle('open');
+    if (isOpen) dashClosePanel();
+}
+function closeNotif() {
+    document.getElementById('notif-panel')?.classList.remove('open');
+}
+function switchNotifTab(tab) {
+    ['updates', 'docs'].forEach(t => {
+        document.getElementById('ntab-' + t)?.classList.toggle('active', t === tab);
+        document.getElementById('npane-' + t)?.classList.toggle('active', t === tab);
+    });
+}
+function markAllRead() {
+    document.querySelectorAll('.nitem.unread').forEach(el => el.classList.remove('unread'));
+    document.querySelectorAll('.nitem-dot').forEach(el => el.remove());
+    const badge = document.querySelector('.notif-badge');
+    if (badge) badge.style.display = 'none';
+}
+
+/* ── Banner data lookup ── */
 const ENTITY_BANNER = {};
 document.querySelectorAll('#entity-banner-data span[data-idx]').forEach(el => {
     ENTITY_BANNER[el.dataset.idx] = { name: el.dataset.name, photo: el.dataset.photo };
@@ -1584,26 +1782,22 @@ document.querySelectorAll('#entity-banner-data span[data-idx]').forEach(el => {
 const FALLBACK_IMG = 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=1200&q=70';
 
 function updateFooterBanner(idx) {
-    const data = ENTITY_BANNER[String(idx)];
-    if (!data) return;
-    const bg   = document.getElementById('footer-banner-bg');
-    const name = document.getElementById('footer-banner-name');
-    if (bg)   bg.style.backgroundImage = `url('${data.photo || FALLBACK_IMG}')`;
+    const data = ENTITY_BANNER[String(idx)]; if (!data) return;
+    const bg = document.getElementById('footer-banner-bg'), name = document.getElementById('footer-banner-name');
+    if (bg) bg.style.backgroundImage = `url('${data.photo || FALLBACK_IMG}')`;
     if (name) name.textContent = data.name + "'s";
 }
 
-// Replace existing selectEntity
 function selectEntity(idx) {
     panels.forEach((p, i) => p.classList.toggle('active', i === idx));
-    tabs.forEach((t, i)   => t.classList.toggle('active', i === idx));
-    updateFooterBanner(idx);          // ← updates photo + name
+    tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    updateFooterBanner(idx);
     setTimeout(() => {
         initReveal();
         document.getElementById('panel-' + idx)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 60);
 }
 
-// Init on page load
 document.addEventListener('DOMContentLoaded', () => {
     const first = [...document.querySelectorAll('.entity-tab')].findIndex(t => t.classList.contains('active'));
     updateFooterBanner(first >= 0 ? first : 0);

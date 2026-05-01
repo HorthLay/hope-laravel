@@ -29,6 +29,7 @@ use App\Http\Controllers\SponsorAuthController;
 use App\Http\Controllers\SponsorContactController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\SponsorDashboardController;
+use App\Http\Controllers\SponsorMessagesController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\VerifyHumanController;
 use App\Models\DonationProject;
@@ -244,10 +245,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/download/{type}/{id}', [SponsorDashboardController::class, 'download'])->name('sponsor.download');
         Route::post('/logout/sponsor', [SponsorAuthController::class, 'logout'])->name('sponsor.logout');
         Route::post('/sponsor/child',     [HomeController::class, 'sponsor'])->name('sponsor.child');
+        Route::get('/messages',     [SponsorMessagesController::class, 'index'])->name('sponsor.messages.home');
+        Route::post('/messages/send',     [SponsorMessagesController::class, 'send'])->name('sponsor.messages.send');
+        Route::post('/messages/reply',    [SponsorMessagesController::class, 'reply'])->name('sponsor.messages.reply');
+        Route::post('/messages/markread', [SponsorMessagesController::class, 'markRead'])->name('sponsor.messages.markRead');
     });
 
 
-   
+
     Route::get('/contact/created', [SponsorContactController::class, 'show'])->name('sponsor.contact');
     Route::post('/contact', [SponsorContactController::class, 'submit'])->name('sponsor.contact.submit');
 
