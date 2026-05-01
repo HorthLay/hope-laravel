@@ -4,6 +4,7 @@ namespace App\Providers;
 // use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use App\Helpers\NumberHelper;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -45,6 +46,9 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        RateLimiter::for('global', function (Request $request) {
+                return Limit::perMinute(1000)->by($request->ip());
+        });
 
      
     }

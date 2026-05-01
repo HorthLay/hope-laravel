@@ -318,7 +318,7 @@
             </div>
             <h3 class="font-black text-gray-800 mb-2" data-fr="Pas encore parrain ?" data-en="Not a sponsor yet?" data-km="មិនទាន់ជាអ្នកឧបត្ថម្ភ?">Pas encore parrain ?</h3>
             <p class="text-sm text-gray-600 mb-4" data-fr="Rejoignez-nous pour changer la vie d'un enfant" data-en="Join us to change a child's life" data-km="ចូលរួមជាមួយយើងដើម្បីផ្លាស់ប្តូរជីវិតកុមារ">Rejoignez-nous pour changer la vie d'un enfant</p>
-            <a href="{{ route('sponsor.contact') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm rounded-lg transition shadow-md hover:shadow-lg">
+            <a href="{{ route('sponsor.children') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm rounded-lg transition shadow-md hover:shadow-lg">
                 <i class="fas fa-envelope"></i>
                 <span data-fr="Devenir parrain" data-en="Become a sponsor" data-km="ក្លាយជាអ្នកឧបត្ថម្ភ">Devenir parrain</span>
             </a>

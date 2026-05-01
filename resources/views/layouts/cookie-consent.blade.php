@@ -458,11 +458,11 @@
 {{-- ════════════════════════════════════════
      FLOATING REVOKE PILL
 ════════════════════════════════════════ --}}
-<div id="ck-revoke" title="Manage cookies">
+{{-- <div id="ck-revoke" title="Manage cookies">
     <button id="ck-revoke-btn" onclick="ckRevoke()" aria-label="Manage cookie settings">
         🍪 Cookie Settings
     </button>
-</div>
+</div> --}}
 
 {{-- ════════════════════════════════════════
      COOKIE CONSENT SCRIPT

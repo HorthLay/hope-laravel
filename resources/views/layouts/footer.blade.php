@@ -98,7 +98,14 @@
                     @if(!empty($settings['contact_phone']))
                     <li class="flex items-start gap-2">
                         <i class="fas fa-phone text-[#f4b630] mt-1"></i>
-                        <span>{{ $settings['contact_phone'] }}</span>
+                        <span>
+                            @php
+                                $phone = preg_replace('/\D/', '', $settings['contact_phone'] ?? '');
+                                $cc = substr($phone, 0, 2);
+                                $local = substr($phone, 2);
+                            @endphp
+                            (+{{ $cc }}){{ $local }}
+                        </span>
                     </li>
                     @endif
 
@@ -115,7 +122,7 @@
 
         <div class="pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
             <p>
-                © {{ date('Y') }} {{ $settings['site_name'] ?? 'Hope & Impact' }}. All rights reserved.
+                © {{ date('Y') }} {{ $settings['site_name'] ?? 'Hope & Impact' }}. Association Française loi de 1901 – reconnue d’intérêt général.
                 | <a href="{{ route('privacy') }}" class="hover:text-[#f4b630]">Privacy Policy</a>
                 | <a href="{{ route('terms') }}" class="hover:text-[#f4b630]">Terms</a>
             </p>

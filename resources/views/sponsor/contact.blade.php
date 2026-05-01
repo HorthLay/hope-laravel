@@ -19,12 +19,35 @@
     $linkedinUrl  = $headerSettings['linkedin_url']  ?? null ?: null;
 @endphp
 
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
 <style>
+/* ══════════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════════ */
+:root {
+    --orange:     #f97316;
+    --orange-dk:  #c2410c;
+    --orange-lt:  #fed7aa;
+    --ink:        #0f0e0d;
+    --ink-soft:   #2c2a28;
+    --mist:       #f5f3ef;
+    --white:      #ffffff;
+    --ff-display: 'Fraunces', Georgia, serif;
+    --ff-body:    'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--ff-body); }
+
 /* ══════════════════════════════════════════════
    ANIMATIONS & REVEAL
 ══════════════════════════════════════════════ */
 @keyframes fadeUp     { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
-@keyframes pulse-soft { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+@keyframes fadeLeft   { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
+@keyframes scaleIn    { from{opacity:0;transform:scale(.94)} to{opacity:1;transform:scale(1)} }
+@keyframes bounceY    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
 .reveal       {opacity:0;transform:translateY(28px); transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
 .reveal-left  {opacity:0;transform:translateX(-36px);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
 .reveal-right {opacity:0;transform:translateX(36px); transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
@@ -35,194 +58,421 @@
 /* ══════════════════════════════════════════════
    HERO
 ══════════════════════════════════════════════ */
-.page-hero{position:relative;overflow:hidden;background:#1a1a1a;min-height:320px}
-.page-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.45) saturate(1.1);transition:transform 8s ease}
-.page-hero:hover .page-hero-bg{transform:scale(1.04)}
-.page-hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.2) 60%,transparent 100%)}
-.page-hero-content{position:relative;z-index:2;padding:70px 40px 60px;max-width:1280px;margin:0 auto}
-.breadcrumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:18px}
-.breadcrumb a:hover{color:#fff}
-.breadcrumb span{color:rgba(255,255,255,.9)}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.wave-divider{line-height:0;overflow:hidden}.wave-divider svg{display:block}
-@media(max-width:640px){.page-hero-content{padding:50px 20px 44px}}
-
-/* ══════════════════════════════════════════════
-   LAYOUT
-══════════════════════════════════════════════ */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-@media(max-width:767px){
-    .contact-grid{grid-template-columns:1fr}
-    .desktop-contact-col{display:none!important}
-    .mobile-contact-trigger{display:flex!important}
-    #why-mobile{display:block!important}
-    #why-desktop{display:none!important}
-}
-@media(min-width:768px){
-    .mobile-contact-trigger{display:none!important}
-    #why-mobile{display:none!important}
-    #why-desktop{display:block!important}
+.hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    background: var(--ink);
+    font-family: var(--ff-body);
 }
 
-/* ══════════════════════════════════════════════
-   CARDS
-══════════════════════════════════════════════ */
-.info-card{background:#fff;border-radius:20px;border:1px solid #f1f5f9;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:28px}
-.card-title{font-size:18px;font-weight:900;color:#1f2937;margin:0 0 6px}
-.card-sub{font-size:13px;color:#6b7280;margin:0 0 22px;line-height:1.65}
-.section-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#9ca3af;margin:0 0 14px}
+/* ── Photo panel (left) ── */
+.hero-photo {
+    position: relative;
+    overflow: hidden;
+}
+.hero-photo-img {
+    position: absolute;
+    inset: 0;
+    background-image: url('{{ asset('images/children/image-1.jpg') }}');
+    background-size: cover;
+    background-position: center 20%;
+    transform: scale(1.06);
+    transition: transform 12s ease;
+    filter: brightness(.82) saturate(1.15);
+}
+.hero:hover .hero-photo-img { transform: scale(1); }
+
+.hero-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 2;
+}
+
+.hero-photo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -80px;
+    bottom: 0;
+    width: 160px;
+    background: var(--ink);
+    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+    z-index: 3;
+}
+
+.hero-photo-thumbs {
+    position: absolute;
+    bottom: 60px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 4;
+}
+.hero-thumb {
+    width: 80px;
+    height: 60px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    border: 2.5px solid rgba(255,255,255,.2);
+    box-shadow: 0 4px 16px rgba(0,0,0,.4);
+    transition: transform .3s, border-color .3s;
+}
+.hero-thumb:hover { transform: scale(1.07); border-color: var(--orange); }
+
+/* ── Content panel (right) ── */
+.hero-content {
+    position: relative;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 64px 80px 96px;
+    z-index: 2;
+}
+
+.hero-content::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(249,115,22,.18) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.35);
+    margin-bottom: 32px;
+    animation: fadeUp .6s ease both;
+}
+.hero-breadcrumb a { color: rgba(255,255,255,.35); text-decoration: none; transition: color .2s; }
+.hero-breadcrumb a:hover { color: rgba(255,255,255,.8); }
+.hero-breadcrumb i { font-size: 7px; }
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(249,115,22,.12);
+    border: 1px solid rgba(249,115,22,.3);
+    color: #fb923c;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    width: fit-content;
+    animation: fadeUp .7s .05s ease both;
+}
+.hero-eyebrow-dot {
+    width: 6px; height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+
+.hero-h1 {
+    font-family: var(--ff-display);
+    font-size: clamp(2.6rem, 4.5vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--white);
+    margin-bottom: 10px;
+    animation: fadeUp .8s .1s ease both;
+}
+.hero-h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--orange);
+}
+
+.hero-h1-accent {
+    font-family: var(--ff-display);
+    font-size: clamp(1.1rem, 2vw, 1.55rem);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,.45);
+    margin-bottom: 28px;
+    animation: fadeUp .8s .15s ease both;
+}
+
+.hero-body {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255,255,255,.58);
+    font-weight: 300;
+    max-width: 420px;
+    margin-bottom: 40px;
+    animation: fadeUp .85s .2s ease both;
+}
+.hero-body strong { color: rgba(255,255,255,.85); font-weight: 600; }
+
+/* ── CTA buttons ── */
+.hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    animation: fadeUp .9s .25s ease both;
+}
+.hero-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 32px;
+    border-radius: 999px;
+    background: var(--orange);
+    color: #fff;
+    font-family: var(--ff-body);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: .01em;
+    box-shadow: 0 6px 28px rgba(249,115,22,.40);
+    transition: background .25s, transform .2s, box-shadow .25s;
+    cursor: pointer;
+    border: none;
+}
+.hero-btn-primary:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 36px rgba(249,115,22,.52);
+}
+
+/* ── Contact scroll button ── */
+.hero-btn-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 15px 28px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: transparent;
+    color: rgba(255,255,255,.7);
+    font-family: var(--ff-body);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color .25s, color .25s, background .25s;
+}
+.hero-btn-contact:hover {
+    border-color: rgba(255,255,255,.45);
+    color: #fff;
+    background: rgba(255,255,255,.06);
+}
+.hero-btn-contact i { font-size: 11px; }
+
+/* ── Stats bar ── */
+.hero-stats {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 52px;
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 32px;
+    animation: fadeUp 1s .35s ease both;
+}
+.hero-stat {
+    flex: 1;
+    padding: 0 24px 0 0;
+    position: relative;
+}
+.hero-stat + .hero-stat {
+    padding-left: 24px;
+    border-left: 1px solid rgba(255,255,255,.08);
+}
+.hero-stat-num {
+    font-family: var(--ff-display);
+    font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.hero-stat-num span { color: var(--orange); }
+.hero-stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,.38);
+    font-weight: 500;
+    letter-spacing: .03em;
+    line-height: 1.5;
+}
+
+/* ── Floating trust badge ── */
+.hero-trust {
+    position: absolute;
+    bottom: 40px;
+    left: 36px;
+    z-index: 10;
+    background: rgba(15,14,13,.75);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 16px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 240px;
+    animation: scaleIn 1s .5s ease both;
+}
+.hero-trust-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--orange), #c2410c);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+    color: #fff;
+}
+.hero-trust-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 2px;
+}
+.hero-trust-text span {
+    font-size: 11px;
+    color: rgba(255,255,255,.45);
+    line-height: 1.4;
+}
+
+/* ── Vertical label ── */
+.hero-vertical-label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.25);
+    z-index: 5;
+    white-space: nowrap;
+}
+
+/* ── Scroll-down chevron (bottom of hero content) ── */
+.hero-scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    right: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    opacity: .35;
+    transition: opacity .2s;
+    animation: fadeUp 1.2s .6s ease both;
+    border: none;
+    background: none;
+    color: white;
+    z-index: 5;
+}
+.hero-scroll-hint:hover { opacity: .8; }
+.hero-scroll-hint span {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.6);
+}
+.hero-scroll-hint i {
+    font-size: 14px;
+    animation: bounceY 1.6s ease-in-out infinite;
+}
 
 /* ══════════════════════════════════════════════
-   HOW-TO STEPS
+   WAVE DIVIDER
 ══════════════════════════════════════════════ */
-.step{display:flex;align-items:flex-start;gap:13px}
-.step+.step{margin-top:18px}
-.step-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:14px}
-.step h3{font-size:13px;font-weight:800;color:#1f2937;margin:0 0 3px}
-.step p{font-size:11px;color:#6b7280;margin:0;line-height:1.5}
-
-/* ══════════════════════════════════════════════
-   CONTACT BUTTONS
-══════════════════════════════════════════════ */
-.contact-list{display:flex;flex-direction:column;gap:10px}
-.contact-btn{
-    display:flex;align-items:center;gap:13px;
-    padding:14px 16px;border-radius:14px;text-decoration:none;
-    background:#f9fafb;border:1.5px solid #f3f4f6;
-    transition:all .18s;min-height:64px;
-}
-.contact-btn:hover,.contact-btn:active{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.10)}
-.btn-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:21px}
-.btn-body{flex:1;min-width:0}
-.btn-title{font-size:13px;font-weight:800;color:#1f2937}
-.btn-sub{font-size:11px;color:#9ca3af;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.btn-arrow{color:#d1d5db;font-size:11px;flex-shrink:0}
-.contact-btn.email:hover    {background:#fff7ed;border-color:#fed7aa}
-.contact-btn.whatsapp:hover {background:#f0fdf4;border-color:#bbf7d0}
-.contact-btn.telegram:hover {background:#f0f9ff;border-color:#bae6fd}
-.contact-btn.facebook:hover {background:#eff6ff;border-color:#bfdbfe}
-.contact-btn.instagram:hover{background:#fdf2f8;border-color:#f5d0fe}
-.contact-btn.youtube:hover  {background:#fef2f2;border-color:#fecaca}
-.contact-btn.linkedin:hover {background:#eff6ff;border-color:#bfdbfe}
-
-/* ══════════════════════════════════════════════
-   WHY CARD
-══════════════════════════════════════════════ */
-.why-card{background:linear-gradient(135deg,#f97316,#ea580c);border-radius:20px;padding:24px;color:#fff;box-shadow:0 8px 28px rgba(249,115,22,.30)}
-.why-card h3{font-size:17px;font-weight:900;margin:0 0 16px}
-.why-item{display:flex;align-items:flex-start;gap:9px;font-size:13px}
-.why-item+.why-item{margin-top:10px}
-.why-item i{margin-top:2px;flex-shrink:0}
-
-/* ══════════════════════════════════════════════
-   MOBILE TRIGGER BUTTON
-══════════════════════════════════════════════ */
-.mobile-contact-trigger{
-    display:none;align-items:center;justify-content:center;gap:10px;
-    width:100%;padding:18px;
-    background:linear-gradient(135deg,#f97316,#ea580c);
-    color:#fff;border:none;border-radius:16px;
-    font-family:inherit;font-size:15px;font-weight:900;
-    cursor:pointer;box-shadow:0 8px 24px rgba(249,115,22,.38);
-    transition:transform .15s,box-shadow .15s;
-}
-.mobile-contact-trigger:active{transform:scale(.97)}
-.mobile-contact-trigger i{font-size:18px}
-
-/* ══════════════════════════════════════════════
-   BOTTOM SHEET MODAL
-══════════════════════════════════════════════ */
-.modal-overlay{
-    display:none;position:fixed;inset:0;z-index:1200;
-    background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
-    align-items:flex-end;justify-content:center;
-}
-.modal-overlay.open{display:flex}
-.modal-sheet{
-    background:#fff;width:100%;max-width:520px;
-    border-radius:24px 24px 0 0;
-    max-height:90dvh;overflow-y:auto;
-    transform:translateY(110%);
-    transition:transform .35s cubic-bezier(.4,0,.2,1);
-    padding-bottom:env(safe-area-inset-bottom,16px);
-}
-.modal-overlay.open .modal-sheet{transform:translateY(0)}
-.modal-handle{width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:14px auto 0}
-.modal-header{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:14px 20px 12px;border-bottom:1px solid #f3f4f6;
-    position:sticky;top:0;background:#fff;z-index:1
-}
-.modal-title{font-size:16px;font-weight:900;color:#1f2937}
-.modal-close{
-    width:32px;height:32px;border-radius:50%;
-    border:none;background:#f3f4f6;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-    color:#6b7280;font-size:13px;transition:background .2s
-}
-.modal-close:hover{background:#e5e7eb}
-.modal-body{padding:18px 20px 28px}
+.wave-divider { line-height: 0; overflow: hidden; }
+.wave-divider svg { display: block; }
 
 /* ══════════════════════════════════════════════
    HELLOASSO IFRAME SECTION
 ══════════════════════════════════════════════ */
 .ha-section {
-    background: #f9fafb;
-    border-top: 1px solid #f1f5f9;
-    padding: 64px 0 72px;
+    background: #f5f3ef;
+    border-top: 1px solid #ede9e3;
+    padding: 72px 0 80px;
 }
 .ha-section-inner {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
 }
 .ha-section-header {
     text-align: center;
-    margin-bottom: 36px;
+    margin-bottom: 40px;
 }
 .ha-section-header .ha-pill {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    padding: 5px 16px;
+    padding: 6px 18px;
     border-radius: 999px;
     background: rgba(249,115,22,.10);
     border: 1px solid rgba(249,115,22,.25);
     color: #ea580c;
     font-size: 11px;
     font-weight: 800;
-    letter-spacing: .06em;
+    letter-spacing: .07em;
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 .ha-section-header h2 {
-    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-family: var(--ff-display);
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
     font-weight: 900;
-    color: #1f2937;
-    margin: 0 0 10px;
-    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 12px;
+    line-height: 1.15;
 }
 .ha-section-header p {
-    font-size: 14px;
+    font-size: 14.5px;
     color: #6b7280;
-    max-width: 520px;
+    max-width: 480px;
     margin: 0 auto;
-    line-height: 1.7;
+    line-height: 1.75;
 }
 .ha-frame-wrap {
-    background: #fff;
-    border-radius: 24px;
-    border: 1px solid #f1f5f9;
-    box-shadow: 0 8px 40px rgba(0,0,0,.07);
+    background: var(--white);
+    border-radius: 28px;
+    border: 1px solid #e8e4de;
+    box-shadow: 0 12px 56px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
     overflow: hidden;
     position: relative;
 }
 .ha-frame-wrap::before {
     content: '';
     display: block;
-    height: 4px;
-    background: linear-gradient(90deg, #f97316, #ea580c, #fb923c);
-    border-radius: 24px 24px 0 0;
+    height: 5px;
+    background: linear-gradient(90deg, #f97316 0%, #ea580c 50%, #fb923c 100%);
 }
 .ha-frame-loader {
     position: absolute;
@@ -231,10 +481,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    background: #fff;
+    gap: 16px;
+    background: var(--white);
     z-index: 2;
-    transition: opacity .4s ease, visibility .4s ease;
+    transition: opacity .5s ease, visibility .5s ease;
 }
 .ha-frame-loader.hidden {
     opacity: 0;
@@ -242,8 +492,8 @@
     pointer-events: none;
 }
 .ha-spinner {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border: 3px solid #fed7aa;
     border-top-color: #f97316;
     border-radius: 50%;
@@ -254,6 +504,7 @@
     font-size: 12px;
     color: #9ca3af;
     font-weight: 600;
+    letter-spacing: .02em;
 }
 #haWidget {
     display: block;
@@ -261,38 +512,282 @@
     border: none;
     min-height: 750px;
 }
-@media (max-width: 640px) {
-    .ha-section { padding: 44px 0 52px; }
-    .ha-frame-wrap { border-radius: 16px; }
+
+/* ══════════════════════════════════════════════
+   CONTACT SECTION
+══════════════════════════════════════════════ */
+.contact-section {
+    background: #ffffff;
+    padding: 72px 0 80px;
+    border-top: 1px solid #f1f5f9;
+}
+.contact-section-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+.contact-section-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+.contact-section-header .cs-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 18px;
+    border-radius: 999px;
+    background: rgba(249,115,22,.08);
+    border: 1px solid rgba(249,115,22,.2);
+    color: #ea580c;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+.contact-section-header h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 900;
+    color: var(--ink);
+    margin: 0 0 10px;
+    line-height: 1.15;
+}
+.contact-section-header p {
+    font-size: 14px;
+    color: #6b7280;
+    max-width: 440px;
+    margin: 0 auto;
+    line-height: 1.75;
+}
+
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+/* ── Cards ── */
+.info-card { background:#fff; border-radius:20px; border:1px solid #f1f5f9; box-shadow:0 4px 20px rgba(0,0,0,.06); padding:28px; }
+.card-title { font-size:18px; font-weight:900; color:#1f2937; margin:0 0 6px; font-family:var(--ff-body); }
+.card-sub   { font-size:13px; color:#6b7280; margin:0 0 22px; line-height:1.65; }
+.section-label { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:#9ca3af; margin:0 0 14px; }
+
+/* ── Steps ── */
+.step { display:flex; align-items:flex-start; gap:13px; }
+.step+.step { margin-top:18px; }
+.step-icon { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; font-size:14px; }
+.step h3 { font-size:13px; font-weight:800; color:#1f2937; margin:0 0 3px; }
+.step p  { font-size:11px; color:#6b7280; margin:0; line-height:1.5; }
+
+/* ── Contact buttons ── */
+.contact-list { display:flex; flex-direction:column; gap:10px; }
+.contact-btn {
+    display:flex; align-items:center; gap:13px;
+    padding:14px 16px; border-radius:14px; text-decoration:none;
+    background:#f9fafb; border:1.5px solid #f3f4f6;
+    transition:all .18s; min-height:64px;
+}
+.contact-btn:hover,.contact-btn:active { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.10); }
+.btn-icon  { width:44px; height:44px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:21px; }
+.btn-body  { flex:1; min-width:0; }
+.btn-title { font-size:13px; font-weight:800; color:#1f2937; }
+.btn-sub   { font-size:11px; color:#9ca3af; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.btn-arrow { color:#d1d5db; font-size:11px; flex-shrink:0; }
+.contact-btn.email:hover     { background:#fff7ed; border-color:#fed7aa; }
+.contact-btn.whatsapp:hover  { background:#f0fdf4; border-color:#bbf7d0; }
+.contact-btn.telegram:hover  { background:#f0f9ff; border-color:#bae6fd; }
+.contact-btn.facebook:hover  { background:#eff6ff; border-color:#bfdbfe; }
+.contact-btn.instagram:hover { background:#fdf2f8; border-color:#f5d0fe; }
+.contact-btn.youtube:hover   { background:#fef2f2; border-color:#fecaca; }
+.contact-btn.linkedin:hover  { background:#eff6ff; border-color:#bfdbfe; }
+
+/* ── Why card ── */
+.why-card { background:linear-gradient(135deg,#f97316,#ea580c); border-radius:20px; padding:24px; color:#fff; box-shadow:0 8px 28px rgba(249,115,22,.30); }
+.why-card h3 { font-size:17px; font-weight:900; margin:0 0 16px; }
+.why-item { display:flex; align-items:flex-start; gap:9px; font-size:13px; }
+.why-item+.why-item { margin-top:10px; }
+.why-item i { margin-top:2px; flex-shrink:0; }
+
+/* ── Mobile trigger button ── */
+.mobile-contact-trigger {
+    display:none; align-items:center; justify-content:center; gap:10px;
+    width:100%; padding:18px;
+    background:linear-gradient(135deg,#f97316,#ea580c);
+    color:#fff; border:none; border-radius:16px;
+    font-family:var(--ff-body); font-size:15px; font-weight:900;
+    cursor:pointer; box-shadow:0 8px 24px rgba(249,115,22,.38);
+    transition:transform .15s, box-shadow .15s;
+}
+.mobile-contact-trigger:active { transform:scale(.97); }
+.mobile-contact-trigger i { font-size:18px; }
+
+/* ══════════════════════════════════════════════
+   BOTTOM SHEET MODAL
+══════════════════════════════════════════════ */
+.modal-overlay {
+    display:none; position:fixed; inset:0; z-index:1200;
+    background:rgba(0,0,0,.45); backdrop-filter:blur(4px);
+    align-items:flex-end; justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+.modal-sheet {
+    background:#fff; width:100%; max-width:520px;
+    border-radius:24px 24px 0 0;
+    max-height:90dvh; overflow-y:auto;
+    transform:translateY(110%);
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+    padding-bottom:env(safe-area-inset-bottom,16px);
+}
+.modal-overlay.open .modal-sheet { transform:translateY(0); }
+.modal-handle { width:40px; height:4px; background:#e5e7eb; border-radius:2px; margin:14px auto 0; }
+.modal-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px 12px; border-bottom:1px solid #f3f4f6;
+    position:sticky; top:0; background:#fff; z-index:1;
+}
+.modal-title { font-size:16px; font-weight:900; color:#1f2937; }
+.modal-close {
+    width:32px; height:32px; border-radius:50%;
+    border:none; background:#f3f4f6; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    color:#6b7280; font-size:13px; transition:background .2s;
+}
+.modal-close:hover { background:#e5e7eb; }
+.modal-body { padding:18px 20px 28px; }
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-photo { height: 55vw; min-height: 260px; max-height: 420px; }
+    .hero-photo::before { display: none; }
+    .hero-photo-thumbs { display: none; }
+    .hero-vertical-label { display: none; }
+    .hero-trust { bottom: 16px; left: 16px; }
+    .hero-content { padding: 48px 24px 72px; }
+    .hero-scroll-hint { right: 24px; bottom: 24px; }
+}
+@media (max-width: 767px) {
+    .contact-grid { grid-template-columns: 1fr; }
+    .desktop-contact-col { display: none !important; }
+    .mobile-contact-trigger { display: flex !important; }
+    #why-mobile { display: block !important; }
+    #why-desktop { display: none !important; }
+    .ha-section { padding: 48px 0 56px; }
+    .ha-frame-wrap { border-radius: 18px; }
     #haWidget { min-height: 680px; }
+}
+@media (min-width: 768px) {
+    .mobile-contact-trigger { display: none !important; }
+    #why-mobile { display: none !important; }
+    #why-desktop { display: block !important; }
+}
+@media (max-width: 480px) {
+    .hero-stats { flex-direction: column; gap: 20px; }
+    .hero-stat { border-left: none !important; padding-left: 0 !important; border-top: 1px solid rgba(255,255,255,.08); padding-top: 20px; }
+    .hero-stat:first-child { border-top: none; padding-top: 0; }
+    .hero-ctas { flex-direction: column; align-items: stretch; }
+    .hero-btn-primary, .hero-btn-contact { justify-content: center; }
 }
 </style>
 
-{{-- HERO --}}
-<section class="page-hero">
-    <div class="page-hero-bg" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}')"></div>
-    <div class="page-hero-overlay"></div>
-    <div class="page-hero-content">
-        <nav class="breadcrumb">
-            <a href="{{ route('home') }}">Home</a>
-            <i class="fas fa-chevron-right text-[9px]"></i>
-            <span>Sponsor</span>
-            <i class="fas fa-chevron-right text-[9px]"></i>
-            <span>Create Account</span>
-        </nav>
-        <div class="pill bg-orange-500/20 border border-orange-400/30 text-orange-300 mb-5" style="animation:fadeUp .7s ease both">
-            <i class="fas fa-user-plus text-xs"></i> Become a Sponsor
+{{-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ --}}
+<section class="hero">
+
+    {{-- Left: photo --}}
+    <div class="hero-photo">
+        <div class="hero-photo-img"></div>
+        <span class="hero-vertical-label">Des Ailes Pour Grandir &nbsp;·&nbsp; Cambodia</span>
+        <div class="hero-photo-thumbs">
+            <div class="hero-thumb" style="background-image:url('{{ asset('images/children/image-2.jpg') }}')"></div>
+            <div class="hero-thumb" style="background-image:url('{{ asset('images/children/image-3.jpg') }}')"></div>
         </div>
-        <h1 class="text-4xl md:text-5xl font-black text-white leading-tight mb-4" style="animation:fadeUp .9s ease both">Create a Sponsor Account</h1>
-        <p class="text-lg text-white/80 font-medium max-w-xl" style="animation:fadeUp .9s .15s ease both">Contact us directly to create your sponsor account and start changing a child's life.</p>
+        <div class="hero-trust">
+            <div class="hero-trust-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="hero-trust-text">
+                <strong>Secure &amp; Transparent</strong>
+                <span>Registered French nonprofit</span>
+            </div>
+        </div>
+    </div>
+
+    {{-- Right: content --}}
+    <div class="hero-content">
+
+        <nav class="hero-breadcrumb">
+            <a href="{{ route('home') }}">Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <span style="color:rgba(255,255,255,.6)">Sponsor</span>
+            <i class="fas fa-chevron-right"></i>
+            <span style="color:rgba(255,255,255,.75)">Create Account</span>
+        </nav>
+
+        <div class="hero-eyebrow">
+            <span class="hero-eyebrow-dot"></span>
+            Become a Sponsor
+        </div>
+
+        <h1 class="hero-h1">
+            Give a Child<br>
+            <em>Wings to Grow</em>
+        </h1>
+
+        <p class="hero-h1-accent">One decision. A lifetime of impact.</p>
+
+        <p class="hero-body">
+            Your sponsorship provides <strong>education, nutrition, and healthcare</strong>
+            to children who need it most. For just €1 a day, you can walk alongside
+            a child as they grow — and receive their story every step of the way.
+        </p>
+
+        <div class="hero-ctas">
+            {{-- Primary: scroll to HelloAsso form --}}
+            <a href="#registration" class="hero-btn-primary" onclick="smoothScroll(event,'registration')">
+                <i class="fas fa-heart" style="font-size:12px"></i>
+                Register to Become a Sponsor
+            </a>
+
+            {{-- Secondary: scroll to contact section --}}
+            <a href="#contact" class="hero-btn-contact" onclick="smoothScroll(event,'contact')">
+                <i class="fas fa-paper-plane"></i>
+                Contact Us
+            </a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-num" data-count="247">0<span>+</span></div>
+                <div class="hero-stat-label">Children<br>sponsored</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num" data-count="84"><span></span>0<span>%</span></div>
+                <div class="hero-stat-label">Funds reach<br>programs directly</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num" data-count="12">0<span>+</span></div>
+                <div class="hero-stat-label">Years of<br>impact</div>
+            </div>
+        </div>
+
+        {{-- Scroll-down hint --}}
+        <button class="hero-scroll-hint" onclick="smoothScroll(event,'registration')" aria-label="Scroll down">
+            <span>Scroll</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+
     </div>
 </section>
 
-<div class="wave-divider" style="background:#f9fafb"><svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,30 C360,55 1080,5 1440,30 L1440,0 L0,0 Z" fill="#ffffff"/></svg></div>
+<div class="wave-divider" style="background:#f5f3ef">
+    <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,24 C480,52 960,0 1440,24 L1440,0 L0,0 Z" fill="#0f0e0d"/>
+    </svg>
+</div>
+
 {{-- ══════════════════════════════════════════
      HELLOASSO REGISTRATION SECTION
 ══════════════════════════════════════════ --}}
-<section class="ha-section">
+<section class="ha-section" id="registration">
     <div class="ha-section-inner">
         <div class="ha-section-header reveal">
             <div class="ha-pill">
@@ -304,12 +799,10 @@
         </div>
 
         <div class="ha-frame-wrap reveal stagger-1">
-            {{-- Loading overlay --}}
             <div class="ha-frame-loader" id="ha-loader">
                 <div class="ha-spinner"></div>
                 <p>Loading registration form…</p>
             </div>
-
             <iframe
                 id="haWidget"
                 allowtransparency="true"
@@ -320,18 +813,31 @@
             ></iframe>
         </div>
 
-        <p class="text-center text-xs text-gray-400 mt-4" style="line-height:1.7">
+        <p class="text-center text-xs text-gray-400 mt-4" style="line-height:1.7;font-family:var(--ff-body)">
             <i class="fas fa-lock mr-1 text-green-400"></i>
             Secure payment powered by <strong>HelloAsso</strong> &mdash; a French nonprofit platform. Your data is protected.
         </p>
     </div>
 </section>
-{{-- MAIN CONTENT --}}
-<section class="bg-white py-14 md:py-20">
-    <div class="max-w-5xl mx-auto px-4">
+
+{{-- ══════════════════════════════════════════
+     CONTACT SECTION  ← anchor target
+══════════════════════════════════════════ --}}
+<section class="contact-section" id="contact">
+    <div class="contact-section-inner">
+
+        {{-- Section header --}}
+        <div class="contact-section-header reveal">
+            <div class="cs-pill">
+                <i class="fas fa-paper-plane" style="font-size:9px"></i>
+                Get in Touch
+            </div>
+            <h2>Prefer to contact us directly?</h2>
+            <p>Our team is here to help you create your account and answer any questions.</p>
+        </div>
 
         {{-- Mobile trigger --}}
-        <div class="mb-6">
+        <div class="mb-6 reveal stagger-1">
             <button class="mobile-contact-trigger" onclick="openContactModal()">
                 <i class="fas fa-paper-plane"></i>
                 <span>Contact Us</span>
@@ -343,8 +849,6 @@
 
             {{-- LEFT: How to + Why (mobile) --}}
             <div style="display:flex;flex-direction:column;gap:20px;">
-
-                {{-- How to card --}}
                 <div class="info-card reveal">
                     <h2 class="card-title">How to create an account?</h2>
                     <p class="card-sub">Contact us via one of the methods below. Our team will guide you through the process and create your account.</p>
@@ -352,174 +856,121 @@
                     @if($emailUrl)
                     <div class="step">
                         <div class="step-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
-                        <div>
-                            <h3>Send us an email</h3>
-                            <p>Include your name, email and phone number.</p>
-                        </div>
+                        <div><h3>Send us an email</h3><p>Include your name, email and phone number.</p></div>
                     </div>
                     @endif
-
                     @if($whatsappUrl)
                     <div class="step">
                         <div class="step-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e"></i></div>
-                        <div>
-                            <h3>Contact us on WhatsApp</h3>
-                            <p>Immediate assistance via WhatsApp.</p>
-                        </div>
+                        <div><h3>Contact us on WhatsApp</h3><p>Immediate assistance via WhatsApp.</p></div>
                     </div>
                     @endif
-
                     @if($telegramUrl)
                     <div class="step">
                         <div class="step-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9"></i></div>
-                        <div>
-                            <h3>Message on Telegram</h3>
-                            <p>Create your account via Telegram.</p>
-                        </div>
+                        <div><h3>Message on Telegram</h3><p>Create your account via Telegram.</p></div>
                     </div>
                     @endif
-
                     @if($facebookUrl)
                     <div class="step">
                         <div class="step-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb"></i></div>
-                        <div>
-                            <h3>Contact us on Facebook</h3>
-                            <p>Via our official Facebook page.</p>
-                        </div>
+                        <div><h3>Contact us on Facebook</h3><p>Via our official Facebook page.</p></div>
                     </div>
                     @endif
-
                     @if(!$emailUrl && !$whatsappUrl && !$telegramUrl && !$facebookUrl)
                     <div class="step">
                         <div class="step-icon" style="background:#f3f4f6"><i class="fas fa-headset" style="color:#9ca3af"></i></div>
-                        <div>
-                            <h3>Reach out to our team</h3>
-                            <p>We will get back to you within 24 hours.</p>
-                        </div>
+                        <div><h3>Reach out to our team</h3><p>We will get back to you within 24 hours.</p></div>
                     </div>
                     @endif
                 </div>
 
-                {{-- Why card — mobile only --}}
                 <div class="why-card reveal stagger-2" id="why-mobile">
                     <h3>Why Become a Sponsor?</h3>
                     <div class="why-item"><i class="fas fa-check-circle"></i><span>Directly change a child's life</span></div>
                     <div class="why-item"><i class="fas fa-check-circle"></i><span>Receive regular updates & photos</span></div>
                     <div class="why-item"><i class="fas fa-check-circle"></i><span>84% of funds go directly to programs</span></div>
                     <div class="why-item"><i class="fas fa-check-circle"></i><span>Track your child's education journey</span></div>
-                    <div class="why-item"><i class="fas fa-check-circle"></i><span>For just $1 a day — make a lasting impact</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>For just €1 a day — make a lasting impact</span></div>
                 </div>
             </div>
 
-            {{-- RIGHT: Contact list + Why — desktop only --}}
+            {{-- RIGHT: Contact list + Why (desktop) --}}
             <div class="desktop-contact-col" style="display:flex;flex-direction:column;gap:20px;">
-
                 <div class="info-card reveal stagger-1">
                     <p class="section-label">Contact Us Directly</p>
                     <div class="contact-list">
-
                         @if($emailUrl)
                         <a href="{{ $emailUrl }}" target="_blank" class="contact-btn email">
                             <div class="btn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
-                            <div class="btn-body">
-                                <div class="btn-title">Email</div>
-                                <div class="btn-sub">{{ $headerSettings['contact_email'] ?? 'Send us a message' }}</div>
-                            </div>
+                            <div class="btn-body"><div class="btn-title">Email</div><div class="btn-sub">{{ $headerSettings['contact_email'] ?? 'Send us a message' }}</div></div>
                             <i class="fas fa-external-link-alt btn-arrow"></i>
                         </a>
                         @endif
-
                         @if($whatsappUrl)
                         <a href="{{ $whatsappUrl }}" target="_blank" class="contact-btn whatsapp">
                             <div class="btn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e"></i></div>
-                            <div class="btn-body">
-                                <div class="btn-title">WhatsApp</div>
-                                <div class="btn-sub">Instant chat</div>
-                            </div>
+                            <div class="btn-body"><div class="btn-title">WhatsApp</div><div class="btn-sub">Instant chat</div></div>
                             <i class="fas fa-external-link-alt btn-arrow"></i>
                         </a>
                         @endif
-
                         @if($telegramUrl)
                         <a href="{{ $telegramUrl }}" target="_blank" class="contact-btn telegram">
                             <div class="btn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9"></i></div>
-                            <div class="btn-body">
-                                <div class="btn-title">Telegram</div>
-                                <div class="btn-sub">{{ $headerSettings['telegram_url'] ?? '' }}</div>
-                            </div>
+                            <div class="btn-body"><div class="btn-title">Telegram</div><div class="btn-sub">{{ $headerSettings['telegram_url'] ?? '' }}</div></div>
                             <i class="fas fa-external-link-alt btn-arrow"></i>
                         </a>
                         @endif
-
                         @if($facebookUrl)
                         <a href="{{ $facebookUrl }}" target="_blank" class="contact-btn facebook">
                             <div class="btn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb"></i></div>
-                            <div class="btn-body">
-                                <div class="btn-title">Facebook</div>
-                                <div class="btn-sub">Official page</div>
-                            </div>
+                            <div class="btn-body"><div class="btn-title">Facebook</div><div class="btn-sub">Official page</div></div>
                             <i class="fas fa-external-link-alt btn-arrow"></i>
                         </a>
                         @endif
-
                         @if($instagramUrl)
                         <a href="{{ $instagramUrl }}" target="_blank" class="contact-btn instagram">
                             <div class="btn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899"></i></div>
-                            <div class="btn-body">
-                                <div class="btn-title">Instagram</div>
-                                <div class="btn-sub">{{ $headerSettings['instagram_url'] ?? '' }}</div>
-                            </div>
+                            <div class="btn-body"><div class="btn-title">Instagram</div><div class="btn-sub">{{ $headerSettings['instagram_url'] ?? '' }}</div></div>
                             <i class="fas fa-external-link-alt btn-arrow"></i>
                         </a>
                         @endif
-
                         @if($youtubeUrl)
                         <a href="{{ $youtubeUrl }}" target="_blank" class="contact-btn youtube">
                             <div class="btn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626"></i></div>
-                            <div class="btn-body">
-                                <div class="btn-title">YouTube</div>
-                                <div class="btn-sub">Watch our stories</div>
-                            </div>
+                            <div class="btn-body"><div class="btn-title">YouTube</div><div class="btn-sub">Watch our stories</div></div>
                             <i class="fas fa-external-link-alt btn-arrow"></i>
                         </a>
                         @endif
-
                         @if($linkedinUrl)
                         <a href="{{ $linkedinUrl }}" target="_blank" class="contact-btn linkedin">
                             <div class="btn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8"></i></div>
-                            <div class="btn-body">
-                                <div class="btn-title">LinkedIn</div>
-                                <div class="btn-sub">{{ $headerSettings['linkedin_url'] ?? '' }}</div>
-                            </div>
+                            <div class="btn-body"><div class="btn-title">LinkedIn</div><div class="btn-sub">{{ $headerSettings['linkedin_url'] ?? '' }}</div></div>
                             <i class="fas fa-external-link-alt btn-arrow"></i>
                         </a>
                         @endif
-
                         @if(!$emailUrl && !$whatsappUrl && !$telegramUrl && !$facebookUrl && !$instagramUrl && !$youtubeUrl && !$linkedinUrl)
                         <div style="padding:20px;text-align:center;color:#9ca3af;font-size:12px;background:#f9fafb;border-radius:12px;">
                             <i class="fas fa-info-circle" style="margin-right:6px"></i>No contact links configured yet.
                         </div>
                         @endif
-
                     </div>
                 </div>
 
-                {{-- Why card — desktop only --}}
                 <div class="why-card reveal stagger-2" id="why-desktop">
                     <h3>Why Become a Sponsor?</h3>
                     <div class="why-item"><i class="fas fa-check-circle"></i><span>Directly change a child's life</span></div>
                     <div class="why-item"><i class="fas fa-check-circle"></i><span>Receive regular updates & photos</span></div>
                     <div class="why-item"><i class="fas fa-check-circle"></i><span>84% of funds go directly to programs</span></div>
                     <div class="why-item"><i class="fas fa-check-circle"></i><span>Track your child's education journey</span></div>
-                    <div class="why-item"><i class="fas fa-check-circle"></i><span>For just $1 a day — make a lasting impact</span></div>
+                    <div class="why-item"><i class="fas fa-check-circle"></i><span>For just €1 a day — make a lasting impact</span></div>
                 </div>
             </div>
 
-        </div>{{-- end contact-grid --}}
+        </div>{{-- /contact-grid --}}
 
-        {{-- Already have an account link --}}
         <div class="mt-10 text-center reveal">
-            <p class="text-sm text-gray-400">
+            <p class="text-sm text-gray-400" style="font-family:var(--ff-body)">
                 Already have an account?
                 <a href="{{ route('sponsor.login') }}" class="text-orange-500 font-bold hover:underline ml-1">
                     <i class="fas fa-sign-in-alt mr-1"></i>Log in here
@@ -530,34 +981,7 @@
     </div>
 </section>
 
-
-
-{{-- Bottom CTA Banner --}}
-<section class="bg-white pb-20 pt-0">
-    <div class="max-width-5xl mx-auto px-4" style="max-width:80rem">
-        <div class="bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 rounded-3xl p-10 md:p-14 relative overflow-hidden reveal">
-            <div class="absolute inset-0 opacity-10" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}');background-size:cover;"></div>
-            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
-                <div class="text-white text-center lg:text-left">
-                    <h2 class="text-3xl md:text-4xl font-black mb-3">Ready to Change a Life?</h2>
-                    <p class="text-white/85 text-lg max-w-lg">Contact us today and we'll set up your sponsor account and match you with a child.</p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
-                    <a href="{{ route('sponsor.children') }}" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-black rounded-xl hover:bg-orange-50 transition shadow-lg justify-center">
-                        <i class="fas fa-child"></i> Browse Children
-                    </a>
-                    <a href="{{ route('sponsor.login') }}" class="inline-flex items-center gap-3 px-8 py-4 border-2 border-white/50 text-white font-black rounded-xl hover:bg-white/10 transition justify-center">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- ══════════════════════════════════════════
-     MOBILE BOTTOM SHEET MODAL
-══════════════════════════════════════════ --}}
+{{-- MOBILE BOTTOM SHEET MODAL --}}
 <div class="modal-overlay" id="contact-modal" onclick="handleOverlayClick(event)">
     <div class="modal-sheet" id="modal-sheet">
         <div class="modal-handle"></div>
@@ -567,108 +991,126 @@
         </div>
         <div class="modal-body">
             <div class="contact-list">
-
                 @if($emailUrl)
                 <a href="{{ $emailUrl }}" target="_blank" class="contact-btn email">
                     <div class="btn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
-                    <div class="btn-body">
-                        <div class="btn-title">Email</div>
-                        <div class="btn-sub">{{ $headerSettings['contact_email'] ?? 'Send us a message' }}</div>
-                    </div>
+                    <div class="btn-body"><div class="btn-title">Email</div><div class="btn-sub">{{ $headerSettings['contact_email'] ?? 'Send us a message' }}</div></div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
                 @endif
-
                 @if($whatsappUrl)
                 <a href="{{ $whatsappUrl }}" target="_blank" class="contact-btn whatsapp">
                     <div class="btn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e"></i></div>
-                    <div class="btn-body">
-                        <div class="btn-title">WhatsApp</div>
-                        <div class="btn-sub">Instant chat</div>
-                    </div>
+                    <div class="btn-body"><div class="btn-title">WhatsApp</div><div class="btn-sub">Instant chat</div></div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
                 @endif
-
                 @if($telegramUrl)
                 <a href="{{ $telegramUrl }}" target="_blank" class="contact-btn telegram">
                     <div class="btn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9"></i></div>
-                    <div class="btn-body">
-                        <div class="btn-title">Telegram</div>
-                        <div class="btn-sub">@{{ $headerSettings['telegram_url'] ?? '' }}</div>
-                    </div>
+                    <div class="btn-body"><div class="btn-title">Telegram</div><div class="btn-sub">{{ $headerSettings['telegram_url'] ?? '' }}</div></div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
                 @endif
-
                 @if($facebookUrl)
                 <a href="{{ $facebookUrl }}" target="_blank" class="contact-btn facebook">
                     <div class="btn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb"></i></div>
-                    <div class="btn-body">
-                        <div class="btn-title">Facebook</div>
-                        <div class="btn-sub">Official page</div>
-                    </div>
+                    <div class="btn-body"><div class="btn-title">Facebook</div><div class="btn-sub">Official page</div></div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
                 @endif
-
                 @if($instagramUrl)
                 <a href="{{ $instagramUrl }}" target="_blank" class="contact-btn instagram">
                     <div class="btn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899"></i></div>
-                    <div class="btn-body">
-                        <div class="btn-title">Instagram</div>
-                        <div class="btn-sub">{{ $headerSettings['instagram_url'] ?? '' }}</div>
-                    </div>
+                    <div class="btn-body"><div class="btn-title">Instagram</div><div class="btn-sub">{{ $headerSettings['instagram_url'] ?? '' }}</div></div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
                 @endif
-
                 @if($youtubeUrl)
                 <a href="{{ $youtubeUrl }}" target="_blank" class="contact-btn youtube">
                     <div class="btn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626"></i></div>
-                    <div class="btn-body">
-                        <div class="btn-title">YouTube</div>
-                        <div class="btn-sub">Watch our stories</div>
-                    </div>
+                    <div class="btn-body"><div class="btn-title">YouTube</div><div class="btn-sub">Watch our stories</div></div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
                 @endif
-
                 @if($linkedinUrl)
                 <a href="{{ $linkedinUrl }}" target="_blank" class="contact-btn linkedin">
                     <div class="btn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8"></i></div>
-                    <div class="btn-body">
-                        <div class="btn-title">LinkedIn</div>
-                        <div class="btn-sub">{{ $headerSettings['linkedin_url'] ?? '' }}</div>
-                    </div>
+                    <div class="btn-body"><div class="btn-title">LinkedIn</div><div class="btn-sub">{{ $headerSettings['linkedin_url'] ?? '' }}</div></div>
                     <i class="fas fa-external-link-alt btn-arrow"></i>
                 </a>
                 @endif
-
                 @if(!$emailUrl && !$whatsappUrl && !$telegramUrl && !$facebookUrl && !$instagramUrl && !$youtubeUrl && !$linkedinUrl)
                 <div style="padding:20px;text-align:center;color:#9ca3af;font-size:12px;background:#f9fafb;border-radius:12px;">
                     <i class="fas fa-info-circle" style="margin-right:6px"></i>No contact links configured yet.
                 </div>
                 @endif
-
             </div>
         </div>
     </div>
 </div>
 
 <script>
+// ── Smooth scroll utility ─────────────────────────────────
+function smoothScroll(e, targetId) {
+    e.preventDefault();
+    const el = document.getElementById(targetId);
+    if (!el) return;
+    const navH = document.querySelector('header, nav, .navbar')?.offsetHeight || 0;
+    const top  = el.getBoundingClientRect().top + window.scrollY - navH - 24;
+    window.scrollTo({ top, behavior: 'smooth' });
+}
+
+// Also handle any bare <a href="#contact"> or <a href="#registration">
+// clicks that don't go through onclick (e.g. from other parts of the page)
+document.addEventListener('click', function(e) {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    const navH = document.querySelector('header, nav, .navbar')?.offsetHeight || 0;
+    const top  = el.getBoundingClientRect().top + window.scrollY - navH - 24;
+    window.scrollTo({ top, behavior: 'smooth' });
+});
+
 // ── Scroll reveal ─────────────────────────────────────────
 (function(){
-    const o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');o.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
-    document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>o.observe(el));
+    const o = new IntersectionObserver(e => {
+        e.forEach(x => { if(x.isIntersecting){ x.target.classList.add('visible'); o.unobserve(x.target); } });
+    }, { threshold:.08, rootMargin:'0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => o.observe(el));
+})();
+
+// ── Animated stat counters ────────────────────────────────
+(function(){
+    const counters = document.querySelectorAll('.hero-stat-num[data-count]');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el     = entry.target;
+            const target = +el.dataset.count;
+            const prefix = el.querySelector('span:first-child')?.textContent || '';
+            const suffix = el.querySelector('span:last-child')?.textContent  || '';
+            const dur    = 1800;
+            const start  = performance.now();
+            (function tick(now) {
+                const t    = Math.min((now - start) / dur, 1);
+                const ease = 1 - Math.pow(1 - t, 3);
+                const val  = Math.round(ease * target);
+                el.innerHTML = `${prefix}${val}<span>${suffix}</span>`;
+                if (t < 1) requestAnimationFrame(tick);
+            })(start);
+            observer.unobserve(el);
+        });
+    }, { threshold: .5 });
+    counters.forEach(c => observer.observe(c));
 })();
 
 // ── HelloAsso iframe ──────────────────────────────────────
 function haWidgetLoaded(iframe) {
-    // Hide the loading overlay
     document.getElementById('ha-loader').classList.add('hidden');
-
-    // Listen for height messages from HelloAsso
     window.addEventListener('message', function(e) {
         const dataHeight = e.data && e.data.height;
         if (dataHeight && dataHeight > parseFloat(iframe.style.minHeight || 0)) {
@@ -689,11 +1131,8 @@ function closeContactModal() {
 function handleOverlayClick(e) {
     if (e.target === document.getElementById('contact-modal')) closeContactModal();
 }
-
-// Close on ESC
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContactModal(); });
 
-// Swipe down to close
 let touchStartY = 0;
 document.getElementById('modal-sheet').addEventListener('touchstart', e => {
     touchStartY = e.touches[0].clientY;

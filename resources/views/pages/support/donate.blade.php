@@ -25,6 +25,7 @@
 @keyframes popIn    {0%{opacity:0;transform:scale(.85)}70%{transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
 @keyframes float    {0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes borderAnim{0%,100%{border-color:rgba(251,191,36,.3)}50%{border-color:rgba(251,191,36,.8)}}
+@keyframes calcShimmer{0%{background-position:-200% 0}to{background-position:200% 0}}
 
 /* Reveal */
 .reveal       {opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
@@ -56,7 +57,6 @@
     transform-origin:bottom center;animation:ray 3s ease-in-out infinite;
 }
 
-/* Photo mosaic strip at bottom */
 .photo-strip{
     position:absolute;bottom:0;left:0;right:0;z-index:2;height:280px;
     display:flex;
@@ -113,7 +113,6 @@
     animation:fadeUp .8s .18s ease both;
 }
 
-/* Hero buttons */
 .hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .32s ease both;margin-bottom:52px;}
 .btn-gold{
     display:inline-flex;align-items:center;gap:9px;
@@ -134,7 +133,6 @@
 }
 .btn-ghost:hover{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.6);color:#fff;}
 
-/* Hero stats */
 .hero-stats{display:flex;gap:40px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .46s ease both;}
 .hero-stat-n{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;color:#fbbf24;line-height:1;letter-spacing:-.02em;}
 .hero-stat-l{font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.33);text-transform:uppercase;letter-spacing:.1em;margin-top:3px;}
@@ -198,7 +196,6 @@
 .proj-tag:hover{background:#fff7ed;border-color:#fed7aa;color:#c2410c;}
 .proj-desc{color:#64748b;font-family:'Outfit',sans-serif;font-size:.82rem;line-height:1.65;margin-bottom:14px;}
 
-/* Campaign card button */
 .proj-card-btn{
     display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:10px;
     background:linear-gradient(135deg,#1e293b,#0f172a);
@@ -208,7 +205,6 @@
 }
 .proj-card-btn:hover{transform:translateY(-1px);color:#fbbf24;box-shadow:0 6px 18px rgba(15,23,42,.3);}
 
-/* Inline widget */
 .proj-widget-wrap{border-top:1px solid #f1f5f9;background:#f8fafc;overflow:hidden;}
 .proj-widget-bar{
     display:flex;align-items:center;justify-content:space-between;
@@ -226,6 +222,96 @@
     opacity:0;transition:opacity .4s ease;
 }
 .proj-widget-iframe.loaded{opacity:1;}
+
+/* ══════════════════════════
+   FISCAL CALCULATOR
+══════════════════════════ */
+.calc-section{
+    background:linear-gradient(180deg,#e8edf2 0%,#f0f4f8 100%);
+    padding:80px 0;position:relative;overflow:hidden;
+}
+.calc-section::before{
+    content:'';position:absolute;top:-120px;right:-200px;
+    width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(ellipse,rgba(251,191,36,.06) 0%,transparent 70%);
+    pointer-events:none;
+}
+.calc-wrap{
+    background:#fff;border-radius:28px;overflow:hidden;
+    box-shadow:0 8px 48px rgba(0,0,0,.09),0 1px 0 rgba(251,191,36,.15);
+    border:1px solid rgba(251,191,36,.12);
+}
+
+/* Type option cards */
+.calc-type-card{
+    cursor:pointer;padding:14px 12px;border-radius:16px;border:1.5px solid #e8edf2;
+    transition:border-color .2s,background .2s,box-shadow .2s;
+    background:#fff;
+}
+.calc-type-card:hover{border-color:rgba(251,191,36,.5);}
+.calc-type-card.active{
+    border-color:#fbbf24;
+    background:linear-gradient(135deg,rgba(251,191,36,.06),rgba(249,115,22,.04));
+    box-shadow:0 4px 18px rgba(251,191,36,.15);
+}
+.calc-type-card .ctc-title{
+    font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:800;color:#1e293b;margin-bottom:4px;
+}
+.calc-type-card .ctc-rate{
+    font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;
+    background:linear-gradient(135deg,#fbbf24,#f97316);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    line-height:1;margin-bottom:3px;
+}
+.calc-type-card .ctc-desc{
+    font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:600;
+    color:#94a3b8;line-height:1.5;
+}
+.calc-type-card.active .ctc-title{color:#92400e;}
+
+/* Amount quick-pick buttons */
+.calc-amt-btn{
+    padding:10px 4px;border-radius:12px;border:1.5px solid #e8edf2;
+    background:#fff;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:800;
+    color:#64748b;cursor:pointer;transition:all .18s;text-align:center;
+}
+.calc-amt-btn:hover{border-color:rgba(251,191,36,.5);color:#92400e;}
+.calc-amt-btn.active{
+    background:linear-gradient(135deg,#fbbf24,#f97316);
+    border-color:transparent;color:#fff;
+    box-shadow:0 4px 14px rgba(251,191,36,.4);
+}
+
+/* Result panel */
+.calc-result-panel{
+    background:linear-gradient(145deg,#0c1445 0%,#04091f 55%,#1a0a3d 100%);
+    border-radius:22px;padding:36px 28px;
+    position:relative;overflow:hidden;
+}
+.calc-result-panel::before{
+    content:'';position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);
+    width:360px;height:240px;border-radius:50%;
+    background:radial-gradient(ellipse,rgba(251,191,36,.18) 0%,rgba(249,115,22,.08) 45%,transparent 70%);
+    pointer-events:none;
+}
+.calc-result-big{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(3rem,6vw,4.5rem);font-weight:700;
+    background:linear-gradient(135deg,#fde68a,#fbbf24,#f97316);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    line-height:1;letter-spacing:-.02em;
+}
+
+/* Fiscal info box */
+.calc-info-box{
+    background:linear-gradient(135deg,rgba(251,191,36,.06),rgba(249,115,22,.04));
+    border:1px solid rgba(251,191,36,.18);border-radius:16px;padding:18px 20px;
+}
+
+/* Number input — hide spinners */
+input[type=number].calc-input::-webkit-inner-spin-button,
+input[type=number].calc-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
+input[type=number].calc-input{-moz-appearance:textfield;}
 
 /* ══════════════════════════
    WAYS TO GIVE
@@ -289,7 +375,6 @@
 .proj-modal-foot{padding:10px 18px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;flex-shrink:0;}
 .proj-modal-foot span{font-family:'Outfit',sans-serif;font-size:11px;color:#94a3b8;font-weight:700;display:flex;align-items:center;gap:4px;}
 
-/* Responsive */
 @media(max-width:640px){
     .page-hero{min-height:auto;}
     .page-hero-content{padding:72px 16px 290px;}
@@ -299,6 +384,7 @@
     .proj-modal-bg{align-items:flex-end;padding:0;}
     .proj-modal{max-height:92vh;border-radius:22px 22px 0 0;width:100%;max-width:100%;}
     .proj-widget-iframe{height:480px;}
+    .calc-type-card .ctc-rate{font-size:1.1rem;}
 }
 @media(max-width:380px){.hero-stats{display:none;}}
 </style>
@@ -447,6 +533,148 @@
             @endforelse
         </div>
 
+        {{-- ══════════════════════════════════════
+             FISCAL CALCULATOR — inline section
+        ══════════════════════════════════════ --}}
+        <div class="reveal mb-16" id="fiscalCalc">
+
+            <div class="text-center mb-8">
+                <div class="section-pill mx-auto mb-4">
+                    <span class="dot"></span> Tax Benefit Simulator
+                </div>
+                <h3 class="text-2xl md:text-3xl font-black" style="font-family:'Cormorant Garamond',serif;color:#1e3a4a;letter-spacing:-.02em;">
+                    How Much Does Your Gift Really Cost?
+                </h3>
+                <p class="text-gray-400 mt-2 max-w-sm mx-auto" style="font-family:'Outfit',sans-serif;font-size:.87rem;">
+                    Calculate your real donation cost after French tax deductions — in real time.
+                </p>
+            </div>
+
+            <div class="calc-wrap">
+                <div class="grid md:grid-cols-2">
+
+                    {{-- LEFT: Inputs --}}
+                    <div class="p-8 md:p-10 space-y-7">
+
+                        {{-- Tax situation --}}
+                        <div>
+                            <p class="font-semibold text-slate-700 mb-3" style="font-family:'Outfit',sans-serif;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;">
+                                Your Tax Situation
+                            </p>
+                            <div class="grid grid-cols-3 gap-3" id="calc-type-cards">
+                                <div onclick="calcSetType('ir')" id="calc-card-ir" class="calc-type-card active">
+                                    <div class="ctc-rate">66%</div>
+                                    <div class="ctc-title">Individual</div>
+                                    <div class="ctc-desc">Income tax reduction • Capped at 20% of taxable income</div>
+                                </div>
+                                <div onclick="calcSetType('ifi')" id="calc-card-ifi" class="calc-type-card">
+                                    <div class="ctc-rate">75%</div>
+                                    <div class="ctc-title">IFI</div>
+                                    <div class="ctc-desc">Wealth tax reduction • Max €50,000/year</div>
+                                </div>
+                                <div onclick="calcSetType('is')" id="calc-card-is" class="calc-type-card">
+                                    <div class="ctc-rate">60%</div>
+                                    <div class="ctc-title">Company</div>
+                                    <div class="ctc-desc">Corporate tax deduction • 0.5% revenue or €20K cap</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Amount --}}
+                        <div>
+                            <p class="font-semibold text-slate-700 mb-3" style="font-family:'Outfit',sans-serif;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;">
+                                Donation Amount
+                            </p>
+                            <div class="grid grid-cols-4 gap-3 mb-4" id="calc-amt-btns">
+                                <button onclick="calcSetAmount(20)"  data-amount="20"  class="calc-amt-btn">€20</button>
+                                <button onclick="calcSetAmount(50)"  data-amount="50"  class="calc-amt-btn">€50</button>
+                                <button onclick="calcSetAmount(100)" data-amount="100" class="calc-amt-btn">€100</button>
+                                <button onclick="calcSetAmount(250)" data-amount="250" class="calc-amt-btn">€250</button>
+                            </div>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-amber-500 font-bold" style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;">€</span>
+                                <input id="calc-input" type="number" min="1" placeholder="Custom amount"
+                                    oninput="calcOnInput(this.value)"
+                                    class="calc-input w-full pl-9 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent placeholder-slate-300"
+                                    style="font-family:'Outfit',sans-serif;font-weight:700;color:#1e293b;">
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2" style="font-family:'Outfit',sans-serif;">
+                                Selected: <span id="calc-selected" class="font-bold" style="color:#d97706;">€0</span>
+                            </p>
+                        </div>
+
+                        {{-- Info box --}}
+                        <div class="calc-info-box">
+                            <p class="font-bold text-amber-800 mb-2 flex items-center gap-2" style="font-family:'Outfit',sans-serif;font-size:.82rem;">
+                                <i class="fas fa-lightbulb text-amber-400"></i> French Tax Deductions on Donations
+                            </p>
+                            <ul class="space-y-1" style="font-family:'Outfit',sans-serif;font-size:.78rem;color:#92400e;">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400 text-[10px]"></i> 66% for individual taxpayers</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400 text-[10px]"></i> 75% for IFI (subject to conditions)</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400 text-[10px]"></i> 60% for companies</li>
+                            </ul>
+                            <p class="mt-2.5 flex items-start gap-2" style="font-family:'Outfit',sans-serif;font-size:.75rem;color:#78716c;">
+                                <i class="fas fa-file-alt text-amber-400 mt-0.5 flex-shrink-0"></i>
+                                An official <strong>tax receipt</strong> is sent automatically after your donation.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    {{-- RIGHT: Result --}}
+                    <div class="flex flex-col justify-center p-8 md:p-10"
+                         style="background:linear-gradient(145deg,#f8fafc,#f0f4f8);border-left:1px solid rgba(241,245,249,.9);">
+
+                        <div class="calc-result-panel mb-6">
+                            {{-- Mini star dots --}}
+                            <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-[22px]">
+                                <div style="position:absolute;top:14%;left:12%;width:2px;height:2px;background:rgba(251,191,36,.6);border-radius:50%;"></div>
+                                <div style="position:absolute;top:22%;left:75%;width:1.5px;height:1.5px;background:rgba(255,255,255,.4);border-radius:50%;"></div>
+                                <div style="position:absolute;top:65%;left:88%;width:2px;height:2px;background:rgba(251,191,36,.4);border-radius:50%;"></div>
+                                <div style="position:absolute;top:80%;left:20%;width:1px;height:1px;background:rgba(255,255,255,.3);border-radius:50%;"></div>
+                            </div>
+                            <div class="relative z-10">
+                                <p class="text-sm mb-1" style="font-family:'Outfit',sans-serif;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.1em;font-size:10px;">
+                                    <i class="fas fa-hand-holding-heart mr-1" style="color:rgba(251,191,36,.5);"></i> Your gift actually costs
+                                </p>
+                                <div id="calc-result-cout" class="calc-result-big mb-6">€0.00</div>
+                                <div class="space-y-2" style="font-family:'Outfit',sans-serif;font-size:.8rem;color:rgba(255,255,255,.5);">
+                                    <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                        <span><i class="fas fa-coins mr-1.5" style="color:rgba(251,191,36,.5);"></i> Total donation</span>
+                                        <span class="font-bold text-white/80"><span id="calc-res-don">€0</span></span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span><i class="fas fa-piggy-bank mr-1.5" style="color:rgba(251,191,36,.5);"></i> Tax reduction</span>
+                                        <span class="font-bold" style="color:#fbbf24;">− <span id="calc-res-reduction">€0.00</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- CTA box --}}
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+                            <p class="font-semibold text-slate-800 mb-1" style="font-family:'Outfit',sans-serif;font-size:.9rem;">
+                                👉 In practice
+                            </p>
+                            <p class="text-slate-500 text-sm mb-4" style="font-family:'Outfit',sans-serif;line-height:1.65;">
+                                A gift of <strong id="calc-cta-don" class="text-slate-800">€0</strong> only costs you
+                                <strong id="calc-cta-cout" style="color:#d97706;">€0.00</strong> after tax deduction.
+                            </p>
+                            <button onclick="document.getElementById('openHaDonate1').click()"
+                                    class="donate-btn w-full justify-center text-sm py-3">
+                                <i class="fas fa-hand-holding-heart"></i> Donate Now
+                            </button>
+                            <p class="text-center mt-3" style="font-family:'Outfit',sans-serif;font-size:10px;color:#94a3b8;">
+                                <i class="fas fa-receipt mr-1 text-orange-300"></i> Official tax receipt sent automatically
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- / fiscal calculator --}}
+
         {{-- Ways to Give --}}
         <div class="reveal stagger-3">
             <div class="text-center mb-8">
@@ -490,6 +718,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
@@ -533,7 +762,7 @@
     <div class="max-w-2xl mx-auto px-4 text-center">
         <div class="donate-cta-box reveal">
             <div class="relative z-10">
-                <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg" style="shadow-color:rgba(251,191,36,.2);animation:heartBeat 2.5s ease infinite;box-shadow:0 8px 24px rgba(251,191,36,.2);">
+                <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg" style="animation:heartBeat 2.5s ease infinite;box-shadow:0 8px 24px rgba(251,191,36,.2);">
                     <i class="fas fa-heart text-2xl" style="color:#f97316;"></i>
                 </div>
                 <div class="section-pill mx-auto mb-4" style="font-size:11px;"><span class="dot"></span> General Fund</div>
@@ -561,7 +790,6 @@
         <div class="rounded-2xl md:rounded-3xl p-8 md:p-14 relative overflow-hidden reveal"
              style="background:linear-gradient(135deg,#04091f 0%,#0c1445 55%,#1a0a3d 100%);">
             <div class="absolute inset-0" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}');background-size:cover;opacity:.07;"></div>
-            <div class="absolute bottom:-80px left:50%;transform:translateX(-50%);width:700px;height:300px;border-radius:50%;background:radial-gradient(ellipse,rgba(251,191,36,.12) 0%,rgba(249,115,22,.06) 45%,transparent 70%);pointer-events:none;"></div>
             <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div class="text-white text-center lg:text-left">
                     <p style="font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(251,191,36,.5);margin-bottom:10px;">
@@ -645,7 +873,7 @@
     }
 })();
 
-/* ═══════════ MODAL ═══════════ */
+/* ═══════════ PROJECT MODAL ═══════════ */
 function openProjModalTab(card){
     var vigUrl=card.getAttribute('data-vignette')||'';if(!vigUrl)return;
     document.getElementById('projModalTitle').textContent=card.getAttribute('data-title');
@@ -655,7 +883,7 @@ function openProjModalTab(card){
 }
 function closeProjModalDirect(){document.getElementById('projModalBg').classList.remove('open');document.getElementById('projVignetteIframe').src='';document.body.style.overflow='';}
 function closeProjModal(e){if(e.target===document.getElementById('projModalBg'))closeProjModalDirect();}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeProjModalDirect();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeProjModalDirect();closeHaDonate();}});
 
 /* ═══════════ CARD ENTRANCE ═══════════ */
 (function(){
@@ -687,6 +915,7 @@ document.addEventListener('DOMContentLoaded',function(){
     var closeBtn=document.getElementById('closeHaDonateBtn');
     function openModal(){modal.style.display='flex';document.body.style.overflow='hidden';}
     function closeModal(){modal.style.display='none';document.body.style.overflow='';}
+    window.closeHaDonate=closeModal;
     document.getElementById('openHaDonate1')?.addEventListener('click',openModal);
     document.getElementById('openHaDonate2')?.addEventListener('click',openModal);
     closeBtn.addEventListener('click',closeModal);
@@ -694,5 +923,60 @@ document.addEventListener('DOMContentLoaded',function(){
     closeBtn.addEventListener('mouseleave',function(){closeBtn.style.background='#EFEFF4';});
     modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
 });
+
+/* ═══════════════════════════════════════
+   FISCAL CALCULATOR
+═══════════════════════════════════════ */
+(function(){
+    var currentType   = 'ir';
+    var currentAmount = 0;
+    var rates = { ir: 0.66, ifi: 0.75, is: 0.60 };
+
+    window.calcSetType = function(type){
+        currentType = type;
+        ['ir','ifi','is'].forEach(function(t){
+            var card = document.getElementById('calc-card-'+t);
+            if(t === type) card.classList.add('active');
+            else           card.classList.remove('active');
+        });
+        calcUpdate();
+    };
+
+    window.calcSetAmount = function(amount){
+        currentAmount = amount;
+        document.getElementById('calc-input').value = amount;
+        calcHighlightBtn(amount);
+        calcUpdate();
+    };
+
+    window.calcOnInput = function(val){
+        var parsed = parseFloat(val);
+        currentAmount = isNaN(parsed) ? 0 : parsed;
+        calcHighlightBtn(currentAmount);
+        calcUpdate();
+    };
+
+    function calcHighlightBtn(amount){
+        document.querySelectorAll('#calc-amt-btns .calc-amt-btn').forEach(function(btn){
+            if(parseInt(btn.dataset.amount) === amount) btn.classList.add('active');
+            else                                         btn.classList.remove('active');
+        });
+    }
+
+    function calcUpdate(){
+        var taux      = rates[currentType] || 0.66;
+        var reduction = currentAmount * taux;
+        var cout      = currentAmount - reduction;
+
+        document.getElementById('calc-result-cout').textContent  = '€' + cout.toFixed(2);
+        document.getElementById('calc-res-don').textContent       = '€' + currentAmount;
+        document.getElementById('calc-res-reduction').textContent = '€' + reduction.toFixed(2);
+        document.getElementById('calc-selected').textContent      = '€' + currentAmount;
+        document.getElementById('calc-cta-don').textContent       = '€' + currentAmount;
+        document.getElementById('calc-cta-cout').textContent      = '€' + cout.toFixed(2);
+    }
+
+    calcUpdate();
+})();
 </script>
 @endsection

@@ -11,220 +11,274 @@
     <link rel="icon" type="image/png" href="{{ asset($settings['favicon']) }}">
     @endif
     <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Hanuman&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     @include('css.style')
     <style>
-        /* ── Base animations ──────────────────────────────────────── */
-        @keyframes fadeUp    { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes pulse-soft{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.04);} }
-        @keyframes bounce-down{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+        /* ── Base animations ── */
+        @keyframes fadeUp    { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulse-soft{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+        @keyframes bounce-down{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
 
-        /* ── Scroll-triggered reveal ──────────────────────────────── */
-        .reveal       { opacity:0; transform:translateY(28px);   transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1); }
-        .reveal-left  { opacity:0; transform:translateX(-36px);  transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1); }
-        .reveal-right { opacity:0; transform:translateX(36px);   transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1); }
-        .reveal-scale { opacity:0; transform:scale(.93);         transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1); }
-        .reveal.visible,.reveal-left.visible,.reveal-right.visible,.reveal-scale.visible { opacity:1; transform:none; }
+        /* ── Scroll reveal ── */
+        .reveal      {opacity:0;transform:translateY(28px); transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+        .reveal-left {opacity:0;transform:translateX(-36px);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+        .reveal-right{opacity:0;transform:translateX(36px); transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+        .reveal-scale{opacity:0;transform:scale(.93);       transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+        .reveal.visible,.reveal-left.visible,.reveal-right.visible,.reveal-scale.visible{opacity:1;transform:none}
+        .stagger-1{transition-delay:.05s}.stagger-2{transition-delay:.12s}.stagger-3{transition-delay:.19s}
+        .stagger-4{transition-delay:.26s}.stagger-5{transition-delay:.33s}.stagger-6{transition-delay:.40s}
 
-        /* ── Stagger delays ───────────────────────────────────────── */
-        .stagger-1{transition-delay:.05s} .stagger-2{transition-delay:.12s} .stagger-3{transition-delay:.19s}
-        .stagger-4{transition-delay:.26s} .stagger-5{transition-delay:.33s} .stagger-6{transition-delay:.40s}
+        /* ── Cards ── */
+        .child-card{transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s}
+        .child-card:hover{transform:translateY(-6px);box-shadow:0 24px 48px rgba(0,0,0,.13)}
+        .family-card{transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s}
+        .family-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.12)}
+        .child-card:hover .heart-pulse{animation:pulse-soft .6s ease infinite}
+        .urgency-badge{animation:pulse-soft 2s ease infinite}
+        .news-cat-btn,.top-tag-btn{transition:all .18s ease}
+        .news-cat-btn.active-cat-btn,.top-tag-btn.active-tag-btn{background:#f97316!important;color:#fff!important;border-color:#f97316!important;box-shadow:0 2px 10px rgba(249,115,22,.35)}
+        .news-card,.top-card{transition:opacity .2s ease}
+        .wave-divider{line-height:0;overflow:hidden}
+        .wave-divider svg{display:block}
 
-        /* ── Child / Family cards ─────────────────────────────────── */
-        .child-card  { transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s; }
-        .child-card:hover  { transform:translateY(-6px); box-shadow:0 24px 48px rgba(0,0,0,.13); }
-        .family-card { transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s; }
-        .family-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.12); }
-        .child-card:hover .heart-pulse { animation:pulse-soft .6s ease infinite; }
-        .urgency-badge { animation:pulse-soft 2s ease infinite; }
+        /* ══ HERO ══ */
+        #hero-section{position:relative;width:100%;height:62vh;min-height:380px;max-height:560px;overflow:hidden;background:#111}
+        #hero-video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
+        #hero-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center top;background:#111;display:none}
+        #hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,rgba(0,0,0,.10) 40%,transparent 70%),linear-gradient(to right,rgba(0,0,0,.30) 0%,transparent 55%);z-index:1}
+        #hero-content{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:0 40px 52px;max-width:640px}
+        #hero-content h1{font-size:clamp(1.7rem,4vw,3.25rem);font-weight:900;color:#fff;line-height:1.12;margin-bottom:10px;text-shadow:0 2px 12px rgba(0,0,0,.4);animation:fadeUp .9s ease both}
+        #hero-content p{font-size:clamp(.9rem,1.5vw,1.2rem);font-weight:700;color:rgba(255,255,255,.92);margin-bottom:22px;text-shadow:0 1px 6px rgba(0,0,0,.4);animation:fadeUp .9s .15s ease both}
+        #hero-content a{animation:fadeUp .9s .3s ease both}
+        .hero-sponsor-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 26px;background:#f4b630;color:#1a1a1a;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;border-radius:4px;text-decoration:none;transition:background .18s,transform .15s;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+        .hero-sponsor-btn:hover{background:#e6b800;transform:translateY(-2px);color:#1a1a1a}
+        #hero-scroll{position:absolute;bottom:18px;right:28px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:5px;color:rgba(255,255,255,.55);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;transition:opacity .3s}
+        #hero-scroll i{animation:bounce-down 1.6s ease-in-out infinite}
+        @media(max-width:640px){
+            #hero-section{height:100svh;max-height:100svh;min-height:480px}
+            #hero-fallback{object-fit:cover;object-position:center 15%}
+            #hero-video{object-position:center 15%}
+            #hero-content{padding:0 20px 44px;max-width:100%}
+            #hero-scroll{display:none}
+        }
 
-        /* ── Filter buttons ───────────────────────────────────────── */
-        .news-cat-btn,.top-tag-btn { transition:all .18s ease; }
-        .news-cat-btn.active-cat-btn,.top-tag-btn.active-tag-btn {
-            background:#f97316!important; color:#fff!important;
-            border-color:#f97316!important; box-shadow:0 2px 10px rgba(249,115,22,.35);
-        }
-        .news-card,.top-card { transition:opacity .2s ease; }
-        .wave-divider { line-height:0; overflow:hidden; }
-        .wave-divider svg { display:block; }
-
-        /* ══════════════════════════════════════════════════════════
-           HERO
-        ══════════════════════════════════════════════════════════ */
-        #hero-section {
-            position: relative; width: 100%;
-            height: 62vh; min-height: 380px; max-height: 560px;
-            overflow: hidden; background: #111;
-        }
-        #hero-video {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: cover; object-position: center center; z-index: 0;
-        }
-        #hero-fallback {
-            position: absolute; inset: 0;
-            width: 100%; height: 100%;
-            object-fit: contain; object-position: center top;
-            background: #111; display: none;
-        }
-        #hero-overlay {
-            position: absolute; inset: 0;
-            background:
-                linear-gradient(to top,   rgba(0,0,0,.75) 0%, rgba(0,0,0,.10) 40%, transparent 70%),
-                linear-gradient(to right, rgba(0,0,0,.30) 0%, transparent 55%);
-            z-index: 1;
-        }
-        #hero-content {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            z-index: 2; padding: 0 40px 52px; max-width: 640px;
-        }
-        #hero-content h1 {
-            font-size: clamp(1.7rem, 4vw, 3.25rem);
-            font-weight: 900; color: #fff; line-height: 1.12; margin-bottom: 10px;
-            text-shadow: 0 2px 12px rgba(0,0,0,.4); animation: fadeUp .9s ease both;
-        }
-        #hero-content p {
-            font-size: clamp(.9rem, 1.5vw, 1.2rem);
-            font-weight: 700; color: rgba(255,255,255,.92); margin-bottom: 22px;
-            text-shadow: 0 1px 6px rgba(0,0,0,.4); animation: fadeUp .9s .15s ease both;
-        }
-        #hero-content a { animation: fadeUp .9s .3s ease both; }
-        .hero-sponsor-btn {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 13px 26px; background: #f4b630; color: #1a1a1a;
-            font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em;
-            border-radius: 4px; text-decoration: none;
-            transition: background .18s, transform .15s;
-            box-shadow: 0 4px 16px rgba(0,0,0,.25);
-        }
-        .hero-sponsor-btn:hover { background: #e6b800; transform: translateY(-2px); color: #1a1a1a; }
-        #hero-scroll {
-            position: absolute; bottom: 18px; right: 28px; z-index: 2;
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
-            color: rgba(255,255,255,.55); font-size: 10px; font-weight: 600;
-            letter-spacing: .05em; text-transform: uppercase; transition: opacity .3s;
-        }
-        #hero-scroll i { animation: bounce-down 1.6s ease-in-out infinite; }
-
-        @media (max-width: 640px) {
-            #hero-section { height: 100svh; max-height: 100svh; min-height: 480px; }
-            #hero-fallback { object-fit: cover; object-position: center 15%; }
-            #hero-video { object-position: center 15%; }
-            #hero-content { padding: 0 20px 44px; max-width: 100%; }
-            #hero-scroll  { display: none; }
-        }
+        /* ══ CONTACT ══ */
+        .contact-section{background:#f9fafb;padding:72px 0}
+        .contact-grid-home{display:grid;grid-template-columns:1fr 1.4fr;gap:32px;align-items:start}
+        @media(max-width:900px){.contact-grid-home{grid-template-columns:1fr}}
+        .contact-desktop-col{display:flex;flex-direction:column;gap:20px}
+        @media(max-width:767px){.contact-desktop-col{display:none!important}}
+        .contact-mobile-trigger{display:none;align-items:center;justify-content:center;gap:10px;width:100%;padding:18px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:16px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 8px 24px rgba(249,115,22,.38);transition:transform .15s,box-shadow .15s;margin-top:16px}
+        .contact-mobile-trigger:active{transform:scale(.97)}
+        @media(max-width:767px){.contact-mobile-trigger{display:flex!important}}
+        .contact-info-card{background:#fff;border-radius:24px;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.06);padding:28px}
+        .contact-btn-home{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;text-decoration:none;background:#f9fafb;border:1.5px solid #f3f4f6;transition:all .2s;min-height:64px}
+        .contact-btn-home:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.10)}
+        .contact-btn-home .cbtn-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:21px}
+        .contact-btn-home .cbtn-body{flex:1;min-width:0}
+        .contact-btn-home .cbtn-title{font-size:13px;font-weight:800;color:#1f2937}
+        .contact-btn-home .cbtn-sub{font-size:11px;color:#9ca3af;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .contact-btn-home .cbtn-arrow{color:#d1d5db;font-size:11px;flex-shrink:0}
+        .contact-btn-home.cb-email:hover{background:#fff7ed;border-color:#fed7aa}
+        .contact-btn-home.cb-whatsapp:hover{background:#f0fdf4;border-color:#bbf7d0}
+        .contact-btn-home.cb-telegram:hover{background:#f0f9ff;border-color:#bae6fd}
+        .contact-btn-home.cb-facebook:hover{background:#eff6ff;border-color:#bfdbfe}
+        .contact-btn-home.cb-instagram:hover{background:#fdf2f8;border-color:#f5d0fe}
+        .contact-btn-home.cb-youtube:hover{background:#fef2f2;border-color:#fecaca}
+        .contact-btn-home.cb-linkedin:hover{background:#eff6ff;border-color:#bfdbfe}
+        .contact-why-card{background:linear-gradient(135deg,#1a2e3b,#243444);border-radius:24px;padding:28px;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,.18);position:relative;overflow:hidden}
+        .contact-why-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 85% 15%,rgba(249,115,22,.25),transparent 55%);pointer-events:none}
+        .cwhy-item{display:flex;align-items:flex-start;gap:11px;font-size:14px;color:rgba(255,255,255,.88)}
+        .cwhy-item+.cwhy-item{margin-top:12px}
+        .cwhy-item i{color:#f97316;margin-top:2px;flex-shrink:0}
+        .cwhy-stat{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);border-radius:12px;padding:14px 18px;margin-top:18px}
+        .cwhy-stat-num{font-size:2rem;font-weight:900;color:#f97316;line-height:1}
+        .cwhy-stat-label{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px}
+        .home-contact-modal-overlay{display:none;position:fixed;inset:0;z-index:1200;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);align-items:flex-end;justify-content:center}
+        .home-contact-modal-overlay.open{display:flex}
+        .home-contact-sheet{background:#fff;width:100%;max-width:520px;border-radius:24px 24px 0 0;max-height:90dvh;overflow-y:auto;transform:translateY(110%);transition:transform .35s cubic-bezier(.4,0,.2,1);padding-bottom:env(safe-area-inset-bottom,16px)}
+        .home-contact-modal-overlay.open .home-contact-sheet{transform:translateY(0)}
+        .home-contact-handle{width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:14px auto 0}
+        .home-contact-modal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;border-bottom:1px solid #f3f4f6;position:sticky;top:0;background:#fff;z-index:1}
+        .home-contact-modal-title{font-size:16px;font-weight:900;color:#1f2937}
+        .home-contact-modal-close{width:32px;height:32px;border-radius:50%;border:none;background:#f3f4f6;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:13px;transition:background .2s}
+        .home-contact-modal-close:hover{background:#e5e7eb}
+        .home-contact-modal-body{padding:18px 20px 28px;display:flex;flex-direction:column;gap:10px}
 
         /* ══════════════════════════════════════════════════════════
-           CONTACT SECTION
+           DARA CHAT WIDGET — fully responsive
         ══════════════════════════════════════════════════════════ */
-        .contact-section { background: #f9fafb; padding: 72px 0; }
-        .contact-grid-home { display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px; align-items: start; }
-        @media (max-width: 900px) { .contact-grid-home { grid-template-columns: 1fr; } }
+        #dara-chat-widget {
+            position: fixed;
+            right: 20px;
+            bottom: 28px;
+            width: 310px;
+            background: #fff;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow:
+                0 8px 32px rgba(249,115,22,.18),
+                0 2px 8px rgba(0,0,0,.10),
+                0 0 0 1px rgba(249,115,22,.12);
+            opacity: 0;
+            transform: translateY(18px) scale(.97);
+            transition: opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1);
+            pointer-events: none;
+            z-index: 999;
+            max-height: calc(100vh - 80px);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        #dara-chat-widget.dara-visible { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+        #dara-chat-widget.dara-hidden  { display:none !important; }
 
-        .contact-desktop-col { display: flex; flex-direction: column; gap: 20px; }
-        @media (max-width: 767px) { .contact-desktop-col { display: none !important; } }
-
-        .contact-mobile-trigger {
-            display: none;
-            align-items: center; justify-content: center; gap: 10px;
-            width: 100%; padding: 18px;
-            background: linear-gradient(135deg,#f97316,#ea580c);
-            color: #fff; border: none; border-radius: 16px;
-            font-family: inherit; font-size: 15px; font-weight: 900;
-            cursor: pointer; box-shadow: 0 8px 24px rgba(249,115,22,.38);
-            transition: transform .15s, box-shadow .15s; margin-top: 16px;
+        .dara-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px 13px 10px;
+            background: linear-gradient(135deg,#1a2e3b,#243444);
+            position: relative; flex-shrink: 0;
         }
-        .contact-mobile-trigger:active { transform: scale(.97); }
-        @media (max-width: 767px) { .contact-mobile-trigger { display: flex !important; } }
-
-        .contact-info-card {
-            background: #fff; border-radius: 24px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 4px 24px rgba(0,0,0,.06);
-            padding: 28px;
-        }
-        .contact-btn-home {
-            display: flex; align-items: center; gap: 14px;
-            padding: 14px 16px; border-radius: 14px; text-decoration: none;
-            background: #f9fafb; border: 1.5px solid #f3f4f6;
-            transition: all .2s; min-height: 64px;
-        }
-        .contact-btn-home:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.10); }
-        .contact-btn-home .cbtn-icon {
-            width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center; font-size: 21px;
-        }
-        .contact-btn-home .cbtn-body { flex: 1; min-width: 0; }
-        .contact-btn-home .cbtn-title { font-size: 13px; font-weight: 800; color: #1f2937; }
-        .contact-btn-home .cbtn-sub   { font-size: 11px; color: #9ca3af; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .contact-btn-home .cbtn-arrow { color: #d1d5db; font-size: 11px; flex-shrink: 0; }
-        .contact-btn-home.cb-email:hover     { background: #fff7ed; border-color: #fed7aa; }
-        .contact-btn-home.cb-whatsapp:hover  { background: #f0fdf4; border-color: #bbf7d0; }
-        .contact-btn-home.cb-telegram:hover  { background: #f0f9ff; border-color: #bae6fd; }
-        .contact-btn-home.cb-facebook:hover  { background: #eff6ff; border-color: #bfdbfe; }
-        .contact-btn-home.cb-instagram:hover { background: #fdf2f8; border-color: #f5d0fe; }
-        .contact-btn-home.cb-youtube:hover   { background: #fef2f2; border-color: #fecaca; }
-        .contact-btn-home.cb-linkedin:hover  { background: #eff6ff; border-color: #bfdbfe; }
-
-        .contact-why-card {
-            background: linear-gradient(135deg, #1a2e3b 0%, #243444 100%);
-            border-radius: 24px; padding: 28px; color: #fff;
-            box-shadow: 0 8px 32px rgba(0,0,0,.18);
-            position: relative; overflow: hidden;
-        }
-        .contact-why-card::before {
+        .dara-header::before {
             content: ''; position: absolute; inset: 0;
-            background: radial-gradient(ellipse at 85% 15%, rgba(249,115,22,.25) 0%, transparent 55%);
+            background: radial-gradient(ellipse at 88% 12%,rgba(249,115,22,.22),transparent 60%);
             pointer-events: none;
         }
-        .cwhy-item { display: flex; align-items: flex-start; gap: 11px; font-size: 14px; color: rgba(255,255,255,.88); }
-        .cwhy-item + .cwhy-item { margin-top: 12px; }
-        .cwhy-item i { color: #f97316; margin-top: 2px; flex-shrink: 0; }
-        .cwhy-stat { background: rgba(249,115,22,.15); border: 1px solid rgba(249,115,22,.3); border-radius: 12px; padding: 14px 18px; margin-top: 18px; }
-        .cwhy-stat-num { font-size: 2rem; font-weight: 900; color: #f97316; line-height: 1; }
-        .cwhy-stat-label { font-size: 12px; color: rgba(255,255,255,.65); margin-top: 3px; }
+        .dara-header img {
+            width: 34px; height: 34px; border-radius: 50%; object-fit: cover;
+            flex-shrink: 0; border: 2px solid rgba(249,115,22,.5);
+            position: relative; z-index: 1;
+        }
+        .dara-header-info { position:relative; z-index:1; flex:1; min-width:0; }
+        .dara-name        { font-size:13px; font-weight:900; color:#fff; line-height:1.2; }
+        .dara-status-row  { display:flex; align-items:center; gap:5px; margin-top:2px; }
+        .dara-online-dot  {
+            width:6px; height:6px; border-radius:50%; background:#22c55e; flex-shrink:0;
+            box-shadow:0 0 0 2px rgba(34,197,94,.25);
+            animation:daraOnlinePulse 2s ease infinite;
+        }
+        @keyframes daraOnlinePulse{0%,100%{box-shadow:0 0 0 2px rgba(34,197,94,.25)}50%{box-shadow:0 0 0 4px rgba(34,197,94,.12)}}
+        .dara-status      { font-size:10px; font-weight:600; color:rgba(255,255,255,.62); }
+        .dara-translation { font-size:9px; color:rgba(255,255,255,.3); margin-top:2px; font-style:italic; }
+        #dara-close-btn {
+            margin-left:auto; width:26px; height:26px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:15px; font-weight:700; color:rgba(255,255,255,.55);
+            cursor:pointer; background:rgba(255,255,255,.08);
+            border:1px solid rgba(255,255,255,.14);
+            transition:background .18s,color .18s;
+            flex-shrink:0; position:relative; z-index:1; line-height:1;
+        }
+        #dara-close-btn:hover { background:rgba(249,115,22,.28); color:#fff; }
 
-        /* ── Bottom sheet modal ── */
-        .home-contact-modal-overlay {
-            display: none; position: fixed; inset: 0; z-index: 1200;
-            background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
-            align-items: flex-end; justify-content: center;
+        .dara-messages {
+            flex:1; padding:11px 10px 7px; overflow-y:auto;
+            display:flex; flex-direction:column; max-height:200px;
+            background:#fafaf9; box-shadow:inset 0 4px 8px rgba(0,0,0,.03);
+            -webkit-overflow-scrolling:touch;
         }
-        .home-contact-modal-overlay.open { display: flex; }
-        .home-contact-sheet {
-            background: #fff; width: 100%; max-width: 520px;
-            border-radius: 24px 24px 0 0;
-            max-height: 90dvh; overflow-y: auto;
-            transform: translateY(110%);
-            transition: transform .35s cubic-bezier(.4,0,.2,1);
-            padding-bottom: env(safe-area-inset-bottom, 16px);
+        .dara-messages::-webkit-scrollbar{width:3px}
+        .dara-messages::-webkit-scrollbar-thumb{background:#fed7aa;border-radius:2px}
+        .dara-message {
+            background:#fff; border:1px solid #f1f5f9; color:#374151;
+            padding:9px 11px; border-radius:4px 14px 14px 14px;
+            margin-bottom:7px; max-width:90%;
+            font-size:12.5px; font-weight:500; line-height:1.55;
+            white-space:pre-line; word-break:break-word;
+            box-shadow:0 2px 6px rgba(0,0,0,.05);
+            animation:daraFadeIn .28s cubic-bezier(.16,1,.3,1) both;
         }
-        .home-contact-modal-overlay.open .home-contact-sheet { transform: translateY(0); }
-        .home-contact-handle { width: 40px; height: 4px; background: #e5e7eb; border-radius: 2px; margin: 14px auto 0; }
-        .home-contact-modal-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 20px 12px; border-bottom: 1px solid #f3f4f6;
-            position: sticky; top: 0; background: #fff; z-index: 1;
+        @keyframes daraFadeIn{from{opacity:0;transform:translateY(5px) scale(.97)}to{opacity:1;transform:none}}
+        .dara-typing {
+            display:flex; gap:4px; padding:9px 12px;
+            background:#fff; border:1px solid #f1f5f9;
+            border-radius:4px 14px 14px 14px;
+            width:fit-content; margin-bottom:7px;
+            box-shadow:0 2px 6px rgba(0,0,0,.05);
         }
-        .home-contact-modal-title { font-size: 16px; font-weight: 900; color: #1f2937; }
-        .home-contact-modal-close {
-            width: 32px; height: 32px; border-radius: 50%;
-            border: none; background: #f3f4f6; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            color: #6b7280; font-size: 13px; transition: background .2s;
+        .dara-dot{width:5px;height:5px;background:#fdba74;border-radius:50%;animation:daraBlink 1.3s infinite}
+        .dara-dot:nth-child(2){animation-delay:.2s}
+        .dara-dot:nth-child(3){animation-delay:.4s}
+        @keyframes daraBlink{0%,100%{opacity:.22;transform:scale(.82)}50%{opacity:1;transform:scale(1)}}
+
+        .dara-input-row {
+            display:flex; align-items:center; gap:7px;
+            padding:8px 10px; background:#fff;
+            border-top:1px solid #f1f5f9; flex-shrink:0;
         }
-        .home-contact-modal-close:hover { background: #e5e7eb; }
-        .home-contact-modal-body { padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 10px; }
+        .dara-input-row input {
+            flex:1; padding:7px 11px; border-radius:10px;
+            border:1.5px solid #f1f5f9; outline:none;
+            font-size:12px; font-family:inherit;
+            background:#f9fafb; color:#9ca3af; cursor:not-allowed;
+        }
+        .dara-input-row button {
+            padding:7px 12px; border-radius:10px;
+            border:1.5px solid #f1f5f9; background:#f9fafb;
+            color:#d1d5db; font-size:12px; font-family:inherit;
+            font-weight:700; cursor:not-allowed;
+        }
+
+        .dara-cta {
+            display:none; text-align:center;
+            padding:12px 14px 14px;
+            border-top:1px solid #fed7aa;
+            background:linear-gradient(to bottom,#fff7ed,#fff);
+            flex-shrink:0;
+        }
+        .dara-cta p{font-size:11px;color:#6b7280;line-height:1.55;margin:0 0 10px;font-weight:500}
+        .dara-cta p strong{color:#1f2937;font-weight:800}
+        .dara-cta-btn {
+            display:inline-flex; align-items:center; justify-content:center; gap:7px;
+            padding:10px 16px; border:none; border-radius:14px;
+            background:#f97316; color:#fff;
+            font-size:12px; font-weight:900; font-family:inherit;
+            cursor:pointer; text-decoration:none;
+            box-shadow:0 4px 14px rgba(249,115,22,.36);
+            transition:background .18s,transform .14s;
+            width:100%;
+        }
+        .dara-cta-btn:hover{background:#ea580c;transform:translateY(-1px);color:#fff}
+
+        /* ── Mobile ≤639px: full-width above bottom nav ── */
+        @media(max-width:639px){
+            #dara-chat-widget{
+                left:10px; right:10px; width:auto;
+                bottom:72px;
+                border-radius:14px;
+                max-height:calc(100dvh - 155px);
+                box-shadow:
+                    0 -4px 24px rgba(0,0,0,.12),
+                    0 8px 28px rgba(249,115,22,.15),
+                    0 0 0 1px rgba(249,115,22,.1);
+                transform:translateY(30px) scale(.98);
+            }
+            #dara-chat-widget.dara-visible{transform:translateY(0) scale(1)}
+            .dara-messages{max-height:130px}
+            .dara-message{font-size:12px;padding:8px 10px}
+            .dara-header{padding:10px 12px 9px}
+            .dara-header img{width:30px;height:30px}
+            .dara-name{font-size:12.5px}
+            .dara-translation{display:none}
+            .dara-input-row{padding:7px 10px}
+            .dara-input-row input{font-size:11.5px}
+            .dara-input-row button{font-size:11.5px;padding:7px 11px}
+            .dara-cta{padding:10px 12px 12px}
+            .dara-cta p{font-size:10.5px;margin-bottom:8px}
+            .dara-cta-btn{font-size:11.5px;padding:9px 12px}
+        }
+        /* ── Tablet 640–1023px ── */
+        @media(min-width:640px) and (max-width:1023px){
+            #dara-chat-widget{width:285px;right:16px;bottom:24px}
+            .dara-messages{max-height:175px}
+        }
     </style>
 </head>
 <body>
 
-{{-- ═══════════════════════════════════════════════════════
-     MAINTENANCE MODE
-═══════════════════════════════════════════════════════ --}}
 @if(!empty($settings['maintenance_mode']) && $settings['maintenance_mode'])
 <!DOCTYPE html>
 <html lang="en">
@@ -237,113 +291,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #0f172a;
-            min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden; position: relative;
-        }
-        .bg-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(80px); }
-        .bg-orb-1 {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(249,115,22,.18) 0%, transparent 70%);
-            top: -150px; right: -100px;
-            animation: orbFloat 8s ease-in-out infinite;
-        }
-        .bg-orb-2 {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(251,191,36,.1) 0%, transparent 70%);
-            bottom: -120px; left: -80px;
-            animation: orbFloat 10s ease-in-out infinite reverse;
-        }
-        .bg-orb-3 {
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(59,130,246,.1) 0%, transparent 70%);
-            top: 40%; left: 50%;
-            animation: orbFloat3 12s ease-in-out infinite 2s;
-        }
-        @keyframes orbFloat      { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-30px) scale(1.05)} }
-        @keyframes orbFloat3     { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-55%) scale(1.05)} }
-        .bg-grid {
-            position: absolute; inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-            background-size: 48px 48px; pointer-events: none;
-        }
-        .maint-card {
-            position: relative; z-index: 10;
-            background: rgba(255,255,255,.04);
-            border: 1px solid rgba(255,255,255,.1);
-            backdrop-filter: blur(24px);
-            border-radius: 32px; padding: 52px 44px 48px;
-            max-width: 520px; width: calc(100% - 32px);
-            text-align: center;
-            box-shadow: 0 32px 96px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1);
-            animation: cardIn .7s cubic-bezier(.34,1.1,.64,1) both;
-        }
-        @keyframes cardIn { from{opacity:0;transform:translateY(32px) scale(.96)} to{opacity:1;transform:none} }
-        .gear-wrap {
-            width: 88px; height: 88px; border-radius: 24px; margin: 0 auto 28px;
-            background: linear-gradient(135deg, rgba(249,115,22,.25), rgba(234,88,12,.15));
-            border: 1px solid rgba(249,115,22,.3);
-            display: flex; align-items: center; justify-content: center; position: relative;
-        }
-        .gear-wrap::before {
-            content: ''; position: absolute; inset: -6px; border-radius: 28px;
-            border: 1px dashed rgba(249,115,22,.25);
-            animation: gearSpin 12s linear infinite;
-        }
-        @keyframes gearSpin { to{transform:rotate(360deg)} }
-        .gear-icon { font-size: 36px; color: #f97316; animation: gearSpin 6s linear infinite; }
-        .maint-label {
-            display: inline-flex; align-items: center; gap: 7px;
-            background: rgba(249,115,22,.15); border: 1px solid rgba(249,115,22,.3);
-            color: #fb923c; font-size: 11px; font-weight: 800; letter-spacing: .1em;
-            text-transform: uppercase; padding: 5px 14px; border-radius: 99px; margin-bottom: 20px;
-            animation: pulseLbl 2s ease-in-out infinite;
-        }
-        @keyframes pulseLbl { 0%,100%{opacity:1} 50%{opacity:.65} }
-        .maint-label .dot { width: 7px; height: 7px; border-radius: 50%; background: #f97316; animation: pulseLbl 1.4s ease-in-out infinite; }
-        h1 { font-family: 'Instrument Serif', serif; font-size: clamp(26px,6vw,38px); color: #fff; line-height: 1.2; margin-bottom: 14px; }
-        h1 em { color: #fb923c; font-style: italic; }
-        .maint-desc { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 32px; font-weight: 500; }
-        .maint-features { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
-        .maint-feat {
-            display: flex; align-items: center; gap: 7px;
-            background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
-            border-radius: 10px; padding: 8px 14px;
-            font-size: 12px; font-weight: 700; color: rgba(255,255,255,.7);
-        }
-        .maint-feat i { font-size: 11px; color: #f97316; }
-        .maint-divider { height: 1px; background: linear-gradient(to right, transparent, rgba(255,255,255,.1), transparent); margin-bottom: 28px; }
-        .maint-contact { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .maint-contact a {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 10px 18px; border-radius: 12px; text-decoration: none;
-            font-size: 13px; font-weight: 700; transition: all .2s; border: 1px solid;
-        }
-        .maint-contact a.primary {
-            background: linear-gradient(135deg,#f97316,#ea580c); border-color: transparent; color: #fff;
-            box-shadow: 0 4px 20px rgba(249,115,22,.35);
-        }
-        .maint-contact a.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(249,115,22,.45); }
-        .maint-contact a.secondary { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.7); }
-        .maint-contact a.secondary:hover { background: rgba(255,255,255,.1); color: #fff; }
-        .maint-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 32px; }
-        .maint-logo img { height: 52px; width: auto; filter: brightness(1.1); }
-        .maint-logo-name { font-size: 15px; font-weight: 900; color: #fff; text-align: left; }
-        .maint-logo-tag  { font-size: 11px; color: rgba(255,255,255,.4); font-weight: 600; text-align: left; }
-        .maint-footer { margin-top: 36px; font-size: 11px; color: rgba(255,255,255,.25); font-weight: 600; }
-        @media (max-width: 480px) {
-            .maint-card { padding: 36px 24px 32px; border-radius: 24px; }
-            .gear-wrap { width: 72px; height: 72px; border-radius: 20px; }
-            .gear-icon { font-size: 28px; }
-            .maint-feat { font-size: 11px; padding: 7px 11px; }
-            .maint-contact a { padding: 9px 14px; font-size: 12px; }
-        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Plus Jakarta Sans',sans-serif;background:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+        .bg-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px)}
+        .bg-orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(249,115,22,.18),transparent 70%);top:-150px;right:-100px;animation:orbFloat 8s ease-in-out infinite}
+        .bg-orb-2{width:400px;height:400px;background:radial-gradient(circle,rgba(251,191,36,.1),transparent 70%);bottom:-120px;left:-80px;animation:orbFloat 10s ease-in-out infinite reverse}
+        .bg-orb-3{width:300px;height:300px;background:radial-gradient(circle,rgba(59,130,246,.1),transparent 70%);top:40%;left:50%;animation:orbFloat3 12s ease-in-out infinite 2s}
+        @keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+        @keyframes orbFloat3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-55%) scale(1.05)}}
+        .bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+        .maint-card{position:relative;z-index:10;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(24px);border-radius:32px;padding:52px 44px 48px;max-width:520px;width:calc(100% - 32px);text-align:center;box-shadow:0 32px 96px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1);animation:cardIn .7s cubic-bezier(.34,1.1,.64,1) both}
+        @keyframes cardIn{from{opacity:0;transform:translateY(32px) scale(.96)}to{opacity:1;transform:none}}
+        .gear-wrap{width:88px;height:88px;border-radius:24px;margin:0 auto 28px;background:linear-gradient(135deg,rgba(249,115,22,.25),rgba(234,88,12,.15));border:1px solid rgba(249,115,22,.3);display:flex;align-items:center;justify-content:center;position:relative}
+        .gear-wrap::before{content:'';position:absolute;inset:-6px;border-radius:28px;border:1px dashed rgba(249,115,22,.25);animation:gearSpin 12s linear infinite}
+        @keyframes gearSpin{to{transform:rotate(360deg)}}
+        .gear-icon{font-size:36px;color:#f97316;animation:gearSpin 6s linear infinite}
+        .maint-label{display:inline-flex;align-items:center;gap:7px;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);color:#fb923c;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:99px;margin-bottom:20px;animation:pulseLbl 2s ease-in-out infinite}
+        @keyframes pulseLbl{0%,100%{opacity:1}50%{opacity:.65}}
+        .maint-label .dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulseLbl 1.4s ease-in-out infinite}
+        h1{font-family:'Instrument Serif',serif;font-size:clamp(26px,6vw,38px);color:#fff;line-height:1.2;margin-bottom:14px}
+        h1 em{color:#fb923c;font-style:italic}
+        .maint-desc{font-size:15px;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:32px;font-weight:500}
+        .maint-features{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+        .maint-feat{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;color:rgba(255,255,255,.7)}
+        .maint-feat i{font-size:11px;color:#f97316}
+        .maint-divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.1),transparent);margin-bottom:28px}
+        .maint-contact{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .maint-contact a{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;text-decoration:none;font-size:13px;font-weight:700;transition:all .2s;border:1px solid}
+        .maint-contact a.primary{background:linear-gradient(135deg,#f97316,#ea580c);border-color:transparent;color:#fff;box-shadow:0 4px 20px rgba(249,115,22,.35)}
+        .maint-contact a.primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(249,115,22,.45)}
+        .maint-contact a.secondary{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.7)}
+        .maint-contact a.secondary:hover{background:rgba(255,255,255,.1);color:#fff}
+        .maint-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px}
+        .maint-logo img{height:52px;width:auto;filter:brightness(1.1)}
+        .maint-logo-name{font-size:15px;font-weight:900;color:#fff;text-align:left}
+        .maint-logo-tag{font-size:11px;color:rgba(255,255,255,.4);font-weight:600;text-align:left}
+        .maint-footer{margin-top:36px;font-size:11px;color:rgba(255,255,255,.25);font-weight:600}
+        @media(max-width:480px){.maint-card{padding:36px 24px 32px;border-radius:24px}.gear-wrap{width:72px;height:72px;border-radius:20px}.gear-icon{font-size:28px}.maint-feat{font-size:11px;padding:7px 11px}.maint-contact a{padding:9px 14px;font-size:12px}}
     </style>
 </head>
 <body>
@@ -355,10 +339,7 @@
         @if(!empty($settings['logo']))
         <div class="maint-logo">
             <img src="{{ asset($settings['logo']) }}" alt="{{ $settings['site_name'] ?? '' }}">
-            <div>
-                <div class="maint-logo-name">{{ $settings['site_name'] ?? 'Hope & Impact' }}</div>
-                <div class="maint-logo-tag">{{ $settings['site_tagline'] ?? '' }}</div>
-            </div>
+            <div><div class="maint-logo-name">{{ $settings['site_name'] ?? 'Hope & Impact' }}</div><div class="maint-logo-tag">{{ $settings['site_tagline'] ?? '' }}</div></div>
         </div>
         @else
         <div style="font-size:15px;font-weight:900;color:#fff;margin-bottom:28px;opacity:.7">{{ $settings['site_name'] ?? 'Hope & Impact' }}</div>
@@ -366,7 +347,7 @@
         <div class="maint-label"><span class="dot"></span> Under Maintenance</div>
         <div class="gear-wrap"><i class="fas fa-cog gear-icon"></i></div>
         <h1>We'll be <em>back soon!</em></h1>
-        <p class="maint-desc">Our website is currently undergoing scheduled maintenance and improvements. We apologize for the inconvenience and appreciate your patience.</p>
+        <p class="maint-desc">Our website is currently undergoing scheduled maintenance. We apologize for the inconvenience.</p>
         <div class="maint-features">
             <div class="maint-feat"><i class="fas fa-wrench"></i> Updates in progress</div>
             <div class="maint-feat"><i class="fas fa-shield-alt"></i> Securing systems</div>
@@ -375,29 +356,11 @@
         <div class="maint-divider"></div>
         <p style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:16px;font-weight:600">Need urgent assistance?</p>
         <div class="maint-contact">
-            @php
-                $mEmail    = $settings['contact_email'] ?? null;
-                $mWhatsapp = $settings['whatsapp_url']  ?? null;
-                $mFacebook = $settings['facebook_url']  ?? null;
-            @endphp
-            @if($mEmail)
-            <a href="https://mail.google.com/mail/?view=cm&to={{ $mEmail }}" target="_blank" class="primary">
-                <i class="fas fa-envelope"></i> Email Us
-            </a>
-            @endif
-            @if($mWhatsapp)
-            <a href="https://wa.me/{{ $mWhatsapp }}" target="_blank" class="secondary">
-                <i class="fab fa-whatsapp" style="color:#22c55e"></i> WhatsApp
-            </a>
-            @endif
-            @if($mFacebook)
-            <a href="{{ $mFacebook }}" target="_blank" class="secondary">
-                <i class="fab fa-facebook" style="color:#60a5fa"></i> Facebook
-            </a>
-            @endif
-            @if(!$mEmail && !$mWhatsapp && !$mFacebook)
-            <span style="font-size:12px;color:rgba(255,255,255,.35)">Contact information coming soon.</span>
-            @endif
+            @php $mEmail=$settings['contact_email']??null;$mWhatsapp=$settings['whatsapp_url']??null;$mFacebook=$settings['facebook_url']??null; @endphp
+            @if($mEmail)<a href="https://mail.google.com/mail/?view=cm&to={{ $mEmail }}" target="_blank" class="primary"><i class="fas fa-envelope"></i> Email Us</a>@endif
+            @if($mWhatsapp)<a href="https://wa.me/{{ $mWhatsapp }}" target="_blank" class="secondary"><i class="fab fa-whatsapp" style="color:#22c55e"></i> WhatsApp</a>@endif
+            @if($mFacebook)<a href="{{ $mFacebook }}" target="_blank" class="secondary"><i class="fab fa-facebook" style="color:#60a5fa"></i> Facebook</a>@endif
+            @if(!$mEmail && !$mWhatsapp && !$mFacebook)<span style="font-size:12px;color:rgba(255,255,255,.35)">Contact information coming soon.</span>@endif
         </div>
         <p class="maint-footer">&copy; {{ date('Y') }} {{ $settings['site_name'] ?? 'Hope & Impact' }} &middot; All rights reserved</p>
     </div>
@@ -405,37 +368,22 @@
 </html>
 <?php exit; ?>
 @endif
-{{-- ── END MAINTENANCE MODE ── --}}
 
 @include('layouts.loading')
 @include('layouts.header')
 
 {{-- ═══════ HERO ═══════ --}}
 <section id="hero-section">
-    <video id="hero-video" autoplay muted loop playsinline preload="auto"
-           poster="{{ asset('images/cambodia-bg.jpg') }}">
+    <video id="hero-video" autoplay muted loop playsinline preload="auto" poster="{{ asset('images/cambodia-bg.jpg') }}">
         <source src="{{ asset('project/videos/video.mp4') }}" type="video/mp4">
     </video>
     <img id="hero-fallback" src="{{ asset('images/cambodia-bg.jpg') }}" alt="Children in Cambodia">
     <div id="hero-overlay"></div>
     <div id="hero-content">
-        <h1 data-en="Sponsor a child today"
-                    data-km="ឧបត្ថម្ភកុមារនៅថ្ងៃនេះ"
-                    data-fr="Parrainez dès aujourd'hui">Sponsor a child today</h1>
-        <p 
-        
-        data-en="And change a life with the gift of education"
-                    data-km="ហើយផ្លាស់ប្តូរជីវិតជាមួយនឹងអំណោយនៃការអប់រំ"
-                    data-fr="Changez une vie pour toujours."
-        >And change a life with the gift of education</p>
-        <a href="{{ route('sponsor.children') }}" class="hero-sponsor-btn"
-        data-en="Sponsor a child Now"
-                    data-km="ឧបត្ថម្ភកុមារនៅថ្ងៃនេះ"
-                    data-fr="Je m'engage!"
-        
-        >
-            <i class="fas fa-child"></i> 
-            Sponsor a Child Now
+        <h1 data-en="Sponsor a child today" data-km="ឧបត្ថម្ភកុមារនៅថ្ងៃនេះ" data-fr="Parrainez dès aujourd'hui">Sponsor a child today</h1>
+        <p data-en="And change a life with the gift of education" data-km="ហើយផ្លាស់ប្តូរជីវិតជាមួយនឹងអំណោយនៃការអប់រំ" data-fr="Changez une vie pour toujours.">And change a life with the gift of education</p>
+        <a href="{{ route('sponsor.children') }}" class="hero-sponsor-btn" data-en="Sponsor a child Now" data-km="ឧបត្ថម្ភកុមារនៅថ្ងៃនេះ" data-fr="Je m'engage!">
+            <i class="fas fa-child"></i> Sponsor a Child Now
         </a>
     </div>
     <div id="hero-scroll"><i class="fas fa-chevron-down"></i><span>Scroll</span></div>
@@ -457,22 +405,10 @@
             <p class="text-lg opacity-90">Transparency and efficiency in action</p>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            <div class="text-center reveal stagger-1">
-                <div class="stat-number counter" data-target="{{ $stats['total_children'] ?? 0 }}">0</div>
-                <p class="text-base md:text-lg font-medium">Children in Program</p>
-            </div>
-            <div class="text-center reveal stagger-2">
-                <div class="stat-number counter" data-target="84">0</div>
-                <p class="text-base md:text-lg font-medium">% To Programs</p>
-            </div>
-            <div class="text-center reveal stagger-3">
-                <div class="stat-number counter" data-target="{{ $stats['total_countries'] ?? 0 }}">0</div>
-                <p class="text-base md:text-lg font-medium">Countries</p>
-            </div>
-            <div class="text-center reveal stagger-4">
-                <div class="stat-number counter" data-target="{{ $stats['total_articles'] ?? 0 }}">0</div>
-                <p class="text-base md:text-lg font-medium">Articles Published</p>
-            </div>
+            <div class="text-center reveal stagger-1"><div class="stat-number counter" data-target="{{ $stats['total_children'] ?? 0 }}">0</div><p class="text-base md:text-lg font-medium">Children in Program</p></div>
+            <div class="text-center reveal stagger-2"><div class="stat-number counter" data-target="84">0</div><p class="text-base md:text-lg font-medium">% To Programs</p></div>
+            <div class="text-center reveal stagger-3"><div class="stat-number counter" data-target="{{ $stats['total_countries'] ?? 0 }}">0</div><p class="text-base md:text-lg font-medium">Countries</p></div>
+            <div class="text-center reveal stagger-4"><div class="stat-number counter" data-target="{{ $stats['total_articles'] ?? 0 }}">0</div><p class="text-base md:text-lg font-medium">Articles Published</p></div>
         </div>
     </div>
 </section>
@@ -499,7 +435,7 @@
 </section>
 @endif
 
-{{-- ═══════ CHILDREN WAITING FOR A SPONSOR ═══════ --}}
+{{-- ═══════ CHILDREN WAITING ═══════ --}}
 @if(isset($unsponsoredChildren) && $unsponsoredChildren->isNotEmpty())
 <section class="py-16 md:py-20 bg-gradient-to-br from-orange-50 via-white to-amber-50 relative overflow-hidden">
     <div class="absolute top-0 right-0 w-72 h-72 bg-orange-100 rounded-full opacity-40 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
@@ -508,21 +444,17 @@
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
             <div class="reveal">
                 <div class="inline-flex items-center gap-2 bg-orange-100 text-orange-600 text-xs font-black px-4 py-1.5 rounded-full mb-3 border border-orange-200">
-                    <span class="urgency-badge inline-block w-2 h-2 rounded-full bg-orange-500"></span>
-                    Needs Your Help
+                    <span class="urgency-badge inline-block w-2 h-2 rounded-full bg-orange-500"></span> Needs Your Help
                 </div>
-                <h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">
-                    Children <span class="text-orange-500">Waiting</span><br>for a Sponsor
-                </h2>
-                <p class="text-gray-500 mt-2 text-sm max-w-md">Each of these children has no sponsor yet. $30/month changes everything — education, meals, healthcare, hope.</p>
+                <h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">Children <span class="text-orange-500">Waiting</span><br>for a Sponsor</h2>
+                <p class="text-gray-500 mt-2 text-sm max-w-md">Each of these children has no sponsor yet. $30/month changes everything.</p>
             </div>
             <div class="reveal flex items-center gap-3 flex-shrink-0">
                 <div class="text-right hidden md:block">
                     <p class="text-2xl font-black text-orange-500">{{ $unsponsoredChildren->count() }}+</p>
                     <p class="text-xs text-gray-400 font-medium">waiting now</p>
                 </div>
-                <a href="{{ route('sponsor.children') }}"
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-black text-sm rounded-2xl transition shadow-lg shadow-orange-200">
+                <a href="{{ route('sponsor.children') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-black text-sm rounded-2xl transition shadow-lg shadow-orange-200">
                     <i class="fas fa-child"></i> See All Children <i class="fas fa-arrow-right text-xs"></i>
                 </a>
             </div>
@@ -532,56 +464,33 @@
             @php $cEncId = \Illuminate\Support\Facades\Crypt::encryptString((string)$child->id); @endphp
             <div class="child-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col reveal stagger-{{ min($i+1,6) }}">
                 <div class="relative overflow-hidden" style="height:160px">
-                    <img src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}"
-                         alt="{{ $child->first_name }}"
-                         class="w-full h-full object-cover object-top">
+                    <img src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}" alt="{{ $child->first_name }}" class="w-full h-full object-cover object-top">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                     @if(!empty($child->gender))
-                    <div class="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center shadow
-                        {{ strtolower($child->gender)==='female'?'bg-pink-500':'bg-blue-500' }}">
+                    <div class="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center shadow {{ strtolower($child->gender)==='female'?'bg-pink-500':'bg-blue-500' }}">
                         <i class="fas {{ strtolower($child->gender)==='female'?'fa-venus':'fa-mars' }} text-white text-[9px]"></i>
                     </div>
                     @endif
-                    <div class="absolute top-2 left-2">
-                        <span class="bg-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">No Sponsor</span>
-                    </div>
+                    <div class="absolute top-2 left-2"><span class="bg-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">No Sponsor</span></div>
                     <div class="absolute bottom-2 left-2">
                         @if(!empty($child->age) || !empty($child->date_of_birth))
-                        <span class="text-white text-[10px] font-bold flex items-center gap-1">
-                            <i class="fas fa-birthday-cake text-orange-300 text-[8px]"></i>
-                            {{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth)->age }} yrs
-                        </span>
+                        <span class="text-white text-[10px] font-bold flex items-center gap-1"><i class="fas fa-birthday-cake text-orange-300 text-[8px]"></i>{{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth)->age }} yrs</span>
                         @endif
                     </div>
                     <div class="absolute bottom-2 left-2" style="bottom:28px;">
                         @if($child->has_family)
-                        <span class="text-white text-[10px] font-bold flex items-center gap-1">
-                            <i class="fas fa-home text-green-300 text-[8px]"></i> Has Family
-                        </span>
+                        <span class="text-white text-[10px] font-bold flex items-center gap-1"><i class="fas fa-home text-green-300 text-[8px]"></i> Has Family</span>
                         @else
-                        <span class="text-white text-[10px] font-bold flex items-center gap-1">
-                            <i class="fas fa-home text-gray-400 text-[8px]"></i> No Family
-                        </span>
+                        <span class="text-white text-[10px] font-bold flex items-center gap-1"><i class="fas fa-home text-gray-400 text-[8px]"></i> No Family</span>
                         @endif
                     </div>
                 </div>
                 <div class="p-3 flex flex-col flex-1">
                     <p class="font-black text-gray-800 text-sm leading-tight truncate">{{ $child->first_name }} {{ $child->last_name ?? '' }}</p>
-                    @if(!empty($child->country))
-                    <p class="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1 truncate">
-                        <i class="fas fa-map-marker-alt text-orange-300 text-[8px]"></i> {{ $child->country }}
-                    </p>
-                    @endif
+                    @if(!empty($child->country))<p class="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1 truncate"><i class="fas fa-map-marker-alt text-orange-300 text-[8px]"></i> {{ $child->country }}</p>@endif
                     <div class="mt-auto pt-2 grid grid-cols-2 gap-1">
-                        <a href="{{ route('children.show', $cEncId) }}"
-                           class="flex items-center justify-center py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-bold rounded-lg transition">
-                            <i class="fas fa-eye text-[8px] mr-1"></i> Story
-                        </a>
-                        <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
-                           target="_blank" rel="noopener"
-                           class="flex items-center justify-center py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold rounded-lg transition">
-                            <i class="fas fa-heart heart-pulse text-[8px] mr-1"></i> Sponsor
-                        </a>
+                        <a href="{{ route('children.show', $cEncId) }}" class="flex items-center justify-center py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-bold rounded-lg transition"><i class="fas fa-eye text-[8px] mr-1"></i> Story</a>
+                        <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1" target="_blank" rel="noopener" class="flex items-center justify-center py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold rounded-lg transition"><i class="fas fa-heart heart-pulse text-[8px] mr-1"></i> Sponsor</a>
                     </div>
                 </div>
             </div>
@@ -591,38 +500,26 @@
             <div class="inline-block bg-white rounded-3xl border border-orange-100 shadow-sm px-8 py-6">
                 <p class="text-gray-700 font-bold mb-1">Ready to make a difference?</p>
                 <p class="text-gray-400 text-sm mb-4">For just <span class="text-orange-500 font-black">$1 a day</span> you give a child education, meals & hope.</p>
-                <a href="{{ route('sponsor.children') }}"
-                   class="inline-flex items-center gap-3 px-8 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition shadow-md shadow-orange-200">
-                    <i class="fas fa-heart"></i> Sponsor a Child Now — $30/month
-                </a>
+                <a href="{{ route('sponsor.children') }}" class="inline-flex items-center gap-3 px-8 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition shadow-md shadow-orange-200"><i class="fas fa-heart"></i> Sponsor a Child Now — $30/month</a>
             </div>
         </div>
     </div>
 </section>
-<div class="wave-divider bg-white">
-    <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <path d="M0,20 C360,40 1080,0 1440,20 L1440,0 L0,0 Z" fill="#fff7ed"/>
-    </svg>
-</div>
+<div class="wave-divider bg-white"><svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,20 C360,40 1080,0 1440,20 L1440,0 L0,0 Z" fill="#fff7ed"/></svg></div>
 @endif
 
-{{-- ═══════ FAMILIES WITHOUT A SPONSOR ═══════ --}}
+{{-- ═══════ FAMILIES ═══════ --}}
 @if(isset($unsponsoredFamilies) && $unsponsoredFamilies->isNotEmpty())
 <section class="py-16 md:py-20 bg-white relative overflow-hidden">
     <div class="absolute top-1/2 right-0 w-80 h-80 bg-amber-50 rounded-full opacity-60 blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
     <div class="max-w-7xl mx-auto px-4 relative">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
             <div class="reveal">
-                <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-700 text-xs font-black px-4 py-1.5 rounded-full mb-3 border border-amber-200">
-                    <i class="fas fa-home text-[10px]"></i> Family Support
-                </div>
-                <h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">
-                    Families <span class="text-amber-500">Without</span><br>a Sponsor
-                </h2>
-                <p class="text-gray-500 mt-2 text-sm max-w-md">Support an entire household — parents, children, grandparents — with a single monthly gift.</p>
+                <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-700 text-xs font-black px-4 py-1.5 rounded-full mb-3 border border-amber-200"><i class="fas fa-home text-[10px]"></i> Family Support</div>
+                <h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">Families <span class="text-amber-500">Without</span><br>a Sponsor</h2>
+                <p class="text-gray-500 mt-2 text-sm max-w-md">Support an entire household with a single monthly gift.</p>
             </div>
-            <a href="{{ route('sponsor.children') }}?tab=families"
-               class="reveal inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-black text-sm rounded-2xl transition shadow-lg shadow-amber-200 flex-shrink-0 self-start md:self-auto">
+            <a href="{{ route('sponsor.children') }}?tab=families" class="reveal inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-black text-sm rounded-2xl transition shadow-lg shadow-amber-200 flex-shrink-0 self-start md:self-auto">
                 <i class="fas fa-users"></i> See All Families <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
@@ -632,44 +529,23 @@
             <div class="family-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col reveal stagger-{{ min($i+1,4) }}">
                 <div class="relative overflow-hidden" style="height:180px">
                     @if(!empty($family->profile_photo))
-                    <img src="{{ asset($family->profile_photo) }}" alt="{{ $family->name }}"
-                         class="w-full h-full object-cover object-top">
+                    <img src="{{ asset($family->profile_photo) }}" alt="{{ $family->name }}" class="w-full h-full object-cover object-top">
                     @else
-                    <div class="w-full h-full bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center">
-                        <i class="fas fa-users text-5xl text-amber-300"></i>
-                    </div>
+                    <div class="w-full h-full bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center"><i class="fas fa-users text-5xl text-amber-300"></i></div>
                     @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                    <div class="absolute top-3 left-3">
-                        <span class="bg-amber-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">No Sponsor</span>
-                    </div>
+                    <div class="absolute top-3 left-3"><span class="bg-amber-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">No Sponsor</span></div>
                     <div class="absolute bottom-3 left-3 flex items-center gap-1.5 flex-wrap">
-                        <span class="flex items-center gap-1 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm">
-                            <i class="fas fa-users text-amber-300 text-[8px]"></i> {{ $family->members_count ?? '?' }} members
-                        </span>
-                        @if(!empty($family->country))
-                        <span class="flex items-center gap-1 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm">
-                            <i class="fas fa-map-marker-alt text-amber-300 text-[8px]"></i> {{ $family->country }}
-                        </span>
-                        @endif
+                        <span class="flex items-center gap-1 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-users text-amber-300 text-[8px]"></i> {{ $family->members_count ?? '?' }} members</span>
+                        @if(!empty($family->country))<span class="flex items-center gap-1 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm"><i class="fas fa-map-marker-alt text-amber-300 text-[8px]"></i> {{ $family->country }}</span>@endif
                     </div>
                 </div>
                 <div class="p-4 flex flex-col flex-1">
                     <h3 class="font-black text-gray-800 text-sm leading-tight mb-1">{{ $family->name ?? 'Family #'.$family->id }}</h3>
-                    @if(!empty($family->story))
-                    <p class="text-[11px] text-gray-500 leading-relaxed line-clamp-2 flex-1 mb-3">{{ Str::limit(strip_tags($family->story), 80) }}</p>
-                    @else
-                    <div class="flex-1 mb-3"></div>
-                    @endif
+                    @if(!empty($family->story))<p class="text-[11px] text-gray-500 leading-relaxed line-clamp-2 flex-1 mb-3">{{ Str::limit(strip_tags($family->story), 80) }}</p>@else<div class="flex-1 mb-3"></div>@endif
                     <div class="grid grid-cols-2 gap-2 mt-auto">
-                        <a href="{{ route('families.show', $fEncId) }}"
-                           class="flex items-center justify-center gap-1 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-bold rounded-xl transition">
-                            <i class="fas fa-eye text-[9px]"></i> View
-                        </a>
-                        <a href="#"
-                           class="flex items-center justify-center gap-1 py-2 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold rounded-xl transition">
-                            <i class="fas fa-hands-helping text-[9px]"></i> Sponsor
-                        </a>
+                        <a href="{{ route('families.show', $fEncId) }}" class="flex items-center justify-center gap-1 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[10px] font-bold rounded-xl transition"><i class="fas fa-eye text-[9px]"></i> View</a>
+                        <a href="#" class="flex items-center justify-center gap-1 py-2 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold rounded-xl transition"><i class="fas fa-hands-helping text-[9px]"></i> Sponsor</a>
                     </div>
                 </div>
             </div>
@@ -679,12 +555,10 @@
 </section>
 @endif
 
+{{-- ═══════ OUR WORK ═══════ --}}
 <section id="our-work" class="section bg-white py-12 md:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-8 md:mb-12 reveal">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">What We Do</h2>
-            <div class="w-20 h-1 bg-orange-500 rounded-full green-line"></div>
-        </div>
+        <div class="mb-8 md:mb-12 reveal"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">What We Do</h2><div class="w-20 h-1 bg-orange-500 rounded-full green-line"></div></div>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             @foreach([
                 ['img'=>'images/children/image-1.jpg','overlay'=>'1958','title'=>'66 years of experience','desc'=>"Since 1958, we've been transforming children's lives through a network of over 1,000 local volunteers."],
@@ -693,17 +567,8 @@
                 ['img'=>'images/children/image-4.jpg','overlay'=>'IDEAS','title'=>'IDEAS Label 2024','desc'=>"We've been awarded the IDEAS label for good governance, transparency, and monitoring the effectiveness of our actions."],
             ] as $i => $card)
             <div class="card reveal bg-white rounded-xl shadow-lg overflow-hidden stagger-{{ $i+1 }}">
-                <div class="relative">
-                    <img src="{{ asset($card['img']) }}" alt="{{ $card['title'] }}" class="w-full h-64 object-cover">
-                    <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
-                        <h3 class="text-5xl md:text-6xl font-black text-white text-center px-2">{{ $card['overlay'] }}</h3>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h4 class="text-lg font-bold text-gray-800 mb-3">{{ $card['title'] }}</h4>
-                    <p class="text-sm text-gray-600 mb-6">{{ $card['desc'] }}</p>
-                    <a href="{{ route('sponsor.children') }}" class="inline-block px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm rounded transition">LEARN MORE</a>
-                </div>
+                <div class="relative"><img src="{{ asset($card['img']) }}" alt="{{ $card['title'] }}" class="w-full h-64 object-cover"><div class="absolute inset-0 bg-black/30 flex items-center justify-center"><h3 class="text-5xl md:text-6xl font-black text-white text-center px-2">{{ $card['overlay'] }}</h3></div></div>
+                <div class="p-6"><h4 class="text-lg font-bold text-gray-800 mb-3">{{ $card['title'] }}</h4><p class="text-sm text-gray-600 mb-6">{{ $card['desc'] }}</p><a href="{{ route('sponsor.children') }}" class="inline-block px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm rounded transition">LEARN MORE</a></div>
             </div>
             @endforeach
         </div>
@@ -713,59 +578,33 @@
 {{-- ═══════ LATEST NEWS ═══════ --}}
 <section id="news" class="section bg-gray-50">
     <div class="max-w-7xl mx-auto">
-        <div class="mb-3 reveal">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">News And Updates</h2>
-            <div class="green-line"></div>
-        </div>
+        <div class="mb-3 reveal"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">News And Updates</h2><div class="green-line"></div></div>
         @if($categories->isNotEmpty())
         <div class="flex flex-wrap items-center gap-2 mb-7 reveal" id="news-cat-filters">
-            <button type="button" onclick="filterNewsCat('all', this)"
-                    class="news-cat-btn active-cat-btn px-3 py-1.5 rounded-full text-xs font-bold bg-orange-500 text-white">
-                <i class="fas fa-border-all text-[10px] mr-0.5"></i> All
-            </button>
+            <button type="button" onclick="filterNewsCat('all', this)" class="news-cat-btn active-cat-btn px-3 py-1.5 rounded-full text-xs font-bold bg-orange-500 text-white"><i class="fas fa-border-all text-[10px] mr-0.5"></i> All</button>
             @foreach($categories as $cat)
-            <button type="button" onclick="filterNewsCat({{ $cat->id }}, this)"
-                    class="news-cat-btn px-3 py-1.5 rounded-full text-xs font-bold border-2 whitespace-nowrap"
-                    data-cat-id="{{ $cat->id }}"
-                    style="border-color:{{ $cat->color ?? '#f97316' }};color:{{ $cat->color ?? '#f97316' }};">
-                @if($cat->icon)<i class="{{ $cat->icon }} text-xs mr-0.5"></i>@endif
-                {{ $cat->name }}
-                @if($cat->articles_count)<span class="opacity-60">({{ $cat->articles_count }})</span>@endif
+            <button type="button" onclick="filterNewsCat({{ $cat->id }}, this)" class="news-cat-btn px-3 py-1.5 rounded-full text-xs font-bold border-2 whitespace-nowrap" data-cat-id="{{ $cat->id }}" style="border-color:{{ $cat->color ?? '#f97316' }};color:{{ $cat->color ?? '#f97316' }};">
+                @if($cat->icon)<i class="{{ $cat->icon }} text-xs mr-0.5"></i>@endif {{ $cat->name }}@if($cat->articles_count)<span class="opacity-60">({{ $cat->articles_count }})</span>@endif
             </button>
             @endforeach
         </div>
         @endif
         @if($articles->isNotEmpty())
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5" id="news-grid">
-            <div class="md:col-span-2 lg:row-span-2 reveal news-card" data-cat-id="{{ $articles->first()->category_id }}">
-                @include('articles.styles.home.featured', ['article' => $articles->first()])
-            </div>
+            <div class="md:col-span-2 lg:row-span-2 reveal news-card" data-cat-id="{{ $articles->first()->category_id }}">@include('articles.styles.home.featured', ['article' => $articles->first()])</div>
             @foreach($articles->skip(1) as $article)
             @php $st = in_array($article->style, ['overlay','card','magazine','featured','minimal']) ? $article->style : 'overlay'; @endphp
-            <div class="reveal news-card stagger-{{ ($loop->index % 3)+1 }}" data-cat-id="{{ $article->category_id }}">
-                @include('articles.styles.home.' . $st, ['article' => $article])
-            </div>
+            <div class="reveal news-card stagger-{{ ($loop->index % 3)+1 }}" data-cat-id="{{ $article->category_id }}">@include('articles.styles.home.' . $st, ['article' => $article])</div>
             @endforeach
         </div>
-        <div id="news-no-results" class="hidden py-12 text-center">
-            <i class="fas fa-folder-open text-3xl text-orange-200 block mb-3"></i>
-            <p class="text-gray-500 text-sm font-medium">No articles in this category yet.</p>
-            <button type="button" onclick="filterNewsCat('all', document.querySelector('.news-cat-btn'))"
-                    class="mt-3 text-xs font-bold text-orange-500 hover:underline">Show all</button>
-        </div>
+        <div id="news-no-results" class="hidden py-12 text-center"><i class="fas fa-folder-open text-3xl text-orange-200 block mb-3"></i><p class="text-gray-500 text-sm font-medium">No articles in this category yet.</p><button type="button" onclick="filterNewsCat('all', document.querySelector('.news-cat-btn'))" class="mt-3 text-xs font-bold text-orange-500 hover:underline">Show all</button></div>
         @if($categories->isNotEmpty())
-        <div class="text-center mt-8 reveal">
-            <a href="{{ route('category.articles', $categories->first()->encrypted_slug) }}"
-               class="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full transition shadow-md">
-                <i class="fas fa-newspaper"></i> View All Articles <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
+        <div class="text-center mt-8 reveal"><a href="{{ route('category.articles', $categories->first()->encrypted_slug) }}" class="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full transition shadow-md"><i class="fas fa-newspaper"></i> View All Articles <i class="fas fa-arrow-right"></i></a></div>
         @endif
         @endif
     </div>
 </section>
 
-{{-- ═══════ PER-CATEGORY SECTIONS ═══════ --}}
 @foreach($categories->take(3) as $cat)
 @if(isset($categoryArticles[$cat->id]) && $categoryArticles[$cat->id]->isNotEmpty())
 <section class="section {{ $loop->even ? 'bg-white' : 'bg-gray-50' }}">
@@ -773,27 +612,17 @@
         <div class="flex items-center justify-between mb-7 reveal">
             <div>
                 <div class="flex items-center gap-3 mb-1.5">
-                    @if($cat->icon)
-                    <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:{{ $cat->color ?? '#f97316' }}22">
-                        <i class="{{ $cat->icon }}" style="color:{{ $cat->color ?? '#f97316' }}"></i>
-                    </div>
-                    @endif
+                    @if($cat->icon)<div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:{{ $cat->color ?? '#f97316' }}22"><i class="{{ $cat->icon }}" style="color:{{ $cat->color ?? '#f97316' }}"></i></div>@endif
                     <h2 class="text-2xl md:text-3xl font-bold text-gray-800">{{ $cat->name }}</h2>
                 </div>
                 <div class="h-1 w-14 rounded-full" style="background:{{ $cat->color ?? '#f97316' }}"></div>
             </div>
-            <a href="{{ route('category.articles', $cat->encrypted_slug) }}"
-               class="flex-shrink-0 text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all"
-               style="color:{{ $cat->color ?? '#f97316' }}">
-                See All <i class="fas fa-arrow-right text-xs"></i>
-            </a>
+            <a href="{{ route('category.articles', $cat->encrypted_slug) }}" class="flex-shrink-0 text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all" style="color:{{ $cat->color ?? '#f97316' }}">See All <i class="fas fa-arrow-right text-xs"></i></a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
             @foreach($categoryArticles[$cat->id] as $article)
             @php $st = in_array($article->style, ['overlay','card','magazine','featured','minimal']) ? $article->style : 'card'; @endphp
-            <div class="reveal stagger-{{ $loop->index+1 }}">
-                @include('articles.styles.home.' . $st, ['article' => $article])
-            </div>
+            <div class="reveal stagger-{{ $loop->index+1 }}">@include('articles.styles.home.' . $st, ['article' => $article])</div>
             @endforeach
         </div>
     </div>
@@ -801,97 +630,49 @@
 @endif
 @endforeach
 
-{{-- ═══════ TOP ARTICLES ═══════ --}}
 @if($articles->isNotEmpty())
 @php $topTags = $articles->sortByDesc('views_count')->take(6)->flatMap(fn($a) => $a->tags ?? collect())->unique('id')->values(); @endphp
 <section class="section bg-white">
     <div class="max-w-7xl mx-auto">
-        <div class="mb-3 reveal">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Most Read Stories</h2>
-            <div class="green-line"></div>
-        </div>
+        <div class="mb-3 reveal"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Most Read Stories</h2><div class="green-line"></div></div>
         @if($topTags->isNotEmpty())
         <div class="flex flex-wrap items-center gap-2 mb-7 reveal" id="top-tag-filters">
-            <button type="button" onclick="filterTopTag('all', this)"
-                    class="top-tag-btn active-tag-btn px-3 py-1.5 rounded-full text-xs font-bold bg-orange-500 text-white">
-                <i class="fas fa-border-all text-[10px] mr-0.5"></i> All
-            </button>
-            @foreach($topTags as $tag)
-            <button type="button" onclick="filterTopTag({{ $tag->id }}, this)"
-                    class="top-tag-btn px-3 py-1.5 rounded-full text-xs font-bold border"
-                    data-tag-id="{{ $tag->id }}" style="{{ $tag->badge_style }};border-color:currentColor;">
-                {{ $tag->name }}
-            </button>
-            @endforeach
+            <button type="button" onclick="filterTopTag('all', this)" class="top-tag-btn active-tag-btn px-3 py-1.5 rounded-full text-xs font-bold bg-orange-500 text-white"><i class="fas fa-border-all text-[10px] mr-0.5"></i> All</button>
+            @foreach($topTags as $tag)<button type="button" onclick="filterTopTag({{ $tag->id }}, this)" class="top-tag-btn px-3 py-1.5 rounded-full text-xs font-bold border" data-tag-id="{{ $tag->id }}" style="{{ $tag->badge_style }};border-color:currentColor;">{{ $tag->name }}</button>@endforeach
         </div>
         @endif
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="top-grid">
             @foreach($articles->sortByDesc('views_count')->take(6) as $i => $article)
-            <div class="top-card flex gap-3 p-3 bg-gray-50 rounded-xl hover:shadow-md transition group reveal stagger-{{ ($i % 3)+1 }}"
-                 data-tag-ids="{{ $article->tags->pluck('id')->join(',') }}">
-                <div class="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center font-black text-base
-                    {{ $i===0?'bg-orange-500 text-white':($i===1?'bg-orange-200 text-orange-700':'bg-gray-200 text-gray-600') }}">
-                    {{ $i + 1 }}
-                </div>
+            <div class="top-card flex gap-3 p-3 bg-gray-50 rounded-xl hover:shadow-md transition group reveal stagger-{{ ($i % 3)+1 }}" data-tag-ids="{{ $article->tags->pluck('id')->join(',') }}">
+                <div class="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center font-black text-base {{ $i===0?'bg-orange-500 text-white':($i===1?'bg-orange-200 text-orange-700':'bg-gray-200 text-gray-600') }}">{{ $i + 1 }}</div>
                 <div class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
-                    @if($article->image)
-                    <img src="{{ $article->image->url }}" alt="{{ $article->title }}"
-                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                    @else
-                    <div class="w-full h-full flex items-center justify-center" style="background:{{ $article->category->color ?? '#f97316' }}15">
-                        <i class="{{ $article->category->icon ?? 'fas fa-newspaper' }} text-xl opacity-30" style="color:{{ $article->category->color ?? '#f97316' }}"></i>
-                    </div>
-                    @endif
+                    @if($article->image)<img src="{{ $article->image->url }}" alt="{{ $article->title }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">@else<div class="w-full h-full flex items-center justify-center" style="background:{{ $article->category->color ?? '#f97316' }}15"><i class="{{ $article->category->icon ?? 'fas fa-newspaper' }} text-xl opacity-30" style="color:{{ $article->category->color ?? '#f97316' }}"></i></div>@endif
                 </div>
                 <div class="flex-1 min-w-0">
-                    @if($article->category)
-                    <a href="{{ route('category.articles', $article->category->encrypted_slug) }}"
-                       class="text-[10px] font-semibold hover:underline block" style="color:{{ $article->category->color ?? '#f97316' }}">
-                        {{ $article->category->name }}
-                    </a>
-                    @endif
-                    <h4 class="text-xs font-bold text-gray-800 line-clamp-2 mt-0.5 group-hover:text-orange-500 transition">
-                        <a href="{{ route('articles.show', $article->encrypted_slug) }}">{{ $article->title }}</a>
-                    </h4>
+                    @if($article->category)<a href="{{ route('category.articles', $article->category->encrypted_slug) }}" class="text-[10px] font-semibold hover:underline block" style="color:{{ $article->category->color ?? '#f97316' }}">{{ $article->category->name }}</a>@endif
+                    <h4 class="text-xs font-bold text-gray-800 line-clamp-2 mt-0.5 group-hover:text-orange-500 transition"><a href="{{ route('articles.show', $article->encrypted_slug) }}">{{ $article->title }}</a></h4>
                     <p class="text-[10px] text-gray-500 mt-1"><i class="fas fa-eye mr-0.5"></i>{{ number_format($article->views_count) }} views</p>
                 </div>
             </div>
             @endforeach
         </div>
-        <div id="top-no-results" class="hidden py-12 text-center">
-            <i class="fas fa-tag text-2xl text-orange-200 block mb-3"></i>
-            <p class="text-gray-500 text-sm">No articles found for this tag.</p>
-        </div>
+        <div id="top-no-results" class="hidden py-12 text-center"><i class="fas fa-tag text-2xl text-orange-200 block mb-3"></i><p class="text-gray-500 text-sm">No articles found for this tag.</p></div>
     </div>
 </section>
 @endif
 
-{{-- ═══════ SUCCESS STORY ═══════ --}}
 @if(isset($successStory) && $successStory)
 <section class="section bg-gradient-to-br from-orange-50 to-orange-100">
     <div class="max-w-7xl mx-auto">
         <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div class="img-hover rounded-2xl overflow-hidden shadow-xl reveal-left">
-                @if($successStory->image)
-                <img src="{{ $successStory->image->url }}" alt="{{ $successStory->title }}" class="w-full h-64 md:h-full object-cover">
-                @else
-                <div class="w-full h-64 md:h-96 flex items-center justify-center bg-orange-100">
-                    <i class="fas fa-star text-8xl text-orange-200"></i>
-                </div>
-                @endif
+                @if($successStory->image)<img src="{{ $successStory->image->url }}" alt="{{ $successStory->title }}" class="w-full h-64 md:h-full object-cover">@else<div class="w-full h-64 md:h-96 flex items-center justify-center bg-orange-100"><i class="fas fa-star text-8xl text-orange-200"></i></div>@endif
             </div>
             <div class="reveal-right">
                 <span class="inline-block bg-orange-500 text-white text-xs font-semibold px-4 py-2 rounded-full mb-4">SUCCESS STORY</span>
-                @if($successStory->category)
-                <a href="{{ route('category.articles', $successStory->category->encrypted_slug) }}"
-                   class="block text-sm font-semibold mb-2 hover:underline" style="color:{{ $successStory->category->color ?? '#f97316' }}">
-                    @if($successStory->category->icon)<i class="{{ $successStory->category->icon }} mr-1"></i>@endif {{ $successStory->category->name }}
-                </a>
-                @endif
+                @if($successStory->category)<a href="{{ route('category.articles', $successStory->category->encrypted_slug) }}" class="block text-sm font-semibold mb-2 hover:underline" style="color:{{ $successStory->category->color ?? '#f97316' }}">@if($successStory->category->icon)<i class="{{ $successStory->category->icon }} mr-1"></i>@endif {{ $successStory->category->name }}</a>@endif
                 <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-4">{{ $successStory->title }}</h2>
-                <p class="text-base md:text-lg text-gray-700 mb-6 leading-relaxed">
-                    {{ Str::limit(strip_tags($successStory->excerpt ?? $successStory->content ?? ''), 220) }}
-                </p>
+                <p class="text-base md:text-lg text-gray-700 mb-6 leading-relaxed">{{ Str::limit(strip_tags($successStory->excerpt ?? $successStory->content ?? ''), 220) }}</p>
                 <a href="{{ route('articles.show', $successStory->encrypted_slug) }}" class="btn-primary">Read Full Story</a>
             </div>
         </div>
@@ -899,27 +680,16 @@
 </section>
 @endif
 
-{{-- ═══════ VIDEOS ═══════ --}}
 @if(isset($videoArticles) && $videoArticles->isNotEmpty())
 <section id="videos" class="section bg-gray-50">
     <div class="max-w-7xl mx-auto">
-        <div class="mb-8 md:mb-10 reveal">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Watch Our Impact Stories</h2>
-            <div class="green-line"></div>
-        </div>
+        <div class="mb-8 md:mb-10 reveal"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Watch Our Impact Stories</h2><div class="green-line"></div></div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($videoArticles as $article)
             <div class="group reveal stagger-{{ $loop->index+1 }}">
-                <div class="relative overflow-hidden rounded-xl shadow-lg mb-4 aspect-video">
-                    <iframe class="w-full h-full" src="{{ $article->embed_url }}" title="{{ $article->title }}"
-                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <h4 class="font-bold text-gray-800 mb-1 group-hover:text-orange-500 transition leading-snug">
-                    <a href="{{ route('articles.show', $article->encrypted_slug) }}">{{ $article->title }}</a>
-                </h4>
-                @if($article->excerpt)
-                <p class="text-sm text-gray-600 line-clamp-2">{{ Str::limit(strip_tags($article->excerpt), 100) }}</p>
-                @endif
+                <div class="relative overflow-hidden rounded-xl shadow-lg mb-4 aspect-video"><iframe class="w-full h-full" src="{{ $article->embed_url }}" title="{{ $article->title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+                <h4 class="font-bold text-gray-800 mb-1 group-hover:text-orange-500 transition leading-snug"><a href="{{ route('articles.show', $article->encrypted_slug) }}">{{ $article->title }}</a></h4>
+                @if($article->excerpt)<p class="text-sm text-gray-600 line-clamp-2">{{ Str::limit(strip_tags($article->excerpt), 100) }}</p>@endif
             </div>
             @endforeach
         </div>
@@ -927,60 +697,26 @@
 </section>
 @endif
 
-{{-- ═══════ SPONSOR CTA ═══════ --}}
 @php $topArticle = $articles->sortByDesc('views_count')->first(); @endphp
 <section class="section bg-white">
     <div class="max-w-7xl mx-auto">
-        <div class="mb-8 reveal">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Sponsor a Child Today and Change a Life!</h2>
-            <div class="green-line"></div>
-        </div>
+        <div class="mb-8 reveal"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Sponsor a Child Today and Change a Life!</h2><div class="green-line"></div></div>
         <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div class="reveal-left">
-                <p class="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">
-                    Access to school can be a real challenge for poor children in Southeast Asia.
-                    <span class="font-bold text-gray-900">Sponsoring a child is a simple and efficient way to help a child go to school.</span>
-                </p>
-                <p class="text-base md:text-lg text-gray-700 mb-6 leading-relaxed">
-                    With your financial support, we will help <span class="font-bold text-gray-900">your sponsored child continue his/her education</span> without fear of dropping out.
-                </p>
+                <p class="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">Access to school can be a real challenge for poor children in Southeast Asia. <span class="font-bold text-gray-900">Sponsoring a child is a simple and efficient way to help a child go to school.</span></p>
+                <p class="text-base md:text-lg text-gray-700 mb-6 leading-relaxed">With your financial support, we will help <span class="font-bold text-gray-900">your sponsored child continue his/her education</span> without fear of dropping out.</p>
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('sponsor.children') }}"
-                       class="inline-flex items-center gap-3 px-8 py-4 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded transition shadow-md">
-                        <i class="fas fa-child text-2xl"></i> SPONSOR A CHILD TODAY!
-                    </a>
-                    @if($topArticle)
-                    <a href="{{ route('articles.show', $topArticle->encrypted_slug) }}"
-                       class="inline-flex items-center gap-2 px-6 py-4 border-2 border-orange-400 text-orange-600 hover:bg-orange-50 font-bold rounded transition">
-                        <i class="fas fa-book-open"></i> Read Top Story
-                    </a>
-                    @endif
+                    <a href="{{ route('sponsor.children') }}" class="inline-flex items-center gap-3 px-8 py-4 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded transition shadow-md"><i class="fas fa-child text-2xl"></i> SPONSOR A CHILD TODAY!</a>
+                    @if($topArticle)<a href="{{ route('articles.show', $topArticle->encrypted_slug) }}" class="inline-flex items-center gap-2 px-6 py-4 border-2 border-orange-400 text-orange-600 hover:bg-orange-50 font-bold rounded transition"><i class="fas fa-book-open"></i> Read Top Story</a>@endif
                 </div>
             </div>
             @if($topArticle)
             <div class="reveal-right">
-                <a href="{{ route('articles.show', $topArticle->encrypted_slug) }}"
-                   class="group relative block rounded-2xl overflow-hidden shadow-2xl">
-                    @if($topArticle->image)
-                    <img src="{{ $topArticle->image->url }}" alt="{{ $topArticle->title }}"
-                         class="w-full h-72 md:h-80 object-cover transition-transform duration-700 group-hover:scale-105">
-                    @else
-                    <div class="w-full h-72 md:h-80 flex items-center justify-center bg-orange-50">
-                        <i class="fas fa-newspaper text-8xl text-orange-200"></i>
-                    </div>
-                    @endif
+                <a href="{{ route('articles.show', $topArticle->encrypted_slug) }}" class="group relative block rounded-2xl overflow-hidden shadow-2xl">
+                    @if($topArticle->image)<img src="{{ $topArticle->image->url }}" alt="{{ $topArticle->title }}" class="w-full h-72 md:h-80 object-cover transition-transform duration-700 group-hover:scale-105">@else<div class="w-full h-72 md:h-80 flex items-center justify-center bg-orange-50"><i class="fas fa-newspaper text-8xl text-orange-200"></i></div>@endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    <div class="absolute top-4 left-4">
-                        <span class="bg-orange-500 text-white text-xs font-black px-3 py-1 rounded-full flex items-center gap-1">
-                            <i class="fas fa-fire text-[10px]"></i> #1 Most Read
-                        </span>
-                    </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-5">
-                        <h3 class="text-base md:text-xl font-black text-white mb-2 line-clamp-2 group-hover:text-orange-300 transition">{{ $topArticle->title }}</h3>
-                        <span class="inline-flex items-center gap-1 text-white text-xs font-bold group-hover:text-orange-300 transition">
-                            Read Story <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
-                        </span>
-                    </div>
+                    <div class="absolute top-4 left-4"><span class="bg-orange-500 text-white text-xs font-black px-3 py-1 rounded-full flex items-center gap-1"><i class="fas fa-fire text-[10px]"></i> #1 Most Read</span></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-5"><h3 class="text-base md:text-xl font-black text-white mb-2 line-clamp-2 group-hover:text-orange-300 transition">{{ $topArticle->title }}</h3><span class="inline-flex items-center gap-1 text-white text-xs font-bold group-hover:text-orange-300 transition">Read Story <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i></span></div>
                 </a>
             </div>
             @endif
@@ -988,14 +724,9 @@
     </div>
 </section>
 
-{{-- ═══════════════════════════════════════════════════════
-     CONTACT SECTION
-═══════════════════════════════════════════════════════ --}}
+{{-- ═══════ CONTACT ═══════ --}}
 @php
-    $contactSettings = (function() {
-        $file = storage_path('app/settings.json');
-        return file_exists($file) ? json_decode(file_get_contents($file), true) : [];
-    })();
+    $contactSettings = (function() { $file = storage_path('app/settings.json'); return file_exists($file) ? json_decode(file_get_contents($file), true) : []; })();
     $c_emailUrl     = !empty($contactSettings['contact_email'])  ? 'https://mail.google.com/mail/?view=cm&to=' . $contactSettings['contact_email'] : null;
     $c_whatsappUrl  = !empty($contactSettings['whatsapp_url'])   ? 'https://wa.me/' . $contactSettings['whatsapp_url']  : null;
     $c_telegramUrl  = !empty($contactSettings['telegram_url'])   ? 'https://t.me/' . $contactSettings['telegram_url']   : null;
@@ -1008,28 +739,18 @@
 <section id="contact" class="contact-section">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12 reveal">
-            <div class="inline-flex items-center gap-2 bg-orange-100 text-orange-600 text-xs font-black px-4 py-1.5 rounded-full mb-4 border border-orange-200">
-                <i class="fas fa-paper-plane text-[10px]"></i> Get In Touch
-            </div>
+            <div class="inline-flex items-center gap-2 bg-orange-100 text-orange-600 text-xs font-black px-4 py-1.5 rounded-full mb-4 border border-orange-200"><i class="fas fa-paper-plane text-[10px]"></i> Get In Touch</div>
             <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-3">Contact Us</h2>
-            <p class="text-gray-500 text-lg max-w-xl mx-auto">Have questions or want to become a sponsor? Our team is ready to help you make a difference.</p>
+            <p class="text-gray-500 text-lg max-w-xl mx-auto">Have questions or want to become a sponsor? Our team is ready to help.</p>
         </div>
-
-        {{-- Mobile trigger --}}
         <button class="contact-mobile-trigger reveal" onclick="openHomeContactModal()">
-            <i class="fas fa-paper-plane"></i>
-            <span>Contact Us</span>
-            <i class="fas fa-chevron-up" style="font-size:12px;margin-left:auto;opacity:.7;"></i>
+            <i class="fas fa-paper-plane"></i><span>Contact Us</span><i class="fas fa-chevron-up" style="font-size:12px;margin-left:auto;opacity:.7;"></i>
         </button>
-
         <div class="contact-grid-home" style="margin-top:24px;">
-            {{-- LEFT: Why card --}}
             <div class="reveal-left">
                 <div class="contact-why-card">
                     <div class="relative z-10">
-                        <div class="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center mb-5">
-                            <i class="fas fa-heart text-orange-400 text-xl"></i>
-                        </div>
+                        <div class="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center mb-5"><i class="fas fa-heart text-orange-400 text-xl"></i></div>
                         <h3 class="text-2xl font-black text-white mb-2">Why Become a Sponsor?</h3>
                         <p class="text-white/65 text-sm mb-6 leading-relaxed">Join thousands of sponsors who are changing children's lives every single day.</p>
                         <div class="cwhy-item"><i class="fas fa-check-circle"></i><span>Directly change a child's life with $1/day</span></div>
@@ -1039,187 +760,100 @@
                         <div class="cwhy-item"><i class="fas fa-check-circle"></i><span>Certified NGO — full transparency & accountability</span></div>
                         <div class="cwhy-stat">
                             <div class="flex items-end gap-4">
-                                <div>
-                                    <div class="cwhy-stat-num">{{ $stats['total_children'] ?? '95k+' }}</div>
-                                    <div class="cwhy-stat-label">Children supported every year</div>
-                                </div>
-                                <div style="border-left:1px solid rgba(249,115,22,.3);padding-left:16px;">
-                                    <div class="cwhy-stat-num">84%</div>
-                                    <div class="cwhy-stat-label">Funds go to programs</div>
-                                </div>
+                                <div><div class="cwhy-stat-num">{{ $stats['total_children'] ?? '95k+' }}</div><div class="cwhy-stat-label">Children supported every year</div></div>
+                                <div style="border-left:1px solid rgba(249,115,22,.3);padding-left:16px;"><div class="cwhy-stat-num">84%</div><div class="cwhy-stat-label">Funds go to programs</div></div>
                             </div>
                         </div>
-                        <a href="{{ route('sponsor.children') }}"
-                           class="mt-6 inline-flex items-center gap-3 px-7 py-3.5 bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl transition shadow-lg shadow-orange-900/30 w-full justify-center">
-                            <i class="fas fa-child"></i> Browse Children to Sponsor
-                        </a>
+                        <a href="{{ route('sponsor.children') }}" class="mt-6 inline-flex items-center gap-3 px-7 py-3.5 bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl transition shadow-lg shadow-orange-900/30 w-full justify-center"><i class="fas fa-child"></i> Browse Children to Sponsor</a>
                     </div>
                 </div>
             </div>
-
-            {{-- RIGHT: Contact buttons desktop --}}
             <div class="contact-desktop-col reveal-right">
                 <div class="contact-info-card">
                     <h3 class="text-xl font-black text-gray-900 mb-1">Reach Out to Our Team</h3>
                     <p class="text-gray-400 text-sm mb-6 leading-relaxed">Choose any channel below — we typically respond within a few hours.</p>
                     <div style="display:flex;flex-direction:column;gap:10px;">
-                        @if($c_emailUrl)
-                        <a href="{{ $c_emailUrl }}" target="_blank" class="contact-btn-home cb-email">
-                            <div class="cbtn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
-                            <div class="cbtn-body"><div class="cbtn-title">Email Us</div><div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div></div>
-                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
-                        </a>
-                        @endif
-                        @if($c_whatsappUrl)
-                        <a href="{{ $c_whatsappUrl }}" target="_blank" class="contact-btn-home cb-whatsapp">
-                            <div class="cbtn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:22px"></i></div>
-                            <div class="cbtn-body"><div class="cbtn-title">WhatsApp</div><div class="cbtn-sub">Chat with us instantly</div></div>
-                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
-                        </a>
-                        @endif
-                        @if($c_telegramUrl)
-                        <a href="{{ $c_telegramUrl }}" target="_blank" class="contact-btn-home cb-telegram">
-                            <div class="cbtn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:22px"></i></div>
-                            <div class="cbtn-body"><div class="cbtn-title">Telegram</div><div class="cbtn-sub">{{ $contactSettings['telegram_url'] ?? '' }}</div></div>
-                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
-                        </a>
-                        @endif
-                        @if($c_facebookUrl)
-                        <a href="{{ $c_facebookUrl }}" target="_blank" class="contact-btn-home cb-facebook">
-                            <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb;font-size:22px"></i></div>
-                            <div class="cbtn-body"><div class="cbtn-title">Facebook</div><div class="cbtn-sub">Message our official page</div></div>
-                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
-                        </a>
-                        @endif
-                        @if($c_instagramUrl)
-                        <a href="{{ $c_instagramUrl }}" target="_blank" class="contact-btn-home cb-instagram">
-                            <div class="cbtn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:22px"></i></div>
-                            <div class="cbtn-body"><div class="cbtn-title">Instagram</div><div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div></div>
-                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
-                        </a>
-                        @endif
-                        @if($c_youtubeUrl)
-                        <a href="{{ $c_youtubeUrl }}" target="_blank" class="contact-btn-home cb-youtube">
-                            <div class="cbtn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626;font-size:22px"></i></div>
-                            <div class="cbtn-body"><div class="cbtn-title">YouTube</div><div class="cbtn-sub">Watch our impact stories</div></div>
-                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
-                        </a>
-                        @endif
-                        @if($c_linkedinUrl)
-                        <a href="{{ $c_linkedinUrl }}" target="_blank" class="contact-btn-home cb-linkedin">
-                            <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:22px"></i></div>
-                            <div class="cbtn-body"><div class="cbtn-title">LinkedIn</div><div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div></div>
-                            <i class="fas fa-external-link-alt cbtn-arrow"></i>
-                        </a>
-                        @endif
-                        @if(!$c_emailUrl && !$c_whatsappUrl && !$c_telegramUrl && !$c_facebookUrl && !$c_instagramUrl && !$c_youtubeUrl && !$c_linkedinUrl)
-                        <div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;background:#f9fafb;border-radius:16px;">
-                            <i class="fas fa-info-circle" style="margin-right:6px;color:#f97316"></i>
-                            Contact links will appear once configured in settings.
-                        </div>
-                        @endif
+                        @if($c_emailUrl)<a href="{{ $c_emailUrl }}" target="_blank" class="contact-btn-home cb-email"><div class="cbtn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div><div class="cbtn-body"><div class="cbtn-title">Email Us</div><div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+                        @if($c_whatsappUrl)<a href="{{ $c_whatsappUrl }}" target="_blank" class="contact-btn-home cb-whatsapp"><div class="cbtn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">WhatsApp</div><div class="cbtn-sub">Chat with us instantly</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+                        @if($c_telegramUrl)<a href="{{ $c_telegramUrl }}" target="_blank" class="contact-btn-home cb-telegram"><div class="cbtn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">Telegram</div><div class="cbtn-sub">{{ $contactSettings['telegram_url'] ?? '' }}</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+                        @if($c_facebookUrl)<a href="{{ $c_facebookUrl }}" target="_blank" class="contact-btn-home cb-facebook"><div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">Facebook</div><div class="cbtn-sub">Message our official page</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+                        @if($c_instagramUrl)<a href="{{ $c_instagramUrl }}" target="_blank" class="contact-btn-home cb-instagram"><div class="cbtn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">Instagram</div><div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+                        @if($c_youtubeUrl)<a href="{{ $c_youtubeUrl }}" target="_blank" class="contact-btn-home cb-youtube"><div class="cbtn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">YouTube</div><div class="cbtn-sub">Watch our impact stories</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+                        @if($c_linkedinUrl)<a href="{{ $c_linkedinUrl }}" target="_blank" class="contact-btn-home cb-linkedin"><div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">LinkedIn</div><div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+                        @if(!$c_emailUrl && !$c_whatsappUrl && !$c_telegramUrl && !$c_facebookUrl && !$c_instagramUrl && !$c_youtubeUrl && !$c_linkedinUrl)<div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;background:#f9fafb;border-radius:16px;"><i class="fas fa-info-circle" style="margin-right:6px;color:#f97316"></i>Contact links will appear once configured in settings.</div>@endif
                     </div>
-                    <div class="mt-6 pt-5 border-t border-gray-100 text-center">
-                        <p class="text-xs text-gray-400">
-                            Want to create a sponsor account?
-                            <a href="{{ route('sponsor.contact') }}" class="text-orange-500 font-bold hover:underline ml-1">Learn how →</a>
-                        </p>
-                    </div>
+                    <div class="mt-6 pt-5 border-t border-gray-100 text-center"><p class="text-xs text-gray-400">Want to create a sponsor account? <a href="{{ route('sponsor.contact') }}" class="text-orange-500 font-bold hover:underline ml-1">Learn how →</a></p></div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-{{-- ═══════════════════════════════════════════════════════
-     HOME CONTACT BOTTOM SHEET (mobile)
-═══════════════════════════════════════════════════════ --}}
+{{-- Contact bottom sheet --}}
 <div class="home-contact-modal-overlay" id="home-contact-modal" onclick="handleHomeContactOverlay(event)">
     <div class="home-contact-sheet" id="home-contact-sheet">
         <div class="home-contact-handle"></div>
         <div class="home-contact-modal-header">
-            <span class="home-contact-modal-title">
-                <i class="fas fa-paper-plane text-orange-500 mr-2 text-sm"></i> Contact Us
-            </span>
-            <button class="home-contact-modal-close" onclick="closeHomeContactModal()">
-                <i class="fas fa-times"></i>
-            </button>
+            <span class="home-contact-modal-title"><i class="fas fa-paper-plane text-orange-500 mr-2 text-sm"></i> Contact Us</span>
+            <button class="home-contact-modal-close" onclick="closeHomeContactModal()"><i class="fas fa-times"></i></button>
         </div>
         <div class="home-contact-modal-body">
-            @if($c_emailUrl)
-            <a href="{{ $c_emailUrl }}" target="_blank" class="contact-btn-home cb-email">
-                <div class="cbtn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div>
-                <div class="cbtn-body"><div class="cbtn-title">Email Us</div><div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div></div>
-                <i class="fas fa-external-link-alt cbtn-arrow"></i>
-            </a>
-            @endif
-            @if($c_whatsappUrl)
-            <a href="{{ $c_whatsappUrl }}" target="_blank" class="contact-btn-home cb-whatsapp">
-                <div class="cbtn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:22px"></i></div>
-                <div class="cbtn-body"><div class="cbtn-title">WhatsApp</div><div class="cbtn-sub">Chat with us instantly</div></div>
-                <i class="fas fa-external-link-alt cbtn-arrow"></i>
-            </a>
-            @endif
-            @if($c_telegramUrl)
-            <a href="{{ $c_telegramUrl }}" target="_blank" class="contact-btn-home cb-telegram">
-                <div class="cbtn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:22px"></i></div>
-                <div class="cbtn-body"><div class="cbtn-title">Telegram</div><div class="cbtn-sub">@{{ $contactSettings['telegram_url'] ?? '' }}</div></div>
-                <i class="fas fa-external-link-alt cbtn-arrow"></i>
-            </a>
-            @endif
-            @if($c_facebookUrl)
-            <a href="{{ $c_facebookUrl }}" target="_blank" class="contact-btn-home cb-facebook">
-                <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb;font-size:22px"></i></div>
-                <div class="cbtn-body"><div class="cbtn-title">Facebook</div><div class="cbtn-sub">Message our official page</div></div>
-                <i class="fas fa-external-link-alt cbtn-arrow"></i>
-            </a>
-            @endif
-            @if($c_instagramUrl)
-            <a href="{{ $c_instagramUrl }}" target="_blank" class="contact-btn-home cb-instagram">
-                <div class="cbtn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:22px"></i></div>
-                <div class="cbtn-body"><div class="cbtn-title">Instagram</div><div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div></div>
-                <i class="fas fa-external-link-alt cbtn-arrow"></i>
-            </a>
-            @endif
-            @if($c_youtubeUrl)
-            <a href="{{ $c_youtubeUrl }}" target="_blank" class="contact-btn-home cb-youtube">
-                <div class="cbtn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626;font-size:22px"></i></div>
-                <div class="cbtn-body"><div class="cbtn-title">YouTube</div><div class="cbtn-sub">Watch our impact stories</div></div>
-                <i class="fas fa-external-link-alt cbtn-arrow"></i>
-            </a>
-            @endif
-            @if($c_linkedinUrl)
-            <a href="{{ $c_linkedinUrl }}" target="_blank" class="contact-btn-home cb-linkedin">
-                <div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:22px"></i></div>
-                <div class="cbtn-body"><div class="cbtn-title">LinkedIn</div><div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div></div>
-                <i class="fas fa-external-link-alt cbtn-arrow"></i>
-            </a>
-            @endif
-            @if(!$c_emailUrl && !$c_whatsappUrl && !$c_telegramUrl && !$c_facebookUrl && !$c_instagramUrl && !$c_youtubeUrl && !$c_linkedinUrl)
-            <div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;background:#f9fafb;border-radius:16px;">
-                <i class="fas fa-info-circle" style="margin-right:6px;color:#f97316"></i>
-                Contact links will appear once configured in settings.
-            </div>
-            @endif
-            <div style="margin-top:8px;padding-top:16px;border-top:1px solid #f3f4f6;text-align:center;">
-                <p style="font-size:12px;color:#9ca3af;">
-                    Want to become a sponsor?
-                    <a href="{{ route('sponsor.contact') }}" style="color:#f97316;font-weight:700;text-decoration:none;margin-left:4px;">Learn how →</a>
-                </p>
-            </div>
+            @if($c_emailUrl)<a href="{{ $c_emailUrl }}" target="_blank" class="contact-btn-home cb-email"><div class="cbtn-icon" style="background:#fff7ed"><i class="fas fa-envelope" style="color:#f97316"></i></div><div class="cbtn-body"><div class="cbtn-title">Email Us</div><div class="cbtn-sub">{{ $contactSettings['contact_email'] ?? 'Send a message' }}</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+            @if($c_whatsappUrl)<a href="{{ $c_whatsappUrl }}" target="_blank" class="contact-btn-home cb-whatsapp"><div class="cbtn-icon" style="background:#f0fdf4"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">WhatsApp</div><div class="cbtn-sub">Chat with us instantly</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+            @if($c_telegramUrl)<a href="{{ $c_telegramUrl }}" target="_blank" class="contact-btn-home cb-telegram"><div class="cbtn-icon" style="background:#f0f9ff"><i class="fab fa-telegram" style="color:#0ea5e9;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">Telegram</div><div class="cbtn-sub">@{{ $contactSettings['telegram_url'] ?? '' }}</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+            @if($c_facebookUrl)<a href="{{ $c_facebookUrl }}" target="_blank" class="contact-btn-home cb-facebook"><div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-facebook" style="color:#2563eb;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">Facebook</div><div class="cbtn-sub">Message our official page</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+            @if($c_instagramUrl)<a href="{{ $c_instagramUrl }}" target="_blank" class="contact-btn-home cb-instagram"><div class="cbtn-icon" style="background:#fdf2f8"><i class="fab fa-instagram" style="color:#ec4899;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">Instagram</div><div class="cbtn-sub">{{ $contactSettings['instagram_url'] ?? '' }}</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+            @if($c_youtubeUrl)<a href="{{ $c_youtubeUrl }}" target="_blank" class="contact-btn-home cb-youtube"><div class="cbtn-icon" style="background:#fef2f2"><i class="fab fa-youtube" style="color:#dc2626;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">YouTube</div><div class="cbtn-sub">Watch our impact stories</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+            @if($c_linkedinUrl)<a href="{{ $c_linkedinUrl }}" target="_blank" class="contact-btn-home cb-linkedin"><div class="cbtn-icon" style="background:#eff6ff"><i class="fab fa-linkedin" style="color:#1d4ed8;font-size:22px"></i></div><div class="cbtn-body"><div class="cbtn-title">LinkedIn</div><div class="cbtn-sub">{{ $contactSettings['linkedin_url'] ?? '' }}</div></div><i class="fas fa-external-link-alt cbtn-arrow"></i></a>@endif
+            @if(!$c_emailUrl && !$c_whatsappUrl && !$c_telegramUrl && !$c_facebookUrl && !$c_instagramUrl && !$c_youtubeUrl && !$c_linkedinUrl)<div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;background:#f9fafb;border-radius:16px;"><i class="fas fa-info-circle" style="margin-right:6px;color:#f97316"></i>Contact links will appear once configured in settings.</div>@endif
+            <div style="margin-top:8px;padding-top:16px;border-top:1px solid #f3f4f6;text-align:center;"><p style="font-size:12px;color:#9ca3af;">Want to become a sponsor? <a href="{{ route('sponsor.contact') }}" style="color:#f97316;font-weight:700;text-decoration:none;margin-left:4px;">Learn how →</a></p></div>
         </div>
     </div>
 </div>
 
+{{-- ═══════ DARA CHAT WIDGET ═══════ --}}
+<div id="dara-chat-widget" role="complementary" aria-label="Message from Dara">
+    <div class="dara-header">
+        <img src="https://www.momesdumonde.com/wp-content/uploads/2021/11/documentaire-cambodge.jpg" alt="Dara" onerror="this.style.background='#374151';this.src='';">
+        <div class="dara-header-info">
+            <div class="dara-name" data-en="Dara" data-km="ដារា" data-fr="Dara">Dara</div>
+            <div class="dara-status-row">
+                <span class="dara-online-dot"></span>
+                <span class="dara-status" id="dara-status" data-en="online" data-km="អនឡាញ" data-fr="en ligne">en ligne</span>
+            </div>
+            <div class="dara-translation" data-en="Auto-translate: KH → EN" data-km="បកប្រែស្វ័យប្រវត្តិ: KH → KM" data-fr="traduction automatique: KH → FR">traduction automatique: KH → FR</div>
+        </div>
+        <button id="dara-close-btn" onclick="daraDismiss()" title="Close" aria-label="Close chat">×</button>
+    </div>
+    <div class="dara-messages" id="dara-messages"></div>
+    <div class="dara-input-row">
+        <input type="text" placeholder="Type a message…" disabled aria-disabled="true">
+        <button disabled aria-disabled="true">Send</button>
+    </div>
+    <div class="dara-cta" id="dara-cta">
+        <p>
+            <strong data-en="Dara can't see your reply here…" data-km="ដារាមិនអាចឃើញការឆ្លើយតបរបស់អ្នកទីនេះ…" data-fr="Dara ne peut pas voir votre réponse ici…">Dara ne peut pas voir votre réponse ici…</strong><br>
+            <span data-en="This is her story, and the story of every child we support." data-km="នេះគឺជារឿងរបស់គ្នា និងរឿងរបស់កុមារគ្រប់រូបដែលយើងគាំទ្រ។" data-fr="Cette histoire est la sienne, mais aussi celle de chaque enfant que nous accompagnons.">Cette histoire est la sienne, mais aussi celle de chaque enfant que nous accompagnons.</span><br>
+            <span data-en="You can be there for one of them right now." data-km="អ្នកអាចនៅទីនោះសម្រាប់ម្នាក់ក្នុងចំណោមពួកគេឥឡូវនេះ។" data-fr="Vous pouvez dès maintenant être là pour l'un d'entre eux.">Vous pouvez dès maintenant être là pour l'un d'entre eux.</span>
+        </p>
+        <a href="{{ route('sponsor.children') }}" class="dara-cta-btn">
+            <i class="fas fa-heart"></i>
+            <span data-en="I want to support a child" data-km="ខ្ញុំចង់គាំទ្រកុមារ" data-fr="Je veux soutenir un enfant">Je veux soutenir un enfant</span>
+        </a>
+    </div>
+</div>
+
+<audio id="dara-notif" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3" type="audio/mpeg">
+</audio>
+
 @include('layouts.footer')
 @include('layouts.navigation')
 @include('layouts.ads')
-
-{{-- ════ COOKIE CONSENT ════ --}}
 @include('layouts.cookie-consent')
 
 <script>
-// ── Loader + popup ──────────────────────────────────
+// ── Loader + popup ──────────────────────────────────────────────────
 window.addEventListener('load',()=>{
     setTimeout(()=>{
         document.getElementById('loader')?.classList.add('hidden');
@@ -1231,7 +865,7 @@ document.getElementById('close-popup')?.addEventListener('click',()=>popup?.clas
 document.getElementById('remind-later')?.addEventListener('click',()=>popup?.classList.remove('active'));
 popup?.addEventListener('click',(e)=>{if(e.target===popup)popup.classList.remove('active');});
 
-// ── Mobile nav ──────────────────────────────────────
+// ── Mobile nav ──────────────────────────────────────────────────────
 const mobileMenu=document.getElementById('mobile-menu'),mobileMenuOverlay=document.getElementById('mobile-menu-overlay');
 const openMenu=()=>{mobileMenu?.classList.add('active');mobileMenuOverlay?.classList.add('active');document.body.style.overflow='hidden';};
 const closeMenu=()=>{mobileMenu?.classList.remove('active');mobileMenuOverlay?.classList.remove('active');document.body.style.overflow='';};
@@ -1242,119 +876,176 @@ mobileMenuOverlay?.addEventListener('click',closeMenu);
 document.querySelectorAll('.mobile-menu-link').forEach(l=>l.addEventListener('click',closeMenu));
 document.querySelectorAll('.nav-item').forEach(item=>{
     item.addEventListener('click',function(){
-        if(this.id!=='menu-nav-item'){
-            document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-            this.classList.add('active');
-        }
+        if(this.id!=='menu-nav-item'){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));this.classList.add('active');}
     });
 });
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener('click',function(e){
-        e.preventDefault();
-        const t=document.querySelector(this.getAttribute('href'));
-        if(t)window.scrollTo({top:t.offsetTop-(window.innerWidth<768?70:80),behavior:'smooth'});
+        const href=this.getAttribute('href');if(href==='#')return;e.preventDefault();
+        const t=document.querySelector(href);if(t)window.scrollTo({top:t.offsetTop-(window.innerWidth<768?70:80),behavior:'smooth'});
     });
 });
 
-// ── Scroll-reveal ───────────────────────────────────
+// ── Scroll reveal ───────────────────────────────────────────────────
 const revealObs=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-        if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); }
-    });
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target);}});
 },{threshold:0.08,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.scroll-animate').forEach(el=>{
-    if(!el.classList.contains('reveal')&&!el.classList.contains('reveal-left')&&
-       !el.classList.contains('reveal-right')&&!el.classList.contains('reveal-scale')){
-        el.classList.add('reveal');
-    }
+    if(!el.classList.contains('reveal')&&!el.classList.contains('reveal-left')&&!el.classList.contains('reveal-right')&&!el.classList.contains('reveal-scale'))el.classList.add('reveal');
     revealObs.observe(el);
 });
 
-// ── Counter animation ───────────────────────────────
+// ── Counter ─────────────────────────────────────────────────────────
 document.querySelectorAll('.counter').forEach(el=>{
     const obs=new IntersectionObserver((entries)=>{
         entries.forEach(entry=>{
             if(!entry.isIntersecting)return;
-            const target=+el.getAttribute('data-target'),step=Math.max(1,Math.ceil(target/200));
-            let cur=0;
+            const target=+el.getAttribute('data-target'),step=Math.max(1,Math.ceil(target/200));let cur=0;
             const tick=()=>{cur=Math.min(cur+step,target);el.innerText=cur.toLocaleString();if(cur<target)setTimeout(tick,5);};
-            tick(); obs.unobserve(el);
+            tick();obs.unobserve(el);
         });
-    },{threshold:0.5});
-    obs.observe(el);
+    },{threshold:0.5});obs.observe(el);
 });
 
-// ── Progress bars ───────────────────────────────────
+// ── Progress bars ────────────────────────────────────────────────────
 document.querySelectorAll('.progress-fill').forEach(el=>{
     const obs=new IntersectionObserver((entries)=>{
-        entries.forEach(entry=>{
-            if(!entry.isIntersecting)return;
-            setTimeout(()=>entry.target.style.width=entry.target.getAttribute('data-progress')+'%',200);
-            obs.unobserve(entry.target);
-        });
-    },{threshold:0.5});
-    obs.observe(el);
+        entries.forEach(entry=>{if(!entry.isIntersecting)return;setTimeout(()=>entry.target.style.width=entry.target.getAttribute('data-progress')+'%',200);obs.unobserve(entry.target);});
+    },{threshold:0.5});obs.observe(el);
 });
 
-// ── Category filter — News ──────────────────────────
+// ── News category filter ─────────────────────────────────────────────
 function filterNewsCat(catId, btn) {
-    document.querySelectorAll('.news-cat-btn').forEach(b=>{
-        b.classList.remove('active-cat-btn');
-        b.style.backgroundColor='';
-        b.style.color=b.dataset.catId?(b.style.borderColor||'#f97316'):'';
-        b.classList.add('opacity-60');
-    });
-    btn.classList.add('active-cat-btn'); btn.style.backgroundColor='#f97316'; btn.style.color='#fff';
-    btn.classList.remove('opacity-60');
-    const cards=document.querySelectorAll('.news-card');
-    let shown=0;
+    document.querySelectorAll('.news-cat-btn').forEach(b=>{b.classList.remove('active-cat-btn');b.style.backgroundColor='';b.style.color=b.dataset.catId?(b.style.borderColor||'#f97316'):'';b.classList.add('opacity-60');});
+    btn.classList.add('active-cat-btn');btn.style.backgroundColor='#f97316';btn.style.color='#fff';btn.classList.remove('opacity-60');
+    const cards=document.querySelectorAll('.news-card');let shown=0;
     const hero=document.querySelector('#news-grid .news-card:first-child');
-    cards.forEach(card=>{
-        const match=catId==='all'||card.dataset.catId==catId;
-        card.style.display=match?'':'none';
-        if(match)shown++;
-    });
+    cards.forEach(card=>{const match=catId==='all'||card.dataset.catId==catId;card.style.display=match?'':'none';if(match)shown++;});
     if(hero){hero.classList.toggle('md:col-span-2',catId==='all');hero.classList.toggle('lg:row-span-2',catId==='all');}
     document.getElementById('news-no-results').classList.toggle('hidden',shown>0);
     document.getElementById('news-grid')?.classList.toggle('hidden',shown===0);
 }
 
-// ── Home contact bottom sheet ───────────────────────
-function openHomeContactModal() {
-    document.getElementById('home-contact-modal').classList.add('open');
-    document.body.style.overflow = 'hidden';
-}
-function closeHomeContactModal() {
-    document.getElementById('home-contact-modal').classList.remove('open');
-    document.body.style.overflow = '';
-}
-function handleHomeContactOverlay(e) {
-    if (e.target === document.getElementById('home-contact-modal')) closeHomeContactModal();
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHomeContactModal(); });
+// ── Contact bottom sheet ─────────────────────────────────────────────
+function openHomeContactModal(){document.getElementById('home-contact-modal').classList.add('open');document.body.style.overflow='hidden';}
+function closeHomeContactModal(){document.getElementById('home-contact-modal').classList.remove('open');document.body.style.overflow='';}
+function handleHomeContactOverlay(e){if(e.target===document.getElementById('home-contact-modal'))closeHomeContactModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHomeContactModal();});
 (function(){
-    let ty = 0;
-    const sheet = document.getElementById('home-contact-sheet');
-    if (!sheet) return;
-    sheet.addEventListener('touchstart', e => { ty = e.touches[0].clientY; }, { passive: true });
-    sheet.addEventListener('touchmove',  e => { if (e.touches[0].clientY - ty > 80) closeHomeContactModal(); }, { passive: true });
+    let ty=0;const sheet=document.getElementById('home-contact-sheet');if(!sheet)return;
+    sheet.addEventListener('touchstart',e=>{ty=e.touches[0].clientY;},{passive:true});
+    sheet.addEventListener('touchmove',e=>{if(e.touches[0].clientY-ty>80)closeHomeContactModal();},{passive:true});
 })();
 
-// ── Tag filter — Most Read ──────────────────────────
+// ── Top tag filter ───────────────────────────────────────────────────
 function filterTopTag(tagId, btn) {
     document.querySelectorAll('.top-tag-btn').forEach(b=>{b.classList.remove('active-tag-btn');b.classList.add('opacity-60');});
-    btn.classList.add('active-tag-btn'); btn.classList.remove('opacity-60');
-    const cards=document.querySelectorAll('.top-card');
-    let shown=0;
-    cards.forEach(card=>{
-        const ids=card.dataset.tagIds?card.dataset.tagIds.split(',').map(Number):[];
-        const match=tagId==='all'||ids.includes(Number(tagId));
-        card.style.display=match?'':'none';
-        if(match)shown++;
-    });
+    btn.classList.add('active-tag-btn');btn.classList.remove('opacity-60');
+    const cards=document.querySelectorAll('.top-card');let shown=0;
+    cards.forEach(card=>{const ids=card.dataset.tagIds?card.dataset.tagIds.split(',').map(Number):[];const match=tagId==='all'||ids.includes(Number(tagId));card.style.display=match?'':'none';if(match)shown++;});
     document.getElementById('top-no-results').classList.toggle('hidden',shown>0);
     document.getElementById('top-grid')?.classList.toggle('hidden',shown===0);
 }
+
+// ══════════════════════════════════════════════════════════════════════
+// DARA CHAT WIDGET — localStorage reshow after 60s
+// ══════════════════════════════════════════════════════════════════════
+(function () {
+    const MSGS = [
+        { en:"Hello...\nI don't know if anyone will read this, but I'm writing anyway.\nJust in case.", km:"សួស្តី...\nខ្ញុំមិនដឹងថាមាននរណាម្នាក់អានសារនេះឬអត់ទេ ប៉ុន្តែខ្ញុំនៅតែសរសេរ។\nគ្រាន់តែសិនជាមាន។", fr:"Bonjour…\nje ne sais pas si quelqu'un va lire ça, mais j'écris quand même.\nJuste au cas où." },
+        { en:"My name is Dara.\nI'm 11 years old.", km:"ខ្ញុំឈ្មោះ ដារា។\nខ្ញុំអាយុ ១១ ឆ្នាំ។", fr:"Je m'appelle Dara.\nj'ai 11 ans." },
+        { en:"I live with other children.\nThere are many of us here.", km:"ខ្ញុំរស់នៅជាមួយកុមារផ្សេងៗទៀត។\nមានពួកយើងជាច្រើននៅទីនេះ។", fr:"je vis avec d'autres enfants.\non est nombreux ici." },
+        { en:"Sometimes I stay quiet.\nI watch the others talk.", km:"ពេលខ្លះខ្ញុំនៅស្ងៀមស្ងាត់។\nខ្ញុំមើលអ្នកដទៃនិយាយគ្នា។", fr:"parfois je reste silencieux.\nje regarde les autres parler." },
+        { en:"And I wonder if I matter to someone.\nOr if I'm just here.", km:"ហើយខ្ញុំសួរខ្លួនឯងថា តើខ្ញុំមានន័យសម្រាប់នរណាម្នាក់ទេ?\nឬខ្ញុំគ្រាន់តែនៅទីនេះប៉ុណ្ណោះ។", fr:"et je me demande si je compte pour quelqu'un.\nou si je suis juste là." },
+        { en:"I don't know if these words will go anywhere.\nOr if they'll stay here.", km:"ខ្ញុំមិនដឹងថាពាក្យទាំងនេះនឹងទៅដល់ណាទេ។\nឬវានឹងនៅតែស្ថិតនៅទីនេះ។", fr:"je ne sais pas si ces mots vont quelque part.\nou s'ils restent ici." },
+        { en:"But writing… it eases my heart.", km:"ប៉ុន្តែការសរសេរ… វាធ្វើឲ្យចិត្តខ្ញុំស្រាលឡើង។", fr:"mais écrire… ça soulage mon cœur." },
+        { en:"I don't know if anyone is there, so I'll wait a little.\nJust in case.", km:"ខ្ញុំមិនដឹងថាមាននរណាម្នាក់នៅទីនោះឬអត់ទេ ដូច្នេះខ្ញុំនឹងរង់ចាំបន្តិច។\nគ្រាន់តែសិនជាមាន។", fr:"je ne sais pas si quelqu'un est là, alors je vais attendre un peu.\njuste au cas où." },
+        { en:"...", km:"…", fr:"..." },
+        { en:"Is anyone there?", km:"មាននរណាម្នាក់នៅទីនោះទេ?", fr:"il y a quelqu'un ?" }
+    ];
+
+    const widget   = document.getElementById('dara-chat-widget');
+    const messages = document.getElementById('dara-messages');
+    const status   = document.getElementById('dara-status');
+    const cta      = document.getElementById('dara-cta');
+    const sound    = document.getElementById('dara-notif');
+    let soundEnabled = false, daraRunning = false;
+
+    document.addEventListener('click',      ()=>{soundEnabled=true;},{once:true});
+    document.addEventListener('touchstart', ()=>{soundEnabled=true;},{once:true});
+
+    function getLang(){
+        const l=(document.documentElement.lang||'en').toLowerCase();
+        if(l.startsWith('km')||l.startsWith('kh'))return 'km';
+        if(l.startsWith('fr'))return 'fr';
+        return 'en';
+    }
+
+    /* Dismiss — stores timestamp so we can reshow after 60s */
+    window.daraDismiss = function(){
+        widget.classList.remove('dara-visible');
+        setTimeout(()=>widget.classList.add('dara-hidden'),550);
+        try{localStorage.setItem('dara_closed_at',Date.now().toString());}catch(e){}
+    };
+
+    function shouldShow(){
+        try{
+            const t=parseInt(localStorage.getItem('dara_closed_at')||'0',10);
+            if(!t)return true;
+            return Date.now()-t>=60000; /* 60 seconds */
+        }catch(e){return true;}
+    }
+
+    function playSound(){if(!soundEnabled||!sound)return;sound.currentTime=0;sound.play().catch(()=>{});}
+
+    function addMsg(obj){
+        const d=document.createElement('div');d.className='dara-message';
+        d.textContent=obj[getLang()]||obj.en||'';
+        messages.appendChild(d);messages.scrollTop=messages.scrollHeight;playSound();
+    }
+    function showTyping(){
+        const t=document.createElement('div');t.className='dara-typing';
+        t.innerHTML='<div class="dara-dot"></div><div class="dara-dot"></div><div class="dara-dot"></div>';
+        messages.appendChild(t);messages.scrollTop=messages.scrollHeight;return t;
+    }
+    const delay=ms=>new Promise(r=>setTimeout(r,ms));
+    const typingDur=text=>Math.min(9000,text.length*85+Math.random()*800);
+    const pauseAfter=text=>text.length*42+Math.random()*1800+1800;
+
+    async function runDara(){
+        if(daraRunning)return;daraRunning=true;
+        /* Translate static header */
+        document.querySelectorAll('#dara-chat-widget [data-en],[data-km],[data-fr]').forEach(el=>{
+            const lang=getLang();if(el.dataset[lang])el.textContent=el.dataset[lang];
+        });
+        for(let i=0;i<MSGS.length;i++){
+            const msg=MSGS[i][getLang()]||MSGS[i].en||'';
+            await delay(i===0?2800:pauseAfter(MSGS[i-1][getLang()]||MSGS[i-1].en||''));
+            const lang=getLang();
+            status.textContent=lang==='fr'?'écrit…':lang==='km'?'កំពុងវាយ…':'typing…';
+            const typing=showTyping();await delay(typingDur(msg));typing.remove();
+            status.textContent=lang==='fr'?'en ligne':lang==='km'?'អនឡាញ':'online';
+            addMsg(MSGS[i]);
+        }
+        await delay(7000);
+        cta.style.display='block';
+        document.querySelectorAll('#dara-cta [data-en],[data-km],[data-fr]').forEach(el=>{
+            const lang=getLang();if(el.dataset[lang])el.textContent=el.dataset[lang];
+        });
+        messages.scrollTop=messages.scrollHeight;
+    }
+
+    setTimeout(()=>{
+        if(!shouldShow())return;
+        widget.classList.remove('dara-hidden');
+        widget.classList.add('dara-visible');
+        runDara();
+    },12000);
+
+    let ty0=0;
+    widget.addEventListener('touchstart',e=>{ty0=e.touches[0].clientY;},{passive:true});
+    widget.addEventListener('touchmove',e=>{if(e.touches[0].clientY-ty0>55)daraDismiss();},{passive:true});
+})();
 </script>
 </body>
 </html>
