@@ -19,6 +19,7 @@ use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\FamilyUpdateController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\MessageAdminController;
 use App\Http\Controllers\ProjectAdminController;
 use App\Http\Controllers\PublicChildController;
 use App\Http\Controllers\PublicFamilyController;
@@ -234,6 +235,10 @@ Route::prefix('admin')->group(function () {
 
         // Drag-to-reorder (AJAX POST)
         Route::post('donation-projects/reorder',[ProjectAdminController::class, 'reorder'])->name('admin.donation-projects.reorder');
+
+        // Message to sponsor
+        Route::get('/messages', [MessageAdminController::class, 'index'])->name('admin.messages.index');
+        Route::get('/messages/unread-count',  [MessageAdminController::class, 'unreadCount']) ->name('admin.messages.unread');
             // ======== END OF ADMIN ROUTES ==========
     });
 });
@@ -246,9 +251,9 @@ Route::prefix('admin')->group(function () {
         Route::post('/logout/sponsor', [SponsorAuthController::class, 'logout'])->name('sponsor.logout');
         Route::post('/sponsor/child',     [HomeController::class, 'sponsor'])->name('sponsor.child');
         Route::get('/messages',     [SponsorMessagesController::class, 'index'])->name('sponsor.messages.home');
-        Route::post('/messages/send',     [SponsorMessagesController::class, 'send'])->name('sponsor.messages.send');
-        Route::post('/messages/reply',    [SponsorMessagesController::class, 'reply'])->name('sponsor.messages.reply');
-        Route::post('/messages/markread', [SponsorMessagesController::class, 'markRead'])->name('sponsor.messages.markRead');
+        // Route::post('/messages/send',     [SponsorMessagesController::class, 'send'])->name('sponsor.messages.send');
+        // Route::post('/messages/reply',    [SponsorMessagesController::class, 'reply'])->name('sponsor.messages.reply');
+        // Route::post('/messages/markread', [SponsorMessagesController::class, 'markRead'])->name('sponsor.messages.markRead');
     });
 
 

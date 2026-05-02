@@ -22,7 +22,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-    
+     @livewireStyles
     <style>
         :root {
             --sidebar-width: 280px;
@@ -258,7 +258,6 @@
         #sfxToggle:hover { background: #f97316; color: #fff; border-color: #f97316; }
         #sfxToggle.off { opacity: .45; }
     </style>
-
     @stack('styles')
 </head>
 <body>
@@ -365,6 +364,7 @@
                 <a href="{{ route('admin.analytics.index') }}" class="nav-item {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
                     <i class="fas fa-chart-line"></i><span class="font-medium">Analytics</span>
                 </a>
+                @include('admin.messages.nav-item')
             @endif
 
             @if($isSuperAdmin)
@@ -469,7 +469,7 @@
     <button id="sfxToggle" title="Toggle alert sounds" onclick="toggleSfx()">
         <i class="fas fa-bell" id="sfxIcon"></i>
     </button>
-
+@livewireScripts
     <script>
     /* ═══════════════════════════════════════════════════════════
        WEB AUDIO — synthesized sounds, zero external files
