@@ -399,10 +399,14 @@ body { top: 0 !important; }
             <img src="{{ $logoPath }}" alt="{{ $siteName }}" class="logo-img">
         </a>
         <div class="banner-btns notranslate" translate="no">
-            <a href="{{ route('sponsor.login') }}" class="hdr-btn hdr-btn-sponsor notranslate" translate="no">
-                <i class="fas fa-heart"></i>
-                <span class="notranslate" id="btn-label-sponsor">Accès parrainage</span>
-            </a>
+            @auth('sponsor')
+                <a href="{{ route('sponsor.dashboard') }}" class="hdr-btn hdr-btn-sponsor notranslate" translate="no">Dashboard</a>
+                 @else
+                 <a href="{{ route('sponsor.login') }}" class="hdr-btn hdr-btn-sponsor notranslate" translate="no">
+                     <i class="fas fa-heart"></i>
+                     <span class="notranslate" id="btn-label-sponsor">Accès parrainage</span>
+                 </a>
+            @endauth
         <button onclick="openMapModal()" class="hdr-btn hdr-btn-map notranslate" translate="no">
               <i class="fas fa-map-marked-alt"></i>
             <span class="notranslate" id="btn-label-map">Notre présence sur le terrain (Carte)</span>
@@ -498,12 +502,16 @@ body { top: 0 !important; }
         <img src="{{ $logoPath }}" alt="{{ $siteName }}" style="height:52px;width:auto;filter:brightness(1.15) saturate(1.2) drop-shadow(0 2px 8px rgba(0,0,0,.55));">
     </a>
     <div class="flex items-center gap-2">
+        @auth('sponsor')
+            <a href="{{ route('sponsor.dashboard') }}" class="nav-cta-sponsor"><i class="fas fa-tachometer-alt text-base"></i><span data-en="Dashboard" data-km="ផ្ទាំងគ្រប់គ្រង" data-fr="Tableau de bord">Dashboard</span></a>
+        @else
         <a href="{{ route('sponsor.login') }}"
            class="flex items-center gap-1.5 px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-[11px] font-black uppercase rounded-lg transition notranslate"
            translate="no">
             <i class="fas fa-heart text-xs"></i>
             <span id="mob-top-sponsor-label">Accès parrainage</span>
         </a>
+        @endauth
         <button id="mobile-menu-btn" class="text-white/80 hover:text-white p-2 rounded-lg hover:bg-white/10 transition">
             <i class="fas fa-bars text-xl"></i>
         </button>
