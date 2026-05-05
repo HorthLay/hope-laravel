@@ -18,11 +18,14 @@
     @if($favicon)
     <link rel="icon" type="image/png" href="{{ asset($favicon) }}">
     @endif
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-     @livewireStyles
+
+    {{-- ① Livewire styles must be in <head> --}}
+    @livewireStyles
+
     <style>
         :root {
             --sidebar-width: 280px;
@@ -101,6 +104,16 @@
         .role-admin { background: rgba(59,130,246,0.2); color: #93c5fd; }
         .role-editor { background: rgba(34,197,94,0.2); color: #86efac; }
 
+        /* ── Message badge inside nav ── */
+        .adm-nav-msg-badge {
+            display: none; /* JS shows it when count > 0 */
+            align-items: center; justify-content: center;
+            min-width: 18px; height: 18px; padding: 0 5px;
+            background: #ef4444; color: #fff;
+            font-size: 9px; font-weight: 900; border-radius: 999px;
+            line-height: 1; margin-left: auto;
+        }
+
         /* ========== MOBILE TOP BAR ========== */
         .mobile-topbar {
             position: fixed; top: 0; left: 0; right: 0;
@@ -177,13 +190,10 @@
             from { opacity: 0; transform: translateY(-14px) scale(.97); }
             to   { opacity: 1; transform: translateY(0)    scale(1); }
         }
-
-        /* Animated left bar */
         .flash-alert::before {
             content: ''; position: absolute; left: 0; top: 0;
             width: 4px; height: 100%; border-radius: 14px 0 0 14px;
         }
-        /* Shimmer sweep */
         .flash-alert::after {
             content: ''; position: absolute; inset: 0;
             background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.25) 50%, transparent 100%);
@@ -191,8 +201,6 @@
             animation: shimmer .7s .45s ease forwards;
         }
         @keyframes shimmer { to { transform: translateX(100%); } }
-
-        /* Progress bar */
         .flash-progress {
             position: absolute; bottom: 0; left: 0;
             height: 3px; border-radius: 0 0 14px 14px;
@@ -200,12 +208,9 @@
             transform-origin: left;
         }
         @keyframes shrink { from { width: 100%; } to { width: 0%; } }
-
-        /* Success */
         .flash-success {
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border: 1.5px solid #86efac;
-            color: #166534;
+            border: 1.5px solid #86efac; color: #166534;
         }
         .flash-success::before { background: #22c55e; }
         .flash-success .flash-progress { background: linear-gradient(90deg, #22c55e, #16a34a); }
@@ -215,12 +220,9 @@
             animation: iconPop .5s .3s cubic-bezier(.34,1.56,.64,1) both;
         }
         .flash-success .flash-icon-wrap i { color: #16a34a; font-size: 18px; }
-
-        /* Error */
         .flash-error {
             background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-            border: 1.5px solid #fca5a5;
-            color: #991b1b;
+            border: 1.5px solid #fca5a5; color: #991b1b;
             animation: alertIn .45s cubic-bezier(.16,1,.3,1) both, shakeX .5s .45s ease;
         }
         .flash-error::before { background: #ef4444; }
@@ -231,14 +233,11 @@
             animation: iconPop .5s .3s cubic-bezier(.34,1.56,.64,1) both;
         }
         .flash-error .flash-icon-wrap i { color: #dc2626; font-size: 18px; }
-
         @keyframes iconPop { from { opacity: 0; transform: scale(.5) rotate(-10deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
         @keyframes shakeX { 0%,100%{transform:translateX(0);} 20%,60%{transform:translateX(-6px);} 40%,80%{transform:translateX(6px);} }
-
         .flash-body { flex: 1; min-width: 0; }
         .flash-title { font-size: 14px; font-weight: 700; }
         .flash-msg   { font-size: 13px; opacity: .8; margin-top: 1px; }
-
         .flash-close {
             background: none; border: none; cursor: pointer;
             opacity: .45; font-size: 14px; padding: 4px; transition: opacity .15s;
@@ -340,11 +339,10 @@
                 <i class="fas fa-hand-holding-heart"></i><span class="font-medium">Sponsors</span>
             </a>
             <a href="{{ route('admin.emails.index') }}" class="nav-item {{ request()->routeIs('admin.emails.*') ? 'active' : '' }}">
-            <i class="fas fa-envelope"></i><span class="font-medium">Email</span>
+                <i class="fas fa-envelope"></i><span class="font-medium">Email</span>
             </a>
-
-              <a href="{{ route('admin.donation-projects.index') }}" class="nav-item {{ request()->routeIs('admin.donation-projects.*') ? 'active' : '' }}">
-            <i class="fas fa-project-diagram"></i><span class="font-medium">Project</span>
+            <a href="{{ route('admin.donation-projects.index') }}" class="nav-item {{ request()->routeIs('admin.donation-projects.*') ? 'active' : '' }}">
+                <i class="fas fa-project-diagram"></i><span class="font-medium">Project</span>
             </a>
 
             @if($isSuperAdmin || $isAdmin)
@@ -364,6 +362,8 @@
                 <a href="{{ route('admin.analytics.index') }}" class="nav-item {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
                     <i class="fas fa-chart-line"></i><span class="font-medium">Analytics</span>
                 </a>
+
+                {{-- ── ② Support Messages nav link with live unread badge ── --}}
                 @include('admin.messages.nav-item')
             @endif
 
@@ -465,11 +465,20 @@
         </div>
     </main>
 
+    {{-- ── ③ Hidden Livewire component — polls every 8 s for new sponsor messages ──
+         Renders as <div style="display:none"> so it's invisible.
+         Its @script block wires up the toast, badge, sound, and tab flash.
+    --}}
+    @livewire('admin-message-notifier')
+
     {{-- ── Sound effects toggle (bottom-right) ── --}}
     <button id="sfxToggle" title="Toggle alert sounds" onclick="toggleSfx()">
         <i class="fas fa-bell" id="sfxIcon"></i>
     </button>
-@livewireScripts
+
+    {{-- ④ Livewire scripts must come AFTER the component markup ── --}}
+    @livewireScripts
+
     <script>
     /* ═══════════════════════════════════════════════════════════
        WEB AUDIO — synthesized sounds, zero external files
@@ -489,11 +498,9 @@
         document.getElementById('sfxToggle').classList.toggle('off', !sfxOn);
         document.getElementById('sfxIcon').className = sfxOn ? 'fas fa-bell' : 'fas fa-bell-slash';
         if (sfxOn) { _getCtx(); _playClick(); }
-        // Cancel any speech if toggling off
         if (!sfxOn && window.speechSynthesis) window.speechSynthesis.cancel();
     }
 
-    /* ── Tiny UI click ── */
     function _playClick() {
         if (!sfxOn) return;
         const c = _getCtx();
@@ -505,11 +512,9 @@
         o.start(); o.stop(c.currentTime + .08);
     }
 
-    /* ── SUCCESS — bright rising triple chime ── */
     function playSoundSuccess() {
         if (!sfxOn) return;
         const c = _getCtx();
-        // Soft noise whoosh
         const buf = c.createBuffer(1, c.sampleRate * .25, c.sampleRate);
         const d   = buf.getChannelData(0);
         for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * (1 - i/d.length);
@@ -519,8 +524,6 @@
         wg.gain.exponentialRampToValueAtTime(.0001, c.currentTime + .22);
         src.connect(flt); flt.connect(wg); wg.connect(c.destination);
         src.start(); src.stop(c.currentTime + .25);
-
-        // Triple bell (C5 → E5 → G5)
         [[0, 523],[.12, 659],[.25, 784]].forEach(([delay, freq]) => {
             const o = c.createOscillator(), g = c.createGain();
             o.connect(g); g.connect(c.destination);
@@ -528,37 +531,27 @@
             g.gain.setValueAtTime(.0001, c.currentTime + delay);
             g.gain.linearRampToValueAtTime(.11, c.currentTime + delay + .02);
             g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + delay + .55);
-            o.start(c.currentTime + delay);
-            o.stop(c.currentTime + delay + .6);
-
-            // Harmonic overtone
+            o.start(c.currentTime + delay); o.stop(c.currentTime + delay + .6);
             const o2 = c.createOscillator(), g2 = c.createGain();
             o2.connect(g2); g2.connect(c.destination);
             o2.type = 'sine'; o2.frequency.value = freq * 2;
             g2.gain.setValueAtTime(.0001, c.currentTime + delay);
             g2.gain.linearRampToValueAtTime(.035, c.currentTime + delay + .02);
             g2.gain.exponentialRampToValueAtTime(.0001, c.currentTime + delay + .3);
-            o2.start(c.currentTime + delay);
-            o2.stop(c.currentTime + delay + .35);
+            o2.start(c.currentTime + delay); o2.stop(c.currentTime + delay + .35);
         });
     }
 
-    /* ── ERROR — low thud + double buzz ── */
     function playSoundError() {
         if (!sfxOn) return;
         const c = _getCtx();
-
-        // Deep thud (sub bass drop)
         const o1 = c.createOscillator(), g1 = c.createGain();
-        o1.connect(g1); g1.connect(c.destination);
-        o1.type = 'sine';
+        o1.connect(g1); g1.connect(c.destination); o1.type = 'sine';
         o1.frequency.setValueAtTime(180, c.currentTime);
         o1.frequency.exponentialRampToValueAtTime(55, c.currentTime + .22);
         g1.gain.setValueAtTime(.18, c.currentTime);
         g1.gain.exponentialRampToValueAtTime(.0001, c.currentTime + .28);
         o1.start(); o1.stop(c.currentTime + .3);
-
-        // Noise crackle
         const buf = c.createBuffer(1, c.sampleRate * .15, c.sampleRate);
         const d   = buf.getChannelData(0);
         for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * (1 - i/d.length);
@@ -568,89 +561,57 @@
         ng.gain.exponentialRampToValueAtTime(.0001, c.currentTime + .14);
         src.connect(flt); flt.connect(ng); ng.connect(c.destination);
         src.start(); src.stop(c.currentTime + .16);
-
-        // Double click stutter
         [.08, .16].forEach(delay => {
             const o = c.createOscillator(), g = c.createGain();
             o.connect(g); g.connect(c.destination);
             o.type = 'sawtooth'; o.frequency.value = 160;
             g.gain.setValueAtTime(.07, c.currentTime + delay);
             g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + delay + .06);
-            o.start(c.currentTime + delay);
-            o.stop(c.currentTime + delay + .07);
+            o.start(c.currentTime + delay); o.stop(c.currentTime + delay + .07);
         });
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       AI VOICE — Web Speech API speaks "Success!" on success alert
-       Uses the best available neural voice (Google/Microsoft/Siri)
-    ═══════════════════════════════════════════════════════════ */
     function speakSuccess() {
-        if (!sfxOn) return;
-        if (!window.speechSynthesis) return;
-
-        // Cancel any ongoing speech
+        if (!sfxOn || !window.speechSynthesis) return;
         window.speechSynthesis.cancel();
-
-        const utter        = new SpeechSynthesisUtterance('Success!');
-        utter.rate         = 0.92;   // slightly slower = more natural/confident
-        utter.pitch        = 1.15;   // slightly upbeat tone
-        utter.volume       = 0.9;
-
+        const utter = new SpeechSynthesisUtterance('Success!');
+        utter.rate = 0.92; utter.pitch = 1.15; utter.volume = 0.9;
         const doSpeak = () => {
             const voices = window.speechSynthesis.getVoices();
-
-            // Priority: Google Neural > Microsoft Neural > Apple > any English
             const preferred =
-                voices.find(v => /Google US English/i.test(v.name))          ||
-                voices.find(v => /Google UK English Female/i.test(v.name))   ||
+                voices.find(v => /Google US English/i.test(v.name)) ||
+                voices.find(v => /Google UK English Female/i.test(v.name)) ||
                 voices.find(v => /Microsoft.*Natural/i.test(v.name) && /en/i.test(v.lang)) ||
                 voices.find(v => /Microsoft Aria|Microsoft Jenny|Microsoft Guy/i.test(v.name)) ||
                 voices.find(v => /Samantha|Karen|Daniel|Moira/i.test(v.name)) ||
-                voices.find(v => /en[-_]US/i.test(v.lang))                   ||
+                voices.find(v => /en[-_]US/i.test(v.lang)) ||
                 voices.find(v => /en/i.test(v.lang));
-
             if (preferred) utter.voice = preferred;
-
-            // Delay slightly so it plays AFTER the chime finishes (chime is ~0.85s)
             setTimeout(() => window.speechSynthesis.speak(utter), 900);
         };
-
-        // Voices load asynchronously on first page load — handle both cases
-        if (window.speechSynthesis.getVoices().length === 0) {
-            window.speechSynthesis.addEventListener('voiceschanged', doSpeak, { once: true });
-        } else {
-            doSpeak();
-        }
+        window.speechSynthesis.getVoices().length === 0
+            ? window.speechSynthesis.addEventListener('voiceschanged', doSpeak, { once: true })
+            : doSpeak();
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       ALERT DISMISS
-    ═══════════════════════════════════════════════════════════ */
     function dismissAlert(id) {
         const el = document.getElementById(id);
         if (!el) return;
         _playClick();
-        // Stop any ongoing speech when manually dismissed
         if (window.speechSynthesis) window.speechSynthesis.cancel();
         el.style.transition = 'opacity .3s, transform .3s';
-        el.style.opacity = '0';
-        el.style.transform = 'translateX(16px)';
+        el.style.opacity = '0'; el.style.transform = 'translateX(16px)';
         setTimeout(() => el.remove(), 320);
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       AUTO-PLAY ON LOAD
-    ═══════════════════════════════════════════════════════════ */
     window.addEventListener('DOMContentLoaded', () => {
-        // Sync toggle button state
         document.getElementById('sfxToggle').classList.toggle('off', !sfxOn);
         document.getElementById('sfxIcon').className = sfxOn ? 'fas fa-bell' : 'fas fa-bell-slash';
 
         @if(session('success'))
         setTimeout(() => {
-            playSoundSuccess();   // chime plays immediately
-            speakSuccess();       // AI voice says "Success!" ~900ms after chime
+            playSoundSuccess();
+            speakSuccess();
             setTimeout(() => dismissAlert('flashSuccess'), 5000);
         }, 350);
         @endif
@@ -663,9 +624,6 @@
         @endif
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       SIDEBAR & NAV
-    ═══════════════════════════════════════════════════════════ */
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('open');
         document.getElementById('mobile-overlay').classList.toggle('active');

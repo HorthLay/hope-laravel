@@ -435,7 +435,7 @@
 </section>
 @endif
 
-{{-- ═══════ CHILDREN WAITING ═══════ --}}
+{{-- ═══════ CHILDREN WAITING ═══════
 @if(isset($unsponsoredChildren) && $unsponsoredChildren->isNotEmpty())
 <section class="py-16 md:py-20 bg-gradient-to-br from-orange-50 via-white to-amber-50 relative overflow-hidden">
     <div class="absolute top-0 right-0 w-72 h-72 bg-orange-100 rounded-full opacity-40 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
@@ -506,7 +506,7 @@
     </div>
 </section>
 <div class="wave-divider bg-white"><svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,20 C360,40 1080,0 1440,20 L1440,0 L0,0 Z" fill="#fff7ed"/></svg></div>
-@endif
+@endif --}}
 
 {{-- ═══════ FAMILIES ═══════ --}}
 @if(isset($unsponsoredFamilies) && $unsponsoredFamilies->isNotEmpty())
