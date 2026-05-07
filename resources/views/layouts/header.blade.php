@@ -399,14 +399,12 @@ body { top: 0 !important; }
             <img src="{{ $logoPath }}" alt="{{ $siteName }}" class="logo-img">
         </a>
         <div class="banner-btns notranslate" translate="no">
-            @auth('sponsor')
-                <a href="{{ route('sponsor.dashboard') }}" class="hdr-btn hdr-btn-sponsor notranslate" translate="no">Dashboard</a>
-                 @else
+        
                  <a href="{{ route('sponsor.login') }}" class="hdr-btn hdr-btn-sponsor notranslate" translate="no">
                      <i class="fas fa-heart"></i>
                      <span class="notranslate" id="btn-label-sponsor">Accès parrainage</span>
                  </a>
-            @endauth
+         
         <button onclick="openMapModal()" class="hdr-btn hdr-btn-map notranslate" translate="no">
               <i class="fas fa-map-marked-alt"></i>
             <span class="notranslate" id="btn-label-map">Notre présence sur le terrain (Carte)</span>
@@ -612,13 +610,10 @@ body { top: 0 !important; }
         </nav>
 
         <div class="space-y-2.5 mt-5">
-            @auth('sponsor')
-                <a href="{{ route('sponsor.dashboard') }}" class="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-sm uppercase tracking-wide" style="background:#f5c518;color:#1a1a1a"><i class="fas fa-tachometer-alt"></i><span data-en="Dashboard" data-km="ផ្ទាំងគ្រប់គ្រង" data-fr="Tableau de bord">Dashboard</span></a>
-                <form method="POST" action="{{ route('sponsor.logout') }}" style="margin:0;">@csrf<button type="submit" class="flex items-center justify-center gap-2 w-full py-3.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-black text-sm uppercase tracking-wide transition" style="border:none;cursor:pointer;"><i class="fas fa-sign-out-alt"></i><span data-en="Logout" data-km="ចាកចេញ" data-fr="Déconnexion">Logout</span></button></form>
-            @else
+        
                 <a href="{{ route('sponsor.children') }}" class="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-sm uppercase tracking-wide" style="background:#f5c518;color:#1a1a1a"><i class="fas fa-child"></i><span data-en="Sponsor a Child" data-km="ឧបត្ថម្ភកុមារ" data-fr="Je parraine">Sponsor a Child</span></a>
                 <button id="openHaOverlayMobile" class="flex items-center justify-center gap-2 w-full py-3.5 bg-green-500 hover:bg-green-600 text-white rounded-xl font-black text-sm uppercase tracking-wide transition" style="border:none;cursor:pointer;"><i class="fas fa-hand-holding-heart"></i><span data-en="Donate" data-km="បរិច្ចាគ" data-fr="Je donne">Donate</span></button>
-            @endauth
+      
         </div>
     </div>
 </div>
