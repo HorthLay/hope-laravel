@@ -1,12 +1,12 @@
-{{-- resources/views/pages/families/housing.blade.php --}}
+﻿{{-- resources/views/pages/families/housing.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Housing & Family Stability')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-/* ══ DESIGN: Night sky → dawn gradient — particle stars, golden light rays, warm hope ══ */
+/* â•â• DESIGN: Night sky â†’ dawn gradient — particle stars, golden light rays, warm hope â•â• */
 :root{
     --gold:#fbbf24; --gold-d:#d97706; --ember:#f97316;
     --dawn:#fde68a; --sky:#0c1445; --deep:#04091f;
@@ -34,9 +34,9 @@
 .reveal.in{opacity:1;transform:none}
 .d1{transition-delay:.08s}.d2{transition-delay:.18s}.d3{transition-delay:.28s}.d4{transition-delay:.38s}
 
-/* ══════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    HERO — night sky
-══════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .hero{
     position:relative;overflow:hidden;
     min-height:100vh;display:flex;align-items:center;
@@ -191,16 +191,16 @@
 }
 .h-stat-div{width:1px;background:rgba(251,191,36,.12);align-self:stretch;}
 
-/* ══════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    WAVE
-══════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .wave-dark{line-height:0;overflow:hidden;background:var(--cream);}
 .wave-dark svg{display:block;}
 
-/* ══════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PROGRAM CARDS
    Light cream bg, warm card style
-══════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .section-bg{background:var(--cream);padding:96px 0;}
 
 /* Section label */
@@ -222,7 +222,7 @@
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 
-/* ── Card layout: large horizontal ── */
+/* â”€â”€ Card layout: large horizontal â”€â”€ */
 .prog-card{
     position:relative;
     background:#fff;
@@ -356,9 +356,9 @@
 }
 .prog-link:hover{border-color:var(--gold-d);gap:13px;}
 
-/* ══════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    IMPACT BAND
-══════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .impact-band{
     background:linear-gradient(135deg,#04091f 0%,#0c1445 50%,#1a0a3d 100%);
     padding:80px 20px;position:relative;overflow:hidden;
@@ -399,9 +399,9 @@
 }
 .impact-l{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.09em;}
 
-/* ══════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    QUOTE STRIP
-══════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .q-strip{
     position:relative;overflow:hidden;
     background:linear-gradient(135deg,#fffbf0,#fef3c7,#fffbf0);
@@ -428,9 +428,9 @@
     margin-top:20px;position:relative;z-index:1;
 }
 
-/* ══════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CTA
-══════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .cta-wrap{
     background:linear-gradient(135deg,#04091f 0%,#0c1445 55%,#1a0a3d 100%);
     padding:80px 20px;position:relative;overflow:hidden;
@@ -472,11 +472,116 @@
     .impact-grid{grid-template-columns:repeat(2,1fr);}
     .q-strip::before{display:none;}
 }
-</style>
 
-{{-- ══════════════════════════════════
+/* Donate page global header/font match */
+body{font-family:'Outfit',sans-serif!important;}
+body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
+h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
+h1,h2,h3,h4,h5,h6,
+.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
+.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
+.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
+    font-family:'Montserrat',sans-serif!important;
+}
+.page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
+    position:relative!important;
+    min-height:370px!important;
+    height:370px!important;
+    display:flex!important;
+    align-items:center!important;
+    overflow:hidden!important;
+    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;
+    border-radius:0!important;
+}
+.page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
+    content:''!important;
+    position:absolute!important;inset:0!important;z-index:1!important;
+    background:
+        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
+        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    pointer-events:none!important;
+}
+.page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
+    position:absolute!important;inset:0!important;z-index:0!important;
+    display:block!important;
+    width:100%!important;height:100%!important;
+    object-fit:cover!important;object-position:center 45%!important;
+    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-size:cover!important;background-position:center 45%!important;
+    filter:none!important;transform:none!important;transition:none!important;
+    opacity:1!important;
+}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
+    transform:none!important;
+}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
+    display:none!important;
+}
+.page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
+    position:relative!important;z-index:2!important;
+    max-width:1020px!important;width:100%!important;
+    margin:0 auto!important;
+    padding:68px 28px 56px!important;
+    display:block!important;
+    text-align:left!important;
+}
+.page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
+    display:none!important;
+}
+.page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
+    font-family:'Montserrat',sans-serif!important;
+    font-size:clamp(2.7rem,4vw,3.55rem)!important;
+    font-weight:900!important;
+    line-height:.96!important;
+    letter-spacing:-.015em!important;
+    color:#fff!important;
+    max-width:650px!important;
+    margin:0 0 22px!important;
+    text-align:left!important;
+    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
+    animation:fadeUp .6s .08s ease both!important;
+}
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
+.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
+.text-gradient,.glow{
+    background:none!important;
+    color:#fff!important;
+    -webkit-text-fill-color:#fff!important;
+    filter:none!important;
+}
+.page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
+    font-family:'Montserrat',sans-serif!important;
+    font-size:clamp(1rem,1.25vw,1.18rem)!important;
+    font-weight:700!important;
+    color:#fff!important;
+    line-height:1.55!important;
+    max-width:665px!important;
+    margin:0!important;
+    text-align:left!important;
+    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+}
+@media(max-width:1024px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+}
+@media(max-width:768px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+}
+@media(max-width:480px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
+}</style>
+
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
      HERO — night sky with particles
-══════════════════════════════════ --}}
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <section class="hero">
     <canvas id="starCanvas"></canvas>
 
@@ -529,7 +634,7 @@
         </div>
 
         <div class="h-stats">
-            @foreach([['4','Programs'],['100%','Field Impact'],['🏠','Cambodia'],['1958','Since']] as [$n,$l])
+            @foreach([['4','Programs'],['100%','Field Impact'],['ðŸ ','Cambodia'],['1958','Since']] as [$n,$l])
             <div class="h-stat">
                 <div class="h-stat-n">{{ $n }}</div>
                 <div class="h-stat-l">{{ $l }}</div>
@@ -547,7 +652,7 @@
     </svg>
 </div>
 
-{{-- ══ PROGRAMS ══ --}}
+{{-- â•â• PROGRAMS â•â• --}}
 <section class="section-bg">
     <div class="max-w-7xl mx-auto px-4">
 
@@ -657,7 +762,7 @@
     </div>
 </section>
 
-{{-- ══ IMPACT NUMBERS ══ --}}
+{{-- â•â• IMPACT NUMBERS â•â• --}}
 <section class="impact-band reveal">
     <div class="impact-orb impact-orb-a"></div>
     <div class="impact-orb impact-orb-b"></div>
@@ -689,7 +794,7 @@
     </div>
 </section>
 
-{{-- ══ QUOTE ══ --}}
+{{-- â•â• QUOTE â•â• --}}
 <section class="q-strip reveal">
     <div class="max-w-5xl mx-auto px-4 text-center">
         <div style="font-size:3rem;color:var(--gold-d);line-height:1;margin-bottom:16px;font-family:'Cormorant Garamond',serif;">"</div>
@@ -700,7 +805,7 @@
     </div>
 </section>
 
-{{-- ══ CTA ══ --}}
+{{-- â•â• CTA â•â• --}}
 <section class="cta-wrap">
     <div class="cta-glow"></div>
     <div class="cta-box reveal">
@@ -733,9 +838,9 @@
 </section>
 
 <script>
-/* ═══════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PARTICLE STAR CANVAS
-═══════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 (function(){
     var canvas = document.getElementById('starCanvas');
     var ctx    = canvas.getContext('2d');
@@ -748,7 +853,7 @@
     window.addEventListener('resize', resize);
     resize();
 
-    /* ── Static stars ── */
+    /* â”€â”€ Static stars â”€â”€ */
     for(var i=0;i<220;i++){
         particles.push({
             x: Math.random()*100,
@@ -761,7 +866,7 @@
         });
     }
 
-    /* ── Shoot a new star ── */
+    /* â”€â”€ Shoot a new star â”€â”€ */
     function spawnShooting(){
         shooting.push({
             x: Math.random()*W*.6 + W*.1,
@@ -831,9 +936,9 @@
     draw();
 })();
 
-/* ═══════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    LIGHT RAYS
-═══════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 (function(){
     var container = document.getElementById('raysContainer');
     var count = 12;
@@ -857,9 +962,9 @@
     }
 })();
 
-/* ═══════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SCROLL REVEAL
-═══════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 (function(){
     var o = new IntersectionObserver(function(entries){
         entries.forEach(function(e){

@@ -1,9 +1,9 @@
-{{-- resources/views/pages/childhood/personal-development.blade.php --}}
+﻿{{-- resources/views/pages/childhood/personal-development.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Personal Development')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -24,7 +24,7 @@
 .reveal.in{opacity:1;transform:none}
 .d1{transition-delay:.08s}.d2{transition-delay:.17s}.d3{transition-delay:.26s}.d4{transition-delay:.35s}
 
-/* ── Hero ── */
+/* â”€â”€ Hero â”€â”€ */
 .pd-hero{position:relative;overflow:hidden;background:var(--navy);min-height:100vh;display:flex;align-items:center;}
 .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.2) saturate(1.5);}
 .hero-grad{position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,16,31,.98) 0%,rgba(6,16,31,.65) 55%,rgba(249,115,22,.12) 100%);}
@@ -81,11 +81,11 @@
 .trait-name{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:#fff;margin-bottom:5px;}
 .trait-desc{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;color:rgba(255,255,255,.38);line-height:1.55;}
 
-/* ── Section tag ── */
+/* â”€â”€ Section tag â”€â”€ */
 .sec-tag{display:inline-flex;align-items:center;gap:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:999px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);color:var(--or-d);}
 .dot-p{width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.8s ease-in-out infinite;}
 
-/* ── Cards — horizontal timeline style ── */
+/* â”€â”€ Cards — horizontal timeline style â”€â”€ */
 .timeline-wrap{position:relative;padding-left:48px;}
 .timeline-wrap::before{content:'';position:absolute;left:17px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--or),rgba(249,115,22,.1));}
 
@@ -129,7 +129,7 @@
 .tl-link{display:inline-flex;align-items:center;gap:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;padding-bottom:1.5px;border-bottom:1.5px solid transparent;transition:border-color .22s,gap .22s;}
 .tl-link:hover{gap:11px;}
 
-/* ── Values band ── */
+/* â”€â”€ Values band â”€â”€ */
 .values-band{background:linear-gradient(135deg,#0f1c2e,#1a2f42);padding:72px 20px;}
 .val-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06);border-radius:20px;overflow:hidden;}
 .val-item{background:#0f1c2e;padding:36px 24px;text-align:center;transition:background .22s;}
@@ -138,7 +138,7 @@
 .val-num{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,#f97316,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:4px;}
 .val-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.09em;}
 
-/* ── Quote strip ── */
+/* â”€â”€ Quote strip â”€â”€ */
 .quote-strip{position:relative;overflow:hidden;background:var(--ink);padding:80px 20px;}
 .qs-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(249,115,22,.09) 0%,transparent 60%);}
 .qs-decor{position:absolute;right:-40px;top:50%;transform:translateY(-50%);font-family:'Fraunces',serif;font-size:26rem;font-weight:900;color:rgba(255,255,255,.022);line-height:1;pointer-events:none;user-select:none;}
@@ -146,7 +146,7 @@
 .qs-text span{color:var(--or);}
 .qs-src{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-top:18px;position:relative;z-index:1;}
 
-/* ── CTA ── */
+/* â”€â”€ CTA â”€â”€ */
 .cta-outer{background:var(--cream);padding:80px 20px;}
 .cta-inner{max-width:1100px;margin:0 auto;background:linear-gradient(135deg,#ea580c,#f97316 55%,#f59e0b);border-radius:32px;padding:72px 56px;position:relative;overflow:hidden;}
 .cta-inner::before{content:'';position:absolute;inset:0;background-image:url('{{ asset('images/cambodia-bg.jpg') }}');background-size:cover;opacity:.06;}
@@ -176,9 +176,114 @@
     .qs-decor{display:none;}
     .cta-inner{padding:48px 24px;border-radius:22px;}
 }
-</style>
 
-{{-- ══ HERO ══ --}}
+/* Donate page global header/font match */
+body{font-family:'Outfit',sans-serif!important;}
+body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
+h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
+h1,h2,h3,h4,h5,h6,
+.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
+.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
+.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
+    font-family:'Montserrat',sans-serif!important;
+}
+.page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
+    position:relative!important;
+    min-height:370px!important;
+    height:370px!important;
+    display:flex!important;
+    align-items:center!important;
+    overflow:hidden!important;
+    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;
+    border-radius:0!important;
+}
+.page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
+    content:''!important;
+    position:absolute!important;inset:0!important;z-index:1!important;
+    background:
+        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
+        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    pointer-events:none!important;
+}
+.page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
+    position:absolute!important;inset:0!important;z-index:0!important;
+    display:block!important;
+    width:100%!important;height:100%!important;
+    object-fit:cover!important;object-position:center 45%!important;
+    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-size:cover!important;background-position:center 45%!important;
+    filter:none!important;transform:none!important;transition:none!important;
+    opacity:1!important;
+}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
+    transform:none!important;
+}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
+    display:none!important;
+}
+.page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
+    position:relative!important;z-index:2!important;
+    max-width:1020px!important;width:100%!important;
+    margin:0 auto!important;
+    padding:68px 28px 56px!important;
+    display:block!important;
+    text-align:left!important;
+}
+.page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
+    display:none!important;
+}
+.page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
+    font-family:'Montserrat',sans-serif!important;
+    font-size:clamp(2.7rem,4vw,3.55rem)!important;
+    font-weight:900!important;
+    line-height:.96!important;
+    letter-spacing:-.015em!important;
+    color:#fff!important;
+    max-width:650px!important;
+    margin:0 0 22px!important;
+    text-align:left!important;
+    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
+    animation:fadeUp .6s .08s ease both!important;
+}
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
+.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
+.text-gradient,.glow{
+    background:none!important;
+    color:#fff!important;
+    -webkit-text-fill-color:#fff!important;
+    filter:none!important;
+}
+.page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
+    font-family:'Montserrat',sans-serif!important;
+    font-size:clamp(1rem,1.25vw,1.18rem)!important;
+    font-weight:700!important;
+    color:#fff!important;
+    line-height:1.55!important;
+    max-width:665px!important;
+    margin:0!important;
+    text-align:left!important;
+    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+}
+@media(max-width:1024px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+}
+@media(max-width:768px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+}
+@media(max-width:480px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
+}</style>
+
+{{-- â•â• HERO â•â• --}}
 <section class="pd-hero">
     <div class="hero-bg" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}')"></div>
     <div class="hero-grad"></div>
@@ -219,7 +324,7 @@
             </a>
         </div>
 
-        {{-- Right — trait grid ── --}}
+        {{-- Right — trait grid â”€â”€ --}}
         <div class="trait-grid" style="animation:fadeIn .9s .42s ease both;">
             @foreach([
                 ['fas fa-fist-raised','bg-orange-900/30','#f97316','Self-Confidence','Believing in your own power to act'],
@@ -239,7 +344,7 @@
     </div>
 </section>
 
-{{-- ══ TIMELINE CARDS ══ --}}
+{{-- â•â• TIMELINE CARDS â•â• --}}
 <section style="background:var(--cream);padding:80px 0 96px;">
     <div class="max-w-6xl mx-auto px-4">
 
@@ -317,7 +422,7 @@
     </div>
 </section>
 
-{{-- ══ VALUES BAND ══ --}}
+{{-- â•â• VALUES BAND â•â• --}}
 <section class="values-band reveal">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12">
@@ -347,7 +452,7 @@
     </div>
 </section>
 
-{{-- ══ QUOTE STRIP ══ --}}
+{{-- â•â• QUOTE STRIP â•â• --}}
 <section class="quote-strip reveal">
     <div class="qs-bg"></div>
     <div class="qs-decor">"</div>
@@ -360,7 +465,7 @@
     </div>
 </section>
 
-{{-- ══ CTA ══ --}}
+{{-- â•â• CTA â•â• --}}
 <div class="cta-outer reveal">
     <div class="cta-inner">
         <div class="cta-orb cta-o1"></div>

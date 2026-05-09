@@ -129,9 +129,9 @@
             transform: translateY(18px) scale(.97);
             transition: opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1);
             pointer-events: none;
-            z-index: 999;
+            z-index: 1079;
             max-height: calc(100vh - 80px);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
         #dara-chat-widget.dara-visible { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
         #dara-chat-widget.dara-hidden  { display:none !important; }

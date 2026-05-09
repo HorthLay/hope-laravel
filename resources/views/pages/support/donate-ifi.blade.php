@@ -1,9 +1,10 @@
-{{-- {-- resources/views/pages/support/donate-ifi.blade.php --} --}}
+﻿{{-- {-- resources/views/pages/support/donate-ifi.blade.php --} --}}
 @extends('layouts.app')
 
 @section('title', 'Donate via the IFI')
 
 @section('content')
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 @keyframes fadeUp     { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
 @keyframes pulse-soft { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
@@ -35,7 +36,112 @@
 .faq-item.open .faq-chevron{transform:rotate(180deg)}
 .faq-chevron{transition:transform .3s ease}
 @media(max-width:640px){.page-hero-content{padding:60px 20px 56px}}
-</style>
+
+/* Donate page global header/font match */
+body{font-family:'Outfit',sans-serif!important;}
+body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
+h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
+h1,h2,h3,h4,h5,h6,
+.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
+.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
+.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
+    font-family:'Montserrat',sans-serif!important;
+}
+.page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
+    position:relative!important;
+    min-height:370px!important;
+    height:370px!important;
+    display:flex!important;
+    align-items:center!important;
+    overflow:hidden!important;
+    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;
+    border-radius:0!important;
+}
+.page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
+    content:''!important;
+    position:absolute!important;inset:0!important;z-index:1!important;
+    background:
+        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
+        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    pointer-events:none!important;
+}
+.page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
+    position:absolute!important;inset:0!important;z-index:0!important;
+    display:block!important;
+    width:100%!important;height:100%!important;
+    object-fit:cover!important;object-position:center 45%!important;
+    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-size:cover!important;background-position:center 45%!important;
+    filter:none!important;transform:none!important;transition:none!important;
+    opacity:1!important;
+}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
+    transform:none!important;
+}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
+    display:none!important;
+}
+.page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
+    position:relative!important;z-index:2!important;
+    max-width:1020px!important;width:100%!important;
+    margin:0 auto!important;
+    padding:68px 28px 56px!important;
+    display:block!important;
+    text-align:left!important;
+}
+.page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
+    display:none!important;
+}
+.page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
+    font-family:'Montserrat',sans-serif!important;
+    font-size:clamp(2.7rem,4vw,3.55rem)!important;
+    font-weight:900!important;
+    line-height:.96!important;
+    letter-spacing:-.015em!important;
+    color:#fff!important;
+    max-width:650px!important;
+    margin:0 0 22px!important;
+    text-align:left!important;
+    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
+    animation:fadeUp .6s .08s ease both!important;
+}
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
+.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
+.text-gradient,.glow{
+    background:none!important;
+    color:#fff!important;
+    -webkit-text-fill-color:#fff!important;
+    filter:none!important;
+}
+.page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
+    font-family:'Montserrat',sans-serif!important;
+    font-size:clamp(1rem,1.25vw,1.18rem)!important;
+    font-weight:700!important;
+    color:#fff!important;
+    line-height:1.55!important;
+    max-width:665px!important;
+    margin:0!important;
+    text-align:left!important;
+    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+}
+@media(max-width:1024px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+}
+@media(max-width:768px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+}
+@media(max-width:480px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
+}</style>
 <script>
 (function(){
 const o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');o.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
@@ -74,14 +180,14 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             </div>
             <div>
                 <h2 class="text-2xl font-black text-gray-900 mb-3">75% Tax Reduction on Your IFI</h2>
-                <p class="text-gray-600 leading-relaxed">If you are subject to the Impôt sur la Fortune Immobilière (IFI) in France, you can reduce your tax bill by up to 75% of your donation amount — up to a ceiling of €50,000 in tax reduction per year.</p>
+                <p class="text-gray-600 leading-relaxed">If you are subject to the Impôt sur la Fortune Immobilière (IFI) in France, you can reduce your tax bill by up to 75% of your donation amount — up to a ceiling of â‚¬50,000 in tax reduction per year.</p>
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             @foreach([
                 ['Donate', 'Make your donation to Des Ailes pour Grandir before the IFI tax filing deadline.'],
                 ['Declare', 'Include your donation amount in your IFI tax declaration.'],
-                ['Deduct', 'Receive a 75% reduction on your IFI, up to €50,000 per year.'],
+                ['Deduct', 'Receive a 75% reduction on your IFI, up to â‚¬50,000 per year.'],
             ] as $i => $step)
             <div class="bg-white rounded-2xl p-5 text-center">
                 <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-black">{{ $i+1 }}</div>
@@ -106,9 +212,9 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 <tbody class="divide-y divide-gray-100">
                     @foreach([[1000,750,250],[5000,3750,1250],[10000,7500,2500],[20000,15000,5000]] as $row)
                     <tr>
-                        <td class="px-4 py-3 font-bold text-gray-800">{{ number_format($row[0]) }}€</td>
-                        <td class="px-4 py-3 font-bold text-green-600">-{{ number_format($row[1]) }}€</td>
-                        <td class="px-4 py-3 font-black text-blue-700">{{ number_format($row[2]) }}€</td>
+                        <td class="px-4 py-3 font-bold text-gray-800">{{ number_format($row[0]) }}â‚¬</td>
+                        <td class="px-4 py-3 font-bold text-green-600">-{{ number_format($row[1]) }}â‚¬</td>
+                        <td class="px-4 py-3 font-black text-blue-700">{{ number_format($row[2]) }}â‚¬</td>
                     </tr>
                     @endforeach
                 </tbody>

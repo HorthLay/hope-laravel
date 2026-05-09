@@ -1,9 +1,10 @@
-{{-- resources/views/pages/about/team.blade.php --}}
+﻿{{-- resources/views/pages/about/team.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Our Team')
 
 @section('content')
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 @keyframes fadeUp     { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
 @keyframes pulse-soft { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
@@ -34,8 +35,117 @@
 .faq-item.open .faq-body{max-height:600px}
 .faq-item.open .faq-chevron{transform:rotate(180deg)}
 .faq-chevron{transition:transform .3s ease}
+.flag-circle{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.8);box-shadow:0 2px 8px rgba(0,0,0,.2);flex-shrink:0}
+.flag-square{width:100%;height:100%;object-fit:cover;display:block}
 @media(max-width:640px){.page-hero-content{padding:60px 20px 56px}}
+
+/* Global header/font match */
+body{font-family:'Outfit',sans-serif!important;}
+body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
+h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
+h1,h2,h3,h4,h5,h6,
+.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
+.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
+.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
+    font-family:'Montserrat',sans-serif!important;
+}
+.page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
+    position:relative!important;
+    min-height:370px!important;
+    height:370px!important;
+    display:flex!important;
+    align-items:center!important;
+    overflow:hidden!important;
+    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;
+    border-radius:0!important;
+}
+.page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
+    content:''!important;
+    position:absolute!important;inset:0!important;z-index:1!important;
+    background:
+        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
+        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    pointer-events:none!important;
+}
+.page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
+    position:absolute!important;inset:0!important;z-index:0!important;
+    display:block!important;
+    width:100%!important;height:100%!important;
+    object-fit:cover!important;object-position:center 45%!important;
+    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-size:cover!important;background-position:center 45%!important;
+    filter:none!important;transform:none!important;transition:none!important;
+    opacity:1!important;
+}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
+    transform:none!important;
+}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
+    display:none!important;
+}
+.page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
+    position:relative!important;z-index:2!important;
+    max-width:1020px!important;width:100%!important;
+    margin:0 auto!important;
+    padding:68px 28px 56px!important;
+    display:block!important;
+    text-align:left!important;
+}
+.page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
+    display:none!important;
+}
+.page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
+    font-family:'Montserrat',sans-serif!important;
+    font-size:clamp(2.7rem,4vw,3.55rem)!important;
+    font-weight:900!important;
+    line-height:.96!important;
+    letter-spacing:-.015em!important;
+    color:#fff!important;
+    max-width:650px!important;
+    margin:0 0 22px!important;
+    text-align:left!important;
+    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
+    animation:fadeUp .6s .08s ease both!important;
+}
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
+.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
+.text-gradient,.glow{
+    background:none!important;
+    color:#fff!important;
+    -webkit-text-fill-color:#fff!important;
+    filter:none!important;
+}
+.page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
+    font-family:'Montserrat',sans-serif!important;
+    font-size:clamp(1rem,1.25vw,1.18rem)!important;
+    font-weight:700!important;
+    color:#fff!important;
+    line-height:1.55!important;
+    max-width:665px!important;
+    margin:0!important;
+    text-align:left!important;
+    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+}
+@media(max-width:1024px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+}
+@media(max-width:768px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+}
+@media(max-width:480px){
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
+}
 </style>
+
 <script>
 (function(){
 const o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');o.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
@@ -43,6 +153,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').fo
 document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',()=>{const i=b.closest('.faq-item');const w=i.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(x=>x.classList.remove('open'));if(!w)i.classList.add('open')})});
 })();
 </script>
+
 <section class="page-hero" style="min-height:380px">
     <div class="page-hero-bg" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}')"></div>
     <div class="page-hero-overlay"></div>
@@ -77,37 +188,54 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-2">Association Governance</h2>
             <div class="w-20 h-1 bg-orange-500 rounded-full mx-auto"></div>
         </div>
+
+        @php
+        $leaders = [
+            [
+                'photo'  => 'photo_julien.jpg',
+                'flag'   => 'kh.svg',        
+                'flagAlt'=> 'Cambodia',
+                'name'   => 'Julien',
+                'role'   => '<span data-fr="Fondateur & Président">Founder & President</span>',
+                'color'  => 'orange',
+                'icon'   => 'fas fa-star',
+                'desc'   => 'Based in Cambodia, Julien designs, oversees, and leads field actions in collaboration with local stakeholders. The heart and driving force of Des Ailes pour Grandir.',
+                'quote'  => 'Every child we help is a small victory for humanity.',
+            ],
+            [
+                'photo'  => 'photo_fanny.jpg',
+                'flag'   => 'fr.svg',      
+                'flagAlt'=> 'France',
+                'name'   => 'Fanny',
+                'role'   => '<span data-fr="Trésorière">Treasurer</span>',
+                'color'  => 'blue',
+                'icon'   => 'fas fa-chart-bar',
+                'desc'   => "Fanny ensures the association's accounts are accurately maintained, guaranteeing rigorous financial management and full transparency for our donors.",
+                'quote'  => 'Every euro must reach the children who need it most.',
+            ],
+            [
+                'photo'  => 'photo_mickaela.jpg',
+                'flag'   => 'fr.svg',        
+                'flagAlt'=> 'France',
+                'name'   => 'Mickaëla',
+                'role'   => '<span data-fr="Responsable événementiel">Events Manager</span>',
+                'color'  => 'green',
+                'icon'   => 'fas fa-calendar-star',
+                'desc'   => "Mickaëla plans, organizes, and coordinates the association's fundraising events — the essential engine that keeps our programs running.",
+                'quote'  => 'Great events build the bridges that change lives.',
+            ],
+        ];
+        @endphp
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-            @foreach([
-                [
-                    'photo'=>'photo_julien.jpg', 'flag'=>'🇰🇭',
-                    'name'=>'Julien',
-                    'role'=>'<span data-fr="Fondateur & Président">Founder & President</span>',
-                    'color'=>'orange', 'icon'=>'fas fa-star',
-                    'desc'=>'Based in Cambodia, Julien designs, oversees, and leads field actions in collaboration with local stakeholders. The heart and driving force of Des Ailes pour Grandir.',
-                    'quote'=>'Every child we help is a small victory for humanity.',
-                ],
-                [
-                    'photo'=>'photo_fanny.jpg', 'flag'=>'🇫🇷',
-                    'name'=>'Fanny',
-                    'role'=>'<span data-fr="Trésorière">Treasurer</span>',
-                    'color'=>'blue', 'icon'=>'fas fa-chart-bar',
-                    'desc'=>"Fanny ensures the association's accounts are accurately maintained, guaranteeing rigorous financial management and full transparency for our donors.",
-                    'quote'=>'Every euro must reach the children who need it most.',
-                ],
-                [
-                    'photo'=>'photo_mickaela.jpg', 'flag'=>'🇫🇷',
-                    'name'=>'Mickaëla',
-                    'role'=>'<span data-fr="Responsable événementiel">Events Manager</span>',
-                    'color'=>'green', 'icon'=>'fas fa-calendar-star',
-                    'desc'=>"Mickaëla plans, organizes, and coordinates the association's fundraising events — the essential engine that keeps our programs running.",
-                    'quote'=>'Great events build the bridges that change lives.',
-                ],
-            ] as $i => $person)
+            @foreach($leaders as $i => $person)
             <div class="section-card overflow-visible reveal stagger-{{ $i+1 }}">
+
+                {{-- Photo area --}}
                 <div class="relative h-56 bg-gradient-to-br from-{{ $person['color'] }}-100 to-{{ $person['color'] }}-200 overflow-hidden rounded-t-[20px]">
                     @if(file_exists(public_path('images/team/'.$person['photo'])))
-                        <img src="{{ asset('images/team/'.$person['photo']) }}" alt="{{ $person['name'] }}"
+                        <img src="{{ asset('images/team/'.$person['photo']) }}"
+                             alt="{{ $person['name'] }}"
                              class="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-105">
                     @else
                         <div class="w-full h-full flex items-center justify-center">
@@ -116,18 +244,28 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                             </div>
                         </div>
                     @endif
+
+                    {{-- Role icon badge --}}
                     <div class="absolute top-4 right-4 icon-badge w-10 h-10 bg-{{ $person['color'] }}-500 text-white shadow-lg">
                         <i class="{{ $person['icon'] }} text-sm"></i>
                     </div>
-                    <div class="absolute top-4 left-4 text-2xl">{{ $person['flag'] }}</div>
+
+                    {{-- Flag image (top-left) --}}
+                    <div class="absolute top-4 left-4">
+                        <img src="{{ asset('images/'.$person['flag']) }}"
+                             alt="{{ $person['flagAlt'] }} flag"
+                             class="flag-circle">
+                    </div>
                 </div>
+
+                {{-- Card body --}}
                 <div class="p-7">
                     <h3 class="text-xl font-black text-gray-900">{{ $person['name'] }}</h3>
                     <p class="text-sm font-black text-{{ $person['color'] }}-500 mb-3 uppercase tracking-wide">
                         {!! $person['role'] !!}
                     </p>
                     <p class="text-sm text-gray-500 leading-relaxed mb-4">{{ $person['desc'] }}</p>
-                    <div class="border-l-4 border-{{ $person['color'] }}-300 pl-4">
+                    <div class="border-l-4 border-{{ $person['color'] }}-300 pl-4" style="border-radius:0">
                         <p class="text-xs text-gray-500 italic">"{{ $person['quote'] }}"</p>
                     </div>
                 </div>
@@ -137,10 +275,16 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
 
         {{-- Field & Volunteer Teams ── --}}
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
             {{-- Cambodia ── --}}
             <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-8 border border-orange-100 reveal-left">
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-orange-200">🇰🇭</div>
+                    {{-- Cambodia flag square badge --}}
+                    <div class="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-orange-200 flex-shrink-0">
+                        <img src="{{ asset('images/kh.svg') }}"
+                             alt="Cambodia flag"
+                             class="flag-square">
+                    </div>
                     <div>
                         <h3 class="font-black text-gray-900 text-lg">In Cambodia</h3>
                         <p class="text-xs text-gray-500 font-medium">Our ground team</p>
@@ -167,7 +311,12 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             {{-- France ── --}}
             <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-100 reveal-right">
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-blue-200">🇫🇷</div>
+                    {{-- France flag square badge --}}
+                    <div class="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-blue-200 flex-shrink-0">
+                        <img src="{{ asset('images/fr.svg') }}"
+                             alt="France flag"
+                             class="flag-square">
+                    </div>
                     <div>
                         <h3 class="font-black text-gray-900 text-lg">In France</h3>
                         <p class="text-xs text-gray-500 font-medium">Our volunteer network</p>
@@ -188,6 +337,7 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
