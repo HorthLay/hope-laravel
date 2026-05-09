@@ -1,12 +1,11 @@
-﻿{{-- resources/views/pages/families/housing.blade.php --}}
+{{-- resources/views/pages/families/housing.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Housing & Family Stability')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-/* â•â• DESIGN: Night sky â†’ dawn gradient — particle stars, golden light rays, warm hope â•â• */
+/* ══ DESIGN: Night sky → dawn gradient - particle stars, golden light rays, warm hope ══ */
 :root{
     --gold:#fbbf24; --gold-d:#d97706; --ember:#f97316;
     --dawn:#fde68a; --sky:#0c1445; --deep:#04091f;
@@ -34,9 +33,9 @@
 .reveal.in{opacity:1;transform:none}
 .d1{transition-delay:.08s}.d2{transition-delay:.18s}.d3{transition-delay:.28s}.d4{transition-delay:.38s}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   HERO — night sky
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ══════════════════════
+   HERO - night sky
+══════════════════════ */
 .hero{
     position:relative;overflow:hidden;
     min-height:100vh;display:flex;align-items:center;
@@ -65,7 +64,7 @@
     animation:ray 3s ease-in-out infinite;
 }
 
-/* Photo strip — horizontal scroll of children images */
+/* Photo strip - horizontal scroll of children images */
 .photo-strip{
     position:absolute;bottom:0;left:0;right:0;z-index:2;
     height:260px;
@@ -101,7 +100,7 @@
     display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;
     font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
     color:rgba(251,191,36,.4);margin-bottom:32px;
-    font-family:'Outfit',sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 .breadcrumb a{color:rgba(251,191,36,.4);text-decoration:none;transition:color .2s;}
 .breadcrumb a:hover{color:rgba(251,191,36,.9);}
@@ -113,7 +112,7 @@
     padding:8px 20px;border-radius:999px;
     background:rgba(251,191,36,.08);
     border:1px solid rgba(251,191,36,.25);
-    font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:700;
     letter-spacing:.14em;text-transform:uppercase;color:var(--gold);
     margin-bottom:28px;
     animation:fadeUp .6s ease both;
@@ -126,7 +125,7 @@
 
 /* Heading */
 .h-heading{
-    font-family:'Cormorant Garamond',serif;
+    font-family: 'Montserrat', sans-serif;
     font-size:clamp(3rem,8vw,6.5rem);
     font-weight:700;line-height:1;
     color:#fff;
@@ -142,7 +141,7 @@
 }
 
 .h-sub{
-    font-family:'Outfit',sans-serif;font-size:1.05rem;color:rgba(255,255,255,.5);
+    font-family: 'Montserrat', sans-serif;font-size:1.05rem;color:rgba(255,255,255,.5);
     line-height:1.8;max-width:540px;margin:0 auto 40px;
     animation:fadeUp .8s .18s ease both;
 }
@@ -156,7 +155,7 @@
     display:inline-flex;align-items:center;gap:10px;
     padding:16px 34px;border-radius:14px;
     background:linear-gradient(135deg,#fbbf24,#f97316);
-    color:#1c1033;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:800;
+    color:#1c1033;font-family: 'Montserrat', sans-serif;font-size:.9rem;font-weight:800;
     text-decoration:none;
     box-shadow:0 8px 32px rgba(251,191,36,.4),0 0 0 0 rgba(251,191,36,.3);
     transition:transform .22s,box-shadow .22s;
@@ -169,7 +168,7 @@
     background:rgba(255,255,255,.05);
     border:1.5px solid rgba(251,191,36,.3);
     color:rgba(255,255,255,.75);
-    font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:.9rem;font-weight:700;
     text-decoration:none;transition:background .2s,border-color .2s;
 }
 .btn-outline:hover{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.6);color:#fff;}
@@ -182,37 +181,37 @@
 }
 .h-stat{}
 .h-stat-n{
-    font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:2.4rem;font-weight:700;
     color:#fbbf24;line-height:1;letter-spacing:-.02em;
 }
 .h-stat-l{
-    font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:700;
     color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-top:3px;
 }
 .h-stat-div{width:1px;background:rgba(251,191,36,.12);align-self:stretch;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════
    WAVE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════ */
 .wave-dark{line-height:0;overflow:hidden;background:var(--cream);}
 .wave-dark svg{display:block;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════
    PROGRAM CARDS
    Light cream bg, warm card style
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════ */
 .section-bg{background:var(--cream);padding:96px 0;}
 
 /* Section label */
 .sec-label{
     display:inline-flex;align-items:center;gap:8px;
-    font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     color:var(--gold-d);
 }
 .sec-label-line{width:28px;height:2px;background:linear-gradient(90deg,var(--gold),var(--ember));border-radius:2px;}
 
 .sec-heading{
-    font-family:'Cormorant Garamond',serif;
+    font-family: 'Montserrat', sans-serif;
     font-size:clamp(2.2rem,5vw,3.6rem);
     font-weight:700;color:var(--ink);line-height:1.08;letter-spacing:-.02em;
 }
@@ -222,7 +221,7 @@
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 
-/* â”€â”€ Card layout: large horizontal â”€â”€ */
+/* ── Card layout: large horizontal ── */
 .prog-card{
     position:relative;
     background:#fff;
@@ -255,7 +254,7 @@
     position:absolute;top:22px;left:22px;z-index:2;
     width:50px;height:50px;border-radius:16px;
     background:linear-gradient(135deg,#fbbf24,#f97316);
-    color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;
+    color:#fff;font-family: 'Montserrat', sans-serif;font-size:1.5rem;font-weight:700;
     display:flex;align-items:center;justify-content:center;
     box-shadow:0 4px 20px rgba(251,191,36,.5);
     transition:transform .25s,box-shadow .25s;
@@ -279,7 +278,7 @@
     display:flex;align-items:center;gap:8px;
 }
 .prog-img-tag{
-    font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:9px;font-weight:700;
     letter-spacing:.1em;text-transform:uppercase;
     background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);
     color:rgba(255,255,255,.75);padding:4px 11px;border-radius:999px;
@@ -302,13 +301,13 @@
 
 .prog-cat{
     display:inline-flex;align-items:center;gap:6px;
-    font-family:'Outfit',sans-serif;font-size:9.5px;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:9.5px;font-weight:700;
     letter-spacing:.12em;text-transform:uppercase;
     padding:5px 14px;border-radius:999px;width:fit-content;
     margin-bottom:16px;
 }
 .prog-title{
-    font-family:'Cormorant Garamond',serif;
+    font-family: 'Montserrat', sans-serif;
     font-size:1.75rem;font-weight:700;color:var(--ink);
     line-height:1.2;margin-bottom:16px;
     transition:color .2s;
@@ -330,14 +329,14 @@
 .prog-card:hover .prog-title-text::after{width:100%;}
 
 .prog-desc{
-    font-family:'Outfit',sans-serif;font-size:.9rem;color:var(--muted);
+    font-family: 'Montserrat', sans-serif;font-size:.9rem;color:var(--muted);
     line-height:1.82;margin-bottom:28px;
 }
 
 /* Icon feature row */
 .prog-feature{
     display:flex;align-items:center;gap:10px;
-    font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;
+    font-family: 'Montserrat', sans-serif;font-size:.82rem;font-weight:600;
     color:var(--gold-d);margin-bottom:10px;
 }
 .prog-feature-icon{
@@ -347,7 +346,7 @@
 
 .prog-link{
     display:inline-flex;align-items:center;gap:8px;
-    font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;
+    font-family: 'Montserrat', sans-serif;font-size:11px;font-weight:800;
     letter-spacing:.07em;text-transform:uppercase;
     color:var(--gold-d);text-decoration:none;
     margin-top:4px;
@@ -356,9 +355,9 @@
 }
 .prog-link:hover{border-color:var(--gold-d);gap:13px;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════
    IMPACT BAND
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════ */
 .impact-band{
     background:linear-gradient(135deg,#04091f 0%,#0c1445 50%,#1a0a3d 100%);
     padding:80px 20px;position:relative;overflow:hidden;
@@ -392,16 +391,16 @@
     margin:0 auto 16px;
 }
 .impact-n{
-    font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:2.4rem;font-weight:700;
     background:linear-gradient(135deg,#fde68a,#fbbf24);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     line-height:1;margin-bottom:5px;
 }
-.impact-l{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.09em;}
+.impact-l{font-family: 'Montserrat', sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.09em;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════
    QUOTE STRIP
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════ */
 .q-strip{
     position:relative;overflow:hidden;
     background:linear-gradient(135deg,#fffbf0,#fef3c7,#fffbf0);
@@ -412,25 +411,25 @@
 .q-strip::before{
     content:'"';
     position:absolute;right:-20px;top:50%;transform:translateY(-50%);
-    font-family:'Cormorant Garamond',serif;font-size:24rem;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:24rem;font-weight:700;
     color:rgba(251,191,36,.06);line-height:1;pointer-events:none;user-select:none;
 }
 .q-text{
-    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-family: 'Montserrat', sans-serif;font-style:italic;
     font-size:clamp(1.5rem,3.5vw,2.4rem);font-weight:600;
     color:var(--ink);line-height:1.42;max-width:800px;
     position:relative;z-index:1;
 }
 .q-text span{color:var(--gold-d);}
 .q-src{
-    font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;
+    font-family: 'Montserrat', sans-serif;font-size:11px;font-weight:700;
     color:var(--muted);text-transform:uppercase;letter-spacing:.1em;
     margin-top:20px;position:relative;z-index:1;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════
    CTA
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════ */
 .cta-wrap{
     background:linear-gradient(135deg,#04091f 0%,#0c1445 55%,#1a0a3d 100%);
     padding:80px 20px;position:relative;overflow:hidden;
@@ -473,115 +472,96 @@
     .q-strip::before{display:none;}
 }
 
-/* Donate page global header/font match */
-body{font-family:'Outfit',sans-serif!important;}
-body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
-h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
-h1,h2,h3,h4,h5,h6,
-.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
-.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
-.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
-    font-family:'Montserrat',sans-serif!important;
-}
+/* --- GLOBAL STYLE OVERRIDE --- */
+body{font-family: 'Montserrat', sans-serif;}
+h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,.pill,.breadcrumb{font-family: 'Montserrat', sans-serif;}
 .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
-    position:relative!important;
-    min-height:370px!important;
-    height:370px!important;
-    display:flex!important;
-    align-items:center!important;
-    overflow:hidden!important;
-    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
-    isolation:isolate!important;
-    border-radius:0!important;
+    position:relative!important;min-height:clamp(480px,65vh,700px)!important;height:auto!important;
+    display:flex!important;align-items:flex-end!important;overflow:hidden!important;
+    background:#0d1a0a url('{{ asset("images/image-background.jpg") }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;border-radius:0!important;
 }
 .page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
-    content:''!important;
-    position:absolute!important;inset:0!important;z-index:1!important;
-    background:
-        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
-        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    content:''!important;position:absolute!important;inset:0!important;z-index:1!important;
+    background:linear-gradient(0deg,rgba(0,0,0,.80) 0%,rgba(0,0,0,.50) 38%,rgba(0,0,0,.18) 70%,rgba(0,0,0,.05) 100%)!important;
     pointer-events:none!important;
 }
 .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
     position:absolute!important;inset:0!important;z-index:0!important;
-    display:block!important;
     width:100%!important;height:100%!important;
     object-fit:cover!important;object-position:center 45%!important;
-    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-image:url('{{ asset("images/image-background.jpg") }}')!important;
     background-size:cover!important;background-position:center 45%!important;
-    filter:none!important;transform:none!important;transition:none!important;
-    opacity:1!important;
+    filter:none!important;transform:none!important;transition:none!important;opacity:1!important;
 }
-.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
-    transform:none!important;
-}
-.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
-    display:none!important;
-}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{transform:none!important;}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow,.cp-orb,.shape-circle,.shape-circle-sm,.shape-dot-grid{display:none!important;}
 .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
     position:relative!important;z-index:2!important;
-    max-width:1020px!important;width:100%!important;
-    margin:0 auto!important;
-    padding:68px 28px 56px!important;
-    display:block!important;
-    text-align:left!important;
+    max-width:1100px!important;width:100%!important;
+    margin:0 auto!important;padding:0 40px 60px!important;
+    display:block!important;text-align:left!important;
 }
 .page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
-.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
-    display:none!important;
-}
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow,.hero-eyebrow{display:none!important;}
 .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(2.7rem,4vw,3.55rem)!important;
-    font-weight:900!important;
-    line-height:.96!important;
-    letter-spacing:-.015em!important;
-    color:#fff!important;
-    max-width:650px!important;
-    margin:0 0 22px!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
-    animation:fadeUp .6s .08s ease both!important;
+    font-family: 'Montserrat', sans-serif;
+    font-size:clamp(2.4rem,4.5vw,3.8rem)!important;font-weight:900!important;
+    line-height:1.0!important;letter-spacing:-.02em!important;color:#fff!important;
+    max-width:720px!important;margin:0 0 18px!important;text-align:left!important;
+    text-shadow:0 2px 8px rgba(0,0,0,.8),0 4px 20px rgba(0,0,0,.6)!important;
+    animation:fadeUp .65s .08s ease both!important;
 }
-.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
-.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
-.text-gradient,.glow{
-    background:none!important;
-    color:#fff!important;
-    -webkit-text-fill-color:#fff!important;
-    filter:none!important;
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,.hero-h1 span,.hero-h1 em,.text-gradient,.glow{
+    background:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;filter:none!important;
 }
 .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(1rem,1.25vw,1.18rem)!important;
-    font-weight:700!important;
-    color:#fff!important;
-    line-height:1.55!important;
-    max-width:665px!important;
-    margin:0!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+    font-family: 'Montserrat', sans-serif;font-size:clamp(.95rem,1.4vw,1.15rem)!important;
+    font-weight:500!important;color:rgba(255,255,255,.92)!important;line-height:1.65!important;
+    max-width:640px!important;margin:0 0 28px!important;text-align:left!important;
+    text-shadow:0 1px 6px rgba(0,0,0,.7)!important;
 }
+/* Hero CTA Buttons */
+.hero-cta-wrap{display:flex!important;flex-wrap:wrap!important;gap:14px!important;align-items:center!important;}
+.hero-cta-btn{
+    display:inline-flex!important;align-items:center!important;gap:10px!important;
+    padding:13px 28px!important;background:#0ea5e9!important;color:#fff!important;
+    font-family: 'Montserrat', sans-serif;font-size:12.5px!important;
+    font-weight:800!important;letter-spacing:.07em!important;text-transform:uppercase!important;
+    border-radius:6px!important;text-decoration:none!important;
+    transition:background .2s,transform .18s!important;border:2px solid transparent!important;
+    box-shadow:0 4px 14px rgba(14,165,233,.35)!important;
+}
+.hero-cta-btn:hover{background:#0284c7!important;transform:translateY(-2px)!important;color:#fff!important;}
+.hero-cta-btn.outline{background:transparent!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:none!important;color:#fff!important;}
+.hero-cta-btn.outline:hover{background:rgba(255,255,255,.15)!important;border-color:#fff!important;}
+/* Mobile */
 @media(max-width:1024px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:900px!important;padding:0 28px 50px!important;}
 }
 @media(max-width:768px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
-    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
-    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(420px,75vw,560px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2rem,7vw,3rem)!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:55% 45%!important;object-position:55% 45%!important;}
+    .hero-cta-wrap{flex-direction:column!important;gap:10px!important;}
+    .hero-cta-btn{width:100%!important;justify-content:center!important;padding:14px 20px!important;}
 }
 @media(max-width:480px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(380px,85vw,480px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 16px 36px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.75rem,9vw,2.4rem)!important;margin-bottom:14px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.9rem!important;margin-bottom:22px!important;}
+    .hero-cta-btn{font-size:11.5px!important;padding:12px 18px!important;}
+}
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
     .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
     .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
 }</style>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     HERO — night sky with particles
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+{{-- ══════════════════════════════════
+     HERO - night sky with particles
+══════════════════════════════════ --}}
 <section class="hero">
     <canvas id="starCanvas"></canvas>
 
@@ -621,7 +601,7 @@ h1,h2,h3,h4,h5,h6,
         </h1>
 
         <p class="h-sub">
-            A safe roof is not a privilege — it is the foundation upon which a child's entire future is built. We build, restore, and protect.
+            A safe roof is not a privilege - it is the foundation upon which a child's entire future is built. We build, restore, and protect.
         </p>
 
         <div class="h-btns">
@@ -634,7 +614,7 @@ h1,h2,h3,h4,h5,h6,
         </div>
 
         <div class="h-stats">
-            @foreach([['4','Programs'],['100%','Field Impact'],['ðŸ ','Cambodia'],['1958','Since']] as [$n,$l])
+            @foreach([['4','Programs'],['100%','Field Impact'],['🏠','Cambodia'],['1958','Since']] as [$n,$l])
             <div class="h-stat">
                 <div class="h-stat-n">{{ $n }}</div>
                 <div class="h-stat-l">{{ $l }}</div>
@@ -652,7 +632,7 @@ h1,h2,h3,h4,h5,h6,
     </svg>
 </div>
 
-{{-- â•â• PROGRAMS â•â• --}}
+{{-- ══ PROGRAMS ══ --}}
 <section class="section-bg">
     <div class="max-w-7xl mx-auto px-4">
 
@@ -665,7 +645,7 @@ h1,h2,h3,h4,h5,h6,
                     Four Pillars<br>of <em>Family Stability</em>
                 </h2>
             </div>
-            <p style="font-family:'Outfit',sans-serif;font-size:.9rem;color:var(--muted);max-width:360px;line-height:1.8;flex-shrink:0;">
+            <p style="font-family: 'Montserrat', sans-serif;font-size:.9rem;color:var(--muted);max-width:360px;line-height:1.8;flex-shrink:0;">
                 Through housing support, safety, and family care, we give every child in Cambodia a solid foundation from which to grow and dream.
             </p>
         </div>
@@ -699,7 +679,7 @@ h1,h2,h3,h4,h5,h6,
                 'tag'   => 'Prevention',
                 'icon'  => 'fas fa-shield-alt',
                 'title' => 'Prevention & Safety',
-                'desc'  => 'Housing is not just about walls — it involves safety, hygiene, and a nurturing environment. We implement prevention actions and raise families\' awareness of best practices to ensure healthy and protective conditions for children.',
+                'desc'  => 'Housing is not just about walls - it involves safety, hygiene, and a nurturing environment. We implement prevention actions and raise families\' awareness of best practices to ensure healthy and protective conditions for children.',
                 'feats' => [['fas fa-hands-wash','Hygiene programs'],['fas fa-exclamation-triangle','Risk prevention'],['fas fa-heartbeat','Health monitoring']],
             ],
             [
@@ -762,7 +742,7 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â• IMPACT NUMBERS â•â• --}}
+{{-- ══ IMPACT NUMBERS ══ --}}
 <section class="impact-band reveal">
     <div class="impact-orb impact-orb-a"></div>
     <div class="impact-orb impact-orb-b"></div>
@@ -771,7 +751,7 @@ h1,h2,h3,h4,h5,h6,
             <div class="sec-label justify-center mb-4" style="color:rgba(251,191,36,.6);">
                 <div class="sec-label-line"></div> By the Numbers <div class="sec-label-line"></div>
             </div>
-            <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:#fff;letter-spacing:-.02em;">
+            <h2 style="font-family: 'Montserrat', sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:#fff;letter-spacing:-.02em;">
                 Our Impact on Families
             </h2>
         </div>
@@ -794,41 +774,41 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â• QUOTE â•â• --}}
+{{-- ══ QUOTE ══ --}}
 <section class="q-strip reveal">
     <div class="max-w-5xl mx-auto px-4 text-center">
-        <div style="font-size:3rem;color:var(--gold-d);line-height:1;margin-bottom:16px;font-family:'Cormorant Garamond',serif;">"</div>
+        <div style="font-size:3rem;color:var(--gold-d);line-height:1;margin-bottom:16px;font-family: 'Montserrat', sans-serif;">"</div>
         <p class="q-text mx-auto">
-            A safe home is not a luxury — it is the <span>light</span> that gives every child the courage to dream beyond their walls.
+            A safe home is not a luxury - it is the <span>light</span> that gives every child the courage to dream beyond their walls.
         </p>
-        <div class="q-src mx-auto">— Des Ailes pour Grandir · Cambodia</div>
+        <div class="q-src mx-auto">€ Des Ailes pour Grandir - Cambodia</div>
     </div>
 </section>
 
-{{-- â•â• CTA â•â• --}}
+{{-- ══ CTA ══ --}}
 <section class="cta-wrap">
     <div class="cta-glow"></div>
     <div class="cta-box reveal">
         <div class="text-white" style="text-align:inherit;">
-            <p style="font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(251,191,36,.5);margin-bottom:12px;">
+            <p style="font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(251,191,36,.5);margin-bottom:12px;">
                 <i class="fas fa-house-user mr-1"></i> Make an Impact
             </p>
-            <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.4rem);font-weight:700;color:#fff;line-height:1.08;letter-spacing:-.02em;margin-bottom:14px;">
+            <h2 style="font-family: 'Montserrat', sans-serif;font-size:clamp(2rem,4.5vw,3.4rem);font-weight:700;color:#fff;line-height:1.08;letter-spacing:-.02em;margin-bottom:14px;">
                 Help a Family<br>Find <em style="font-style:italic;background:linear-gradient(90deg,#fbbf24,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Their Home</em>
             </h2>
-            <p style="font-family:'Outfit',sans-serif;color:rgba(255,255,255,.5);font-size:.9rem;max-width:420px;line-height:1.78;">
+            <p style="font-family: 'Montserrat', sans-serif;color:rgba(255,255,255,.5);font-size:.9rem;max-width:420px;line-height:1.78;">
                 Your support funds housing reconstruction, safety programs, and daily care for vulnerable families across Cambodia.
             </p>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px;flex-shrink:0;">
             <a href="{{ route('sponsor.children') }}"
-               style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 38px;background:linear-gradient(135deg,#fbbf24,#f97316);color:#1c1033;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:800;border-radius:16px;text-decoration:none;box-shadow:0 10px 32px rgba(251,191,36,.3);transition:transform .22s,box-shadow .22s;"
+               style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 38px;background:linear-gradient(135deg,#fbbf24,#f97316);color:#1c1033;font-family: 'Montserrat', sans-serif;font-size:.9rem;font-weight:800;border-radius:16px;text-decoration:none;box-shadow:0 10px 32px rgba(251,191,36,.3);transition:transform .22s,box-shadow .22s;"
                onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 20px 48px rgba(251,191,36,.45)'"
                onmouseout="this.style.transform='';this.style.boxShadow='0 10px 32px rgba(251,191,36,.3)'">
                 <i class="fas fa-heart"></i> Sponsor a Family
             </a>
             <a href="{{ route('support.donate') }}"
-               style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 38px;background:rgba(251,191,36,.08);border:1.5px solid rgba(251,191,36,.3);color:rgba(255,255,255,.8);font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:700;border-radius:16px;text-decoration:none;transition:background .2s,border-color .2s;"
+               style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 38px;background:rgba(251,191,36,.08);border:1.5px solid rgba(251,191,36,.3);color:rgba(255,255,255,.8);font-family: 'Montserrat', sans-serif;font-size:.9rem;font-weight:700;border-radius:16px;text-decoration:none;transition:background .2s,border-color .2s;"
                onmouseover="this.style.background='rgba(251,191,36,.15)';this.style.borderColor='rgba(251,191,36,.6)'"
                onmouseout="this.style.background='rgba(251,191,36,.08)';this.style.borderColor='rgba(251,191,36,.3)'">
                 <i class="fas fa-hand-holding-heart"></i> Make a Donation
@@ -838,9 +818,9 @@ h1,h2,h3,h4,h5,h6,
 </section>
 
 <script>
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════
    PARTICLE STAR CANVAS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════ */
 (function(){
     var canvas = document.getElementById('starCanvas');
     var ctx    = canvas.getContext('2d');
@@ -853,7 +833,7 @@ h1,h2,h3,h4,h5,h6,
     window.addEventListener('resize', resize);
     resize();
 
-    /* â”€â”€ Static stars â”€â”€ */
+    /* ── Static stars ── */
     for(var i=0;i<220;i++){
         particles.push({
             x: Math.random()*100,
@@ -866,7 +846,7 @@ h1,h2,h3,h4,h5,h6,
         });
     }
 
-    /* â”€â”€ Shoot a new star â”€â”€ */
+    /* ── Shoot a new star ── */
     function spawnShooting(){
         shooting.push({
             x: Math.random()*W*.6 + W*.1,
@@ -936,9 +916,9 @@ h1,h2,h3,h4,h5,h6,
     draw();
 })();
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════
    LIGHT RAYS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════ */
 (function(){
     var container = document.getElementById('raysContainer');
     var count = 12;
@@ -962,9 +942,9 @@ h1,h2,h3,h4,h5,h6,
     }
 })();
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════
    SCROLL REVEAL
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+═══════════════════════════════ */
 (function(){
     var o = new IntersectionObserver(function(entries){
         entries.forEach(function(e){

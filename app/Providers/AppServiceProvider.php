@@ -42,9 +42,9 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('settings', $this->loadSettings());
 
-         if (config('app.env') === 'local') {
-            URL::forceScheme('https');
-        }
+        //  if (config('app.env') === 'local') {
+        //     URL::forceScheme('https');
+        // }
 
         RateLimiter::for('global', function (Request $request) {
                 return Limit::perMinute(1000)->by($request->ip());

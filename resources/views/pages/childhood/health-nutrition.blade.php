@@ -1,9 +1,8 @@
-﻿{{-- resources/views/pages/childhood/health-nutrition.blade.php --}}
+{{-- resources/views/pages/childhood/health-nutrition.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Health & Nutrition')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -44,7 +43,7 @@
 .hero-pill { display:inline-flex;align-items:center;gap:7px;padding:7px 18px;border-radius:999px;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.35);font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#fb923c;margin-bottom:20px;animation:fadeUp .6s ease both; }
 
 /* Section pill */
-.section-pill { display:inline-flex;align-items:center;gap:7px;padding:6px 16px;border-radius:999px;background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(245,158,11,.06));border:1px solid rgba(249,115,22,.18);font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#ea580c;margin-bottom:14px;font-family:'DM Sans',sans-serif; }
+.section-pill { display:inline-flex;align-items:center;gap:7px;padding:6px 16px;border-radius:999px;background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(245,158,11,.06));border:1px solid rgba(249,115,22,.18);font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#ea580c;margin-bottom:14px;font-family: 'Montserrat', sans-serif; }
 .dot-live { width:6px;height:6px;border-radius:50%;background:var(--orange);display:inline-block;animation:floatY 1.8s ease-in-out infinite; }
 
 .wave-divider { line-height:0;overflow:hidden; }
@@ -62,14 +61,14 @@
 .prot-row:hover .prot-img-pane img { transform:scale(1.07); }
 .prot-img-overlay { position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(10,20,30,.55) 100%);pointer-events:none; }
 
-.prot-num { position:absolute;top:20px;left:20px;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;font-size:17px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(249,115,22,.45);font-family:'DM Sans',sans-serif;z-index:2; }
+.prot-num { position:absolute;top:20px;left:20px;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;font-size:17px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(249,115,22,.45);font-family: 'Montserrat', sans-serif;z-index:2; }
 .prot-row.img-right .prot-num { left:auto;right:20px; }
 
 .prot-text-pane { background:#fff;padding:48px 44px;display:flex;flex-direction:column;justify-content:center; }
 .prot-icon { width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;flex-shrink:0; }
-.prot-title { font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:900;color:var(--ink);line-height:1.25;margin-bottom:14px; }
-.prot-desc { font-family:'DM Sans',sans-serif;font-size:.9rem;color:#64748b;line-height:1.78;margin-bottom:24px; }
-.prot-tag { display:inline-flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:#fff7ed;border:1px solid #fed7aa33;color:var(--orange-d);width:fit-content; }
+.prot-title { font-family: 'Montserrat', sans-serif;font-size:1.55rem;font-weight:900;color:var(--ink);line-height:1.25;margin-bottom:14px; }
+.prot-desc { font-family: 'Montserrat', sans-serif;font-size:.9rem;color:#64748b;line-height:1.78;margin-bottom:24px; }
+.prot-tag { display:inline-flex;align-items:center;gap:5px;font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:#fff7ed;border:1px solid #fed7aa33;color:var(--orange-d);width:fit-content; }
 
 /* CTA */
 .cta-banner { background:linear-gradient(135deg,#ea580c 0%,#f97316 50%,#f59e0b 100%);border-radius:28px;padding:64px 48px;position:relative;overflow:hidden; }
@@ -95,113 +94,94 @@
     .cta-banner { padding:44px 20px;border-radius:20px; }
 }
 
-/* Donate page global header/font match */
-body{font-family:'Outfit',sans-serif!important;}
-body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
-h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
-h1,h2,h3,h4,h5,h6,
-.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
-.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
-.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
-    font-family:'Montserrat',sans-serif!important;
-}
+/* --- GLOBAL STYLE OVERRIDE --- */
+body{font-family: 'Montserrat', sans-serif;}
+h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,.pill,.breadcrumb{font-family: 'Montserrat', sans-serif;}
 .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
-    position:relative!important;
-    min-height:370px!important;
-    height:370px!important;
-    display:flex!important;
-    align-items:center!important;
-    overflow:hidden!important;
-    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
-    isolation:isolate!important;
-    border-radius:0!important;
+    position:relative!important;min-height:clamp(480px,65vh,700px)!important;height:auto!important;
+    display:flex!important;align-items:flex-end!important;overflow:hidden!important;
+    background:#0d1a0a url('{{ asset("images/image-background.jpg") }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;border-radius:0!important;
 }
 .page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
-    content:''!important;
-    position:absolute!important;inset:0!important;z-index:1!important;
-    background:
-        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
-        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    content:''!important;position:absolute!important;inset:0!important;z-index:1!important;
+    background:linear-gradient(0deg,rgba(0,0,0,.80) 0%,rgba(0,0,0,.50) 38%,rgba(0,0,0,.18) 70%,rgba(0,0,0,.05) 100%)!important;
     pointer-events:none!important;
 }
 .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
     position:absolute!important;inset:0!important;z-index:0!important;
-    display:block!important;
     width:100%!important;height:100%!important;
     object-fit:cover!important;object-position:center 45%!important;
-    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-image:url('{{ asset("images/image-background.jpg") }}')!important;
     background-size:cover!important;background-position:center 45%!important;
-    filter:none!important;transform:none!important;transition:none!important;
-    opacity:1!important;
+    filter:none!important;transform:none!important;transition:none!important;opacity:1!important;
 }
-.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
-    transform:none!important;
-}
-.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
-    display:none!important;
-}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{transform:none!important;}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow,.cp-orb,.shape-circle,.shape-circle-sm,.shape-dot-grid{display:none!important;}
 .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
     position:relative!important;z-index:2!important;
-    max-width:1020px!important;width:100%!important;
-    margin:0 auto!important;
-    padding:68px 28px 56px!important;
-    display:block!important;
-    text-align:left!important;
+    max-width:1100px!important;width:100%!important;
+    margin:0 auto!important;padding:0 40px 60px!important;
+    display:block!important;text-align:left!important;
 }
 .page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
-.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
-    display:none!important;
-}
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow,.hero-eyebrow{display:none!important;}
 .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(2.7rem,4vw,3.55rem)!important;
-    font-weight:900!important;
-    line-height:.96!important;
-    letter-spacing:-.015em!important;
-    color:#fff!important;
-    max-width:650px!important;
-    margin:0 0 22px!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
-    animation:fadeUp .6s .08s ease both!important;
+    font-family: 'Montserrat', sans-serif;
+    font-size:clamp(2.4rem,4.5vw,3.8rem)!important;font-weight:900!important;
+    line-height:1.0!important;letter-spacing:-.02em!important;color:#fff!important;
+    max-width:720px!important;margin:0 0 18px!important;text-align:left!important;
+    text-shadow:0 2px 8px rgba(0,0,0,.8),0 4px 20px rgba(0,0,0,.6)!important;
+    animation:fadeUp .65s .08s ease both!important;
 }
-.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
-.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
-.text-gradient,.glow{
-    background:none!important;
-    color:#fff!important;
-    -webkit-text-fill-color:#fff!important;
-    filter:none!important;
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,.hero-h1 span,.hero-h1 em,.text-gradient,.glow{
+    background:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;filter:none!important;
 }
 .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(1rem,1.25vw,1.18rem)!important;
-    font-weight:700!important;
-    color:#fff!important;
-    line-height:1.55!important;
-    max-width:665px!important;
-    margin:0!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+    font-family: 'Montserrat', sans-serif;font-size:clamp(.95rem,1.4vw,1.15rem)!important;
+    font-weight:500!important;color:rgba(255,255,255,.92)!important;line-height:1.65!important;
+    max-width:640px!important;margin:0 0 28px!important;text-align:left!important;
+    text-shadow:0 1px 6px rgba(0,0,0,.7)!important;
 }
+/* Hero CTA Buttons */
+.hero-cta-wrap{display:flex!important;flex-wrap:wrap!important;gap:14px!important;align-items:center!important;}
+.hero-cta-btn{
+    display:inline-flex!important;align-items:center!important;gap:10px!important;
+    padding:13px 28px!important;background:#0ea5e9!important;color:#fff!important;
+    font-family: 'Montserrat', sans-serif;font-size:12.5px!important;
+    font-weight:800!important;letter-spacing:.07em!important;text-transform:uppercase!important;
+    border-radius:6px!important;text-decoration:none!important;
+    transition:background .2s,transform .18s!important;border:2px solid transparent!important;
+    box-shadow:0 4px 14px rgba(14,165,233,.35)!important;
+}
+.hero-cta-btn:hover{background:#0284c7!important;transform:translateY(-2px)!important;color:#fff!important;}
+.hero-cta-btn.outline{background:transparent!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:none!important;color:#fff!important;}
+.hero-cta-btn.outline:hover{background:rgba(255,255,255,.15)!important;border-color:#fff!important;}
+/* Mobile */
 @media(max-width:1024px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:900px!important;padding:0 28px 50px!important;}
 }
 @media(max-width:768px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
-    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
-    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(420px,75vw,560px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2rem,7vw,3rem)!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:55% 45%!important;object-position:55% 45%!important;}
+    .hero-cta-wrap{flex-direction:column!important;gap:10px!important;}
+    .hero-cta-btn{width:100%!important;justify-content:center!important;padding:14px 20px!important;}
 }
 @media(max-width:480px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(380px,85vw,480px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 16px 36px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.75rem,9vw,2.4rem)!important;margin-bottom:14px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.9rem!important;margin-bottom:22px!important;}
+    .hero-cta-btn{font-size:11.5px!important;padding:12px 18px!important;}
+}
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
     .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
     .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
 }</style>
 
-{{-- â•â• HERO â•â• --}}
+{{-- ══ HERO ══ --}}
 <section class="page-hero">
     <div class="page-hero-bg" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}')"></div>
     <div class="page-hero-overlay"></div>
@@ -221,19 +201,19 @@ h1,h2,h3,h4,h5,h6,
             <i class="fas fa-heartbeat text-xs"></i> Childhood Health
         </div>
         <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-5 max-w-2xl"
-            style="font-family:'Playfair Display',serif;animation:fadeUp .8s ease both;letter-spacing:-.02em;">
+            style="font-family: 'Montserrat', sans-serif;animation:fadeUp .8s ease both;letter-spacing:-.02em;">
             Health &<br>
             <span style="background:linear-gradient(90deg,#f97316,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Nutrition</span>
         </h1>
         <p class="text-lg text-white/70 font-medium max-w-lg leading-relaxed"
-           style="font-family:'DM Sans',sans-serif;animation:fadeUp .8s .18s ease both">
-            Building healthy bodies and minds — because a well-nourished child is a child who can learn and dream.
+           style="font-family: 'Montserrat', sans-serif;animation:fadeUp .8s .18s ease both">
+            Building healthy bodies and minds - because a well-nourished child is a child who can learn and dream.
         </p>
         <div class="flex gap-8 flex-wrap mt-10" style="animation:fadeUp .8s .32s ease both">
             @foreach([['4','Key Programs'],['95K+','Children/Year'],['84%','Funds to Field']] as [$n,$l])
             <div>
-                <div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-.02em;">{{ $n }}</div>
-                <div style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.09em;margin-top:3px;">{{ $l }}</div>
+                <div style="font-family: 'Montserrat', sans-serif;font-size:1.8rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-.02em;">{{ $n }}</div>
+                <div style="font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.09em;margin-top:3px;">{{ $l }}</div>
             </div>
             @if(!$loop->last)
             <div style="width:1px;background:rgba(255,255,255,.1);align-self:stretch;"></div>
@@ -249,16 +229,16 @@ h1,h2,h3,h4,h5,h6,
     </svg>
 </div>
 
-{{-- â•â• CARDS â•â• --}}
+{{-- ══ CARDS ══ --}}
 <section class="py-16 md:py-20" style="background:#f8fafc;">
     <div class="max-w-7xl mx-auto px-4">
 
         <div class="text-center mb-14 reveal">
             <div class="section-pill mx-auto mb-4"><span class="dot-live"></span> Health & Nutrition</div>
-            <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:var(--ink);margin-bottom:12px;">
+            <h2 style="font-family: 'Montserrat', sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:var(--ink);margin-bottom:12px;">
                 Four Pillars of Child Health
             </h2>
-            <p style="font-family:'DM Sans',sans-serif;font-size:.95rem;color:#64748b;max-width:520px;margin:0 auto;line-height:1.75;">
+            <p style="font-family: 'Montserrat', sans-serif;font-size:.95rem;color:#64748b;max-width:520px;margin:0 auto;line-height:1.75;">
                 A healthy child is a child who can learn. Through care, nutrition, hygiene, and well-being, we give every child in Cambodia the foundation to thrive.
             </p>
         </div>
@@ -318,7 +298,7 @@ h1,h2,h3,h4,h5,h6,
                     <h3 class="prot-title" style="margin-top:12px;">{{ $c['title'] }}</h3>
                     <p class="prot-desc">{{ $c['desc'] }}</p>
                     <a href="{{ route('sponsor.children') }}"
-                       style="display:inline-flex;align-items:center;gap:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);text-decoration:none;transition:gap .2s;"
+                       style="display:inline-flex;align-items:center;gap:7px;font-family: 'Montserrat', sans-serif;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);text-decoration:none;transition:gap .2s;"
                        onmouseover="this.style.gap='11px'" onmouseout="this.style.gap='7px'">
                         Learn more <i class="fas fa-arrow-right text-[10px]"></i>
                     </a>
@@ -330,7 +310,7 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â• CTA â•â• --}}
+{{-- ══ CTA ══ --}}
 <section class="py-16 md:py-20" style="background:#f8fafc;">
     <div class="max-w-7xl mx-auto px-4">
         <div class="cta-banner reveal">
@@ -338,25 +318,25 @@ h1,h2,h3,h4,h5,h6,
             <div class="cta-orb cta-orb-2"></div>
             <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div class="text-white text-center lg:text-left">
-                    <div style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px;">
+                    <div style="font-family: 'Montserrat', sans-serif;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px;">
                         <i class="fas fa-heart mr-1"></i> Take Action
                     </div>
-                    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;color:#fff;margin-bottom:10px;line-height:1.2;">
+                    <h2 style="font-family: 'Montserrat', sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;color:#fff;margin-bottom:10px;line-height:1.2;">
                         Make a Difference Today
                     </h2>
-                    <p style="font-family:'DM Sans',sans-serif;color:rgba(255,255,255,.8);font-size:.95rem;max-width:420px;line-height:1.7;">
+                    <p style="font-family: 'Montserrat', sans-serif;color:rgba(255,255,255,.8);font-size:.95rem;max-width:420px;line-height:1.7;">
                         Your support funds health, nutrition, and wellness programs for children in Cambodia.
                     </p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
                     <a href="{{ route('sponsor.children') }}"
-                       style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;background:#fff;color:#ea580c;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:800;border-radius:14px;text-decoration:none;box-shadow:0 8px 28px rgba(0,0,0,.15);transition:transform .2s,box-shadow .2s;"
+                       style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;background:#fff;color:#ea580c;font-family: 'Montserrat', sans-serif;font-size:.875rem;font-weight:800;border-radius:14px;text-decoration:none;box-shadow:0 8px 28px rgba(0,0,0,.15);transition:transform .2s,box-shadow .2s;"
                        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,.2)'"
                        onmouseout="this.style.transform='';this.style.boxShadow='0 8px 28px rgba(0,0,0,.15)'">
                         <i class="fas fa-heart"></i> Sponsor a Child
                     </a>
                     <a href="{{ route('support.donate') }}"
-                       style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);color:#fff;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:800;border-radius:14px;text-decoration:none;transition:background .2s,border-color .2s;"
+                       style="display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);color:#fff;font-family: 'Montserrat', sans-serif;font-size:.875rem;font-weight:800;border-radius:14px;text-decoration:none;transition:background .2s,border-color .2s;"
                        onmouseover="this.style.background='rgba(255,255,255,.22)';this.style.borderColor='rgba(255,255,255,.6)'"
                        onmouseout="this.style.background='rgba(255,255,255,.12)';this.style.borderColor='rgba(255,255,255,.35)'">
                         <i class="fas fa-hand-holding-heart"></i> Make a Donation

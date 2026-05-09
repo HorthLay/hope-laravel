@@ -1,10 +1,9 @@
-﻿{{-- resources/views/pages/about/team.blade.php --}}
+{{-- resources/views/pages/about/team.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Our Team')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 @keyframes fadeUp     { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
 @keyframes pulse-soft { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
@@ -39,107 +38,88 @@
 .flag-square{width:100%;height:100%;object-fit:cover;display:block}
 @media(max-width:640px){.page-hero-content{padding:60px 20px 56px}}
 
-/* Global header/font match */
-body{font-family:'Outfit',sans-serif!important;}
-body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
-h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
-h1,h2,h3,h4,h5,h6,
-.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
-.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
-.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
-    font-family:'Montserrat',sans-serif!important;
-}
+/* --- GLOBAL STYLE OVERRIDE --- */
+body{font-family: 'Montserrat', sans-serif;}
+h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,.pill,.breadcrumb{font-family: 'Montserrat', sans-serif;}
 .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
-    position:relative!important;
-    min-height:370px!important;
-    height:370px!important;
-    display:flex!important;
-    align-items:center!important;
-    overflow:hidden!important;
-    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
-    isolation:isolate!important;
-    border-radius:0!important;
+    position:relative!important;min-height:clamp(480px,65vh,700px)!important;height:auto!important;
+    display:flex!important;align-items:flex-end!important;overflow:hidden!important;
+    background:#0d1a0a url('{{ asset("images/image-background.jpg") }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;border-radius:0!important;
 }
 .page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
-    content:''!important;
-    position:absolute!important;inset:0!important;z-index:1!important;
-    background:
-        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
-        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    content:''!important;position:absolute!important;inset:0!important;z-index:1!important;
+    background:linear-gradient(0deg,rgba(0,0,0,.80) 0%,rgba(0,0,0,.50) 38%,rgba(0,0,0,.18) 70%,rgba(0,0,0,.05) 100%)!important;
     pointer-events:none!important;
 }
 .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
     position:absolute!important;inset:0!important;z-index:0!important;
-    display:block!important;
     width:100%!important;height:100%!important;
     object-fit:cover!important;object-position:center 45%!important;
-    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-image:url('{{ asset("images/image-background.jpg") }}')!important;
     background-size:cover!important;background-position:center 45%!important;
-    filter:none!important;transform:none!important;transition:none!important;
-    opacity:1!important;
+    filter:none!important;transform:none!important;transition:none!important;opacity:1!important;
 }
-.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
-    transform:none!important;
-}
-.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
-    display:none!important;
-}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{transform:none!important;}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow,.cp-orb,.shape-circle,.shape-circle-sm,.shape-dot-grid{display:none!important;}
 .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
     position:relative!important;z-index:2!important;
-    max-width:1020px!important;width:100%!important;
-    margin:0 auto!important;
-    padding:68px 28px 56px!important;
-    display:block!important;
-    text-align:left!important;
+    max-width:1100px!important;width:100%!important;
+    margin:0 auto!important;padding:0 40px 60px!important;
+    display:block!important;text-align:left!important;
 }
 .page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
-.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
-    display:none!important;
-}
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow,.hero-eyebrow{display:none!important;}
 .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(2.7rem,4vw,3.55rem)!important;
-    font-weight:900!important;
-    line-height:.96!important;
-    letter-spacing:-.015em!important;
-    color:#fff!important;
-    max-width:650px!important;
-    margin:0 0 22px!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
-    animation:fadeUp .6s .08s ease both!important;
+    font-family: 'Montserrat', sans-serif;
+    font-size:clamp(2.4rem,4.5vw,3.8rem)!important;font-weight:900!important;
+    line-height:1.0!important;letter-spacing:-.02em!important;color:#fff!important;
+    max-width:720px!important;margin:0 0 18px!important;text-align:left!important;
+    text-shadow:0 2px 8px rgba(0,0,0,.8),0 4px 20px rgba(0,0,0,.6)!important;
+    animation:fadeUp .65s .08s ease both!important;
 }
-.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
-.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
-.text-gradient,.glow{
-    background:none!important;
-    color:#fff!important;
-    -webkit-text-fill-color:#fff!important;
-    filter:none!important;
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,.hero-h1 span,.hero-h1 em,.text-gradient,.glow{
+    background:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;filter:none!important;
 }
 .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(1rem,1.25vw,1.18rem)!important;
-    font-weight:700!important;
-    color:#fff!important;
-    line-height:1.55!important;
-    max-width:665px!important;
-    margin:0!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+    font-family: 'Montserrat', sans-serif;font-size:clamp(.95rem,1.4vw,1.15rem)!important;
+    font-weight:500!important;color:rgba(255,255,255,.92)!important;line-height:1.65!important;
+    max-width:640px!important;margin:0 0 28px!important;text-align:left!important;
+    text-shadow:0 1px 6px rgba(0,0,0,.7)!important;
 }
+/* Hero CTA Buttons */
+.hero-cta-wrap{display:flex!important;flex-wrap:wrap!important;gap:14px!important;align-items:center!important;}
+.hero-cta-btn{
+    display:inline-flex!important;align-items:center!important;gap:10px!important;
+    padding:13px 28px!important;background:#0ea5e9!important;color:#fff!important;
+    font-family: 'Montserrat', sans-serif;font-size:12.5px!important;
+    font-weight:800!important;letter-spacing:.07em!important;text-transform:uppercase!important;
+    border-radius:6px!important;text-decoration:none!important;
+    transition:background .2s,transform .18s!important;border:2px solid transparent!important;
+    box-shadow:0 4px 14px rgba(14,165,233,.35)!important;
+}
+.hero-cta-btn:hover{background:#0284c7!important;transform:translateY(-2px)!important;color:#fff!important;}
+.hero-cta-btn.outline{background:transparent!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:none!important;color:#fff!important;}
+.hero-cta-btn.outline:hover{background:rgba(255,255,255,.15)!important;border-color:#fff!important;}
+/* Mobile */
 @media(max-width:1024px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:900px!important;padding:0 28px 50px!important;}
 }
 @media(max-width:768px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
-    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
-    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(420px,75vw,560px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2rem,7vw,3rem)!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:55% 45%!important;object-position:55% 45%!important;}
+    .hero-cta-wrap{flex-direction:column!important;gap:10px!important;}
+    .hero-cta-btn{width:100%!important;justify-content:center!important;padding:14px 20px!important;}
 }
 @media(max-width:480px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(380px,85vw,480px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 16px 36px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.75rem,9vw,2.4rem)!important;margin-bottom:14px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.9rem!important;margin-bottom:22px!important;}
+    .hero-cta-btn{font-size:11.5px!important;padding:12px 18px!important;}
+}
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
     .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
     .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
@@ -171,16 +151,16 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
         <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-4" style="animation:fadeUp .9s ease both">
             <span data-fr="Gouvernance">Governance</span>
             <span class="text-gradient">
-                &amp; <span data-fr="équipes">Our Team</span>
+                &amp; <span data-fr="Equipes">Our Team</span>
             </span>
         </h1>
         <p class="text-lg text-white/80 font-medium max-w-xl" style="animation:fadeUp .9s .15s ease both">
-            From the streets of Phnom Penh to Paris — a team united by one belief: every child deserves a chance.
+            From the streets of Phnom Penh to Paris - a team united by one belief: every child deserves a chance.
         </p>
     </div>
 </section>
 
-{{-- ── Governance ── --}}
+{{-- -- Governance -- --}}
 <section class="section bg-white py-16 md:py-20">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12 reveal">
@@ -196,7 +176,7 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 'flag'   => 'kh.svg',        
                 'flagAlt'=> 'Cambodia',
                 'name'   => 'Julien',
-                'role'   => '<span data-fr="Fondateur & Président">Founder & President</span>',
+                'role'   => '<span data-fr="Fondateur & President">Founder & President</span>',
                 'color'  => 'orange',
                 'icon'   => 'fas fa-star',
                 'desc'   => 'Based in Cambodia, Julien designs, oversees, and leads field actions in collaboration with local stakeholders. The heart and driving force of Des Ailes pour Grandir.',
@@ -207,7 +187,7 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 'flag'   => 'fr.svg',      
                 'flagAlt'=> 'France',
                 'name'   => 'Fanny',
-                'role'   => '<span data-fr="Trésorière">Treasurer</span>',
+                'role'   => '<span data-fr="Tresoriere">Treasurer</span>',
                 'color'  => 'blue',
                 'icon'   => 'fas fa-chart-bar',
                 'desc'   => "Fanny ensures the association's accounts are accurately maintained, guaranteeing rigorous financial management and full transparency for our donors.",
@@ -217,11 +197,11 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 'photo'  => 'photo_mickaela.jpg',
                 'flag'   => 'fr.svg',        
                 'flagAlt'=> 'France',
-                'name'   => 'Mickaëla',
-                'role'   => '<span data-fr="Responsable événementiel">Events Manager</span>',
+                'name'   => 'Mickaela',
+                'role'   => '<span data-fr="Responsable evenementiel">Events Manager</span>',
                 'color'  => 'green',
                 'icon'   => 'fas fa-calendar-star',
-                'desc'   => "Mickaëla plans, organizes, and coordinates the association's fundraising events — the essential engine that keeps our programs running.",
+                'desc'   => "Mickaela plans, organizes, and coordinates the association's fundraising events - the essential engine that keeps our programs running.",
                 'quote'  => 'Great events build the bridges that change lives.',
             ],
         ];
@@ -273,10 +253,10 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             @endforeach
         </div>
 
-        {{-- Field & Volunteer Teams ── --}}
+        {{-- Field & Volunteer Teams -- --}}
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-            {{-- Cambodia ── --}}
+            {{-- Cambodia -- --}}
             <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-8 border border-orange-100 reveal-left">
                 <div class="flex items-center gap-4 mb-6">
                     {{-- Cambodia flag square badge --}}
@@ -308,7 +288,7 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 </div>
             </div>
 
-            {{-- France ── --}}
+            {{-- France -- --}}
             <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-100 reveal-right">
                 <div class="flex items-center gap-4 mb-6">
                     {{-- France flag square badge --}}
@@ -328,7 +308,7 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                     </div>
                     <h4 class="font-black text-gray-900 text-base mb-2">Our Dedicated Volunteers</h4>
                     <p class="text-sm text-gray-500 leading-relaxed mb-4">
-                        A team of passionate volunteers across France who bring the association's projects to life — organizing events, raising awareness, and ensuring every initiative succeeds.
+                        A team of passionate volunteers across France who bring the association's projects to life - organizing events, raising awareness, and ensuring every initiative succeeds.
                     </p>
                     <div class="flex flex-wrap gap-2">
                         <span class="pill bg-blue-100 text-blue-600 text-[10px]"><i class="fas fa-calendar text-[8px]"></i> Event Support</span>
@@ -342,7 +322,7 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
     </div>
 </section>
 
-{{-- ── Join CTA ── --}}
+{{-- -- Join CTA -- --}}
 <section class="section bg-gray-50">
     <div class="max-w-7xl mx-auto px-4">
         <div class="bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl p-10 md:p-14 text-white text-center reveal">

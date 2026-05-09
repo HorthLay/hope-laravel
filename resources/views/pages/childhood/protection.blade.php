@@ -1,9 +1,8 @@
-﻿{{-- resources/views/pages/childhood/protection.blade.php --}}
+{{-- resources/views/pages/childhood/protection.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Child Protection')
 @section('content')
 
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -16,10 +15,10 @@
     --border:  #f1f0ec;
 }
 
-/* â”€â”€ Resets & base â”€â”€ */
+/* ── Resets & base ── */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* â”€â”€ Animations â”€â”€ */
+/* ── Animations ── */
 @keyframes fadeUp    { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
 @keyframes fadeLeft  { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
 @keyframes fadeRight { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
@@ -37,9 +36,9 @@
 .d1{transition-delay:.06s}.d2{transition-delay:.14s}.d3{transition-delay:.22s}
 .d4{transition-delay:.30s}.d5{transition-delay:.38s}.d6{transition-delay:.46s}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════
    HERO
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════ */
 .cp-hero {
     position: relative;
     min-height: 520px;
@@ -85,7 +84,7 @@
     display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
     font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
     color: rgba(255,255,255,.45); margin-bottom: 24px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 .breadcrumb a { color: inherit; text-decoration: none; transition: color .2s; }
 .breadcrumb a:hover { color: rgba(249,115,22,.9); }
@@ -98,7 +97,7 @@
     border: 1px solid rgba(249,115,22,.35);
     font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
     color: #fb923c; margin-bottom: 20px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     animation: fadeUp .6s ease both;
 }
 .hero-eyebrow .dot {
@@ -107,7 +106,7 @@
 }
 
 .cp-hero h1 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: clamp(2.4rem, 5vw, 4.2rem);
     font-weight: 900; color: #fff; line-height: 1.1;
     letter-spacing: -.02em; margin-bottom: 18px;
@@ -120,7 +119,7 @@
     background-clip: text;
 }
 .cp-hero p {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.1rem; color: rgba(255,255,255,.65);
     max-width: 520px; line-height: 1.75;
     animation: fadeUp .8s .15s ease both;
@@ -141,15 +140,15 @@
     filter: grayscale(.3) saturate(1.1);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════
    WAVE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════ */
 .wave { line-height: 0; overflow: hidden; }
 .wave svg { display: block; }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════
    STATS BAND
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════ */
 .stats-band {
     background: var(--navy);
     padding: 36px 0;
@@ -164,11 +163,11 @@
     text-align: center;
     padding: 8px 20px;
     border-right: 1px solid rgba(255,255,255,.08);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 .stat-item:last-child { border-right: none; }
 .stat-num {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 2.4rem; font-weight: 900;
     background: linear-gradient(135deg, #f97316, #f59e0b);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -180,9 +179,9 @@
     text-transform: uppercase; color: rgba(255,255,255,.4);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════
    ISSUES SECTION
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════ */
 .issues-section {
     background: var(--cream);
     padding: 96px 0 80px;
@@ -194,7 +193,7 @@
     border: 1px solid rgba(249,115,22,.2);
     font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
     color: #ea580c; margin-bottom: 16px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 /* Alternating image-text rows */
@@ -234,7 +233,7 @@
 }
 .issue-img-num {
     position: absolute; top: 20px; left: 20px;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 3.5rem; font-weight: 900;
     color: rgba(255,255,255,.2);
     line-height: 1; user-select: none;
@@ -246,7 +245,7 @@
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255,255,255,.15);
     border-radius: 999px; padding: 6px 14px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 10px; font-weight: 800; letter-spacing: .08em;
     text-transform: uppercase; color: rgba(255,255,255,.85);
 }
@@ -262,27 +261,27 @@
     font-size: 22px; margin-bottom: 20px; flex-shrink: 0;
 }
 .issue-content h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.55rem; font-weight: 800;
     color: var(--ink); line-height: 1.25; margin-bottom: 14px;
 }
 .issue-content p {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: .95rem; color: var(--muted);
     line-height: 1.8; margin-bottom: 20px;
 }
 .issue-link {
     display: inline-flex; align-items: center; gap: 8px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 13px; font-weight: 700;
     color: var(--orange); text-decoration: none;
     transition: gap .2s;
 }
 .issue-link:hover { gap: 12px; }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════
    PHOTO MOSAIC
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════ */
 .mosaic-section {
     background: #fff;
     padding: 80px 0;
@@ -317,14 +316,14 @@
 }
 .mosaic-cell:hover .mosaic-overlay { opacity: 1; }
 .mosaic-overlay span {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 11px; font-weight: 800; letter-spacing: .07em;
     text-transform: uppercase; color: rgba(255,255,255,.85);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════
    CHILDSAFE BANNER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════ */
 .childsafe-banner {
     background: linear-gradient(135deg, #0f172a 0%, #1e2d42 60%, rgba(249,115,22,.15) 100%);
     border-radius: 28px;
@@ -341,7 +340,7 @@
     position: absolute;
     right: -20px; top: 50%;
     transform: translateY(-50%);
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 9rem; font-weight: 900;
     color: rgba(255,255,255,.025);
     white-space: nowrap;
@@ -349,12 +348,12 @@
     letter-spacing: -.04em;
 }
 .childsafe-banner h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 2rem; font-weight: 900;
     color: #fff; margin-bottom: 12px; line-height: 1.2;
 }
 .childsafe-banner p {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     color: rgba(255,255,255,.6); font-size: .95rem; line-height: 1.75;
     max-width: 560px;
 }
@@ -366,13 +365,13 @@
     flex-shrink: 0;
 }
 .cs-badge i { font-size: 2rem; color: #f97316; }
-.cs-badge-text { font-family: 'DM Sans', sans-serif; }
+.cs-badge-text { font-family: 'Montserrat', sans-serif; }
 .cs-badge-label { font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 2px; }
 .cs-badge-name { font-size: 15px; font-weight: 800; color: #fff; }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════
    CTA BANNER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════ */
 .cta-banner {
     background: linear-gradient(135deg, #f97316, #f59e0b);
     border-radius: 28px;
@@ -393,7 +392,7 @@
 .btn-white {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 14px 28px; background: #fff;
-    color: #ea580c; font-family: 'DM Sans', sans-serif;
+    color: #ea580c; font-family: 'Montserrat', sans-serif;
     font-weight: 800; font-size: 14px;
     border-radius: 14px; text-decoration: none;
     box-shadow: 0 4px 20px rgba(0,0,0,.15);
@@ -403,7 +402,7 @@
 .btn-outline-white {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 14px 28px;
-    color: #fff; font-family: 'DM Sans', sans-serif;
+    color: #fff; font-family: 'Montserrat', sans-serif;
     font-weight: 800; font-size: 14px;
     border: 2px solid rgba(255,255,255,.6);
     border-radius: 14px; text-decoration: none;
@@ -411,9 +410,9 @@
 }
 .btn-outline-white:hover { background: rgba(255,255,255,.15); border-color: #fff; }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════
    RESPONSIVE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════ */
 @media (max-width: 900px) {
     .issue-row, .issue-row.reverse {
         grid-template-columns: 1fr;
@@ -440,115 +439,96 @@
     .mosaic-cell.span-row { grid-row: span 1; }
 }
 
-/* Donate page global header/font match */
-body{font-family:'Outfit',sans-serif!important;}
-body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
-h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
-h1,h2,h3,h4,h5,h6,
-.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
-.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
-.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
-    font-family:'Montserrat',sans-serif!important;
-}
+/* --- GLOBAL STYLE OVERRIDE --- */
+body{font-family: 'Montserrat', sans-serif;}
+h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,.pill,.breadcrumb{font-family: 'Montserrat', sans-serif;}
 .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
-    position:relative!important;
-    min-height:370px!important;
-    height:370px!important;
-    display:flex!important;
-    align-items:center!important;
-    overflow:hidden!important;
-    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
-    isolation:isolate!important;
-    border-radius:0!important;
+    position:relative!important;min-height:clamp(480px,65vh,700px)!important;height:auto!important;
+    display:flex!important;align-items:flex-end!important;overflow:hidden!important;
+    background:#0d1a0a url('{{ asset("images/image-background.jpg") }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;border-radius:0!important;
 }
 .page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
-    content:''!important;
-    position:absolute!important;inset:0!important;z-index:1!important;
-    background:
-        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
-        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    content:''!important;position:absolute!important;inset:0!important;z-index:1!important;
+    background:linear-gradient(0deg,rgba(0,0,0,.80) 0%,rgba(0,0,0,.50) 38%,rgba(0,0,0,.18) 70%,rgba(0,0,0,.05) 100%)!important;
     pointer-events:none!important;
 }
 .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
     position:absolute!important;inset:0!important;z-index:0!important;
-    display:block!important;
     width:100%!important;height:100%!important;
     object-fit:cover!important;object-position:center 45%!important;
-    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-image:url('{{ asset("images/image-background.jpg") }}')!important;
     background-size:cover!important;background-position:center 45%!important;
-    filter:none!important;transform:none!important;transition:none!important;
-    opacity:1!important;
+    filter:none!important;transform:none!important;transition:none!important;opacity:1!important;
 }
-.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
-    transform:none!important;
-}
-.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
-    display:none!important;
-}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{transform:none!important;}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow,.cp-orb,.shape-circle,.shape-circle-sm,.shape-dot-grid{display:none!important;}
 .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
     position:relative!important;z-index:2!important;
-    max-width:1020px!important;width:100%!important;
-    margin:0 auto!important;
-    padding:68px 28px 56px!important;
-    display:block!important;
-    text-align:left!important;
+    max-width:1100px!important;width:100%!important;
+    margin:0 auto!important;padding:0 40px 60px!important;
+    display:block!important;text-align:left!important;
 }
 .page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
-.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
-    display:none!important;
-}
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow,.hero-eyebrow{display:none!important;}
 .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(2.7rem,4vw,3.55rem)!important;
-    font-weight:900!important;
-    line-height:.96!important;
-    letter-spacing:-.015em!important;
-    color:#fff!important;
-    max-width:650px!important;
-    margin:0 0 22px!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
-    animation:fadeUp .6s .08s ease both!important;
+    font-family: 'Montserrat', sans-serif;
+    font-size:clamp(2.4rem,4.5vw,3.8rem)!important;font-weight:900!important;
+    line-height:1.0!important;letter-spacing:-.02em!important;color:#fff!important;
+    max-width:720px!important;margin:0 0 18px!important;text-align:left!important;
+    text-shadow:0 2px 8px rgba(0,0,0,.8),0 4px 20px rgba(0,0,0,.6)!important;
+    animation:fadeUp .65s .08s ease both!important;
 }
-.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
-.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
-.text-gradient,.glow{
-    background:none!important;
-    color:#fff!important;
-    -webkit-text-fill-color:#fff!important;
-    filter:none!important;
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,.hero-h1 span,.hero-h1 em,.text-gradient,.glow{
+    background:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;filter:none!important;
 }
 .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(1rem,1.25vw,1.18rem)!important;
-    font-weight:700!important;
-    color:#fff!important;
-    line-height:1.55!important;
-    max-width:665px!important;
-    margin:0!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+    font-family: 'Montserrat', sans-serif;font-size:clamp(.95rem,1.4vw,1.15rem)!important;
+    font-weight:500!important;color:rgba(255,255,255,.92)!important;line-height:1.65!important;
+    max-width:640px!important;margin:0 0 28px!important;text-align:left!important;
+    text-shadow:0 1px 6px rgba(0,0,0,.7)!important;
 }
+/* Hero CTA Buttons */
+.hero-cta-wrap{display:flex!important;flex-wrap:wrap!important;gap:14px!important;align-items:center!important;}
+.hero-cta-btn{
+    display:inline-flex!important;align-items:center!important;gap:10px!important;
+    padding:13px 28px!important;background:#0ea5e9!important;color:#fff!important;
+    font-family: 'Montserrat', sans-serif;font-size:12.5px!important;
+    font-weight:800!important;letter-spacing:.07em!important;text-transform:uppercase!important;
+    border-radius:6px!important;text-decoration:none!important;
+    transition:background .2s,transform .18s!important;border:2px solid transparent!important;
+    box-shadow:0 4px 14px rgba(14,165,233,.35)!important;
+}
+.hero-cta-btn:hover{background:#0284c7!important;transform:translateY(-2px)!important;color:#fff!important;}
+.hero-cta-btn.outline{background:transparent!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:none!important;color:#fff!important;}
+.hero-cta-btn.outline:hover{background:rgba(255,255,255,.15)!important;border-color:#fff!important;}
+/* Mobile */
 @media(max-width:1024px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:900px!important;padding:0 28px 50px!important;}
 }
 @media(max-width:768px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
-    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
-    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(420px,75vw,560px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2rem,7vw,3rem)!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:55% 45%!important;object-position:55% 45%!important;}
+    .hero-cta-wrap{flex-direction:column!important;gap:10px!important;}
+    .hero-cta-btn{width:100%!important;justify-content:center!important;padding:14px 20px!important;}
 }
 @media(max-width:480px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(380px,85vw,480px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 16px 36px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.75rem,9vw,2.4rem)!important;margin-bottom:14px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.9rem!important;margin-bottom:22px!important;}
+    .hero-cta-btn{font-size:11.5px!important;padding:12px 18px!important;}
+}
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
     .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
     .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
 }</style>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ══════════════════════
      HERO
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+══════════════════════ --}}
 <section class="cp-hero">
     <div class="cp-hero-bg" style="background-image:url('{{ asset('images/cambodia-bg.jpg') }}')"></div>
     <div class="cp-hero-gradient"></div>
@@ -578,14 +558,14 @@ h1,h2,h3,h4,h5,h6,
             <i class="fas fa-shield-alt"></i> Child Safety
         </div>
         <h1>Protecting Every<br><em>Child's Future</em></h1>
-        <p>Safeguarding every child's right to safety, dignity, and a future free from exploitation — in Cambodia and beyond.</p>
+        <p>Safeguarding every child's right to safety, dignity, and a future free from exploitation - in Cambodia and beyond.</p>
     </div>
 </section>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ══════════════════════
      STATS BAND
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
-<div class="stats-band">
+══════════════════════ --}}
+{{-- <div class="stats-band">
     <div class="stats-inner">
         @foreach([
             ['1000+', 'Local Volunteers'],
@@ -599,7 +579,7 @@ h1,h2,h3,h4,h5,h6,
         </div>
         @endforeach
     </div>
-</div>
+</div> --}}
 
 <div class="wave" style="background:var(--cream)">
     <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -607,9 +587,9 @@ h1,h2,h3,h4,h5,h6,
     </svg>
 </div>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     ISSUES — image rows
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+{{-- ══════════════════════
+     ISSUES - image rows
+══════════════════════ --}}
 <section class="issues-section">
     <div class="max-w-6xl mx-auto px-4">
 
@@ -617,11 +597,11 @@ h1,h2,h3,h4,h5,h6,
             <div class="section-tag mx-auto mb-3" style="display:inline-flex;">
                 <i class="fas fa-circle-dot text-xs"></i> Key Issues We Address
             </div>
-            <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.9rem,3.5vw,3rem);font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:12px;">
+            <h2 style="font-family: 'Montserrat', sans-serif;font-size:clamp(1.9rem,3.5vw,3rem);font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:12px;">
                 Six Pillars of<br><span style="color:var(--orange);">Child Protection</span>
             </h2>
-            <p style="font-family:'DM Sans',sans-serif;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.75;">
-                Every action we take is built on these foundations — because every child deserves safety, education, and dignity.
+            <p style="font-family: 'Montserrat', sans-serif;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.75;">
+                Every action we take is built on these foundations - because every child deserves safety, education, and dignity.
             </p>
         </div>
 
@@ -723,9 +703,9 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ══════════════════════
      PHOTO MOSAIC
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+══════════════════════ --}}
 <section class="mosaic-section">
     <div class="max-w-6xl mx-auto px-4">
 
@@ -733,7 +713,7 @@ h1,h2,h3,h4,h5,h6,
             <div class="section-tag mx-auto mb-3" style="display:inline-flex;">
                 <i class="fas fa-images text-xs"></i> Life on the Ground
             </div>
-            <h2 style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--ink);">
+            <h2 style="font-family: 'Montserrat', sans-serif;font-size:2.2rem;font-weight:900;color:var(--ink);">
                 Children We Serve
             </h2>
         </div>
@@ -767,9 +747,9 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ══════════════════════
      CHILDSAFE BANNER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+══════════════════════ --}}
 <section class="bg-white py-16 md:py-20">
     <div class="max-w-6xl mx-auto px-4">
         <div class="childsafe-banner reveal">
@@ -791,18 +771,18 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ══════════════════════
      CTA BANNER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+══════════════════════ --}}
 <section class="bg-white pb-16 md:pb-24">
     <div class="max-w-6xl mx-auto px-4">
         <div class="cta-banner reveal">
             <div class="cta-banner-inner">
                 <div>
-                    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:900;color:#fff;line-height:1.15;margin-bottom:10px;">
+                    <h2 style="font-family: 'Montserrat', sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:900;color:#fff;line-height:1.15;margin-bottom:10px;">
                         Make a Difference Today
                     </h2>
-                    <p style="font-family:'DM Sans',sans-serif;color:rgba(255,255,255,.8);font-size:1rem;max-width:460px;line-height:1.7;">
+                    <p style="font-family: 'Montserrat', sans-serif;color:rgba(255,255,255,.8);font-size:1rem;max-width:460px;line-height:1.7;">
                         Your support funds programs like child protection, education, and community care across Cambodia.
                     </p>
                 </div>

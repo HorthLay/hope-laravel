@@ -137,12 +137,12 @@
     <title>Under Maintenance | {{ $settings['site_name'] ?? 'Hope & Impact' }}</title>
     <meta name="robots" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background: #0f172a;
             min-height: 100vh;
             display: flex; align-items: center; justify-content: center;
@@ -210,7 +210,7 @@
         }
         @keyframes pulseLbl { 0%,100%{opacity:1} 50%{opacity:.65} }
         .maint-label .dot { width: 7px; height: 7px; border-radius: 50%; background: #f97316; animation: pulseLbl 1.4s ease-in-out infinite; }
-        h1 { font-family: 'Instrument Serif', serif; font-size: clamp(26px,6vw,38px); color: #fff; line-height: 1.2; margin-bottom: 14px; }
+        h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(26px,6vw,38px); color: #fff; line-height: 1.2; margin-bottom: 14px; }
         h1 em { color: #fb923c; font-style: italic; }
         .maint-desc { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 32px; font-weight: 500; }
         .maint-features { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }

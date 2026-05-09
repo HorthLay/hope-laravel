@@ -1,14 +1,13 @@
-﻿{{-- resources/views/pages/support/donate.blade.php --}}
+{{-- resources/views/pages/support/donate.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Make a Donation')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ---------------------------------------------------------------
    GLOBAL RESETS + TOKENS
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   --------------------------------------------------------------- */
 *{box-sizing:border-box;}
 
 :root{
@@ -37,13 +36,13 @@
 .reveal.visible{opacity:1;transform:none}
 .stagger-1{transition-delay:.07s}.stagger-2{transition-delay:.14s}.stagger-3{transition-delay:.21s}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   HERO — reference-style photo text area
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ---------------------------------------------------------------
+   HERO - bottom-aligned text, gradient CTA
+   --------------------------------------------------------------- */
 .page-hero{
     position:relative;
     min-height:clamp(320px,38vh,200px);
-    display:flex;align-items:center;
+    display:flex;align-items:flex-end;
     overflow:hidden;
     background:#1a1109;
     isolation:isolate;
@@ -66,13 +65,13 @@
 .page-hero-content{
     position:relative;z-index:2;
     max-width:980px;margin:0 auto;width:100%;
-    padding:76px 36px 58px;
+    padding:0 36px 58px;
 }
 
-/* breadcrumb — strong shadow for legibility on bright photo */
+/* breadcrumb */
 .breadcrumb{
     display:none;align-items:center;gap:8px;flex-wrap:wrap;
-    font-family:'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size:10.5px;font-weight:700;
     letter-spacing:.12em;text-transform:uppercase;
     color:#fff;margin-bottom:30px;
@@ -82,11 +81,8 @@
 .breadcrumb a:hover,.breadcrumb .active{opacity:1;}
 .breadcrumb i{font-size:7px;opacity:.7;}
 
-/* â”€â”€ REFERENCE-STYLE TITLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   condensed, white, bold, with soft shadow only
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hero-h1{
-    font-family:'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size:clamp(2.15rem,3.8vw,3.1rem);
     font-weight:800;
     line-height:.98;
@@ -102,9 +98,8 @@
 .hero-h1 .line-white,
 .hero-h1 .line-orange{display:inline;color:#fff;}
 
-/* sub — clean white paragraph, like the reference */
 .hero-sub{
-    font-family:'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size:clamp(.92rem,1.25vw,1.05rem);font-weight:600;
     color:#fff;line-height:1.65;
     max-width:610px;margin:0 0 22px;
@@ -115,20 +110,37 @@
 }
 .hero-sub strong{color:#fff;font-weight:700;}
 .hero-sub em{font-style:italic;color:#fff;}
+
+/* -- POLISHED GRADIENT CTA BUTTON ----------------------------- */
 .hero-ref-btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    min-height:42px;padding:0 20px;border:0;border-radius:3px;
-    background:#ffc400;color:#243644;text-decoration:none;
-    font-family:'Montserrat', sans-serif;
-    font-size:1.02rem;font-weight:800;letter-spacing:.045em;text-transform:uppercase;
-    box-shadow:0 2px 10px rgba(0,0,0,.26);
-    transition:background .18s,transform .18s;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    min-height:50px;padding:0 28px;
+    border:0;border-radius:10px;
+    background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 50%,#ea580c 100%);
+    background-size:200% 100%;
+    background-position:0% 50%;
+    color:#1a1109;text-decoration:none;
+    font-family: 'Montserrat', sans-serif;
+    font-size:.92rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+    box-shadow:
+        0 4px 14px rgba(249,115,22,.45),
+        0 8px 28px rgba(13,11,9,.35),
+        inset 0 1px 0 rgba(255,255,255,.4);
+    transition:background-position .35s ease,transform .2s ease,box-shadow .2s ease;
     animation:fadeUp .6s .20s ease both;
 }
-.hero-ref-btn:hover{background:#ffd226;color:#243644;transform:translateY(-1px);}
-.hero-ref-btn i{font-size:.9rem;}
+.hero-ref-btn:hover{
+    background-position:100% 50%;
+    color:#1a1109;
+    transform:translateY(-2px);
+    box-shadow:
+        0 8px 22px rgba(249,115,22,.6),
+        0 14px 36px rgba(13,11,9,.45),
+        inset 0 1px 0 rgba(255,255,255,.5);
+}
+.hero-ref-btn i{font-size:.95rem;}
 
-/* stats band — keep orange */
+/* stats band */
 .hero-stats-band{
     position:relative;
     background:#ea580c;
@@ -142,100 +154,81 @@
 }
 .h-stat{flex:1;text-align:center;padding:0 34px;}
 .hero-stat-n{
-    font-family:'Montserrat', sans-serif;font-size:clamp(2rem,3vw,2.7rem);font-weight:900;
+    font-family: 'Montserrat', sans-serif;font-size:clamp(2rem,3vw,2.7rem);font-weight:900;
     color:#fff;line-height:1;letter-spacing:-.02em;
 }
 .hero-stat-l{
-    font-family:'Montserrat', sans-serif;font-size:10px;font-weight:800;
+    font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:800;
     color:rgba(255,255,255,.74);text-transform:uppercase;letter-spacing:.1em;margin-top:7px;
 }
 .hero-stat-div{width:1px;background:rgba(255,255,255,.24);align-self:stretch;}
-
-/* responsive */
-@media(max-width:768px){
-    .page-hero{min-height:clamp(420px,68vh,540px);}
-    .page-hero-content{padding:64px 24px 46px;}
-    .hero-h1{font-size:clamp(2rem,8vw,2.8rem);}
-    .hero-bg-img{object-position:58% 48%;}
-    .hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 0;}
-    .hero-stat-div{display:none;}
-}
-@media(max-width:480px){
-    .page-hero{min-height:clamp(460px,80vh,560px);}
-    .page-hero-content{padding:54px 20px;}
-    .hero-h1{font-size:clamp(1.9rem,10vw,2.45rem);line-height:1;}
-    .hero-sub{font-size:.92rem;}
-    .breadcrumb{font-size:9.5px;}
-    .hero-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
-    .h-stat{padding:0 8px;}
-}
 
 /* wave */
 .wave-divider{line-height:0;overflow:hidden;}
 .wave-divider svg{display:block;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ---------------------------------------------------------------
    SECTION DECOR
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   --------------------------------------------------------------- */
 .section-pill{
     display:inline-flex;align-items:center;gap:7px;padding:6px 16px;border-radius:999px;
     background:rgba(249,115,22,.10);border:1px solid rgba(249,115,22,.20);
-    font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:800;
+    font-family: 'Montserrat', sans-serif;font-size:10.5px;font-weight:800;
     letter-spacing:.07em;text-transform:uppercase;color:var(--orange-d);margin-bottom:12px;
 }
 .section-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:dotPulse 1.8s ease-in-out infinite;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ---------------------------------------------------------------
    PROJECT CARDS
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   --------------------------------------------------------------- */
 .proj-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid #f0f4f8;box-shadow:0 4px 20px rgba(0,0,0,.07);cursor:default;opacity:0;transform:translateY(28px) scale(.97);will-change:transform;}
 .proj-card.card-visible{animation:cardIn .6s cubic-bezier(.16,1,.3,1) both;opacity:1;transform:none;}
 .proj-card:hover{transform:none !important;box-shadow:0 4px 20px rgba(0,0,0,.07) !important;}
 .proj-img-wrap{position:relative;height:240px;overflow:hidden;}
 .proj-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .65s cubic-bezier(.16,1,.3,1);}
 .proj-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,11,9,.85) 0%,rgba(13,11,9,.18) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:14px 16px;}
-.proj-badge{display:inline-flex;align-items:center;gap:4px;background:var(--orange);color:#fff;font-family:'Montserrat', sans-serif;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;margin-bottom:6px;width:fit-content;box-shadow:0 2px 8px rgba(249,115,22,.4);}
-.proj-img-title{color:#fff;font-family:'Montserrat', sans-serif;font-size:.9rem;font-weight:800;line-height:1.3;margin:0;text-shadow:0 1px 6px rgba(0,0,0,.5);}
+.proj-badge{display:inline-flex;align-items:center;gap:4px;background:var(--orange);color:#fff;font-family: 'Montserrat', sans-serif;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;margin-bottom:6px;width:fit-content;box-shadow:0 2px 8px rgba(249,115,22,.4);}
+.proj-img-title{color:#fff;font-family: 'Montserrat', sans-serif;font-size:.9rem;font-weight:800;line-height:1.3;margin:0;text-shadow:0 1px 6px rgba(0,0,0,.5);}
 .proj-body{padding:16px 18px 18px;}
 .proj-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
-.proj-tag{display:inline-flex;align-items:center;gap:3px;background:#f8fafc;border:1px solid #e8edf2;color:#64748b;font-family:'Montserrat', sans-serif;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;}
+.proj-tag{display:inline-flex;align-items:center;gap:3px;background:#f8fafc;border:1px solid #e8edf2;color:#64748b;font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;}
 .proj-tag:hover{background:#fff7ed;border-color:var(--orange-light);color:var(--orange-d);}
-.proj-desc{color:#64748b;font-family:'Montserrat', sans-serif;font-size:.82rem;line-height:1.65;margin-bottom:12px;}
-.proj-card-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:9px;background:linear-gradient(135deg,#1a1109,#2a1a06);color:rgba(255,255,255,.7);font-family:'Montserrat', sans-serif;font-size:11px;font-weight:700;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(13,11,9,.25);transition:transform .16s,color .16s;}
+.proj-desc{color:#64748b;font-family: 'Montserrat', sans-serif;font-size:.82rem;line-height:1.65;margin-bottom:12px;}
+.proj-card-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:9px;background:linear-gradient(135deg,#1a1109,#2a1a06);color:rgba(255,255,255,.7);font-family: 'Montserrat', sans-serif;font-size:11px;font-weight:700;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(13,11,9,.25);transition:transform .16s,color .16s;}
 .proj-card-btn:hover{transform:translateY(-1px);color:var(--gold);}
 .proj-widget-wrap{border-top:1px solid #f0f4f8;background:#f8fafc;overflow:hidden;}
 .proj-widget-bar{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:linear-gradient(135deg,#2a1a06,#1a1109);}
-.proj-widget-label{display:flex;align-items:center;gap:6px;font-family:'Montserrat', sans-serif;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.62);}
+.proj-widget-label{display:flex;align-items:center;gap:6px;font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.62);}
 .proj-widget-label i{color:var(--gold);}
-.proj-widget-ha{font-family:'Montserrat', sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.32);display:flex;align-items:center;gap:4px;}
+.proj-widget-ha{font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.32);display:flex;align-items:center;gap:4px;}
 .proj-widget-iframe{display:block;width:100%;border:none;height:550px;min-height:300px;opacity:0;transition:opacity .4s ease;}
 .proj-widget-iframe.loaded{opacity:1;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ---------------------------------------------------------------
    FISCAL CALCULATOR
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   --------------------------------------------------------------- */
 .calc-wrap{background:#fff;border-radius:26px;overflow:hidden;box-shadow:0 8px 44px rgba(0,0,0,.08);border:1px solid rgba(249,115,22,.10);}
 .calc-type-card{cursor:pointer;padding:13px 11px;border-radius:14px;border:1.5px solid #e8edf2;transition:border-color .18s,background .18s,box-shadow .18s;background:#fff;}
 .calc-type-card:hover{border-color:rgba(249,115,22,.45);}
 .calc-type-card.active{border-color:var(--gold);background:linear-gradient(135deg,rgba(251,191,36,.06),rgba(249,115,22,.04));box-shadow:0 4px 16px rgba(249,115,22,.14);}
-.calc-type-card .ctc-title{font-family:'Montserrat', sans-serif;font-size:.82rem;font-weight:800;color:#1a1109;margin-bottom:3px;}
-.calc-type-card .ctc-rate{font-family:'Montserrat', sans-serif;font-size:1.35rem;font-weight:900;color:var(--orange);line-height:1;margin-bottom:3px;}
-.calc-type-card .ctc-desc{font-family:'Montserrat', sans-serif;font-size:.67rem;font-weight:600;color:#94a3b8;line-height:1.5;}
+.calc-type-card .ctc-title{font-family: 'Montserrat', sans-serif;font-size:.82rem;font-weight:800;color:#1a1109;margin-bottom:3px;}
+.calc-type-card .ctc-rate{font-family: 'Montserrat', sans-serif;font-size:1.35rem;font-weight:900;color:var(--orange);line-height:1;margin-bottom:3px;}
+.calc-type-card .ctc-desc{font-family: 'Montserrat', sans-serif;font-size:.67rem;font-weight:600;color:#94a3b8;line-height:1.5;}
 .calc-type-card.active .ctc-title{color:var(--orange-d);}
-.calc-amt-btn{padding:10px 4px;border-radius:11px;border:1.5px solid #e8edf2;background:#fff;font-family:'Montserrat', sans-serif;font-size:.82rem;font-weight:800;color:#64748b;cursor:pointer;transition:all .16s;text-align:center;}
+.calc-amt-btn{padding:10px 4px;border-radius:11px;border:1.5px solid #e8edf2;background:#fff;font-family: 'Montserrat', sans-serif;font-size:.82rem;font-weight:800;color:#64748b;cursor:pointer;transition:all .16s;text-align:center;}
 .calc-amt-btn:hover{border-color:rgba(249,115,22,.45);color:var(--orange-d);}
 .calc-amt-btn.active{background:linear-gradient(135deg,var(--gold),var(--orange));border-color:transparent;color:#fff;box-shadow:0 4px 12px rgba(249,115,22,.38);}
 .calc-result-panel{background:linear-gradient(145deg,#1a1109 0%,#241508 55%,#2c1c08 100%);border-radius:20px;padding:32px 26px;position:relative;overflow:hidden;}
 .calc-result-panel::before{content:'';position:absolute;bottom:-50px;left:50%;transform:translateX(-50%);width:320px;height:200px;border-radius:50%;background:radial-gradient(ellipse,rgba(249,115,22,.18) 0%,rgba(251,191,36,.08) 45%,transparent 70%);pointer-events:none;}
-.calc-result-big{font-family:'Montserrat', sans-serif;font-size:clamp(2.8rem,6vw,4.2rem);font-weight:900;color:var(--orange);line-height:1;letter-spacing:-.02em;}
+.calc-result-big{font-family: 'Montserrat', sans-serif;font-size:clamp(2.8rem,6vw,4.2rem);font-weight:900;color:var(--orange);line-height:1;letter-spacing:-.02em;}
 .calc-info-box{background:linear-gradient(135deg,rgba(249,115,22,.06),rgba(245,158,11,.04));border:1px solid rgba(249,115,22,.16);border-radius:14px;padding:16px 18px;}
 input[type=number].calc-input::-webkit-inner-spin-button,
 input[type=number].calc-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
 input[type=number].calc-input{-moz-appearance:textfield;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ---------------------------------------------------------------
    WAYS TO GIVE
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   --------------------------------------------------------------- */
 .ways-card{border-radius:20px;overflow:hidden;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s;}
 .ways-card:hover{transform:translateY(-4px);}
 .ways-card-light{background:#fff;border:1.5px solid var(--orange-light);box-shadow:0 4px 20px rgba(249,115,22,.07);}
@@ -244,9 +237,9 @@ input[type=number].calc-input{-moz-appearance:textfield;}
 .ways-card-dark:hover{box-shadow:0 14px 40px rgba(13,11,9,.45);}
 .ways-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ---------------------------------------------------------------
    GENERAL DONATE CTA
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   --------------------------------------------------------------- */
 .donate-cta-box{
     position:relative;overflow:hidden;
     background:linear-gradient(145deg,#fff8f0,#fffbf5,#fff8f0);
@@ -258,30 +251,30 @@ input[type=number].calc-input{-moz-appearance:textfield;}
     display:inline-flex;align-items:center;justify-content:center;gap:9px;
     padding:16px 40px;border-radius:12px;border:none;cursor:pointer;
     background:var(--orange);color:#fff;
-    font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:900;
+    font-family: 'Montserrat', sans-serif;font-size:.95rem;font-weight:900;
     letter-spacing:.04em;text-transform:uppercase;
     box-shadow:0 6px 24px rgba(249,115,22,.36);
     transition:background .2s,transform .2s,box-shadow .2s;
 }
 .donate-btn:hover{background:var(--orange-d);transform:translateY(-2px) scale(1.02);box-shadow:0 12px 36px rgba(249,115,22,.48);color:#fff;}
-.helloasso-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:#f1f5f9;font-family:'Montserrat', sans-serif;font-size:11px;font-weight:700;color:#64748b;border:1px solid #e2e8f0;}
-.secure-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-family:'Montserrat', sans-serif;font-size:12px;font-weight:600;color:#94a3b8;}
+.helloasso-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;background:#f1f5f9;font-family: 'Montserrat', sans-serif;font-size:11px;font-weight:700;color:#64748b;border:1px solid #e2e8f0;}
+.secure-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-family: 'Montserrat', sans-serif;font-size:12px;font-weight:600;color:#94a3b8;}
 .secure-row span{display:flex;align-items:center;gap:4px;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ---------------------------------------------------------------
    PROJECT MODAL
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   --------------------------------------------------------------- */
 .proj-modal-bg{position:fixed;inset:0;z-index:2147483647;display:none;align-items:center;justify-content:center;backdrop-filter:blur(14px) brightness(.35) saturate(1.2);padding:16px;}
 .proj-modal-bg.open{display:flex;animation:fadeIn .22s ease both;}
 .proj-modal{background:#fff;border-radius:22px;overflow:hidden;width:100%;max-width:440px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 36px 90px rgba(0,0,0,.42);animation:popIn .35s cubic-bezier(.16,1,.3,1) both;}
 .proj-modal-head{flex-shrink:0;position:relative;height:145px;overflow:hidden;}
 .proj-modal-head-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .proj-modal-head-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,11,9,.88) 0%,rgba(13,11,9,.42) 55%,rgba(249,115,22,.06) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:14px 20px;}
-.proj-modal-title{color:#fff;font-family:'Montserrat', sans-serif;font-size:.95rem;font-weight:800;line-height:1.3;padding-right:46px;}
+.proj-modal-title{color:#fff;font-family: 'Montserrat', sans-serif;font-size:.95rem;font-weight:800;line-height:1.3;padding-right:46px;}
 .proj-modal-close{position:absolute;top:11px;right:11px;z-index:10;width:36px;height:36px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .16s;}
 .proj-modal-close:hover{background:rgba(255,255,255,.24);}
 .proj-modal-foot{padding:10px 16px;background:#f8fafc;border-top:1px solid #f0f4f8;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;flex-shrink:0;}
-.proj-modal-foot span{font-family:'Montserrat', sans-serif;font-size:11px;color:#94a3b8;font-weight:700;display:flex;align-items:center;gap:4px;}
+.proj-modal-foot span{font-family: 'Montserrat', sans-serif;font-size:11px;color:#94a3b8;font-weight:700;display:flex;align-items:center;gap:4px;}
 
 @media(max-width:640px){
     .proj-img-wrap{height:200px;}
@@ -290,117 +283,117 @@ input[type=number].calc-input{-moz-appearance:textfield;}
     .proj-widget-iframe{height:460px;}
 }
 
-/* Donate page global header/font match */
-body{font-family:'Outfit',sans-serif!important;}
-body [style*="font-family"]{font-family:'Outfit',sans-serif!important;}
-h1[style*="font-family"],h2[style*="font-family"],h3[style*="font-family"],h4[style*="font-family"],h5[style*="font-family"],h6[style*="font-family"]{font-family:'Montserrat',sans-serif!important;}
-h1,h2,h3,h4,h5,h6,
-.hero-h1,.section-title,.section-pill,.breadcrumb,.pill,.hero-pill,
-.hero-eyebrow,.hero-meta,.hero-sub,.hero-ref-btn,.hero-btn,.hero-cta,
-.btn-gold,.btn-ghost,.stat-number-sm,.stat-num,.stat-label{
-    font-family:'Montserrat',sans-serif!important;
-}
+/* --- GLOBAL STYLE OVERRIDE --- */
+body{font-family: 'Montserrat', sans-serif;}
+h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,.pill,.breadcrumb{font-family: 'Montserrat', sans-serif;}
 .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
-    position:relative!important;
-    min-height:370px!important;
-    height:370px!important;
-    display:flex!important;
-    align-items:center!important;
-    overflow:hidden!important;
-    background:#1a1109 url('{{ asset('images/image-background.jpg') }}') center 45%/cover no-repeat!important;
-    isolation:isolate!important;
-    border-radius:0!important;
+    position:relative!important;min-height:clamp(480px,65vh,700px)!important;height:auto!important;
+    display:flex!important;align-items:flex-end!important;overflow:hidden!important;
+    background:#0d1a0a url('{{ asset("images/image-background.jpg") }}') center 45%/cover no-repeat!important;
+    isolation:isolate!important;border-radius:0!important;
 }
 .page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
-    content:''!important;
-    position:absolute!important;inset:0!important;z-index:1!important;
-    background:
-        linear-gradient(90deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.30) 34%,rgba(0,0,0,.18) 68%,rgba(0,0,0,.10) 100%),
-        linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.08) 48%,rgba(0,0,0,.18) 100%)!important;
+    content:''!important;position:absolute!important;inset:0!important;z-index:1!important;
+    background:linear-gradient(0deg,rgba(0,0,0,.80) 0%,rgba(0,0,0,.50) 38%,rgba(0,0,0,.18) 70%,rgba(0,0,0,.05) 100%)!important;
     pointer-events:none!important;
 }
 .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
     position:absolute!important;inset:0!important;z-index:0!important;
-    display:block!important;
     width:100%!important;height:100%!important;
     object-fit:cover!important;object-position:center 45%!important;
-    background-image:url('{{ asset('images/image-background.jpg') }}')!important;
+    background-image:url('{{ asset("images/image-background.jpg") }}')!important;
     background-size:cover!important;background-position:center 45%!important;
-    filter:none!important;transform:none!important;transition:none!important;
-    opacity:1!important;
+    filter:none!important;transform:none!important;transition:none!important;opacity:1!important;
 }
-.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{
-    transform:none!important;
-}
-.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow{
-    display:none!important;
-}
+.page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{transform:none!important;}
+.page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow,.cp-orb,.shape-circle,.shape-circle-sm,.shape-dot-grid{display:none!important;}
 .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
     position:relative!important;z-index:2!important;
-    max-width:1020px!important;width:100%!important;
-    margin:0 auto!important;
-    padding:68px 28px 56px!important;
-    display:block!important;
-    text-align:left!important;
+    max-width:1100px!important;width:100%!important;
+    margin:0 auto!important;padding:0 40px 60px!important;
+    display:block!important;text-align:left!important;
 }
 .page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
-.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow{
-    display:none!important;
-}
+.page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow,.hero-eyebrow{display:none!important;}
 .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(2.7rem,4vw,3.55rem)!important;
-    font-weight:900!important;
-    line-height:.96!important;
-    letter-spacing:-.015em!important;
-    color:#fff!important;
-    max-width:650px!important;
-    margin:0 0 22px!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.75),0 4px 10px rgba(0,0,0,.62)!important;
-    animation:fadeUp .6s .08s ease both!important;
+    font-family: 'Montserrat', sans-serif;
+    font-size:clamp(2.4rem,4.5vw,3.8rem)!important;font-weight:900!important;
+    line-height:1.0!important;letter-spacing:-.02em!important;color:#fff!important;
+    max-width:720px!important;margin:0 0 18px!important;text-align:left!important;
+    text-shadow:0 2px 8px rgba(0,0,0,.8),0 4px 20px rgba(0,0,0,.6)!important;
+    animation:fadeUp .65s .08s ease both!important;
 }
-.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,
-.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,
-.text-gradient,.glow{
-    background:none!important;
-    color:#fff!important;
-    -webkit-text-fill-color:#fff!important;
-    filter:none!important;
+.page-hero h1 span,.page-hero h1 em,.legal-hero h1 span,.legal-hero h1 em,.edu-hero h1 span,.edu-hero h1 em,.ch-hero h1 span,.ch-hero h1 em,.pd-hero h1 span,.pd-hero h1 em,.cp-hero h1 span,.cp-hero h1 em,.hero h1 span,.hero h1 em,.hero-h1 span,.hero-h1 em,.text-gradient,.glow{
+    background:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;filter:none!important;
 }
 .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
-    font-family:'Montserrat',sans-serif!important;
-    font-size:clamp(1rem,1.25vw,1.18rem)!important;
-    font-weight:700!important;
-    color:#fff!important;
-    line-height:1.55!important;
-    max-width:665px!important;
-    margin:0!important;
-    text-align:left!important;
-    text-shadow:0 2px 2px rgba(0,0,0,.78),0 4px 10px rgba(0,0,0,.58)!important;
+    font-family: 'Montserrat', sans-serif;font-size:clamp(.95rem,1.4vw,1.15rem)!important;
+    font-weight:500!important;color:rgba(255,255,255,.92)!important;line-height:1.65!important;
+    max-width:640px!important;margin:0 0 28px!important;text-align:left!important;
+    text-shadow:0 1px 6px rgba(0,0,0,.7)!important;
 }
+/* Hero CTA Buttons */
+.hero-cta-wrap{display:flex!important;flex-wrap:wrap!important;gap:14px!important;align-items:center!important;}
+.hero-cta-btn{
+    display:inline-flex!important;align-items:center!important;gap:10px!important;
+    padding:13px 28px!important;background:#0ea5e9!important;color:#fff!important;
+    font-family: 'Montserrat', sans-serif;font-size:12.5px!important;
+    font-weight:800!important;letter-spacing:.07em!important;text-transform:uppercase!important;
+    border-radius:6px!important;text-decoration:none!important;
+    transition:background .2s,transform .18s!important;border:2px solid transparent!important;
+    box-shadow:0 4px 14px rgba(14,165,233,.35)!important;
+}
+.hero-cta-btn:hover{background:#0284c7!important;transform:translateY(-2px)!important;color:#fff!important;}
+.hero-cta-btn.outline{background:transparent!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:none!important;color:#fff!important;}
+.hero-cta-btn.outline:hover{background:rgba(255,255,255,.15)!important;border-color:#fff!important;}
+/* Mobile */
 @media(max-width:1024px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:340px!important;min-height:340px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:860px!important;padding:56px 28px 46px!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:900px!important;padding:0 28px 50px!important;}
 }
 @media(max-width:768px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:360px!important;min-height:360px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:56px 24px 44px!important;}
-    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2.2rem,8vw,3rem)!important;max-width:560px!important;}
-    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:58% 50%!important;object-position:58% 50%!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(420px,75vw,560px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 20px 40px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2rem,7vw,3rem)!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:55% 45%!important;object-position:55% 45%!important;}
+    .hero-cta-wrap{flex-direction:column!important;gap:10px!important;}
+    .hero-cta-btn{width:100%!important;justify-content:center!important;padding:14px 20px!important;}
 }
 @media(max-width:480px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{height:390px!important;min-height:390px!important;}
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
-    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
-    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
-}</style>
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(380px,85vw,480px)!important;}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 16px 36px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.75rem,9vw,2.4rem)!important;margin-bottom:14px!important;}
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.9rem!important;margin-bottom:22px!important;}
+    .hero-cta-btn{font-size:11.5px!important;padding:12px 18px!important;}
+}
+    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 18px 30px!important;}
+    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
+        font-size:clamp(1.4rem,6.4vw,1.8rem)!important;
+        line-height:1.08!important;
+        margin-bottom:10px!important;
+        letter-spacing:-.01em!important;
+    }
+    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{
+        font-size:.78rem!important;
+        line-height:1.5!important;
+        margin-bottom:14px!important;
+    }
+    .hero-ref-btn{
+        font-size:.76rem!important;min-height:42px!important;
+        padding:0 18px!important;letter-spacing:.04em!important;
+        border-radius:8px!important;gap:8px!important;
+    }
+    .hero-ref-btn i{font-size:.82rem!important;}
+    .hero-stat-n{font-size:1.4rem!important;}
+    .hero-stat-l{font-size:9px!important;}
+    .hero-stats-band{padding:24px 16px 32px!important;}
+}
+</style>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     HERO — Bright photo with reference-style white text
-     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+{{-- ---------------------------------------------------------------
+     HERO
+     --------------------------------------------------------------- --}}
 <section class="page-hero">
-    <img src="{{ asset('images/image-background.jpg') }}" alt="" class="hero-bg-img" loading="eager" fetchpriority="high">
+    <img src="{{ asset('images/children/image-5.jpg') }}" alt="" class="hero-bg-img" loading="eager" fetchpriority="high">
 
     <div class="page-hero-content">
 
@@ -418,7 +411,7 @@ h1,h2,h3,h4,h5,h6,
         </h1>
 
         <p class="hero-sub">
-            <strong>Des Ailes pour Grandir</strong> — <em>"Wings to Grow"</em> — gives vulnerable children in Cambodia the chance to soar. Your gift goes <strong>100% to the field</strong>.
+            <strong>Des Ailes pour Grandir</strong> - <em>"Wings to Grow"</em> - gives vulnerable children in Cambodia the chance to soar. Your gift goes <strong>100% to the field</strong>.
         </p>
 
         <a href="#projectGrid" class="hero-ref-btn">
@@ -466,15 +459,15 @@ h1,h2,h3,h4,h5,h6,
     </svg>
 </div>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ---------------------------------------------------------------
      ACTIVE CAMPAIGNS / PROJECT GRID
-     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+     --------------------------------------------------------------- --}}
 <section class="py-16 md:py-28" style="background:linear-gradient(180deg,#fdf6ec,#fef3e2);">
     <div class="max-w-6xl mx-auto px-4">
         <div class="text-center mb-12 reveal">
             <div class="section-pill mx-auto mb-4"><span class="dot"></span> Active Campaigns</div>
-            <h2 class="text-2xl md:text-4xl font-black" style="font-family:'Montserrat', sans-serif;color:#1a1109;margin-bottom:8px;letter-spacing:-.02em;">Support a Specific Project</h2>
-            <p class="text-gray-500 max-w-md mx-auto" style="font-family:'Montserrat', sans-serif;font-size:.9rem;">Each card contains a live donation form — secure, fast, and transparent.</p>
+            <h2 class="text-2xl md:text-4xl font-black" style="font-family: 'Montserrat', sans-serif;color:#1a1109;margin-bottom:8px;letter-spacing:-.02em;">Support a Specific Project</h2>
+            <p class="text-gray-500 max-w-md mx-auto" style="font-family: 'Montserrat', sans-serif;font-size:.9rem;">Each card contains a live donation form - secure, fast, and transparent.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" id="projectGrid">
@@ -540,47 +533,47 @@ h1,h2,h3,h4,h5,h6,
                 <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(249,115,22,.10);">
                     <i class="fas fa-hand-holding-heart text-3xl" style="color:rgba(249,115,22,.4);"></i>
                 </div>
-                <p class="font-semibold" style="font-family:'Montserrat', sans-serif;">No active projects yet.</p>
+                <p class="font-semibold" style="font-family: 'Montserrat', sans-serif;">No active projects yet.</p>
             </div>
             @endforelse
         </div>
 
-        {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {{-- ---------------------------------------------------------------
              FISCAL CALCULATOR
-             â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+             --------------------------------------------------------------- --}}
         <div class="reveal mb-16" id="fiscalCalc">
             <div class="text-center mb-8">
                 <div class="section-pill mx-auto mb-4"><span class="dot"></span> Tax Benefit Simulator</div>
-                <h3 class="text-2xl md:text-3xl font-black" style="font-family:'Outfit',sans-serif;color:#1a1109;letter-spacing:-.02em;">How Much Does Your Gift Really Cost?</h3>
-                <p class="text-gray-400 mt-2 max-w-sm mx-auto" style="font-family:'Outfit',sans-serif;font-size:.87rem;">Calculate your real donation cost after French tax deductions — in real time.</p>
+                <h3 class="text-2xl md:text-3xl font-black" style="font-family: 'Montserrat', sans-serif;color:#1a1109;letter-spacing:-.02em;">How Much Does Your Gift Really Cost?</h3>
+                <p class="text-gray-400 mt-2 max-w-sm mx-auto" style="font-family: 'Montserrat', sans-serif;font-size:.87rem;">Calculate your real donation cost after French tax deductions - in real time.</p>
             </div>
 
             <div class="calc-wrap">
                 <div class="grid md:grid-cols-2">
                     <div class="p-8 md:p-10 space-y-7">
                         <div>
-                            <p class="font-semibold mb-3" style="font-family:'Montserrat', sans-serif;font-size:.8rem;letter-spacing:.07em;text-transform:uppercase;color:#1a1109;">Your Tax Situation</p>
+                            <p class="font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;font-size:.8rem;letter-spacing:.07em;text-transform:uppercase;color:#1a1109;">Your Tax Situation</p>
                             <div class="grid grid-cols-3 gap-3" id="calc-type-cards">
                                 <div onclick="calcSetType('ir')" id="calc-card-ir" class="calc-type-card active">
                                     <div class="ctc-rate">66%</div>
                                     <div class="ctc-title">Individual</div>
-                                    <div class="ctc-desc">Income tax • Cap 20% taxable income</div>
+                                    <div class="ctc-desc">Income tax - Cap 20% taxable income</div>
                                 </div>
                                 <div onclick="calcSetType('ifi')" id="calc-card-ifi" class="calc-type-card">
                                     <div class="ctc-rate">75%</div>
                                     <div class="ctc-title">IFI</div>
-                                    <div class="ctc-desc">Wealth tax • Max €50,000/year</div>
+                                    <div class="ctc-desc">Wealth tax - Max €50,000/year</div>
                                 </div>
                                 <div onclick="calcSetType('is')" id="calc-card-is" class="calc-type-card">
                                     <div class="ctc-rate">60%</div>
                                     <div class="ctc-title">Company</div>
-                                    <div class="ctc-desc">Corporate deduction • 0.5% revenue</div>
+                                    <div class="ctc-desc">Corporate deduction - 0.5% revenue</div>
                                 </div>
                             </div>
                         </div>
 
                         <div>
-                            <p class="font-semibold mb-3" style="font-family:'Montserrat', sans-serif;font-size:.8rem;letter-spacing:.07em;text-transform:uppercase;color:#1a1109;">Donation Amount</p>
+                            <p class="font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;font-size:.8rem;letter-spacing:.07em;text-transform:uppercase;color:#1a1109;">Donation Amount</p>
                             <div class="grid grid-cols-4 gap-3 mb-4" id="calc-amt-btns">
                                 <button onclick="calcSetAmount(20)"  data-amount="20"  class="calc-amt-btn">€20</button>
                                 <button onclick="calcSetAmount(50)"  data-amount="50"  class="calc-amt-btn">€50</button>
@@ -588,63 +581,63 @@ h1,h2,h3,h4,h5,h6,
                                 <button onclick="calcSetAmount(250)" data-amount="250" class="calc-amt-btn">€250</button>
                             </div>
                             <div class="relative">
-                                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold" style="font-family:'Montserrat', sans-serif;font-size:1rem;color:var(--orange);">€</span>
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold" style="font-family: 'Montserrat', sans-serif;font-size:1rem;color:var(--orange);">€</span>
                                 <input id="calc-input" type="number" min="1" placeholder="Custom amount"
                                        oninput="calcOnInput(this.value)"
                                        class="calc-input w-full pl-9 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none placeholder-slate-300"
-                                       style="font-family:'Montserrat',sans-serif;font-weight:700;color:#1a1109;">
+                                       style="font-family: 'Montserrat', sans-serif;font-weight:700;color:#1a1109;">
                             </div>
-                            <p class="text-xs text-slate-400 mt-2" style="font-family:'Montserrat', sans-serif;">
+                            <p class="text-xs text-slate-400 mt-2" style="font-family: 'Montserrat', sans-serif;">
                                 Selected: <span id="calc-selected" class="font-bold" style="color:var(--orange-d);">€0</span>
                             </p>
                         </div>
 
                         <div class="calc-info-box">
-                            <p class="font-bold mb-2 flex items-center gap-2" style="font-family:'Montserrat', sans-serif;font-size:.82rem;color:var(--orange-d);">
+                            <p class="font-bold mb-2 flex items-center gap-2" style="font-family: 'Montserrat', sans-serif;font-size:.82rem;color:var(--orange-d);">
                                 <i class="fas fa-lightbulb" style="color:var(--gold);"></i> French Tax Deductions on Donations
                             </p>
-                            <ul class="space-y-1" style="font-family:'Montserrat', sans-serif;font-size:.78rem;color:#92400e;">
+                            <ul class="space-y-1" style="font-family: 'Montserrat', sans-serif;font-size:.78rem;color:#92400e;">
                                 <li class="flex items-center gap-2"><i class="fas fa-check" style="color:var(--gold);font-size:9px;"></i> 66% for individual taxpayers</li>
                                 <li class="flex items-center gap-2"><i class="fas fa-check" style="color:var(--gold);font-size:9px;"></i> 75% for IFI (subject to conditions)</li>
                                 <li class="flex items-center gap-2"><i class="fas fa-check" style="color:var(--gold);font-size:9px;"></i> 60% for companies</li>
                             </ul>
-                            <p class="mt-2.5 flex items-start gap-2" style="font-family:'Montserrat', sans-serif;font-size:.75rem;color:#78716c;">
+                            <p class="mt-2.5 flex items-start gap-2" style="font-family: 'Montserrat', sans-serif;font-size:.75rem;color:#78716c;">
                                 <i class="fas fa-file-alt mt-0.5 flex-shrink-0" style="color:var(--gold);"></i>
                                 An official <strong>tax receipt</strong> is sent automatically after your donation.
                             </p>
                         </div>
                     </div>
 
-                    <div class="flex flex-col justify-center p-8 md:p-10" style="background:linear-gradient(145deg,#fdf6ec,#fef3e2);border-left:1px solid rgba(249,115,22,.12);">
+                    <div class="flex flex-col justify-center p-8 md:p-10" style="background:linear-gradient(145deg,#fdf6ec,#fef3e2);borderoleft:1px solid rgba(249,115,22,.12);">
                         <div class="calc-result-panel mb-6">
                             <div class="relative z-10">
-                                <p class="mb-1" style="font-family:'Montserrat', sans-serif;font-weight:700;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.1em;font-size:9.5px;">
+                                <p class="mb-1" style="font-family: 'Montserrat', sans-serif;font-weight:700;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.1em;font-size:9.5px;">
                                     <i class="fas fa-hand-holding-heart mr-1" style="color:rgba(249,115,22,.55);"></i> Your gift actually costs
                                 </p>
                                 <div id="calc-result-cout" class="calc-result-big mb-5">€0.00</div>
-                                <div class="space-y-2" style="font-family:'Outfit',sans-serif;font-size:.78rem;color:rgba(255,255,255,.48);">
+                                <div class="space-y-2" style="font-family: 'Montserrat', sans-serif;font-size:.78rem;color:rgba(255,255,255,.48);">
                                     <div class="flex justify-between items-center border-b pb-2" style="border-color:rgba(255,255,255,.08);">
                                         <span><i class="fas fa-coins mr-1.5" style="color:rgba(249,115,22,.55);"></i> Total donation</span>
                                         <span class="font-bold" style="color:rgba(255,255,255,.8);"><span id="calc-res-don">€0</span></span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span><i class="fas fa-piggy-bank mr-1.5" style="color:rgba(249,115,22,.55);"></i> Tax reduction</span>
-                                        <span class="font-bold" style="color:var(--gold);">âˆ’ <span id="calc-res-reduction">€0.00</span></span>
+                                        <span class="font-bold" style="color:var(--gold);">- <span id="calc-resureduction">€0.00</span></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="bg-white rounded-2xl p-5 border shadow-sm" style="border-color:rgba(249,115,22,.12);">
-                            <p class="font-semibold mb-1" style="font-family:'Outfit',sans-serif;font-size:.9rem;color:#1a1109;">ðŸ‘‰ In practice</p>
-                            <p class="text-sm mb-4" style="font-family:'Outfit',sans-serif;line-height:1.65;color:#64748b;">
+                            <p class="font-semibold mb-1" style="font-family: 'Montserrat', sans-serif;font-size:.9rem;color:#1a1109;">?? In practice</p>
+                            <p class="text-sm mb-4" style="font-family: 'Montserrat', sans-serif;line-height:1.65;color:#64748b;">
                                 A gift of <strong id="calc-cta-don" style="color:#1a1109;">€0</strong> only costs you
                                 <strong id="calc-cta-cout" style="color:var(--orange-d);">€0.00</strong> after tax deduction.
                             </p>
                             <button onclick="document.getElementById('openHaDonate1').click()" class="donate-btn w-full justify-center text-sm py-3">
                                 <i class="fas fa-hand-holding-heart"></i> Donate Now
                             </button>
-                            <p class="text-center mt-3" style="font-family:'Outfit',sans-serif;font-size:9.5px;color:#94a3b8;">
+                            <p class="text-center mt-3" style="font-family: 'Montserrat', sans-serif;font-size:9.5px;color:#94a3b8;">
                                 <i class="fas fa-receipt mr-1" style="color:var(--orange);opacity:.6;"></i> Official tax receipt sent automatically
                             </p>
                         </div>
@@ -653,13 +646,13 @@ h1,h2,h3,h4,h5,h6,
             </div>
         </div>
 
-        {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {{-- ---------------------------------------------------------------
              WAYS TO GIVE
-             â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+             --------------------------------------------------------------- --}}
         <div class="reveal stagger-3">
             <div class="text-center mb-8">
                 <div class="section-pill mx-auto mb-4"><span class="dot"></span> Ways to Give</div>
-                <h3 class="text-2xl md:text-3xl font-black" style="font-family:'Montserrat',sans-serif;color:#1a1109;letter-spacing:-.02em;">Choose How You Give</h3>
+                <h3 class="text-2xl md:text-3xl font-black" style="font-family: 'Montserrat', sans-serif;color:#1a1109;letter-spacing:-.02em;">Choose How You Give</h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="ways-card ways-card-light p-8">
@@ -667,11 +660,11 @@ h1,h2,h3,h4,h5,h6,
                     <div class="section-pill mb-3" style="font-size:10px;background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.16);">
                         <i class="fas fa-heart" style="color:var(--orange);font-size:9px;"></i> Individual
                     </div>
-                    <h3 class="text-lg font-black mb-2" style="font-family:'Montserrat',sans-serif;color:#1a1109;">Individual Donation</h3>
-                    <p class="text-sm leading-relaxed mb-5" style="font-family:'Montserrat',sans-serif;color:#64748b;">Every euro goes directly to the field to support vulnerable children and families in Cambodia.</p>
+                    <h3 class="text-lg font-black mb-2" style="font-family: 'Montserrat', sans-serif;color:#1a1109;">Individual Donation</h3>
+                    <p class="text-sm leading-relaxed mb-5" style="font-family: 'Montserrat', sans-serif;color:#64748b;">Every euro goes directly to the field to support vulnerable children and families in Cambodia.</p>
                     <div class="space-y-2.5">
                         @foreach(['One-time donation','Monthly recurring','Donation in memoriam','Birthday fundraiser'] as $t)
-                        <div class="flex items-center gap-2.5 text-sm" style="font-family:'Montserrat',sans-serif;color:#4b5563;">
+                        <div class="flex items-center gap-2.5 text-sm" style="font-family: 'Montserrat', sans-serif;color:#4b5563;">
                             <span class="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
                                 <i class="fas fa-check" style="color:var(--orange);font-size:8px;"></i>
                             </span>{{ $t }}
@@ -686,11 +679,11 @@ h1,h2,h3,h4,h5,h6,
                     <div class="section-pill mb-3" style="font-size:10px;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.2);color:var(--gold);">
                         <i class="fas fa-city" style="font-size:9px;"></i> Corporate
                     </div>
-                    <h3 class="text-lg font-black text-white mb-2" style="font-family:'Montserrat',sans-serif;">Corporate Donation</h3>
-                    <p class="text-sm leading-relaxed mb-5" style="font-family:'Montserrat',sans-serif;color:rgba(255,255,255,.55);">Tailored partnership packages with visibility, impact reports, and employee engagement.</p>
+                    <h3 class="text-lg font-black text-white mb-2" style="font-family: 'Montserrat', sans-serif;">Corporate Donation</h3>
+                    <p class="text-sm leading-relaxed mb-5" style="font-family: 'Montserrat', sans-serif;color:rgba(255,255,255,.55);">Tailored partnership packages with visibility, impact reports, and employee engagement.</p>
                     <div class="space-y-2.5">
                         @foreach(['Single or recurring gift','Skills-based sponsorship','Employee matching','Named project funding'] as $t)
-                        <div class="flex items-center gap-2.5 text-sm" style="font-family:'Montserrat',sans-serif;color:rgba(255,255,255,.7);display:flex;align-items:center;">
+                        <div class="flex items-center gap-2.5 text-sm" style="font-family: 'Montserrat', sans-serif;color:rgba(255,255,255,.7);display:flex;align-items:center;">
                             <span style="width:20px;height:20px;border-radius:50%;background:rgba(249,115,22,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                 <i class="fas fa-check" style="color:var(--gold);font-size:8px;"></i>
                             </span>&nbsp;{{ $t }}
@@ -703,9 +696,9 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ---------------------------------------------------------------
      PROJECT MODAL
-     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+     --------------------------------------------------------------- --}}
 <div id="projModalBg" class="proj-modal-bg" onclick="closeProjModal(event)">
     <div class="proj-modal" id="projModal">
         <div class="proj-modal-head">
@@ -724,7 +717,7 @@ h1,h2,h3,h4,h5,h6,
             </button>
         </div>
         <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:22px 14px;gap:12px;background:linear-gradient(180deg,#fdf6ec,#fef3e2);">
-            <p style="font-family:'Outfit',sans-serif;font-size:12px;color:#64748b;text-align:center;max-width:300px;line-height:1.65;margin:0;">
+            <p style="font-family: 'Montserrat', sans-serif;font-size:12px;color:#64748b;text-align:center;max-width:300px;line-height:1.65;margin:0;">
                 This <strong style="color:#1a1109;">live campaign card</strong> updates automatically with your HelloAsso fundraiser progress.
             </p>
             <div style="background:#fff;border-radius:16px;box-shadow:0 10px 36px rgba(0,0,0,.13);overflow:hidden;width:340px;max-width:100%;">
@@ -742,9 +735,9 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </div>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ---------------------------------------------------------------
      GENERAL DONATE CTA
-     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+     --------------------------------------------------------------- --}}
 <section class="py-16 md:py-24" style="background:#fef9f0;">
     <div class="max-w-2xl mx-auto px-4 text-center">
         <div class="donate-cta-box reveal">
@@ -754,8 +747,8 @@ h1,h2,h3,h4,h5,h6,
                     <i class="fas fa-heart text-2xl" style="color:var(--orange);"></i>
                 </div>
                 <div class="section-pill mx-auto mb-4" style="font-size:11px;"><span class="dot"></span> General Fund</div>
-                <h2 class="text-2xl md:text-3xl font-black mb-3" style="font-family:'Outfit',sans-serif;color:#1a1109;letter-spacing:-.02em;">Make a General Donation</h2>
-                <p class="text-gray-500 text-base mb-8 max-w-xs mx-auto leading-relaxed" style="font-family:'Outfit',sans-serif;">Support where the need is greatest — funds go to the most urgent programs.</p>
+                <h2 class="text-2xl md:text-3xl font-black mb-3" style="font-family: 'Montserrat', sans-serif;color:#1a1109;letter-spacing:-.02em;">Make a General Donation</h2>
+                <p class="text-gray-500 text-base mb-8 max-w-xs mx-auto leading-relaxed" style="font-family: 'Montserrat', sans-serif;">Support where the need is greatest - funds go to the most urgent programs.</p>
                 <div class="flex justify-center mb-6">
                     <button id="openHaDonate1" class="donate-btn">
                         <i class="fas fa-hand-holding-heart"></i> Donate Now
@@ -772,9 +765,9 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ---------------------------------------------------------------
      BOTTOM CTA BANNER
-     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+     --------------------------------------------------------------- --}}
 <section style="background:#fef9f0;padding-bottom:4rem;">
     <div class="max-w-7xl mx-auto px-4">
         <div class="rounded-2xl md:rounded-3xl p-8 md:p-14 relative overflow-hidden reveal"
@@ -782,23 +775,23 @@ h1,h2,h3,h4,h5,h6,
             <div class="absolute inset-0" style="background-image:url('{{ asset('images/background.jpg') }}');background-size:cover;opacity:.06;"></div>
             <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div class="text-white text-center lg:text-left">
-                    <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(249,115,22,.55);margin-bottom:10px;">
+                    <p style="font-family: 'Montserrat', sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(249,115,22,.55);margin-bottom:10px;">
                         <i class="fas fa-star mr-1"></i> Make an Impact
                     </p>
-                    <h2 style="font-family:'Montserrat',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;color:#fff;line-height:1.06;letter-spacing:-.02em;margin-bottom:10px;">
+                    <h2 style="font-family: 'Montserrat', sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;color:#fff;line-height:1.06;letter-spacing:-.02em;margin-bottom:10px;">
                         Make a Difference <span style="color:var(--orange);">Today</span>
                     </h2>
-                    <p style="font-family:'Montserrat',sans-serif;color:rgba(255,255,255,.48);font-size:.9rem;max-width:420px;line-height:1.78;">Your support funds programs that change children's lives in Cambodia.</p>
+                    <p style="font-family: 'Montserrat', sans-serif;color:rgba(255,255,255,.48);font-size:.9rem;max-width:420px;line-height:1.78;">Your support funds programs that change children's lives in Cambodia.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0">
                     <a href="{{ route('sponsor.children') }}"
-                       style="display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:15px 26px;background:var(--orange);color:#fff;font-family:'Montserrat',sans-serif;font-size:.875rem;font-weight:800;border-radius:12px;text-decoration:none;box-shadow:0 6px 22px rgba(249,115,22,.28);transition:background .18s,transform .18s;"
+                       style="display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:15px 26px;background:var(--orange);color:#fff;font-family: 'Montserrat', sans-serif;font-size:.875rem;font-weight:800;border-radius:12px;text-decoration:none;box-shadow:0 6px 22px rgba(249,115,22,.28);transition:background .18s,transform .18s;"
                        onmouseover="this.style.background='#ea580c';this.style.transform='translateY(-2px)'"
                        onmouseout="this.style.background='#f97316';this.style.transform=''">
                         <i class="fas fa-heart"></i> Sponsor a Child
                     </a>
                     <button id="openHaDonate2"
-                            style="display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:15px 26px;background:rgba(249,115,22,.08);border:1.5px solid rgba(249,115,22,.28);color:rgba(255,255,255,.82);font-family:'Montserrat',sans-serif;font-size:.875rem;font-weight:700;border-radius:12px;cursor:pointer;transition:background .18s,border-color .18s;"
+                            style="display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:15px 26px;background:rgba(249,115,22,.08);border:1.5px solid rgba(249,115,22,.28);color:rgba(255,255,255,.82);font-family: 'Montserrat', sans-serif;font-size:.875rem;font-weight:700;border-radius:12px;cursor:pointer;transition:background .18s,border-color .18s;"
                             onmouseover="this.style.background='rgba(249,115,22,.16)';this.style.borderColor='rgba(249,115,22,.55)'"
                             onmouseout="this.style.background='rgba(249,115,22,.08)';this.style.borderColor='rgba(249,115,22,.28)'">
                         <i class="fas fa-hand-holding-heart"></i> Make a Donation
@@ -809,9 +802,9 @@ h1,h2,h3,h4,h5,h6,
     </div>
 </section>
 
-{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{{-- ---------------------------------------------------------------
      HELLOASSO WIDGET MODAL
-     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+     --------------------------------------------------------------- --}}
 <div id="haWidgetModalDonate"
      style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;backdrop-filter:blur(14px) brightness(0.4) saturate(1.1);z-index:2147483647;padding:16px;">
     <button id="closeHaDonateBtn"
@@ -829,7 +822,7 @@ h1,h2,h3,h4,h5,h6,
 </div>
 
 <script>
-/* â•â•â• PROJECT MODAL â•â•â• */
+/* --- PROJECT MODAL --- */
 function openProjModalTab(card){
     var vigUrl=card.getAttribute('data-vignette')||'';
     if(!vigUrl)return;
@@ -853,7 +846,7 @@ document.addEventListener('keydown',function(e){
     if(e.key==='Escape'){closeProjModalDirect();if(window.closeHaDonate)closeHaDonate();}
 });
 
-/* â•â•â• CARD REVEAL â•â•â• */
+/* --- CARD REVEAL --- */
 (function(){
     var cards=document.querySelectorAll('.proj-card');
     var obs=new IntersectionObserver(function(entries){
@@ -868,7 +861,7 @@ document.addEventListener('keydown',function(e){
     cards.forEach(function(c){obs.observe(c);});
 })();
 
-/* â•â•â• REVEAL ON SCROLL â•â•â• */
+/* --- REVEAL ON SCROLL --- */
 (function(){
     var els=document.querySelectorAll('.reveal');
     var obs=new IntersectionObserver(function(entries){
@@ -879,7 +872,7 @@ document.addEventListener('keydown',function(e){
     els.forEach(function(el){obs.observe(el);});
 })();
 
-/* â•â•â• HELLOASSO IFRAME AUTO-RESIZE â•â•â• */
+/* --- HELLOASSO IFRAME AUTO-RESIZE --- */
 window.addEventListener('message',function(e){
     if(!e.data)return;
     var h=null;
@@ -892,7 +885,7 @@ window.addEventListener('message',function(e){
     }
 });
 
-/* â•â•â• HELLOASSO WIDGET MODAL â•â•â• */
+/* --- HELLOASSO WIDGET MODAL --- */
 document.addEventListener('DOMContentLoaded',function(){
     var modal=document.getElementById('haWidgetModalDonate');
     var closeBtn=document.getElementById('closeHaDonateBtn');
@@ -909,7 +902,7 @@ document.addEventListener('DOMContentLoaded',function(){
     modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
 });
 
-/* â•â•â• FISCAL CALCULATOR â•â•â• */
+/* --- FISCAL CALCULATOR --- */
 (function(){
     var currentType='ir',currentAmount=0;
     var rates={ir:0.66,ifi:0.75,is:0.60};
@@ -946,7 +939,7 @@ document.addEventListener('DOMContentLoaded',function(){
         var cout=currentAmount-reduction;
         document.getElementById('calc-result-cout').textContent='€'+cout.toFixed(2);
         document.getElementById('calc-res-don').textContent='€'+currentAmount;
-        document.getElementById('calc-res-reduction').textContent='€'+reduction.toFixed(2);
+        document.getElementById('calc-resureduction').textContent='€'+reduction.toFixed(2);
         document.getElementById('calc-selected').textContent='€'+currentAmount;
         document.getElementById('calc-cta-don').textContent='€'+currentAmount;
         document.getElementById('calc-cta-cout').textContent='€'+cout.toFixed(2);
