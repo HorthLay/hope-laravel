@@ -253,8 +253,8 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 <div class="relative">
                     <div class="absolute -top-4 -right-4 w-full h-full bg-orange-100 rounded-3xl"></div>
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] bg-orange-50 flex items-center justify-center">
-                        @if(file_exists(public_path('images/about-cambodia.jpg')))
-                            <img src="{{ asset('images/about-cambodia.jpg') }}" class="w-full h-full object-cover" alt="Cambodge">
+                        @if(file_exists(public_path('images/cambodia.jpg')))
+                            <img src="{{ asset('images/cambodia.jpg') }}" class="w-full h-full object-cover" alt="Cambodge">
                         @else
                             <div class="text-center p-12">
                                 <i class="fas fa-globe-asia text-orange-200 text-8xl mb-4 block"></i>
