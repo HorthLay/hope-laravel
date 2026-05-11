@@ -1,13 +1,12 @@
 {{-- resources/views/pages/about/presentation.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'About Us')
+@section('title', 'À propos de nous')
 
 {{-- ═══════ PAGE HERO ═══════ --}}
 
 {{-- ═══════ MAIN CONTENT ═══════ --}}
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 @keyframes fadeUp     { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
 @keyframes pulse-soft { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
@@ -46,7 +45,7 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
 .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
     position:relative!important;min-height:clamp(480px,65vh,700px)!important;height:auto!important;
     display:flex!important;align-items:flex-end!important;overflow:hidden!important;
-    background:#0d1a0a url('{{ asset("images/image-background.jpg") }}') center 45%/cover no-repeat!important;
+    background:#0d1a0a url('{{ asset("images/pages/our-team.jpg") }}') center 45%/cover no-repeat!important;
     isolation:isolate!important;border-radius:0!important;
 }
 .page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
@@ -58,7 +57,7 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
     position:absolute!important;inset:0!important;z-index:0!important;
     width:100%!important;height:100%!important;
     object-fit:cover!important;object-position:center 45%!important;
-    background-image:url('{{ asset("images/image-background.jpg") }}')!important;
+    background-image:url('{{ asset("images/pages/our-team.jpg") }}')!important;
     background-size:cover!important;background-position:center 45%!important;
     filter:none!important;transform:none!important;transition:none!important;opacity:1!important;
 }
@@ -138,25 +137,31 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
     <div class="page-hero-overlay"></div>
     <div class="page-hero-content">
         <nav class="breadcrumb">
-            <a href="{{ route('home') }}">Home</a>
+            <a href="{{ route('home') }}" data-en="Home" data-fr="Accueil" data-km="ទំព័រដើម">Accueil</a>
             <i class="fas fa-chevron-right text-[9px]"></i>
-            <span>Our Association</span>
+            <span data-en="Our Association" data-fr="Notre Association" data-km="សមាគមរបស់យើង">Notre Association</span>
             <i class="fas fa-chevron-right text-[9px]"></i>
-            <span>About Us</span>
+            <span data-en="About Us" data-fr="À propos de nous" data-km="អំពីយើង">À propos de nous</span>
         </nav>
         <div class="inline-flex items-center gap-2 pill bg-orange-500/20 border border-orange-400/30 text-orange-300 mb-5" style="animation:fadeUp .7s ease both">
-            <i class="fas fa-dove text-xs"></i> Who We Are
+            <i class="fas fa-dove text-xs"></i> <span data-en="Who we are" data-fr="Qui sommes-nous" data-km="យើងជានរណា">Qui sommes-nous</span>
         </div>
-        <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-4" style="animation:fadeUp .9s ease both">
-            Changing Lives,<br><span class="text-gradient">One Child at a Time</span>
+        <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-4" style="animation:fadeUp .9s ease both"
+            data-en="Changing lives,<br><span class='text-gradient'>one child at a time</span>"
+            data-fr="Changer des vies,<br><span class='text-gradient'>un enfant à la fois</span>"
+            data-km="ផ្លាស់ប្តូរជីវិត,<br><span class='text-gradient'>កុមារម្នាក់ម្តងៗ</span>">
+            Changer des vies,<br><span class="text-gradient">un enfant à la fois</span>
         </h1>
-        <p class="text-lg text-white/80 font-medium max-w-xl" style="animation:fadeUp .9s .15s ease both">
-            Des Ailes pour Grandir - <em>"Wings to Grow"</em> - giving vulnerable children in Cambodia the chance to soar.
+        <p class="text-lg text-white/80 font-medium max-w-xl" style="animation:fadeUp .9s .15s ease both"
+           data-en="Des Ailes pour Grandir - <em>“Giving wings to grow”</em> - giving vulnerable children in Cambodia the chance to rise."
+           data-fr="Des Ailes pour Grandir - <em>« Donner des ailes pour grandir »</em> - offrir aux enfants vulnérables du Cambodge la chance de s'élever."
+           data-km="Des Ailes pour Grandir - <em>“ផ្តល់ស្លាបដើម្បីរីកចម្រើន”</em> - ផ្តល់ឱកាសឱ្យកុមារងាយរងគ្រោះនៅកម្ពុជាបានលូតលាស់ឡើង។">
+            Des Ailes pour Grandir - <em>« Donner des ailes pour grandir »</em> - offrir aux enfants vulnérables du Cambodge la chance de s'élever.
         </p>
     </div>
 </section>
 
-{{-- ── Opening quote ── --}}
+{{-- ── Citation d'ouverture ── --}}
 <section class="section bg-white py-16 md:py-20">
     <div class="max-w-7xl mx-auto px-4">
         <div class="max-w-4xl mx-auto text-center reveal">
@@ -165,13 +170,16 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                     <i class="fas fa-quote-left text-orange-400 text-3xl"></i>
                 </div>
             </div>
-            <p class="text-xl md:text-2xl lg:text-3xl font-light text-gray-700 leading-relaxed italic mb-6">
-                "At Des Ailes pour Grandir, we believe that no child should grow up in fear, deprivation, or abandonment.
-                Every child deserves to be protected, supported, and nurtured so they can build their future with confidence."
+            <p class="text-xl md:text-2xl lg:text-3xl font-light text-gray-700 leading-relaxed italic mb-6"
+               data-en="“At Des Ailes pour Grandir, we believe no child should grow up in fear, deprivation, or abandonment. Every child deserves to be protected, supported, and guided so they can build their future with confidence.”"
+               data-fr="« Chez Des Ailes pour Grandir, nous croyons qu'aucun enfant ne devrait grandir dans la peur, le dénuement ou l'abandon. Chaque enfant mérite d'être protégé, soutenu et accompagné afin de construire son avenir avec confiance. »"
+               data-km="“នៅ Des Ailes pour Grandir យើងជឿថាកុមារមិនគួរលូតលាស់ក្នុងភាពភ័យខ្លាច ភាពខ្វះខាត ឬការបោះបង់ឡើយ។ កុមារគ្រប់រូបសមនឹងទទួលបានការការពារ ការគាំទ្រ និងការណែនាំ ដើម្បីកសាងអនាគតដោយទំនុកចិត្ត។”">
+                « Chez Des Ailes pour Grandir, nous croyons qu'aucun enfant ne devrait grandir dans la peur, le dénuement ou l'abandon.
+                Chaque enfant mérite d'être protégé, soutenu et accompagné afin de construire son avenir avec confiance. »
             </p>
             <div class="flex items-center justify-center gap-3">
                 <div class="h-px w-12 bg-orange-300"></div>
-                <p class="text-sm font-black text-orange-500 uppercase tracking-wider">Our Mission</p>
+                <p class="text-sm font-black text-orange-500 uppercase tracking-wider" data-en="Our Mission" data-fr="Notre Mission" data-km="បេសកកម្មរបស់យើង">Notre Mission</p>
                 <div class="h-px w-12 bg-orange-300"></div>
             </div>
         </div>
@@ -184,19 +192,19 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
     </svg>
 </div>
 
-{{-- ── Stats bar ── --}}
+{{-- ── Barre de statistiques ── --}}
 <section class="stats-section py-14">
     <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @foreach([
-                ['icon'=>'fas fa-child',         'value'=>'95,000', 'label'=>'Children Helped/Year', 'color'=>'orange'],
-                ['icon'=>'fas fa-percentage',     'value'=>'84',     'label'=>'% Goes to Programs',   'color'=>'yellow'],
-                ['icon'=>'fas fa-globe',          'value'=>'7',      'label'=>'Countries',            'color'=>'blue'],
-                ['icon'=>'fas fa-calendar-check', 'value'=>'65+',    'label'=>'Years of Impact',      'color'=>'green'],
+                ['icon'=>'fas fa-child',         'value'=>'95 000', 'label'=>'Enfants aidés/an',         'label_en'=>'Children helped/year',      'label_km'=>'កុមារដែលបានជួយ/ឆ្នាំ',       'color'=>'orange'],
+                ['icon'=>'fas fa-percentage',    'value'=>'84',     'label'=>'% reversés aux programmes','label_en'=>'% returned to programs',    'label_km'=>'% ផ្តល់ទៅកម្មវិធី',           'color'=>'yellow'],
+                ['icon'=>'fas fa-globe',         'value'=>'7',      'label'=>'Pays',                     'label_en'=>'Countries',                 'label_km'=>'ប្រទេស',                      'color'=>'blue'],
+                ['icon'=>'fas fa-calendar-check','value'=>'65+',    'label'=>"Ans d'impact",             'label_en'=>'Years of impact',           'label_km'=>'ឆ្នាំនៃផលប៉ះពាល់',            'color'=>'green'],
             ] as $i => $st)
             <div class="text-center reveal stagger-{{ $i+1 }}">
                 <div class="stat-number">{{ $st['value'] }}</div>
-                <p class="text-base md:text-lg font-medium">{{ $st['label'] }}</p>
+                <p class="text-base md:text-lg font-medium" data-en="{{ $st['label_en'] }}" data-fr="{{ $st['label'] }}" data-km="{{ $st['label_km'] }}">{{ $st['label'] }}</p>
             </div>
             @endforeach
         </div>
@@ -209,27 +217,36 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
     </svg>
 </div>
 
-{{-- ── Who we are ── --}}
+{{-- ── Qui sommes-nous ── --}}
 <section class="section bg-white">
     <div class="max-w-7xl mx-auto px-4">
         <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center mb-16">
             <div class="reveal-left">
                 <div class="pill bg-orange-100 text-orange-600 mb-5">
-                    <i class="fas fa-map-marker-alt text-xs"></i> Cambodia, Southeast Asia
+                    <i class="fas fa-map-marker-alt text-xs"></i> <span data-en="Cambodia, Southeast Asia" data-fr="Cambodge, Asie du Sud-Est" data-km="កម្ពុជា អាស៊ីអាគ្នេយ៍">Cambodge, Asie du Sud-Est</span>
                 </div>
-                <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-5 leading-tight">
-                    We Work Where<br><span class="text-gradient">It Matters Most</span>
+                <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-5 leading-tight"
+                    data-en="We act where<br><span class='text-gradient'>it matters most</span>"
+                    data-fr="Nous agissons là<br><span class='text-gradient'>où c'est essentiel</span>"
+                    data-km="យើងធ្វើសកម្មភាពនៅកន្លែង<br><span class='text-gradient'>ដែលសំខាន់បំផុត</span>">
+                    Nous agissons là<br><span class="text-gradient">où c'est essentiel</span>
                 </h2>
-                <p class="text-base text-gray-600 leading-relaxed mb-4">
-                    Our association works in Cambodia with orphaned and vulnerable children, providing concrete and lasting support to those who need it most.
-                    Our mission is simple: to create a stable, caring, and opportunity-filled environment so that every child can thrive fully.
+                <p class="text-base text-gray-600 leading-relaxed mb-4"
+                   data-en="Our association works in Cambodia with orphaned and vulnerable children, bringing concrete and lasting support to those who need it most. Our mission is simple: create a stable, caring environment full of opportunity so every child can thrive."
+                   data-fr="Notre association œuvre au Cambodge auprès des enfants orphelins et vulnérables, apportant un soutien concret et durable à ceux qui en ont le plus besoin. Notre mission est simple : créer un environnement stable, bienveillant et porteur d'opportunités afin que chaque enfant puisse s'épanouir pleinement."
+                   data-km="សមាគមរបស់យើងធ្វើការនៅកម្ពុជាជាមួយកុមារកំព្រា និងកុមារងាយរងគ្រោះ ដោយផ្តល់ការគាំទ្រជាក់ស្តែង និងយូរអង្វែងដល់អ្នកដែលត្រូវការបំផុត។ បេសកកម្មរបស់យើងគឺសាមញ្ញ៖ បង្កើតបរិយាកាសមានស្ថិរភាព មានការយកចិត្តទុកដាក់ និងមានឱកាស ដើម្បីឱ្យកុមារគ្រប់រូបអាចរីកចម្រើនពេញលេញ។">
+                    Notre association œuvre au Cambodge auprès des enfants orphelins et vulnérables, apportant un soutien concret et durable à ceux qui en ont le plus besoin.
+                    Notre mission est simple : créer un environnement stable, bienveillant et porteur d'opportunités afin que chaque enfant puisse s'épanouir pleinement.
                 </p>
-                <p class="text-base text-gray-600 leading-relaxed mb-6">
-                    We have chosen a holistic approach that goes beyond the child alone and considers their entire environment - from the family home to the broader community.
+                <p class="text-base text-gray-600 leading-relaxed mb-6"
+                   data-en="We chose a holistic approach that goes beyond the child alone and considers their whole environment - from the family home to the wider community."
+                   data-fr="Nous avons choisi une approche holistique qui dépasse le seul enfant et prend en compte l'ensemble de son environnement - du foyer familial à la communauté élargie."
+                   data-km="យើងបានជ្រើសរើសវិធីសាស្ត្រសរុប ដែលលើសពីកុមារម្នាក់ឯង ហើយគិតដល់បរិយាកាសទាំងមូលរបស់គាត់ - ពីគ្រួសាររហូតដល់សហគមន៍ទូលំទូលាយ។">
+                    Nous avons choisi une approche holistique qui dépasse le seul enfant et prend en compte l'ensemble de son environnement - du foyer familial à la communauté élargie.
                 </p>
                 <a href="{{ route('sponsor.children') }}"
                    class="inline-flex items-center gap-3 px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-xl transition shadow-lg shadow-orange-200">
-                    <i class="fas fa-heart"></i> Sponsor a Child Today
+                    <i class="fas fa-heart"></i> <span data-en="Sponsor a child" data-fr="Parrainer un enfant" data-km="ឧបត្ថម្ភកុមារ">Parrainer un enfant</span>
                 </a>
             </div>
             <div class="reveal-right">
@@ -237,26 +254,26 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                     <div class="absolute -top-4 -right-4 w-full h-full bg-orange-100 rounded-3xl"></div>
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] bg-orange-50 flex items-center justify-center">
                         @if(file_exists(public_path('images/about-cambodia.jpg')))
-                            <img src="{{ asset('images/about-cambodia.jpg') }}" class="w-full h-full object-cover" alt="Cambodia">
+                            <img src="{{ asset('images/about-cambodia.jpg') }}" class="w-full h-full object-cover" alt="Cambodge">
                         @else
                             <div class="text-center p-12">
                                 <i class="fas fa-globe-asia text-orange-200 text-8xl mb-4 block"></i>
-                                <p class="text-orange-400 font-bold">Cambodia Field Work</p>
+                                <p class="text-orange-400 font-bold" data-en="Fieldwork in Cambodia" data-fr="Terrain au Cambodge" data-km="ការងារនៅកម្ពុជា">Terrain au Cambodge</p>
                             </div>
                         @endif
                     </div>
                     <div class="absolute -bottom-6 -left-6 w-28 h-28 bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center text-center p-3">
                         <p class="text-3xl font-black text-orange-500">1958</p>
-                        <p class="text-xs font-bold text-gray-500 mt-0.5">Founded</p>
+                        <p class="text-xs font-bold text-gray-500 mt-0.5" data-en="Founded in" data-fr="Fondée en" data-km="បង្កើតនៅឆ្នាំ">Fondée en</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Three departments ── --}}
+        {{-- Les trois pôles ── --}}
         <div class="reveal mb-4">
-            <div class="pill bg-orange-100 text-orange-600 mb-3"><i class="fas fa-layer-group text-xs"></i> Our 3 Departments</div>
-            <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-2">A Holistic Approach</h2>
+            <div class="pill bg-orange-100 text-orange-600 mb-3"><i class="fas fa-layer-group text-xs"></i> <span data-en="Our 3 Pillars" data-fr="Nos 3 Pôles" data-km="សសរស្តម្ភ ៣ របស់យើង">Nos 3 Pôles</span></div>
+            <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-2" data-en="A holistic approach" data-fr="Une approche holistique" data-km="វិធីសាស្ត្រសរុប">Une approche holistique</h2>
             <div class="w-20 h-1 bg-orange-500 rounded-full mb-10"></div>
         </div>
         <div class="grid md:grid-cols-3 gap-6 md:gap-8">
@@ -264,25 +281,51 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 [
                     'icon'=>'fas fa-child', 'color'=>'orange',
                     'gradient'=>'from-orange-50 to-amber-50', 'border'=>'border-orange-200',
-                    'num'=>'01', 'title'=>'Childhood Department',
-                    'objective'=>'Support the well-being, safety, and development of vulnerable and orphaned children.',
-                    'actions'=>['Child Protection','Health and Nutrition','Education','Personal Development',"Support for Children\'s Homes"],
+                    'num'=>'01', 'title'=>'Pôle Enfance',
+                    'title_en'=>'Childhood',
+                    'title_km'=>'កុមារភាព',
+                    'objective'=>"Soutenir le bien-être, la sécurité et le développement des enfants vulnérables et orphelins.",
+                    'objective_en'=>"Support the well-being, safety, and development of vulnerable and orphaned children.",
+                    'objective_km'=>"គាំទ្រសុខុមាលភាព សុវត្ថិភាព និងការអភិវឌ្ឍរបស់កុមារងាយរងគ្រោះ និងកុមារកំព្រា។",
+                    'actions'=>[
+                        ['fr'=>"Protection de l'enfance", 'en'=>'Child protection', 'km'=>'ការការពារកុមារ'],
+                        ['fr'=>'Santé et nutrition', 'en'=>'Health and nutrition', 'km'=>'សុខភាព និងអាហារូបត្ថម្ភ'],
+                        ['fr'=>'Éducation', 'en'=>'Education', 'km'=>'ការអប់រំ'],
+                        ['fr'=>'Développement personnel', 'en'=>'Personal development', 'km'=>'ការអភិវឌ្ឍផ្ទាល់ខ្លួន'],
+                        ['fr'=>"Soutien aux foyers d'accueil", 'en'=>'Support for care homes', 'km'=>'ការគាំទ្រផ្ទះថែទាំ'],
+                    ],
                     'route'=>'childhood.protection',
                 ],
                 [
                     'icon'=>'fas fa-home', 'color'=>'blue',
                     'gradient'=>'from-blue-50 to-indigo-50', 'border'=>'border-blue-200',
-                    'num'=>'02', 'title'=>'Family Department',
-                    'objective'=>'Support families in their essential needs, autonomy, and stability.',
-                    'actions'=>['Housing and Family Stability','Training and Employment','Financial Support','Family Health and Well-being'],
+                    'num'=>'02', 'title'=>'Pôle Famille',
+                    'title_en'=>'Family',
+                    'title_km'=>'គ្រួសារ',
+                    'objective'=>"Accompagner les familles dans leurs besoins essentiels, leur autonomie et leur stabilité.",
+                    'objective_en'=>"Support families with essential needs, autonomy, and stability.",
+                    'objective_km'=>"គាំទ្រគ្រួសារក្នុងតម្រូវការចាំបាច់ ស្វ័យភាព និងស្ថិរភាព។",
+                    'actions'=>[
+                        ['fr'=>'Logement et stabilité familiale', 'en'=>'Housing and family stability', 'km'=>'លំនៅដ្ឋាន និងស្ថិរភាពគ្រួសារ'],
+                        ['fr'=>'Formation et emploi', 'en'=>'Training and employment', 'km'=>'ការបណ្តុះបណ្តាល និងការងារ'],
+                        ['fr'=>'Soutien financier', 'en'=>'Financial support', 'km'=>'ការគាំទ្រហិរញ្ញវត្ថុ'],
+                        ['fr'=>'Santé et bien-être familial', 'en'=>'Family health and well-being', 'km'=>'សុខភាព និងសុខុមាលភាពគ្រួសារ'],
+                    ],
                     'route'=>'families.housing',
                 ],
                 [
                     'icon'=>'fas fa-city', 'color'=>'green',
                     'gradient'=>'from-green-50 to-emerald-50', 'border'=>'border-green-200',
-                    'num'=>'03', 'title'=>'Community Department',
-                    'objective'=>'Develop and strengthen community infrastructure to improve the quality of life of residents.',
-                    'actions'=>['Construction & Renovation','Water, Sanitation & Basic Services'],
+                    'num'=>'03', 'title'=>'Pôle Communauté',
+                    'title_en'=>'Community',
+                    'title_km'=>'សហគមន៍',
+                    'objective'=>"Développer et renforcer les infrastructures communautaires pour améliorer la qualité de vie des habitants.",
+                    'objective_en'=>"Develop and strengthen community infrastructure to improve residents' quality of life.",
+                    'objective_km'=>"អភិវឌ្ឍ និងពង្រឹងហេដ្ឋារចនាសម្ព័ន្ធសហគមន៍ ដើម្បីលើកកម្ពស់គុណភាពជីវិតរបស់ប្រជាពលរដ្ឋ។",
+                    'actions'=>[
+                        ['fr'=>'Construction & Rénovation', 'en'=>'Construction & Renovation', 'km'=>'សាងសង់ និងជួសជុល'],
+                        ['fr'=>'Eau, assainissement & services de base', 'en'=>'Water, sanitation & basic services', 'km'=>'ទឹក អនាម័យ និងសេវាមូលដ្ឋាន'],
+                    ],
                     'route'=>'community.infrastructure',
                 ],
             ] as $i => $dept)
@@ -294,18 +337,18 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                         </div>
                         <span class="text-5xl font-black text-{{ $dept['color'] }}-100">{{ $dept['num'] }}</span>
                     </div>
-                    <h3 class="text-xl font-black text-gray-900 mb-2">{{ $dept['title'] }}</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed mb-5">{{ $dept['objective'] }}</p>
+                    <h3 class="text-xl font-black text-gray-900 mb-2" data-en="{{ $dept['title_en'] }}" data-fr="{{ $dept['title'] }}" data-km="{{ $dept['title_km'] }}">{{ $dept['title'] }}</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed mb-5" data-en="{{ $dept['objective_en'] }}" data-fr="{{ $dept['objective'] }}" data-km="{{ $dept['objective_km'] }}">{{ $dept['objective'] }}</p>
                     <ul class="space-y-2 mb-6">
                         @foreach($dept['actions'] as $action)
                         <li class="flex items-center gap-2 text-sm text-gray-600">
-                            <i class="fas fa-check-circle text-{{ $dept['color'] }}-400 text-xs flex-shrink-0"></i> {{ $action }}
+                            <i class="fas fa-check-circle text-{{ $dept['color'] }}-400 text-xs flex-shrink-0"></i> <span data-en="{{ $action['en'] }}" data-fr="{{ $action['fr'] }}" data-km="{{ $action['km'] }}">{{ $action['fr'] }}</span>
                         </li>
                         @endforeach
                     </ul>
                     <a href="{{ route($dept['route']) }}"
                        class="inline-flex items-center gap-2 text-sm font-black text-{{ $dept['color'] }}-600 hover:gap-3 transition-all">
-                        Discover <i class="fas fa-arrow-right text-xs"></i>
+                        <span data-en="Discover" data-fr="Découvrir" data-km="ស្វែងយល់">Découvrir</span> <i class="fas fa-arrow-right text-xs"></i>
                     </a>
                 </div>
             </div>
@@ -320,26 +363,26 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
     </svg>
 </div>
 
-{{-- ── Values ── --}}
+{{-- ── Valeurs ── --}}
 <section class="section bg-gray-50">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12 reveal">
-            <div class="pill bg-orange-100 text-orange-600 mx-auto mb-4"><i class="fas fa-star text-xs"></i> Our Values</div>
-            <h2 class="text-3xl md:text-4xl font-black text-gray-900">What Guides Every Decision</h2>
+            <div class="pill bg-orange-100 text-orange-600 mx-auto mb-4"><i class="fas fa-star text-xs"></i> <span data-en="Our Values" data-fr="Nos Valeurs" data-km="តម្លៃរបស់យើង">Nos Valeurs</span></div>
+            <h2 class="text-3xl md:text-4xl font-black text-gray-900" data-en="What guides every decision we make" data-fr="Ce qui guide chacune de nos décisions" data-km="អ្វីដែលណែនាំរាល់ការសម្រេចចិត្តរបស់យើង">Ce qui guide chacune de nos décisions</h2>
         </div>
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
             @foreach([
-                ['fas fa-heart',         'orange', 'Compassion & Courage'],
-                ['fas fa-handshake',     'blue',   'Trust & Respect'],
-                ['fas fa-search',        'green',  'Transparency & Integrity'],
-                ['fas fa-hands-helping', 'purple', 'Commitment & Cooperation'],
-                ['fas fa-star',          'yellow', 'Hope & Empowerment'],
+                ['fas fa-heart',         'orange', 'Compassion & Courage',        'Compassion & Courage',          'ក្តីមេត្តា និងភាពក្លាហាន'],
+                ['fas fa-handshake',     'blue',   'Confiance & Respect',         'Trust & Respect',               'ទំនុកចិត្ត និងការគោរព'],
+                ['fas fa-search',        'green',  'Transparence & Intégrité',    'Transparency & Integrity',      'តម្លាភាព និងសុចរិតភាព'],
+                ['fas fa-hands-helping', 'purple', 'Engagement & Coopération',    'Commitment & Cooperation',      'ការប្តេជ្ញាចិត្ត និងកិច្ចសហការ'],
+                ['fas fa-star',          'yellow', 'Espoir & Autonomisation',     'Hope & Empowerment',            'ក្តីសង្ឃឹម និងការផ្តល់អំណាច'],
             ] as $i => $val)
             <div class="section-card p-6 text-center group reveal stagger-{{ $i+1 }}">
                 <div class="icon-badge w-14 h-14 bg-{{ $val[1] }}-100 group-hover:bg-{{ $val[1] }}-500 mx-auto mb-4 transition">
                     <i class="{{ $val[0] }} text-{{ $val[1] }}-500 group-hover:text-white text-xl transition"></i>
                 </div>
-                <p class="text-xs font-black text-gray-700 uppercase tracking-wide">{{ $val[2] }}</p>
+                <p class="text-xs font-black text-gray-700 uppercase tracking-wide" data-en="{{ $val[3] }}" data-fr="{{ $val[2] }}" data-km="{{ $val[4] }}">{{ $val[2] }}</p>
             </div>
             @endforeach
         </div>
@@ -354,19 +397,19 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div class="text-white text-center lg:text-left">
                     <p class="pill bg-white/20 border border-white/30 text-white mb-4 inline-flex">
-                        <i class="fas fa-dove text-xs"></i> Take Action
+                        <i class="fas fa-dove text-xs"></i> <span data-en="Take action" data-fr="Passez à l'action" data-km="ចូលរួមសកម្មភាព">Passez à l'action</span>
                     </p>
-                    <h2 class="text-3xl md:text-4xl font-black mb-3">Join Our Mission</h2>
-                    <p class="text-white/85 text-lg max-w-xl">Every feather of hope we add to their wings helps them rise a little higher each day.</p>
+                    <h2 class="text-3xl md:text-4xl font-black mb-3" data-en="Join our mission" data-fr="Rejoignez notre mission" data-km="ចូលរួមបេសកកម្មរបស់យើង">Rejoignez notre mission</h2>
+                    <p class="text-white/85 text-lg max-w-xl" data-en="Every feather of hope we add to their wings helps them rise a little higher each day." data-fr="Chaque plume d'espoir que nous ajoutons à leurs ailes les aide à s'élever un peu plus haut chaque jour." data-km="រាល់ស្លាបនៃក្តីសង្ឃឹមដែលយើងបន្ថែមឱ្យពួកគេ ជួយឱ្យពួកគេហោះឡើងខ្ពស់បន្តិចរាល់ថ្ងៃ។">Chaque plume d'espoir que nous ajoutons à leurs ailes les aide à s'élever un peu plus haut chaque jour.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
                     <a href="{{ route('sponsor.children') }}"
                        class="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-black rounded-xl hover:bg-orange-50 transition text-center justify-center shadow-lg">
-                        <i class="fas fa-child"></i> Sponsor a Child
+                        <i class="fas fa-child"></i> <span data-en="Sponsor a child" data-fr="Parrainer un enfant" data-km="ឧបត្ថម្ភកុមារ">Parrainer un enfant</span>
                     </a>
                     <a href="{{ route('about.team') }}"
                        class="inline-flex items-center gap-3 px-8 py-4 border-2 border-white/50 text-white font-black rounded-xl hover:bg-white/10 transition text-center justify-center">
-                        <i class="fas fa-users"></i> Meet Our Team
+                        <i class="fas fa-users"></i> <span data-en="Meet our team" data-fr="Rencontrer notre équipe" data-km="ជួបក្រុមការងាររបស់យើង">Rencontrer notre équipe</span>
                     </a>
                 </div>
             </div>

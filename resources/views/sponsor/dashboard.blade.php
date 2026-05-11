@@ -254,6 +254,7 @@
         background: #fff; border: 2px solid var(--border);
         font-size: 13px; font-weight: 700; color: var(--muted);
         transition: all .22s; box-shadow: var(--card-sh);
+        position: relative;
     }
     .entity-tab img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
     .entity-tab .et-icon {
@@ -264,6 +265,33 @@
     .entity-tab:hover { border-color: var(--brand); color: var(--brand); transform: translateY(-2px); box-shadow: var(--card-sh2); }
     .entity-tab.active { border-color: var(--brand); background: var(--brand-lt); color: var(--brand); box-shadow: 0 6px 20px rgba(249,115,22,.18); }
     .entity-tab.active .et-icon { background: #fde9b8; }
+
+    /* NEW badge for fresh content */
+    .new-pulse {
+        position: absolute; top: -7px; right: -7px;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: #fff; font-size: 9px; font-weight: 900;
+        padding: 3px 7px; border-radius: 999px;
+        border: 2px solid var(--bg);
+        box-shadow: 0 3px 10px rgba(239,68,68,.45);
+        display: none; pointer-events: none;
+        letter-spacing: .04em; z-index: 3;
+        animation: pulseBadge 1.8s ease-in-out infinite;
+        white-space: nowrap;
+    }
+    .new-pulse.show { display: block; }
+    @keyframes pulseBadge {
+        0%, 100% { transform: scale(1); box-shadow: 0 3px 10px rgba(239,68,68,.45); }
+        50% { transform: scale(1.14); box-shadow: 0 4px 16px rgba(239,68,68,.7); }
+    }
+    /* small new-dot used on wcard titles inside a panel */
+    .new-dot {
+        display: inline-block; width: 8px; height: 8px;
+        background: #ef4444; border-radius: 50%;
+        margin-left: 6px; vertical-align: middle;
+        animation: pulseBadge 1.8s ease-in-out infinite;
+        box-shadow: 0 0 0 0 rgba(239,68,68,.5);
+    }
 
     /* ── HERO SECTION ── */
     .hero-grid {
@@ -369,6 +397,9 @@
         background: var(--brand); border-color: var(--brand); color: #fff;
         box-shadow: 0 4px 14px rgba(249,115,22,.35); transform: scale(1.04);
     }
+    /* Special styling for the "All updates" pill — subtle differentiation */
+    .y-pill[data-year="all"] { border-style: dashed; }
+    .y-pill[data-year="all"].active { border-style: solid; }
     .y-sec { display: none; }
     .y-sec.active { display: block; animation: fadeUp .22s ease both; }
 
@@ -393,13 +424,27 @@
         padding: 2px 9px; border-radius: 999px;
     }
 
-    /* About section */
-    .about-text { font-size: 14.5px; color: var(--muted); line-height: 1.75; margin-bottom: 18px; }
-    .see-more { color: var(--orange); font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; text-decoration: none; transition: color .18s; }
+    /* Year separator inside "All updates" timeline */
+    .yr-sep {
+        display: flex; align-items: center; gap: 10px;
+        margin: 18px 0 12px; padding-left: 0;
+    }
+    .yr-sep:first-child { margin-top: 0; }
+    .yr-sep-line { flex: 1; height: 1px; background: var(--border); }
+    .yr-sep-label {
+        font-size: 11px; font-weight: 900; color: var(--brand);
+        background: var(--brand-lt); padding: 4px 12px; border-radius: 999px;
+        letter-spacing: .08em;
+    }
+
+    /* Story / About section */
+    .about-text { font-size: 14.5px; color: var(--muted); line-height: 1.75; }
+    .about-text + .about-text { margin-top: 12px; }
+    .see-more { color: var(--orange); font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; text-decoration: none; transition: color .18s; margin-top: 14px; }
     .see-more:hover { color: #d97000; }
 
     /* Photo gallery */
-    .photo-gallery { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 18px; }
+    .photo-gallery { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
     .gallery-item {
         border-radius: 12px; overflow: hidden; cursor: pointer;
         aspect-ratio: 1; background: var(--brand-lt);
@@ -452,6 +497,8 @@
         color: var(--orange); font-weight: 700; font-size: 13px;
         display: inline-flex; align-items: center; gap: 5px;
         text-decoration: none; margin-top: 16px; transition: color .18s;
+        cursor: pointer; background: none; border: none; padding: 0;
+        font-family: inherit;
     }
     .see-all-link:hover { color: #d97000; }
 
@@ -688,9 +735,17 @@
     @if($totalEntities > 1)
     <div class="entity-tabs anim-up" id="entity-tabs">
         @foreach($families as $fi => $family)
-        @php $eidx = $fi; @endphp
+        @php
+            $eidx = $fi;
+            $famDocTimes   = $family->documents->pluck('created_at')->map(fn($d)=>$d ? \Carbon\Carbon::parse($d)->timestamp : 0)->filter()->values();
+            $famMediaTimes = $family->media->pluck('created_at')->map(fn($d)=>$d ? \Carbon\Carbon::parse($d)->timestamp : 0)->filter()->values();
+        @endphp
         <div class="entity-tab {{ $eidx===0?'active':'' }} sd{{ ($eidx%6)+1 }}"
-             id="tab-{{ $eidx }}" onclick="selectEntity({{ $eidx }})">
+             id="tab-{{ $eidx }}"
+             data-entity-key="family_{{ $family->id }}"
+             data-doc-times='@json($famDocTimes)'
+             data-media-times='@json($famMediaTimes)'
+             onclick="selectEntity({{ $eidx }})">
             @if($family->profile_photo)
                 <img src="{{ $family->profile_photo_url ?? asset($family->profile_photo) }}" alt="">
             @else
@@ -700,12 +755,21 @@
                 <div style="font-size:13px;font-weight:800;color:inherit">{{ $family->name }}</div>
                 <div style="font-size:10px;font-weight:500;opacity:.7;margin-top:1px">Family</div>
             </div>
+            <span class="new-pulse">NEW</span>
         </div>
         @endforeach
         @foreach($children as $ci => $child)
-        @php $eidx = $families->count()+$ci; @endphp
+        @php
+            $eidx = $families->count()+$ci;
+            $cDocTimes   = $child->documents->pluck('created_at')->map(fn($d)=>$d ? \Carbon\Carbon::parse($d)->timestamp : 0)->filter()->values();
+            $cMediaTimes = $child->media->pluck('created_at')->map(fn($d)=>$d ? \Carbon\Carbon::parse($d)->timestamp : 0)->filter()->values();
+        @endphp
         <div class="entity-tab {{ ($totalEntities===1||$eidx===0)?'active':'' }} sd{{ ($eidx%6)+1 }}"
-             id="tab-{{ $eidx }}" onclick="selectEntity({{ $eidx }})">
+             id="tab-{{ $eidx }}"
+             data-entity-key="child_{{ $child->id }}"
+             data-doc-times='@json($cDocTimes)'
+             data-media-times='@json($cMediaTimes)'
+             onclick="selectEntity({{ $eidx }})">
             @if($child->profile_photo)
                 <img src="{{ asset($child->profile_photo) }}" alt="">
             @else
@@ -715,6 +779,7 @@
                 <div style="font-size:13px;font-weight:800;color:inherit">{{ $child->first_name }}</div>
                 <div style="font-size:10px;font-weight:500;opacity:.7;margin-top:1px">Child</div>
             </div>
+            <span class="new-pulse">NEW</span>
         </div>
         @endforeach
     </div>
@@ -734,6 +799,8 @@
         $fYears = $fYears->unique()->sortDesc()->values();
         $latestUpdate = $family->updates->sortByDesc('report_date')->first();
         $sponsorSince = $family->created_at ? $family->created_at->format('M d, Y') : null;
+        // All updates sorted desc — used by the "All updates" tab
+        $fAllUpdates = $family->updates->sortByDesc(fn($u)=>\Carbon\Carbon::parse($u->report_date??$u->created_at)->timestamp);
     @endphp
     <div class="entity-panel {{ ($totalEntities===1||$eidx===0)?'active':'' }}" id="{{ $pid }}">
 
@@ -800,6 +867,21 @@
             </div>
         </div>
 
+        {{-- ━━━━━━ STORY SLOT (below hero, full width) ━━━━━━ --}}
+        <div class="wcard reveal" style="margin-bottom:24px">
+            <h3 class="wcard-title">
+                <i class="fas fa-book-open" style="color:var(--brand)"></i>
+                Family story
+            </h3>
+            @if($family->description ?? null)
+            <p class="about-text">{{ $family->description }}</p>
+            @elseif($family->story)
+            <p class="about-text">{{ $family->story }}</p>
+            @else
+            <p class="about-text" style="text-align:center;padding:16px 0">No story available yet.</p>
+            @endif
+        </div>
+
         {{-- ── YEAR BAR ── --}}
         @if($fYears->isNotEmpty())
         <div class="year-bar reveal">
@@ -810,6 +892,9 @@
             @foreach($fYears as $yr)
             <button class="y-pill" data-panel="{{ $pid }}" data-year="{{ $yr }}" onclick="switchYear('{{ $pid }}','{{ $yr }}')">{{ $yr }}</button>
             @endforeach
+            <button class="y-pill" data-panel="{{ $pid }}" data-year="all" onclick="switchYear('{{ $pid }}','all')">
+                <i class="fas fa-stream" style="font-size:9px;margin-right:4px"></i> All updates
+            </button>
         </div>
         @endif
 
@@ -817,31 +902,8 @@
         <div class="y-sec active" data-panel="{{ $pid }}" data-section="latest">
             <div class="c-grid">
                 <div>
+                    {{-- ━━━━━━ UPDATES (TOP) ━━━━━━ --}}
                     <div class="wcard reveal reveal-l">
-                        <h3 class="wcard-title"><i class="far fa-user" style="color:var(--muted)"></i> About {{ Str::words($family->name,1,'') }}</h3>
-                        @if($family->description ?? null)
-                        <p class="about-text">{{ $family->description }}</p>
-                        @else
-                        <p class="about-text">{{ $family->story }}</p>
-                        @endif
-                        @php $galleryMedia = $family->media->where('type','photo')->take(5); @endphp
-                        @if($galleryMedia->isNotEmpty())
-                        <div class="photo-gallery">
-                            @foreach($galleryMedia as $gm)
-                            <div class="gallery-item reveal-s sd{{ ($loop->index%3)+1 }}"
-                                 onclick="openLightbox('{{ asset($gm->file_path) }}','image','{{ addslashes($gm->caption??"") }}','{{ route("sponsor.download",["type"=>"family_media","id"=>$gm->id]) }}')">
-                                <img src="{{ asset($gm->file_path) }}" alt="{{ $gm->caption ?? '' }}">
-                            </div>
-                            @endforeach
-                            <div class="gallery-item view-all" onclick="switchYear('{{ $pid }}','{{ $fYears->first() ?? "latest" }}')">
-                                <i class="fas fa-camera"></i>
-                                <span>View all<br>photos</span>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-
-                    <div class="wcard reveal" style="margin-top:16px">
                         <h3 class="wcard-title">
                             <span style="width:24px;height:24px;border-radius:50%;background:var(--brand-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0">
                                 <i class="fas fa-check" style="font-size:10px;color:var(--brand)"></i>
@@ -852,6 +914,13 @@
                         @if($family->updates->isNotEmpty())
                         <div class="timeline">
                             @foreach($family->updates->sortByDesc('report_date')->take(3) as $upd)
+                            @php
+                                $updYearLatestF = \Carbon\Carbon::parse($upd->report_date??$upd->created_at)->year;
+                                $upMedia = $family->media->where('type','photo')
+                                    ->filter(fn($m) => $m->created_at->year == $updYearLatestF)
+                                    ->sortByDesc('created_at')->first()
+                                    ?? $family->media->where('type','photo')->sortByDesc('created_at')->first();
+                            @endphp
                             <div class="tl-item">
                                 <div class="tl-dot">
                                     <i class="far {{ $upd->type==='health'?'fa-heart':($upd->type==='education'?'fa-graduation-cap':'fa-user') }}"></i>
@@ -865,7 +934,6 @@
                                         @if($upd->title)<div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px">{{ $upd->title }}</div>@endif
                                         <div class="tl-text">{{ Str::limit($upd->content, 120) }}</div>
                                     </div>
-                                    @php $upMedia = $family->media->where('type','photo')->first(); @endphp
                                     @if($upMedia)
                                     <img src="{{ asset($upMedia->file_path) }}" class="tl-thumb"
                                          onclick="openLightbox('{{ asset($upMedia->file_path) }}','image','','{{ route("sponsor.download",["type"=>"family_media","id"=>$upMedia->id]) }}')" alt="">
@@ -874,11 +942,35 @@
                             </div>
                             @endforeach
                         </div>
-                        <a href="{{ route('sponsor.family.stories') }}" class="see-all-link">See all updates <i class="fas fa-chevron-right" style="font-size:10px"></i></a>
+                        <button type="button" class="see-all-link" onclick="switchYear('{{ $pid }}','all')">See all updates <i class="fas fa-chevron-right" style="font-size:10px"></i></button>
                         @else
                         <p style="text-align:center;color:var(--muted);font-size:13px;padding:24px 0">No updates yet.</p>
                         @endif
                     </div>
+
+                    {{-- ━━━━━━ PHOTO GALLERY SLOT (separate) ━━━━━━ --}}
+                    @php $galleryMedia = $family->media->where('type','photo')->take(5); @endphp
+                    @if($galleryMedia->isNotEmpty())
+                    <div class="wcard reveal" style="margin-top:16px">
+                        <h3 class="wcard-title">
+                            <i class="fas fa-images" style="color:#3b82f6"></i>
+                            Photos
+                            <span class="wc-badge" style="background:#dbeafe;color:#1e40af">{{ $family->media->where('type','photo')->count() }}</span>
+                        </h3>
+                        <div class="photo-gallery">
+                            @foreach($galleryMedia as $gm)
+                            <div class="gallery-item reveal-s sd{{ ($loop->index%3)+1 }}"
+                                 onclick="openLightbox('{{ asset($gm->file_path) }}','image','{{ addslashes($gm->caption??"") }}','{{ route("sponsor.download",["type"=>"family_media","id"=>$gm->id]) }}')">
+                                <img src="{{ asset($gm->file_path) }}" alt="{{ $gm->caption ?? '' }}">
+                            </div>
+                            @endforeach
+                            <div class="gallery-item view-all" onclick="switchYear('{{ $pid }}','{{ $fYears->first() ?? "latest" }}')">
+                                <i class="fas fa-camera"></i>
+                                <span>View all<br>photos</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
 
                 <div>
@@ -929,6 +1021,65 @@
                         @endif
                     </div>
                 </div>
+            </div>
+        </div>
+
+        {{-- ── ALL UPDATES TAB ── --}}
+        <div class="y-sec" data-panel="{{ $pid }}" data-section="all">
+            <div class="wcard">
+                <h3 class="wcard-title">
+                    <span style="width:24px;height:24px;border-radius:50%;background:var(--brand-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                        <i class="fas fa-stream" style="font-size:10px;color:var(--brand)"></i>
+                    </span>
+                    All updates
+                    <span class="wc-badge" style="background:var(--brand-lt);color:var(--brand)">{{ $fAllUpdates->count() }}</span>
+                </h3>
+                @if($fAllUpdates->isNotEmpty())
+                <div class="timeline">
+                    @php $currentYr = null; @endphp
+                    @foreach($fAllUpdates as $upd)
+                        @php
+                            $updYr = \Carbon\Carbon::parse($upd->report_date??$upd->created_at)->year;
+                            // FIX 1: pick year-matched photo, fall back to latest
+                            $allUpdThumbF = $family->media->where('type','photo')
+                                ->filter(fn($m) => $m->created_at->year == $updYr)
+                                ->sortByDesc('created_at')->first()
+                                ?? $family->media->where('type','photo')->sortByDesc('created_at')->first();
+                        @endphp
+                        @if($updYr !== $currentYr)
+                            @php $currentYr = $updYr; @endphp
+                            <div class="yr-sep">
+                                <span class="yr-sep-label">{{ $updYr }}</span>
+                                <span class="yr-sep-line"></span>
+                            </div>
+                        @endif
+                        <div class="tl-item">
+                            <div class="tl-dot">
+                                <i class="far {{ $upd->type==='health'?'fa-heart':($upd->type==='education'?'fa-graduation-cap':'fa-user') }}"></i>
+                            </div>
+                            <div class="tl-row">
+                                <div class="tl-content">
+                                    <div class="tl-date">
+                                        @if($upd->type)<span class="type-badge badge-{{ $upd->type }}">{{ $upd->type }}</span>@endif
+                                        {{ \Carbon\Carbon::parse($upd->report_date??$upd->created_at)->format('M d, Y') }}
+                                    </div>
+                                    @if($upd->title)<div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px">{{ $upd->title }}</div>@endif
+                                    <div class="tl-text">{{ $upd->content }}</div>
+                                </div>
+                                @if($allUpdThumbF)
+                                <img src="{{ asset($allUpdThumbF->file_path) }}" class="tl-thumb"
+                                     onclick="openLightbox('{{ asset($allUpdThumbF->file_path) }}','image','','{{ route("sponsor.download",["type"=>"family_media","id"=>$allUpdThumbF->id]) }}')" alt="">
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                @else
+                <p style="text-align:center;color:var(--muted);font-size:13px;padding:32px 0">
+                    <i class="fas fa-inbox" style="font-size:32px;color:#e2e8f0;display:block;margin-bottom:10px"></i>
+                    No updates yet.
+                </p>
+                @endif
             </div>
         </div>
 
@@ -1026,6 +1177,8 @@
         $cYears = $cYears->unique()->sortDesc()->values();
         $sponsorSince = $child->sponsor_since ? \Carbon\Carbon::parse($child->sponsor_since)->format('M d, Y') : ($child->created_at ? $child->created_at->format('M d, Y') : null);
         $latestQuote = $child->quote ?? null;
+        // All updates sorted desc — used by the "All updates" tab
+        $cAllUpdates = $child->updates->sortByDesc(fn($u)=>\Carbon\Carbon::parse($u->report_date??$u->created_at)->timestamp);
     @endphp
     <div class="entity-panel {{ ($totalEntities===1||$eidx===0)?'active':'' }}" id="{{ $pid }}">
 
@@ -1123,6 +1276,23 @@
             </div>
         </div>
 
+        {{-- ━━━━━━ STORY SLOT (below hero, full width) ━━━━━━ --}}
+        <div class="wcard reveal" style="margin-bottom:24px">
+            <h3 class="wcard-title">
+                <i class="fas fa-book-open" style="color:var(--brand)"></i>
+                {{ $child->first_name }}'s story
+            </h3>
+            @if($child->biography ?? null)
+            <p class="about-text">{{ $child->biography }}</p>
+            @elseif($child->description ?? null)
+            <p class="about-text">{{ $child->description }}</p>
+            @elseif($child->story)
+            <p class="about-text">{{ $child->story }}</p>
+            @else
+            <p class="about-text" style="text-align:center;padding:16px 0">No story available yet.</p>
+            @endif
+        </div>
+
         {{-- ── YEAR BAR ── --}}
         @if($cYears->isNotEmpty())
         <div class="year-bar reveal">
@@ -1133,6 +1303,9 @@
             @foreach($cYears as $yr)
             <button class="y-pill" data-panel="{{ $pid }}" data-year="{{ $yr }}" onclick="switchYear('{{ $pid }}','{{ $yr }}')">{{ $yr }}</button>
             @endforeach
+            <button class="y-pill" data-panel="{{ $pid }}" data-year="all" onclick="switchYear('{{ $pid }}','all')">
+                <i class="fas fa-stream" style="font-size:9px;margin-right:4px"></i> All updates
+            </button>
         </div>
         @endif
 
@@ -1140,31 +1313,8 @@
         <div class="y-sec active" data-panel="{{ $pid }}" data-section="latest">
             <div class="c-grid">
                 <div>
+                    {{-- ━━━━━━ UPDATES (TOP) ━━━━━━ --}}
                     <div class="wcard reveal reveal-l">
-                        <h3 class="wcard-title"><i class="far fa-user" style="color:var(--muted)"></i> About {{ $child->first_name }}</h3>
-                        @if($child->biography ?? ($child->description ?? null))
-                        <p class="about-text">{{ $child->biography ?? $child->description }}</p>
-                        @else
-                        <p class="about-text">{{ $child->story }}</p>
-                        @endif
-                        @php $galleryPhotos = $child->media->where('type','photo')->take(5); @endphp
-                        @if($galleryPhotos->isNotEmpty())
-                        <div class="photo-gallery">
-                            @foreach($galleryPhotos as $gp)
-                            <div class="gallery-item reveal-s sd{{ ($loop->index%3)+1 }}"
-                                 onclick="openLightbox('{{ asset($gp->file_path) }}','image','{{ addslashes($gp->caption??"") }}','{{ route("sponsor.download",["type"=>"media","id"=>$gp->id]) }}')">
-                                <img src="{{ asset($gp->file_path) }}" alt="">
-                            </div>
-                            @endforeach
-                            <div class="gallery-item view-all" onclick="switchYear('{{ $pid }}','{{ $cYears->first() ?? "latest" }}')">
-                                <i class="fas fa-camera"></i>
-                                <span>View all<br>photos</span>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-
-                    <div class="wcard reveal" style="margin-top:16px">
                         <h3 class="wcard-title">
                             <span style="width:24px;height:24px;border-radius:50%;background:var(--brand-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0">
                                 <i class="fas fa-check" style="font-size:10px;color:var(--brand)"></i>
@@ -1175,7 +1325,14 @@
                         @if($child->updates->isNotEmpty())
                         <div class="timeline">
                             @foreach($child->updates->sortByDesc('report_date')->take(3) as $upd)
-                            @php $updThumb = $child->media->where('type','photo')->sortByDesc('created_at')->first(); @endphp
+                            @php
+                                // {{-- FIX 3: per-update year-matched photo instead of always picking the first --}}
+                                $updYearLatestC = \Carbon\Carbon::parse($upd->report_date??$upd->created_at)->year;
+                                $updThumb = $child->media->where('type','photo')
+                                    ->filter(fn($m) => $m->created_at->year == $updYearLatestC)
+                                    ->sortByDesc('created_at')->first()
+                                    ?? $child->media->where('type','photo')->sortByDesc('created_at')->first();
+                            @endphp
                             <div class="tl-item">
                                 <div class="tl-dot"><i class="far fa-user"></i></div>
                                 <div class="tl-row">
@@ -1195,11 +1352,35 @@
                             </div>
                             @endforeach
                         </div>
-                        <a href="{{ route('sponsor.child.stories') }}" class="see-all-link">See all updates <i class="fas fa-chevron-right" style="font-size:10px"></i></a>
+                        <button type="button" class="see-all-link" onclick="switchYear('{{ $pid }}','all')">See all updates <i class="fas fa-chevron-right" style="font-size:10px"></i></button>
                         @else
                         <p style="text-align:center;color:var(--muted);font-size:13px;padding:24px 0">No updates yet.</p>
                         @endif
                     </div>
+
+                    {{-- ━━━━━━ PHOTO GALLERY SLOT (separate) ━━━━━━ --}}
+                    @php $galleryPhotos = $child->media->where('type','photo')->take(5); @endphp
+                    @if($galleryPhotos->isNotEmpty())
+                    <div class="wcard reveal" style="margin-top:16px">
+                        <h3 class="wcard-title">
+                            <i class="fas fa-images" style="color:#3b82f6"></i>
+                            Photos
+                            <span class="wc-badge" style="background:#dbeafe;color:#1e40af">{{ $child->media->where('type','photo')->count() }}</span>
+                        </h3>
+                        <div class="photo-gallery">
+                            @foreach($galleryPhotos as $gp)
+                            <div class="gallery-item reveal-s sd{{ ($loop->index%3)+1 }}"
+                                 onclick="openLightbox('{{ asset($gp->file_path) }}','image','{{ addslashes($gp->caption??"") }}','{{ route("sponsor.download",["type"=>"media","id"=>$gp->id]) }}')">
+                                <img src="{{ asset($gp->file_path) }}" alt="">
+                            </div>
+                            @endforeach
+                            <div class="gallery-item view-all" onclick="switchYear('{{ $pid }}','{{ $cYears->first() ?? "latest" }}')">
+                                <i class="fas fa-camera"></i>
+                                <span>View all<br>photos</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
 
                 <div>
@@ -1265,6 +1446,65 @@
                         @endif
                     </div>
                 </div>
+            </div>
+        </div>
+
+        {{-- ── ALL UPDATES TAB ── --}}
+        <div class="y-sec" data-panel="{{ $pid }}" data-section="all">
+            <div class="wcard">
+                <h3 class="wcard-title">
+                    <span style="width:24px;height:24px;border-radius:50%;background:var(--brand-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                        <i class="fas fa-stream" style="font-size:10px;color:var(--brand)"></i>
+                    </span>
+                    All updates
+                    <span class="wc-badge" style="background:var(--brand-lt);color:var(--brand)">{{ $cAllUpdates->count() }}</span>
+                </h3>
+                @if($cAllUpdates->isNotEmpty())
+                <div class="timeline">
+                    @php $currentYr = null; @endphp
+                    @foreach($cAllUpdates as $upd)
+                        @php
+                            $updYr = \Carbon\Carbon::parse($upd->report_date??$upd->created_at)->year;
+                            // FIX 2: pick year-matched photo for children all-updates, fall back to latest
+                            $allUpdThumbC = $child->media->where('type','photo')
+                                ->filter(fn($m) => $m->created_at->year == $updYr)
+                                ->sortByDesc('created_at')->first()
+                                ?? $child->media->where('type','photo')->sortByDesc('created_at')->first();
+                        @endphp
+                        @if($updYr !== $currentYr)
+                            @php $currentYr = $updYr; @endphp
+                            <div class="yr-sep">
+                                <span class="yr-sep-label">{{ $updYr }}</span>
+                                <span class="yr-sep-line"></span>
+                            </div>
+                        @endif
+                        <div class="tl-item">
+                            <div class="tl-dot">
+                                <i class="far {{ $upd->type==='health'?'fa-heart':($upd->type==='education'?'fa-graduation-cap':'fa-user') }}"></i>
+                            </div>
+                            <div class="tl-row">
+                                <div class="tl-content">
+                                    <div class="tl-date">
+                                        @if($upd->type)<span class="type-badge badge-{{ $upd->type }}">{{ $upd->type }}</span>@endif
+                                        {{ \Carbon\Carbon::parse($upd->report_date??$upd->created_at)->format('M d, Y') }}
+                                    </div>
+                                    @if($upd->title)<div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px">{{ $upd->title }}</div>@endif
+                                    <div class="tl-text">{{ $upd->content }}</div>
+                                </div>
+                                @if($allUpdThumbC)
+                                <img src="{{ asset($allUpdThumbC->file_path) }}" class="tl-thumb"
+                                     onclick="openLightbox('{{ asset($allUpdThumbC->file_path) }}','image','','{{ route("sponsor.download",["type"=>"media","id"=>$allUpdThumbC->id]) }}')" alt="">
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                @else
+                <p style="text-align:center;color:var(--muted);font-size:13px;padding:32px 0">
+                    <i class="fas fa-inbox" style="font-size:32px;color:#e2e8f0;display:block;margin-bottom:10px"></i>
+                    No updates yet.
+                </p>
+                @endif
             </div>
         </div>
 
@@ -1432,6 +1672,11 @@ function switchYear(pid, year) {
     document.querySelectorAll(`.y-pill[data-panel="${pid}"]`).forEach(b => b.classList.toggle('active', b.dataset.year === String(year)));
     document.querySelectorAll(`.y-sec[data-panel="${pid}"]`).forEach(s => s.classList.toggle('active', s.dataset.section === String(year)));
     setTimeout(initReveal, 50);
+    const panel = document.getElementById(pid);
+    if (panel) {
+        const yb = panel.querySelector('.year-bar');
+        if (yb) yb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 }
 
 /* ── Scroll reveal ── */
@@ -1484,7 +1729,7 @@ async function dashSwitchLang(l) { if (l === dLang) { dashClosePanel(); return; 
 function dashTogglePanel() {
     const p = document.getElementById('dash-translate-panel'), c = document.getElementById('dash-caret');
     const o = p.classList.toggle('open'); if (c) c.style.transform = o ? 'rotate(180deg)' : '';
-    if (o) closeNotif(); // close notif if opening lang panel
+    if (o) closeNotif();
 }
 function dashClosePanel() { const p = document.getElementById('dash-translate-panel'), c = document.getElementById('dash-caret'); if (p) p.classList.remove('open'); if (c) c.style.transform = ''; }
 document.addEventListener('click', e => {
@@ -1539,6 +1784,8 @@ function updateFooterBanner(idx) {
 function selectEntity(idx) {
     panels.forEach((p, i) => p.classList.toggle('active', i === idx));
     tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    const tab = document.getElementById('tab-' + idx);
+    if (tab) markEntitySeen(tab);
     updateFooterBanner(idx);
     setTimeout(() => {
         initReveal();
@@ -1546,9 +1793,47 @@ function selectEntity(idx) {
     }, 60);
 }
 
+/* ── NEW content badges (localStorage tracked) ── */
+function markEntitySeen(tab) {
+    const key = tab.dataset.entityKey;
+    if (!key) return;
+    localStorage.setItem('entity_seen:' + key, String(Math.floor(Date.now() / 1000)));
+    const badge = tab.querySelector('.new-pulse');
+    if (badge) badge.classList.remove('show');
+}
+
+function initNewBadges() {
+    document.querySelectorAll('.entity-tab').forEach(tab => {
+        const key = tab.dataset.entityKey;
+        if (!key) return;
+        const badge = tab.querySelector('.new-pulse');
+        if (!badge) return;
+
+        let docTimes = [], mediaTimes = [];
+        try { docTimes   = JSON.parse(tab.dataset.docTimes   || '[]'); } catch(e){}
+        try { mediaTimes = JSON.parse(tab.dataset.mediaTimes || '[]'); } catch(e){}
+
+        const storedStr = localStorage.getItem('entity_seen:' + key);
+        const storedTs  = storedStr ? parseInt(storedStr, 10) : 0;
+
+        const newDocs  = docTimes.filter(t => t > storedTs).length;
+        const newPics  = mediaTimes.filter(t => t > storedTs).length;
+        const total    = newDocs + newPics;
+
+        if (total > 0) {
+            badge.textContent = total > 9 ? '9+ NEW' : (total + ' NEW');
+            badge.classList.add('show');
+        }
+    });
+
+    const active = document.querySelector('.entity-tab.active');
+    if (active) markEntitySeen(active);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const first = [...document.querySelectorAll('.entity-tab')].findIndex(t => t.classList.contains('active'));
     updateFooterBanner(first >= 0 ? first : 0);
+    initNewBadges();
 });
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
