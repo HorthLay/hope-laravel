@@ -176,12 +176,12 @@
                 <span class="msg-notif-badge" aria-label="unread messages"></span>
             </a>
 
-            <a href="{{ route('support.donate') }}"
-               class="hdr-nav-link {{ request()->routeIs('support.donate') ? 'active' : '' }}">
+            <a href="{{ route('sponsor.sponsorship') }}"
+               class="hdr-nav-link {{ request()->routeIs('sponsor.sponsorship') ? 'active' : '' }}">
                 <i class="fas fa-hand-holding-heart" style="font-size:12px"></i> Sponsorship
             </a>
-            <a href="{{ route('home') }}"
-               class="hdr-nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
+            <a href="{{ route('sponsor.news') }}"
+               class="hdr-nav-link {{ request()->routeIs('sponsor.news') ? 'active' : '' }}">
                 <i class="far fa-newspaper" style="font-size:12px"></i> News
             </a>
         </nav>

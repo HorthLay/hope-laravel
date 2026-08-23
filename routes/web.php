@@ -247,6 +247,8 @@ Route::prefix('admin')->group(function () {
     // ── Protected (authenticated sponsors only) ────────────────────
     Route::middleware('sponsor.auth')->group(function () {
         Route::get('/dashboard', [SponsorDashboardController::class, 'index'])->name('sponsor.dashboard');
+        Route::get('/sponsorship', [SponsorDashboardController::class, 'sponsorship'])->name('sponsor.sponsorship');
+        Route::get('/news', [SponsorDashboardController::class, 'news'])->name('sponsor.news');
         Route::get('/download/{type}/{id}', [SponsorDashboardController::class, 'download'])->name('sponsor.download');
         Route::post('/logout/sponsor', [SponsorAuthController::class, 'logout'])->name('sponsor.logout');
         Route::post('/sponsor/child',     [HomeController::class, 'sponsor'])->name('sponsor.child');

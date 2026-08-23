@@ -83,4 +83,38 @@ class SponsorDashboardController extends Controller
 
         return response()->download($filePath);
     }
+
+    public function sponsorship()
+    {
+        $sponsor = Auth::guard('sponsor')->user();
+
+        $sponsor->load([
+            'children.media',
+            'children.documents',
+            'children.updates',
+            'families.media',
+            'families.documents',
+            'families.updates',
+            'families.members',
+        ]);
+
+        return view('sponsor.sponsorship', compact('sponsor'));
+    }
+
+    public function news()
+    {
+        $sponsor = Auth::guard('sponsor')->user();
+        $articles = \App\Models\Article::with(['category', 'image', 'tags'])
+            ->published()
+            ->orderBy('published_at', 'desc')
+            ->paginate(12);
+
+        $articles->getCollection()->transform(function ($article) {
+            $article->encrypted_id   = \Illuminate\Support\Facades\Crypt::encryptString((string) $article->id);
+            $article->encrypted_slug = \Illuminate\Support\Facades\Crypt::encryptString($article->slug);
+            return $article;
+        });
+
+        return view('sponsor.news', compact('sponsor', 'articles'));
+    }
 }

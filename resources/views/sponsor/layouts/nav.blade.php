@@ -21,15 +21,15 @@
     </a>
 
     {{-- Sponsorship --}}
-    <a href="{{ route('support.donate') }}"
-       class="mob-nav-item {{ request()->routeIs('support.donate') ? 'active' : '' }}">
+    <a href="{{ route('sponsor.sponsorship') }}"
+       class="mob-nav-item {{ request()->routeIs('sponsor.sponsorship') ? 'active' : '' }}">
         <i class="fas fa-hand-holding-heart"></i>
         <span>Sponsorship</span>
     </a>
 
     {{-- News --}}
-    <a href="{{ route('home') }}"
-       class="mob-nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+    <a href="{{ route('sponsor.news') }}"
+       class="mob-nav-item {{ request()->routeIs('sponsor.news') ? 'active' : '' }}">
         <i class="far fa-newspaper"></i>
         <span>News</span>
     </a>

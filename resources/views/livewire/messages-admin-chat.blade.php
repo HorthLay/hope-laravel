@@ -177,7 +177,7 @@
                 </div>
             </div>
             <div class="amc-chat-header-actions">
-                <button wire:click="markAdminRead({{ $selectedId }})" class="amc-icon-btn" title="Mark all as read">
+                <button wire:click="markAdminReadAll({{ $selectedId }})" class="amc-icon-btn" title="Mark all as read">
                     <i class="fas fa-check-double"></i>
                 </button>
             </div>

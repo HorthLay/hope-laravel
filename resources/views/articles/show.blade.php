@@ -21,6 +21,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     @include('css.style')
     <style>
+        @keyframes scaleUp { 0%{opacity:0;transform:scale(0.95)} 100%{opacity:1;transform:scale(1)} }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
         .article-body h1,.article-body h2,.article-body h3,.article-body h4{font-weight:700;margin-top:1.75rem;margin-bottom:.75rem;color:#1f2937;line-height:1.3}
         .article-body h1{font-size:1.875rem}.article-body h2{font-size:1.5rem;border-bottom:2px solid #fed7aa;padding-bottom:.5rem}
         .article-body h3{font-size:1.25rem}.article-body h4{font-size:1.125rem}
@@ -119,161 +124,193 @@
             {{-- Body --}}
             <div class="article-body">{!! $article->content !!}</div>
 
-            {{-- ══ FAMILIES IN THIS STORY ══ --}}
-            @if($article->families->isNotEmpty())
-            <div class="mt-10 mb-8">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="h-0.5 flex-1 bg-gradient-to-r from-orange-400 to-transparent rounded-full"></div>
-                    <h2 class="text-lg font-black text-gray-800 flex items-center gap-2 whitespace-nowrap">
-                        <i class="fas fa-home text-orange-500"></i> Families in This Article
+            {{-- ══ PROFILES IN THIS STORY ══ --}}
+            @if($article->families->isNotEmpty() || $article->sponsoredChildren->isNotEmpty())
+            <div class="mt-12 mb-8 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div class="bg-gradient-to-r from-orange-500 to-orange-400 px-6 py-4 flex items-center justify-between">
+                    <h2 class="text-lg font-black text-white flex items-center gap-2">
+                        <i class="fas fa-users text-white/80"></i> Profiles in This Article
                     </h2>
-                    <div class="h-0.5 flex-1 bg-gradient-to-l from-orange-400 to-transparent rounded-full"></div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    @foreach($article->families as $family)
-                    @php $fEncId = \Illuminate\Support\Facades\Crypt::encryptString((string)$family->id); @endphp
-                    <div class="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden hover:shadow-lg hover:border-orange-300 transition group flex flex-col">
-                        <div class="h-36 bg-orange-50 overflow-hidden relative flex-shrink-0">
-                            @if($family->profile_photo)
-                            <img src="{{ asset($family->profile_photo) }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            @else
-                            <div class="w-full h-full flex items-center justify-center"><i class="fas fa-home text-5xl text-orange-200"></i></div>
-                            @endif
-                            @if($family->country)
-                            <span class="absolute top-3 right-3 px-2.5 py-1 bg-black/50 text-white text-[10px] font-bold rounded-full backdrop-blur-sm flex items-center gap-1">
-                                <i class="fas fa-map-marker-alt text-orange-400"></i>{{ $family->country }}
-                            </span>
-                            @endif
-                        </div>
-                        <div class="p-5 flex flex-col flex-1">
-                            <h3 class="font-black text-gray-800 text-lg leading-tight mb-3">{{ $family->name }}</h3>
-                           @if($family->code)
-                                <div class="flex-1 mb-4">
-                                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-                                        <p class="text-sm font-semibold text-gray-500 mb-1 uppercase tracking-wide">
-                                            Family Code
-                                        </p>
-                                        <p class="text-lg font-bold text-gray-800 leading-relaxed break-words">
-                                            {{ $family->code }}
-                                        </p>
+                <div class="p-6">
+                    @if($article->families->isNotEmpty())
+                        <div class="mb-2">
+                            <h3 class="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <i class="fas fa-home text-orange-400"></i> Families
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                @foreach($article->families as $family)
+                                    <div class="flex items-center gap-5 p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-orange-50 hover:border-orange-200 transition group shadow-sm hover:shadow-md">
+                                        <button onclick="openProfileModal('family-modal-{{ $family->id }}')" class="w-24 h-24 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0 bg-white relative cursor-pointer group/img">
+                                            @if($family->profile_photo)
+                                                <img src="{{ asset($family->profile_photo) }}" class="w-full h-full object-cover group-hover/img:scale-110 transition duration-300">
+                                            @else
+                                                <div class="w-full h-full flex items-center justify-center"><i class="fas fa-home text-3xl text-gray-300"></i></div>
+                                            @endif
+                                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity">
+                                                <i class="fas fa-search-plus text-white text-xl"></i>
+                                            </div>
+                                        </button>
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="font-bold text-gray-900 text-base leading-tight mb-1 truncate cursor-pointer hover:text-orange-500 transition" onclick="openProfileModal('family-modal-{{ $family->id }}')">{{ $family->name }} Family</h4>
+                                            @if($family->code)<p class="text-xs font-bold text-gray-500 mb-2">CODE: {{ $family->code }}</p>@endif
+                                            @if($family->country)
+                                                <p class="text-sm font-medium text-gray-600 flex items-center gap-2">
+                                                    <i class="fas fa-map-marker-alt text-orange-400"></i> {{ $family->country }}
+                                                </p>
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
-                            @else
-                                <div class="flex-1 mb-4 flex items-center justify-center border border-dashed border-gray-300 rounded-xl p-4">
-                                    <p class="text-gray-400 text-sm italic">
-                                        No code available
-                                    </p>
-                                </div>
-                            @endif
-                            @if($family->story)
-                            <p class="text-sm text-gray-600 leading-relaxed line-clamp-4 flex-1 mb-4">{{ strip_tags($family->story) }}</p>
-                            @else
-                            <div class="flex-1 mb-4"></div>
-                            @endif
-                            {{-- <div class="grid grid-cols-2 gap-2 mt-auto">
-                                <a href="{{ route('families.show', $fEncId) }}"
-                                   class="flex items-center justify-center gap-1.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
-                                    <i class="fas fa-eye text-gray-500"></i> View Detail
-                                </a>
-                                <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
-                                   class="flex items-center justify-center gap-1.5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl transition shadow-sm">
-                                    <i class="fas fa-hands-helping text-xs"></i> {{ $family->name }}
-                                </a>
-                            </div> --}}
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
 
-            {{-- ══ CHILDREN IN THIS STORY ══ --}}
-            @if($article->sponsoredChildren->isNotEmpty())
-            <div class="mt-8 mb-8">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="h-0.5 flex-1 bg-gradient-to-r from-orange-400 to-transparent rounded-full"></div>
-                    <h2 class="text-lg font-black text-gray-800 flex items-center gap-2 whitespace-nowrap">
-                        <i class="fas fa-child text-orange-500"></i> Children in This Article
-                    </h2>
-                    <div class="h-0.5 flex-1 bg-gradient-to-l from-orange-400 to-transparent rounded-full"></div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    @foreach($article->sponsoredChildren as $child)
-                    @php $cEncId = \Illuminate\Support\Facades\Crypt::encryptString((string)$child->id); @endphp
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-lg hover:border-orange-200 transition group flex flex-col">
-                        <div class="h-36 overflow-hidden relative flex-shrink-0">
-                            <img src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}"
-                                 alt="{{ $child->first_name }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-4 py-3">
-                                <div class="flex items-center gap-3">
-                                    @if(!empty($child->age) || !empty($child->date_of_birth))
-                                    <span class="text-white text-xs font-bold flex items-center gap-1">
-                                        <i class="fas fa-birthday-cake text-orange-300 text-[10px]"></i>
-                                        {{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth)->age }} yrs
-                                    </span>
-                                    @endif
-                                    @if(!empty($child->country))
-                                    <span class="text-white text-xs font-bold flex items-center gap-1">
-                                        <i class="fas fa-map-marker-alt text-orange-300 text-[10px]"></i>{{ $child->country }}
-                                    </span>
-                                    @endif
-                                    @if($child->has_family !== null)
-                                    <span class="text-white text-xs font-bold flex items-center gap-1">
-                                        <i class="fas fa-home {{ $child->has_family ? 'text-green-300' : 'text-red-300' }} text-[10px]"></i>
-                                        {{ $child->has_family ? 'Has Family' : 'No Family' }}
-                                    </span>
-                                    @endif
-                                </div>
+                                    {{-- Family Modal --}}
+                                    <div id="family-modal-{{ $family->id }}" class="fixed inset-0 bg-black/60 z-[9999] hidden items-center justify-center p-4 backdrop-blur-sm profile-modal" onclick="closeProfileModal('family-modal-{{ $family->id }}')">
+                                        <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative" style="animation: scaleUp 0.3s ease;" onclick="event.stopPropagation()">
+                                            <button class="absolute top-4 right-4 w-10 h-10 bg-black/10 hover:bg-black/20 text-gray-700 rounded-full flex items-center justify-center transition z-10" onclick="closeProfileModal('family-modal-{{ $family->id }}')">
+                                                <i class="fas fa-times text-lg"></i>
+                                            </button>
+                                            
+                                            <div class="flex flex-col sm:flex-row max-h-[85vh]">
+                                                <div class="w-full sm:w-2/5 h-64 sm:h-auto relative">
+                                                    @if($family->profile_photo)
+                                                        <img src="{{ asset($family->profile_photo) }}" class="w-full h-full object-cover">
+                                                    @else
+                                                        <div class="w-full h-full flex items-center justify-center bg-gray-100"><i class="fas fa-home text-6xl text-gray-300"></i></div>
+                                                    @endif
+                                                </div>
+                                                <div class="w-full sm:w-3/5 p-8 flex flex-col overflow-hidden">
+                                                    <div class="mb-4 flex-shrink-0">
+                                                        <h3 class="font-black text-2xl text-gray-900 mb-1">{{ $family->name }} Family</h3>
+                                                        @if($family->code)<p class="text-sm font-bold text-orange-500 tracking-wide uppercase">CODE: {{ $family->code }}</p>@endif
+                                                    </div>
+                                                    
+                                                    <div class="flex items-center gap-4 mb-6 flex-shrink-0">
+                                                        @if($family->members)
+                                                            <div class="bg-gray-50 px-3 py-2 rounded-lg border border-gray-100 flex items-center gap-2">
+                                                                <i class="fas fa-users text-orange-400"></i>
+                                                                <span class="text-sm font-bold text-gray-700">{{ $family->members->count() }} Members</span>
+                                                            </div>
+                                                        @endif
+                                                        @if(!empty($family->country))
+                                                            <div class="bg-gray-50 px-3 py-2 rounded-lg border border-gray-100 flex items-center gap-2">
+                                                                <i class="fas fa-map-marker-alt text-orange-400"></i>
+                                                                <span class="text-sm font-bold text-gray-700">{{ $family->country }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    @if(!empty($family->story))
+                                                        <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                                                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Their Story</h4>
+                                                            <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ strip_tags($family->story) }}</p>
+                                                        </div>
+                                                    @else
+                                                        <div class="flex-1 flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                                                            <p class="text-gray-400 text-sm italic">No detailed story available yet.</p>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    <div class="mt-6 pt-4 border-t border-gray-100 flex-shrink-0">
+                                                        <a href="{{ url('/support/donate') }}" class="w-full flex items-center justify-center gap-2 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition shadow-[0_4px_14px_rgba(249,115,22,0.3)] hover:shadow-[0_6px_20px_rgba(249,115,22,0.4)]">
+                                                            <i class="fas fa-heart"></i> Sponsor {{ $family->name }} Family
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                        <div class="p-5 flex flex-col flex-1">
-                            <h3 class="font-black text-gray-800 text-lg leading-tight mb-3">{{ $child->first_name }} {{ $child->last_name ?? '' }}</h3>
+                    @endif
 
+                    @if($article->families->isNotEmpty() && $article->sponsoredChildren->isNotEmpty())
+                        <div class="h-px bg-gray-100 my-6"></div>
+                    @endif
 
-                             @if($child->code)
-                                <div class="flex-1 mb-4">
-                                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-                                        <p class="text-sm font-semibold text-gray-500 mb-1 uppercase tracking-wide">
-                                            Children Code
-                                        </p>
-                                        <p class="text-lg font-bold text-gray-800 leading-relaxed break-words">
-                                            {{ $child->code }}
-                                        </p>
+                    @if($article->sponsoredChildren->isNotEmpty())
+                        <div>
+                            <h3 class="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <i class="fas fa-child text-orange-400"></i> Children
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                @foreach($article->sponsoredChildren as $child)
+                                    <div class="flex items-center gap-5 p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-orange-50 hover:border-orange-200 transition group shadow-sm hover:shadow-md">
+                                        <button onclick="openProfileModal('child-modal-{{ $child->id }}')" class="w-24 h-24 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0 bg-white relative cursor-pointer group/img">
+                                            <img src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}" class="w-full h-full object-cover group-hover/img:scale-110 transition duration-300">
+                                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity">
+                                                <i class="fas fa-search-plus text-white text-xl"></i>
+                                            </div>
+                                        </button>
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="font-bold text-gray-900 text-base leading-tight mb-1 truncate cursor-pointer hover:text-orange-500 transition" onclick="openProfileModal('child-modal-{{ $child->id }}')">{{ $child->first_name }} {{ $child->last_name }}</h4>
+                                            @if($child->code)<p class="text-xs font-bold text-gray-500 mb-2">CODE: {{ $child->code }}</p>@endif
+                                            <p class="text-sm font-medium text-gray-600 flex items-center gap-3 mt-1">
+                                                @if(!empty($child->age) || !empty($child->date_of_birth))
+                                                    <span class="flex items-center gap-1.5"><i class="fas fa-birthday-cake text-orange-400"></i> {{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth)->age }} yrs</span>
+                                                @endif
+                                                @if(!empty($child->country))
+                                                    <span class="flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-orange-400"></i> {{ $child->country }}</span>
+                                                @endif
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            @else
-                                <div class="flex-1 mb-4 flex items-center justify-center border border-dashed border-gray-300 rounded-xl p-4">
-                                    <p class="text-gray-400 text-sm italic">
-                                        No code available
-                                    </p>
-                                </div>
-                            @endif
 
-                            @if(!empty($child->story))
-                            <p class="text-sm text-gray-600 leading-relaxed line-clamp-3 flex-1 mb-4">{{ Str::limit(strip_tags($child->story), 120) }}</p>
-                            @else
-                            <div class="flex-1 mb-4"></div>
-                            @endif
-                            {{-- <div class="grid grid-cols-2 gap-2 mt-auto">
-                                <a href="{{ route('children.show', $cEncId) }}"
-                                   class="flex items-center justify-center gap-1.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
-                                    <i class="fas fa-eye text-gray-500"></i> View Detail
-                                </a>
-                                <a href="https://www.helloasso.com/associations/des-ailes-pour-grandir/formulaires/1"
-                                   class="flex items-center justify-center gap-1.5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl transition shadow-sm">
-                                    <i class="fas fa-heart text-xs"></i> {{ $child->first_name }}
-                                </a>
-                            </div> --}}
+                                    {{-- Child Modal --}}
+                                    <div id="child-modal-{{ $child->id }}" class="fixed inset-0 bg-black/60 z-[9999] hidden items-center justify-center p-4 backdrop-blur-sm profile-modal" onclick="closeProfileModal('child-modal-{{ $child->id }}')">
+                                        <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative" style="animation: scaleUp 0.3s ease;" onclick="event.stopPropagation()">
+                                            <button class="absolute top-4 right-4 w-10 h-10 bg-black/10 hover:bg-black/20 text-gray-700 rounded-full flex items-center justify-center transition z-10" onclick="closeProfileModal('child-modal-{{ $child->id }}')">
+                                                <i class="fas fa-times text-lg"></i>
+                                            </button>
+                                            
+                                            <div class="flex flex-col sm:flex-row max-h-[85vh]">
+                                                <div class="w-full sm:w-2/5 h-64 sm:h-auto relative">
+                                                    <img src="{{ $child->profile_photo ? asset($child->profile_photo) : asset('images/child-placeholder.jpg') }}" class="w-full h-full object-cover">
+                                                </div>
+                                                <div class="w-full sm:w-3/5 p-8 flex flex-col overflow-hidden">
+                                                    <div class="mb-4 flex-shrink-0">
+                                                        <h3 class="font-black text-2xl text-gray-900 mb-1">{{ $child->first_name }} {{ $child->last_name }}</h3>
+                                                        @if($child->code)<p class="text-sm font-bold text-orange-500 tracking-wide uppercase">CODE: {{ $child->code }}</p>@endif
+                                                    </div>
+                                                    
+                                                    <div class="flex items-center gap-4 mb-6 flex-shrink-0">
+                                                        @if(!empty($child->age) || !empty($child->date_of_birth))
+                                                            <div class="bg-gray-50 px-3 py-2 rounded-lg border border-gray-100 flex items-center gap-2">
+                                                                <i class="fas fa-birthday-cake text-orange-400"></i>
+                                                                <span class="text-sm font-bold text-gray-700">{{ $child->age ?? \Carbon\Carbon::parse($child->date_of_birth)->age }} yrs</span>
+                                                            </div>
+                                                        @endif
+                                                        @if(!empty($child->country))
+                                                            <div class="bg-gray-50 px-3 py-2 rounded-lg border border-gray-100 flex items-center gap-2">
+                                                                <i class="fas fa-map-marker-alt text-orange-400"></i>
+                                                                <span class="text-sm font-bold text-gray-700">{{ $child->country }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    @if(!empty($child->story))
+                                                        <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                                                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">My Story</h4>
+                                                            <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ strip_tags($child->story) }}</p>
+                                                        </div>
+                                                    @else
+                                                        <div class="flex-1 flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                                                            <p class="text-gray-400 text-sm italic">No detailed story available yet.</p>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    <div class="mt-6 pt-4 border-t border-gray-100 flex-shrink-0">
+                                                        <a href="{{ url('/support/donate') }}" class="w-full flex items-center justify-center gap-2 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition shadow-[0_4px_14px_rgba(249,115,22,0.3)] hover:shadow-[0_6px_20px_rgba(249,115,22,0.4)]">
+                                                            <i class="fas fa-heart"></i> Sponsor {{ $child->first_name }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
-                    @endforeach
-                </div>
-                <div class="mt-5 text-center">
-                    <a href="{{ route('sponsor.children') }}"
-                       class="inline-flex items-center gap-2 px-6 py-3 border-2 border-orange-300 text-orange-600 font-bold text-sm rounded-full hover:bg-orange-50 transition">
-                        <i class="fas fa-child"></i> See All Children <i class="fas fa-arrow-right text-xs"></i>
-                    </a>
+                    @endif
                 </div>
             </div>
             @endif
@@ -572,9 +609,23 @@
 @include('layouts.navigation')
 
 <script>
+function openProfileModal(id) {
+    document.getElementById(id).style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function closeProfileModal(id) {
+    document.getElementById(id).style.display = 'none';
+    document.body.style.overflow = '';
+}
 function openLightbox(src){const lb=document.getElementById('lightbox');lb.style.display='flex';document.getElementById('lightbox-img').src=src;document.body.style.overflow='hidden';}
 function closeLightbox(){document.getElementById('lightbox').style.display='none';document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){
+        closeLightbox();
+        document.querySelectorAll('.profile-modal').forEach(m => { m.style.display = 'none'; });
+        document.body.style.overflow = '';
+    }
+});
 const mobileMenu=document.getElementById('mobile-menu'),overlay=document.getElementById('mobile-menu-overlay');
 const openMenu=()=>{mobileMenu?.classList.add('active');overlay?.classList.add('active');document.body.style.overflow='hidden';};
 const closeMenu=()=>{mobileMenu?.classList.remove('active');overlay?.classList.remove('active');document.body.style.overflow='';};
