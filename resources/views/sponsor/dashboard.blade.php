@@ -989,9 +989,9 @@
                             <tr><td>Documents</td><td>{{ $family->documents->count() }}</td></tr>
                             <tr><td>Media files</td><td>{{ $family->media->count() }}</td></tr>
                         </table>
-                        <a href="{{ route('support.donate') }}" class="manage-link">
+                        {{-- <a href="{{ route('support.donate') }}" class="manage-link">
                             Manage my sponsorship <i class="fas fa-chevron-right" style="font-size:10px"></i>
-                        </a>
+                        </a> --}}
                         <div class="spons-bg"></div>
                     </div>
 
@@ -1416,9 +1416,9 @@
                             <tr><td>Documents</td><td>{{ $child->documents->count() }}</td></tr>
                             <tr><td>Media files</td><td>{{ $child->media->count() }}</td></tr>
                         </table>
-                        <a href="{{ route('sponsor.child.file') }}" class="manage-link">
+                        {{-- <a href="{{ route('sponsor.child.file') }}" class="manage-link">
                             Manage my sponsorship <i class="fas fa-chevron-right" style="font-size:10px"></i>
-                        </a>
+                        </a> --}}
                         <div class="spons-bg"></div>
                     </div>
 

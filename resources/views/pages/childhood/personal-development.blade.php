@@ -176,13 +176,19 @@
     .cta-inner{padding:48px 24px;border-radius:22px;}
 }
 
-/* --- GLOBAL STYLE OVERRIDE --- */
+/* ════════════════════════════════════════════════════
+   GLOBAL HERO OVERRIDE — banner-style crop
+   ════════════════════════════════════════════════════ */
 body{font-family: 'Montserrat', sans-serif;}
 h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,.pill,.breadcrumb{font-family: 'Montserrat', sans-serif;}
+
 .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
-    position:relative!important;min-height:clamp(480px,65vh,700px)!important;height:auto!important;
+    position:relative!important;
+    min-height:clamp(320px,38vh,440px)!important;
+    aspect-ratio:16 / 5!important;
+    height:auto!important;
     display:flex!important;align-items:flex-end!important;overflow:hidden!important;
-    background:#0d1a0a url('{{ asset("images/image-background.jpg") }}') center 45%/cover no-repeat!important;
+    background:#0d1a0a url('{{ asset("images/image-background.jpg") }}') center 35%/cover no-repeat!important;
     isolation:isolate!important;border-radius:0!important;
 }
 .page-hero::after,.legal-hero::after,.edu-hero::after,.ch-hero::after,.pd-hero::after,.cp-hero::after,.hero::after{
@@ -193,21 +199,34 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
 .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{
     position:absolute!important;inset:0!important;z-index:0!important;
     width:100%!important;height:100%!important;
-    object-fit:cover!important;object-position:center 45%!important;
+    object-fit:cover!important;object-position:center 35%!important;
     background-image:url('{{ asset("images/image-background.jpg") }}')!important;
-    background-size:cover!important;background-position:center 45%!important;
+    background-size:cover!important;background-position:center 35%!important;
     filter:none!important;transform:none!important;transition:none!important;opacity:1!important;
 }
 .page-hero:hover .page-hero-bg,.edu-hero:hover .hero-bg,.ch-hero:hover .hero-bg,.pd-hero:hover .hero-bg,.cp-hero:hover .cp-hero-bg,.hero:hover .hero-bg{transform:none!important;}
+
+/* Hide ALL decorative overlay elements */
 .page-hero-overlay,.hero-grad,.cp-hero-gradient,.hero-shape,.hero-ring,.hero-img-strip,.hero-collage,.hero-stats,.hero-orb,#legalCanvas,.l-glow,.cp-orb,.shape-circle,.shape-circle-sm,.shape-dot-grid{display:none!important;}
+
+/* Hide hero side panels & floating decorations (banner = text + CTA only) */
+.pd-hero .trait-grid,
+.pd-hero .float-tag,
+.pd-hero .ring{
+    display:none!important;
+}
+
 .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{
     position:relative!important;z-index:2!important;
     max-width:1100px!important;width:100%!important;
     margin:0 auto!important;padding:0 40px 60px!important;
     display:block!important;text-align:left!important;
+    grid-template-columns:none!important;
 }
+
 .page-hero .breadcrumb,.legal-hero .breadcrumb,.edu-hero .breadcrumb,.ch-hero .breadcrumb,.pd-hero .breadcrumb,.cp-hero .breadcrumb,.hero .breadcrumb,
 .page-hero .pill,.page-hero .hero-pill,.legal-hero .hero-pill,.edu-hero .hero-eyebrow,.ch-hero .hero-eyebrow,.pd-hero .hero-eyebrow,.cp-hero .hero-eyebrow,.hero .hero-eyebrow,.hero-eyebrow{display:none!important;}
+
 .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{
     font-family: 'Montserrat', sans-serif;
     font-size:clamp(2.4rem,4.5vw,3.8rem)!important;font-weight:900!important;
@@ -225,7 +244,54 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
     max-width:640px!important;margin:0 0 28px!important;text-align:left!important;
     text-shadow:0 1px 6px rgba(0,0,0,.7)!important;
 }
-/* Hero CTA Buttons */
+
+/* ── BANNER CTA BUTTON — yellow, matches donate page ── */
+.pd-hero .hero-btn,
+.page-hero .hero-btn,
+.edu-hero .hero-btn,
+.ch-hero .hero-btn,
+.cp-hero .hero-btn,
+.legal-hero .hero-btn,
+.hero .hero-btn{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    min-height:42px!important;
+    padding:0 20px!important;
+    border:0!important;
+    border-radius:3px!important;
+    background:#ffc400!important;
+    background-image:none!important;       /* kill the orange gradient */
+    color:#243644!important;
+    text-decoration:none!important;
+    font-family:'Montserrat', sans-serif!important;
+    font-size:1.02rem!important;
+    font-weight:800!important;
+    letter-spacing:.045em!important;
+    text-transform:uppercase!important;
+    box-shadow:0 2px 10px rgba(0,0,0,.26)!important;
+    transition:background .18s,transform .18s!important;
+}
+.pd-hero .hero-btn:hover,
+.page-hero .hero-btn:hover,
+.edu-hero .hero-btn:hover,
+.ch-hero .hero-btn:hover,
+.cp-hero .hero-btn:hover,
+.legal-hero .hero-btn:hover,
+.hero .hero-btn:hover{
+    background:#ffd226!important;
+    color:#243644!important;
+    transform:translateY(-1px)!important;
+    box-shadow:0 2px 10px rgba(0,0,0,.26)!important;
+}
+/* Hide the trailing arrow icon — banner button = icon + label only */
+.pd-hero .hero-btn .arrow,
+.pd-hero .hero-btn .fa-arrow-right{
+    display:none!important;
+}
+
+/* Legacy hero CTA buttons (kept for any other pages still using them) */
 .hero-cta-wrap{display:flex!important;flex-wrap:wrap!important;gap:14px!important;align-items:center!important;}
 .hero-cta-btn{
     display:inline-flex!important;align-items:center!important;gap:10px!important;
@@ -239,29 +305,30 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
 .hero-cta-btn:hover{background:#0284c7!important;transform:translateY(-2px)!important;color:#fff!important;}
 .hero-cta-btn.outline{background:transparent!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:none!important;color:#fff!important;}
 .hero-cta-btn.outline:hover{background:rgba(255,255,255,.15)!important;border-color:#fff!important;}
+
 /* Mobile */
 @media(max-width:1024px){
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:900px!important;padding:0 28px 50px!important;}
 }
 @media(max-width:768px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(420px,75vw,560px)!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{
+        aspect-ratio:auto!important;
+        min-height:clamp(420px,68vw,540px)!important;
+    }
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 20px 40px!important;}
     .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(2rem,7vw,3rem)!important;}
-    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:55% 45%!important;object-position:55% 45%!important;}
+    .page-hero-bg,.hero-bg,.cp-hero-bg,.hero-bg-img{background-position:55% 35%!important;object-position:55% 35%!important;}
     .hero-cta-wrap{flex-direction:column!important;gap:10px!important;}
     .hero-cta-btn{width:100%!important;justify-content:center!important;padding:14px 20px!important;}
 }
 @media(max-width:480px){
-    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(380px,85vw,480px)!important;}
+    .page-hero,.legal-hero,.edu-hero,.ch-hero,.pd-hero,.cp-hero,.hero{min-height:clamp(400px,82vw,500px)!important;}
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:0 16px 36px!important;}
     .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.75rem,9vw,2.4rem)!important;margin-bottom:14px!important;}
     .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.9rem!important;margin-bottom:22px!important;}
     .hero-cta-btn{font-size:11.5px!important;padding:12px 18px!important;}
 }
-    .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
-    .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
-    .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
-}</style>
+</style>
 
 {{-- ══ HERO ══ --}}
 <section class="pd-hero">
@@ -304,7 +371,7 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
             </a>
         </div>
 
-        {{-- Right - trait grid ── --}}
+        {{-- Right - trait grid (hidden in banner mode) --}}
         <div class="trait-grid" style="animation:fadeIn .9s .42s ease both;">
             @foreach([
                 ['fas fa-fist-raised','bg-orange-900/30','#f97316','Self-Confidence','Believing in your own power to act'],
