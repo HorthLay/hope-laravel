@@ -1,3 +1,8 @@
+# ═══════════════════════════════════════════════════════════════════
+#  HOPE-LARAVEL — Hardened Apache .htaccess
+#  Generated for production hosting. Review before deploying.
+# ═══════════════════════════════════════════════════════════════════
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -5,17 +10,112 @@
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # ── Handle Authorization Header ──────────────────────────────────
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # ── Redirect Trailing Slashes ────────────────────────────────────
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # ── Force HTTPS (uncomment when SSL is active on your host) ──────
+    # RewriteCond %{HTTPS} off
+    # RewriteCond %{HTTP_HOST} !^localhost$
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # ── Block access to hidden files/directories (e.g. .git, .env) ──
+    RewriteCond %{REQUEST_URI} (?:^|/)\.(?!well-known) [NC]
+    RewriteRule ^ - [F,L]
+
+    # ── Block common vulnerability scanners & bad bots ───────────────
+    RewriteCond %{HTTP_USER_AGENT} (sqlmap|nikto|nmap|masscan|dirbuster|zgrab|nuclei|wfuzz|burpsuite|havij|libwww-perl) [NC]
+    RewriteRule ^ - [F,L]
+
+    # ── Block access to sensitive Laravel paths ──────────────────────
+    RewriteRule ^(\.env|storage|bootstrap/cache|vendor|composer\.(json|lock)|package\.json|package-lock\.json|artisan)$ - [F,L]
+
+    # ── Send Requests To Front Controller ───────────────────────────
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+# ── Disable directory browsing ───────────────────────────────────────
+Options -Indexes
+
+# ── Hide server signature ─────────────────────────────────────────────
+ServerSignature Off
+
+# ── Block access to sensitive file types directly ────────────────────
+<FilesMatch "\.(env|log|sql|bak|sh|conf|ini|htpasswd|htaccess|key|pem|p12)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ── Block XML-RPC and common exploit entry points ────────────────────
+<FilesMatch "^(xmlrpc\.php|wp-login\.php|wp-admin\.php)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+
+# ── Prevent PHP execution in uploads directory ───────────────────────
+<IfModule mod_rewrite.c>
+    RewriteRule ^(storage|public/images)/.*\.(php|phtml|php3|php5|php7|phar)$ - [F,NC,L]
+</IfModule>
+
+# ── Security Headers (backup if middleware doesn't run) ──────────────
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always unset X-Powered-By
+    Header always unset Server
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(self), payment=(), usb=()"
+
+    # Prevent caching of sensitive pages
+    <FilesMatch "\.(php)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate, private"
+    </FilesMatch>
+</IfModule>
+
+# ── Compress text resources (performance + security) ─────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css
+    AddOutputFilterByType DEFLATE application/xml application/xhtml+xml application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# ── Browser caching for static assets ────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg   "access plus 1 year"
+    ExpiresByType image/jpeg  "access plus 1 year"
+    ExpiresByType image/gif   "access plus 1 year"
+    ExpiresByType image/png   "access plus 1 year"
+    ExpiresByType image/webp  "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon  "access plus 1 year"
+    ExpiresByType text/css    "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+    ExpiresByType font/woff   "access plus 1 year"
+    ExpiresByType font/woff2  "access plus 1 year"
+</IfModule>
+
+# ── Limit request size (prevent large payload attacks) ────────────────
+LimitRequestBody 10485760
+
+# ── Block common SQL injection patterns in query strings ─────────────
+<IfModule mod_rewrite.c>
+    RewriteCond %{QUERY_STRING} (union|select|insert|drop|delete|update|cast|create|char|convert|alter|declare|script|javascript|alert|document\.cookie) [NC]
+    RewriteRule ^ - [F,L]
 </IfModule>

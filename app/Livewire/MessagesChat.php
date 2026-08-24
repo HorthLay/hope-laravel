@@ -20,6 +20,8 @@ class MessagesChat extends Component
     public int    $unreadCount   = 0;
     public string $subject       = 'Support';
 
+    public bool   $isTyping      = false;
+
     /* ── Spam-feedback properties (read by Blade) ─────────────── */
     public string $spamError     = '';
     public int    $rateRemaining = 5;
@@ -76,8 +78,18 @@ class MessagesChat extends Component
             $this->dispatch('new-messages');
         }
 
+        $lastTyped = Cache::get("chat_typing_{$this->threadId}_admin");
+        $this->isTyping = $lastTyped && $lastTyped >= now()->subSeconds(4)->timestamp;
+
         $this->refreshRateInfo();
         $this->refreshCooldown();
+    }
+
+    public function typing(): void
+    {
+        if ($this->threadId) {
+            Cache::put("chat_typing_{$this->threadId}_sponsor", now()->timestamp, 5);
+        }
     }
 
     public function useQuickReply(int $index): void

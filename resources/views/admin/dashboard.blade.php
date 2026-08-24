@@ -21,7 +21,7 @@
     <div class="card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-slide-in" style="animation-delay:.1s">
         <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-users text-blue-500 text-xl"></i>
+                <i class="fas fa-user-check text-blue-500 text-xl"></i>
             </div>
             @if($siteVisitsGrowth > 0)
                 <span class="text-green-500 text-sm font-semibold">+{{ $siteVisitsGrowth }}%</span>
@@ -29,10 +29,10 @@
                 <span class="text-gray-500 text-sm font-semibold">{{ $siteVisitsGrowth }}%</span>
             @endif
         </div>
-        <h3 class="text-2xl font-bold text-gray-800 mb-1">{{ $totalSiteVisitsFormatted }}</h3>
-        <p class="text-gray-600 text-sm">Total Site Visits</p>
+        <h3 class="text-2xl font-bold text-gray-800 mb-1">{{ $uniqueVisitorsFormatted }}</h3>
+        <p class="text-gray-600 text-sm">Unique Visitors</p>
         <div class="mt-3 pt-3 border-t border-gray-100">
-            <p class="text-xs text-gray-500"><i class="fas fa-user-check text-blue-500 mr-1"></i>{{ $uniqueVisitorsFormatted }} unique visitors</p>
+            <p class="text-xs text-gray-500"><i class="fas fa-database text-blue-500 mr-1"></i>{{ $totalSiteVisitsFormatted }} total records</p>
         </div>
     </div>
 
@@ -102,6 +102,31 @@
            class="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold rounded-lg transition border border-amber-200">
             <i class="fas fa-home text-[10px]"></i> All Families
         </a>
+        <a href="{{ route('admin.sponsors.index') }}"
+           class="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-700 text-xs font-bold rounded-lg transition border border-green-200">
+            <i class="fas fa-hand-holding-heart text-[10px]"></i> All Sponsors
+        </a>
+    </div>
+</div>
+
+{{-- Sponsor stat card --}}
+<div class="grid grid-cols-3 gap-3 mb-4">
+    <div class="bg-green-50 border border-green-100 rounded-xl p-4 text-center">
+        <p class="text-2xl font-black text-green-600">{{ number_format($totalSponsors) }}</p>
+        <p class="text-xs text-gray-500 font-medium mt-0.5">Total Sponsors</p>
+        @if($newSponsorsThisMonth > 0)
+            <p class="text-[10px] text-green-500 font-bold mt-1">+{{ $newSponsorsThisMonth }} this month</p>
+        @endif
+    </div>
+    <div class="bg-teal-50 border border-teal-100 rounded-xl p-4 text-center">
+        <p class="text-2xl font-black text-teal-600">{{ number_format($activeSponsors) }}</p>
+        <p class="text-xs text-gray-500 font-medium mt-0.5">Active Sponsors</p>
+        <p class="text-[10px] text-teal-500 font-bold mt-1">{{ $totalSponsors > 0 ? round($activeSponsors / $totalSponsors * 100) : 0 }}% active rate</p>
+    </div>
+    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-center">
+        <p class="text-2xl font-black text-indigo-600">{{ number_format($sponsoredChildren + $sponsoredFamilies) }}</p>
+        <p class="text-xs text-gray-500 font-medium mt-0.5">Sponsored Units</p>
+        <p class="text-[10px] text-indigo-400 font-bold mt-1">Children + Families</p>
     </div>
 </div>
 
@@ -114,18 +139,22 @@
     <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 text-center">
         <p class="text-2xl font-black text-orange-600">{{ number_format($activeChildren) }}</p>
         <p class="text-xs text-gray-500 font-medium mt-0.5">Active Children</p>
+        <p class="text-[10px] text-green-600 font-bold mt-1">{{ $childPct }}% sponsored</p>
     </div>
     <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
         <p class="text-2xl font-black text-red-500">{{ number_format($unsponsoredChildren) }}</p>
         <p class="text-xs text-gray-500 font-medium mt-0.5">Children Waiting</p>
+        <p class="text-[10px] text-red-400 font-bold mt-1">Need sponsors</p>
     </div>
     <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 text-center">
         <p class="text-2xl font-black text-amber-600">{{ number_format($activeFamilies) }}</p>
         <p class="text-xs text-gray-500 font-medium mt-0.5">Active Families</p>
+        <p class="text-[10px] text-green-600 font-bold mt-1">{{ $familyPct }}% sponsored</p>
     </div>
     <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 text-center">
         <p class="text-2xl font-black text-rose-500">{{ number_format($unsponsoredFamilies) }}</p>
         <p class="text-xs text-gray-500 font-medium mt-0.5">Families Waiting</p>
+        <p class="text-[10px] text-rose-400 font-bold mt-1">Need sponsors</p>
     </div>
 </div>
 
@@ -407,17 +436,23 @@
         </div>
         <div class="space-y-3">
             <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">Site Visits</span>
-                <span class="text-lg font-bold text-blue-600">{{ $visitsTodayFormatted }}</span>
+                <span class="text-sm text-gray-600">Unique Visitors</span>
+                <span class="text-lg font-bold text-blue-600">{{ $uniqueVisitorsTodayFormatted }}</span>
             </div>
             <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">Unique Visitors</span>
-                <span class="text-lg font-bold text-green-600">{{ $uniqueVisitorsTodayFormatted }}</span>
+                <span class="text-sm text-gray-600">Total Visits</span>
+                <span class="text-lg font-bold text-indigo-500">{{ $visitsTodayFormatted }}</span>
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-600">Article Views</span>
                 <span class="text-lg font-bold text-purple-600">{{ App\Helpers\NumberHelper::formatNumber($viewsToday ?? 0) }}</span>
             </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-gray-100">
+            <p class="text-xs text-gray-400">
+                <i class="fas fa-info-circle mr-1 text-blue-400"></i>
+                Each IP + device counted once per 30 min
+            </p>
         </div>
     </div>
 

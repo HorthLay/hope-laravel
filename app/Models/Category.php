@@ -53,6 +53,14 @@ class Category extends Model
                 $category->slug = Str::slug($category->name);
             }
         });
+
+        static::saved(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('home_data');
+        });
+
+        static::deleted(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('home_data');
+        });
     }
 
     /**

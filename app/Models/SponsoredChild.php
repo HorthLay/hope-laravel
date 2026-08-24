@@ -26,6 +26,19 @@ class SponsoredChild extends Model
         'is_active' => 'boolean',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::saved(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('home_data');
+        });
+
+        static::deleted(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('home_data');
+        });
+    }
+
     // article
 public function articles()
 {
@@ -60,7 +73,7 @@ public function getEncryptedIdAttribute()
     {
         return $this->hasMany(ChildMedia::class, 'child_id')->orderBy('taken_date', 'desc');
     }
-
+    
     public function documents()
     {
         return $this->hasMany(ChildDocument::class, 'child_id')->orderBy('document_date', 'desc');

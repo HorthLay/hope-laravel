@@ -351,6 +351,13 @@
             <div wire:loading.delay wire:target="poll" class="amc-poll">
                 <span></span><span></span><span></span>
             </div>
+
+            @if($isTyping)
+            <div class="amc-typing-indicator" style="display:flex;align-items:center;gap:6px;font-size:12px;color:#9ca3af;font-weight:600;padding:4px 0;">
+                <div class="amc-poll" style="opacity:1;padding:0;"><span></span><span></span><span></span></div>
+                {{ $activeSponsorName }} is typing...
+            </div>
+            @endif
         </div>
 
         {{-- ── Input footer ── --}}
@@ -383,6 +390,7 @@
                     rows="1"
                     x-on:input="autoResize($el)"
                     x-on:keydown="handleEnter($event)"
+                    x-on:keydown.throttle.2000ms="$wire.typing()"
                     class="amc-textarea"
                 ></textarea>
                 <div class="amc-form-actions">

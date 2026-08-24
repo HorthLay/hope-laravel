@@ -92,6 +92,11 @@ class AdminController extends Controller
         $newFamiliesThisMonth = \App\Models\Family::where('created_at', '>=', now()->startOfMonth())->count();
         $recentFamilies       = \App\Models\Family::withCount('members')->with('sponsors')->latest()->take(6)->get();
 
+        // ========== SPONSOR STATISTICS ==========
+        $totalSponsors        = \App\Models\Sponsor::count();
+        $activeSponsors       = \App\Models\Sponsor::where('is_active', true)->count();
+        $newSponsorsThisMonth = \App\Models\Sponsor::where('created_at', '>=', now()->startOfMonth())->count();
+
         return view('admin.dashboard', compact(
             // Site visits
             'totalSiteVisits', 'totalSiteVisitsFormatted',
@@ -121,7 +126,9 @@ class AdminController extends Controller
             // Families
             'totalFamilies', 'activeFamilies', 'sponsoredFamilies',
             'unsponsoredFamilies', 'totalFamilyMembers',
-            'newFamiliesThisMonth', 'recentFamilies'
+            'newFamiliesThisMonth', 'recentFamilies',
+            // Sponsors
+            'totalSponsors', 'activeSponsors', 'newSponsorsThisMonth'
         ));
     }
 

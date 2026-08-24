@@ -67,11 +67,20 @@ class Article extends Model
             }
 
             // Set published_at when status transitions to published
+            // Set published_at when status transitions to published
             if ($article->isDirty('status')
                 && $article->status === 'published'
                 && empty($article->published_at)) {
                 $article->published_at = now();
             }
+        });
+
+        static::saved(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('home_data');
+        });
+
+        static::deleted(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('home_data');
         });
     }
 

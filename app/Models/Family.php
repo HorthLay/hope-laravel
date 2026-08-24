@@ -24,6 +24,19 @@ class Family extends Model
         'is_active' => 'boolean',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::saved(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('home_data');
+        });
+
+        static::deleted(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('home_data');
+        });
+    }
+
     // ── Relationships ────────────────────────────────────────────────
 
     /** Many-to-many: families are sponsored independently from children */

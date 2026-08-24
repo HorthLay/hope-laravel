@@ -24,6 +24,9 @@ class MessagesAdminChat extends Component
     public int    $editingId  = 0;
     public string $editBody   = '';
 
+    // Typing indicator
+    public bool   $isTyping   = false;
+
     // Delete confirmation
     public int    $deleteConfirmId = 0;
 
@@ -83,6 +86,17 @@ class MessagesAdminChat extends Component
             if (count($this->messages) !== $prev) {
                 $this->dispatch('new-messages');
             }
+            
+            // Check if sponsor is typing
+            $lastTyped = \Illuminate\Support\Facades\Cache::get("chat_typing_{$this->selectedId}_sponsor");
+            $this->isTyping = $lastTyped && $lastTyped >= now()->subSeconds(4)->timestamp;
+        }
+    }
+
+    public function typing(): void
+    {
+        if ($this->selectedId) {
+            \Illuminate\Support\Facades\Cache::put("chat_typing_{$this->selectedId}_admin", now()->timestamp, 5);
         }
     }
 

@@ -22,10 +22,9 @@ class TrackSiteVisit
             return $next($request);
         }
 
-        // Don't track bots and crawlers (optional)
+        // Don't track bots and crawlers
         $userAgent = $request->userAgent();
         $botPatterns = ['bot', 'crawler', 'spider', 'scraper'];
-        
         foreach ($botPatterns as $pattern) {
             if (stripos($userAgent, $pattern) !== false) {
                 return $next($request);
@@ -33,11 +32,9 @@ class TrackSiteVisit
         }
 
         try {
-            // Use Agent library to detect device, browser, platform
             $agent = new Agent();
             $agent->setUserAgent($userAgent);
 
-            // Determine device type
             $deviceType = 'desktop';
             if ($agent->isMobile()) {
                 $deviceType = 'mobile';
@@ -45,27 +42,36 @@ class TrackSiteVisit
                 $deviceType = 'tablet';
             }
 
-            // Get IP address
             $ipAddress = $this->getClientIp($request);
-            
-            // Get location data (country, city)
+
+            // ── Deduplication: same IP + device = count as 1 unique visitor ──
+            // Uses a 30-minute cache window — resets if they come back after 30 min.
+            $dedupeKey = 'site_visit:' . md5($ipAddress . '|' . $deviceType);
+
+            if (\Illuminate\Support\Facades\Cache::has($dedupeKey)) {
+                // Already counted this visitor in the last 30 minutes — skip
+                return $next($request);
+            }
+
+            // Mark this visitor as counted for 30 minutes
+            \Illuminate\Support\Facades\Cache::put($dedupeKey, true, now()->addMinutes(30));
+            // ─────────────────────────────────────────────────────────────────
+
             $locationData = $this->getLocationFromIp($ipAddress);
 
-            // Track the visit
             SiteVisit::create([
-                'ip_address' => $ipAddress,
-                'user_agent' => $userAgent,
-                'page_url' => $request->fullUrl(),
-                'referrer' => $request->header('referer'),
+                'ip_address'  => $ipAddress,
+                'user_agent'  => $userAgent,
+                'page_url'    => $request->fullUrl(),
+                'referrer'    => $request->header('referer'),
                 'device_type' => $deviceType,
-                'browser' => $agent->browser(),
-                'platform' => $agent->platform(),
-                'country' => $locationData['country'] ?? null,
-                'city' => $locationData['city'] ?? null,
-                'visited_at' => now(),
+                'browser'     => $agent->browser(),
+                'platform'    => $agent->platform(),
+                'country'     => $locationData['country'] ?? null,
+                'city'        => $locationData['city'] ?? null,
+                'visited_at'  => now(),
             ]);
         } catch (\Exception $e) {
-            // Silently fail - don't break the application
             Log::error('Failed to track site visit: ' . $e->getMessage());
         }
 

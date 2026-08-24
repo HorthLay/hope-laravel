@@ -15,115 +15,120 @@ class HomeController extends Controller
        // ──────────────────────────────────────────────────────────────────────
     //  HOME
     // ──────────────────────────────────────────────────────────────────────
- public function index()
-{
-    $articles = Article::with(['category', 'image', 'tags'])
-        ->published()
-        ->orderBy('published_at', 'desc')
-        ->get()
-        ->map(fn($a) => $this->encryptArticle($a));
-    
-    $settingsFile = storage_path('app/settings.json');
-    $settings = file_exists($settingsFile)
-        ? json_decode(file_get_contents($settingsFile), true)
-        : [];
+    public function index()
+    {
+        $settings = $this->getCachedJsonSettings();
 
+        // Cache all homepage data for 10 minutes
+        $homeData = \Illuminate\Support\Facades\Cache::remember('home_data', 600, function () {
+            $articles = Article::with(['category', 'image', 'tags'])
+                ->published()
+                ->orderBy('published_at', 'desc')
+                ->get()
+                ->map(fn($a) => $this->encryptArticle($a));
 
-    $successStory = Article::with(['category', 'image', 'tags'])
-        ->published()
-        ->featured()
-        ->orderBy('published_at', 'desc')
-        ->first();
-    if ($successStory) {
-        $successStory = $this->encryptArticle($successStory);
-    }
+            $successStory = Article::with(['category', 'image', 'tags'])
+                ->published()
+                ->featured()
+                ->orderBy('published_at', 'desc')
+                ->first();
+            if ($successStory) {
+                $successStory = $this->encryptArticle($successStory);
+            }
 
-    $videoArticles = Article::with(['category', 'image', 'tags'])
-        ->published()
-        ->whereNotNull('video_url')
-        ->where('video_url', '!=', '')
-        ->orderBy('published_at', 'desc')
-        ->limit(3)
-        ->get()
-        ->map(function ($a) {
-            $a = $this->encryptArticle($a);
-            $a->embed_url = $this->getYoutubeEmbedUrl($a->video_url);
-            return $a;
+            $videoArticles = Article::with(['category', 'image', 'tags'])
+                ->published()
+                ->whereNotNull('video_url')
+                ->where('video_url', '!=', '')
+                ->orderBy('published_at', 'desc')
+                ->limit(3)
+                ->get()
+                ->map(function ($a) {
+                    $a = $this->encryptArticle($a);
+                    $a->embed_url = $this->getYoutubeEmbedUrl($a->video_url);
+                    return $a;
+                });
+
+            $categories = Category::active()
+                ->withCount(['articles' => fn($q) => $q->published()])
+                ->ordered()
+                ->get()
+                ->map(fn($c) => $this->encryptCategory($c));
+
+            $categoryArticles = $categories->take(3)->mapWithKeys(function ($cat) {
+                $articles = Article::with(['category', 'image', 'tags'])
+                    ->published()
+                    ->where('category_id', $cat->id)
+                    ->orderBy('published_at', 'desc')
+                    ->limit(4)
+                    ->get()
+                    ->map(fn($a) => $this->encryptArticle($a));
+                return [$cat->id => $articles];
+            });
+
+            $popupArticle = Article::with(['category', 'image'])
+                ->published()
+                ->orderBy('views_count', 'desc')
+                ->first();
+            if ($popupArticle) {
+                $this->encryptArticle($popupArticle);
+            }
+
+            $unsponsoredChildren = \App\Models\SponsoredChild::where('is_active', true)
+                ->whereDoesntHave('sponsors')
+                ->inRandomOrder()
+                ->limit(6)
+                ->get();
+
+            $unsponsoredFamilies = \App\Models\Family::where('is_active', true)
+                ->whereDoesntHave('sponsors')
+                ->withCount('members')
+                ->inRandomOrder()
+                ->limit(4)
+                ->get();
+
+            $stats = [
+                'total_articles'   => Article::published()->count(),
+                'total_categories' => Category::active()->count(),
+                'total_views'      => Article::sum('views_count') ?? 0,
+                'total_children'   => \App\Models\SponsoredChild::where('is_active', true)->count(),
+                'total_countries'  => \App\Models\SponsoredChild::where('is_active', true)
+                                        ->whereNotNull('country')
+                                        ->distinct('country')
+                                        ->count('country'),
+            ];
+
+            return compact(
+                'articles',
+                'successStory',
+                'videoArticles',
+                'categories',
+                'categoryArticles',
+                'popupArticle',
+                'unsponsoredChildren',
+                'unsponsoredFamilies',
+                'stats'
+            );
         });
 
-    $categories = Category::active()
-        ->withCount(['articles' => fn($q) => $q->published()])
-        ->ordered()
-        ->get()
-        ->map(fn($c) => $this->encryptCategory($c));
+        // Extract variables from cache
+        extract($homeData);
 
-    $categoryArticles = $categories->take(3)->mapWithKeys(function ($cat) {
-        $articles = Article::with(['category', 'image', 'tags'])
-            ->published()
-            ->where('category_id', $cat->id)
-            ->orderBy('published_at', 'desc')
-            ->limit(4)
-            ->get()
-            ->map(fn($a) => $this->encryptArticle($a));
-        return [$cat->id => $articles];
-    });
+        $this->trackVisit(request());
 
-    $stats = [
-        'total_articles'   => Article::published()->count(),
-        'total_categories' => Category::active()->count(),
-        'total_views'      => Article::sum('views_count'),
-    ];
-
-    $popupArticle = Article::with(['category', 'image'])
-        ->published()
-        ->orderBy('views_count', 'desc')
-        ->first();
-    if ($popupArticle) {
-        $this->encryptArticle($popupArticle);
+        return view('home', compact(
+            'articles',
+            'successStory',
+            'videoArticles',
+            'categories',
+            'categoryArticles',
+            'stats',
+            'popupArticle',
+            'unsponsoredChildren',
+            'unsponsoredFamilies',
+            'settings'
+        ));
     }
-
-    // ── NEW: unsponsored children & families ──────────────────────────
-    $unsponsoredChildren = \App\Models\SponsoredChild::where('is_active', true)
-        ->whereDoesntHave('sponsors')
-        ->inRandomOrder()
-        ->limit(6)
-        ->get();
-
-    $stats = [
-    'total_articles'  => Article::published()->count(),
-    'total_categories'=> Category::active()->count(),
-    'total_views'     => Article::sum('views_count'),
-    'total_children'  => \App\Models\SponsoredChild::where('is_active', true)->count(),
-    'total_countries' => \App\Models\SponsoredChild::where('is_active', true)
-                            ->whereNotNull('country')
-                            ->distinct('country')
-                            ->count('country'),
-];
-
-    $unsponsoredFamilies = \App\Models\Family::where('is_active', true)
-        ->whereDoesntHave('sponsors')
-        ->withCount('members')
-        ->inRandomOrder()
-        ->limit(4)
-        ->get();
-    // ─────────────────────────────────────────────────────────────────
-
-    $this->trackVisit(request());
-
-    return view('home', compact(
-        'articles',
-        'successStory',
-        'videoArticles',
-        'categories',
-        'categoryArticles',
-        'stats',
-        'popupArticle',
-        'unsponsoredChildren',
-        'unsponsoredFamilies',
-        'stats',
-        'settings'
-    ));
-}
     // ──────────────────────────────────────────────────────────────────────
     //  ARTICLE DETAIL  /articles/{slug}
     // ──────────────────────────────────────────────────────────────────────
@@ -169,10 +174,7 @@ class HomeController extends Controller
 
         $this->trackVisit(request());
 
-        $settingsFile = storage_path('app/settings.json');
-        $settings = file_exists($settingsFile)
-        ? json_decode(file_get_contents($settingsFile), true)
-        : [];
+        $settings = $this->getCachedJsonSettings();
 
         return view('articles.show', compact(
             'article',
@@ -215,10 +217,7 @@ class HomeController extends Controller
         $this->trackVisit(request());
 
 
-        $settingsFile = storage_path('app/settings.json');
-        $settings = file_exists($settingsFile)
-        ? json_decode(file_get_contents($settingsFile), true)
-        : [];
+        $settings = $this->getCachedJsonSettings();
 
         return view('categories.articles', compact(
             'category',
@@ -240,10 +239,7 @@ class HomeController extends Controller
             ->limit(6)
             ->get()
             ->map(fn($a) => $this->encryptArticle($a));
-            $settingsFile = storage_path('app/settings.json');
-        $settings = file_exists($settingsFile)
-        ? json_decode(file_get_contents($settingsFile), true)
-        : [];
+        $settings = $this->getCachedJsonSettings();
 
         return view('pages.learn-more', compact('featuredArticles', 'settings'));
     }
@@ -266,19 +262,13 @@ class HomeController extends Controller
 
     public function privacy()
     {
-        $settingsFile = storage_path('app/settings.json');
-        $settings = file_exists($settingsFile)
-        ? json_decode(file_get_contents($settingsFile), true)
-        : [];
+        $settings = $this->getCachedJsonSettings();
         return view('pages.privacy-policy',compact('settings'));
     }
 
     public function terms()
     {
-         $settingsFile = storage_path('app/settings.json');
-         $settings = file_exists($settingsFile)
-        ? json_decode(file_get_contents($settingsFile), true)
-        : [];
+        $settings = $this->getCachedJsonSettings();
         return view('pages.terms-of-service',compact('settings'));
     }
 
@@ -359,11 +349,22 @@ class HomeController extends Controller
     private function trackVisit(Request $request): void
     {
         try {
-            $ua = $request->userAgent() ?? '';
+            $ua         = $request->userAgent() ?? '';
+            $ip         = $request->ip();
+            $deviceType = $this->detectDevice($ua);
+
+            // ── Deduplication: same IP + device = count as 1 ────────────
+            $dedupeKey = 'site_visit:' . md5($ip . '|' . $deviceType);
+            if (\Illuminate\Support\Facades\Cache::has($dedupeKey)) {
+                return; // Already counted this visitor in the last 30 min
+            }
+            \Illuminate\Support\Facades\Cache::put($dedupeKey, true, now()->addMinutes(30));
+            // ─────────────────────────────────────────────────────────────
+
             SiteVisit::create([
-                'ip_address'  => $request->ip(),
+                'ip_address'  => $ip,
                 'user_agent'  => $ua,
-                'device_type' => $this->detectDevice($ua),
+                'device_type' => $deviceType,
                 'browser'     => $this->detectBrowser($ua),
                 'page_url'    => $request->fullUrl(),
                 'country'     => session('visitor_country'),
@@ -388,6 +389,19 @@ class HomeController extends Controller
         if (str_contains($ua, 'Firefox'))                            return 'Firefox';
         if (str_contains($ua, 'Safari'))                             return 'Safari';
         return 'Other';
+    }
+
+    // ──────────────────────────────────────────────────────────────────────
+    //  JSON SETTINGS CACHED HELPER
+    // ──────────────────────────────────────────────────────────────────────
+    private function getCachedJsonSettings(): array
+    {
+        return \Illuminate\Support\Facades\Cache::remember('site_settings_json', 3600, function () {
+            $settingsFile = storage_path('app/settings.json');
+            return file_exists($settingsFile)
+                ? json_decode(file_get_contents($settingsFile), true)
+                : [];
+        });
     }
 
 }

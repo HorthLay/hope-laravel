@@ -525,16 +525,16 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
 .hero-cta-wrap{display:flex!important;flex-wrap:wrap!important;gap:14px!important;align-items:center!important;}
 .hero-cta-btn{
     display:inline-flex!important;align-items:center!important;gap:10px!important;
-    padding:13px 28px!important;background:#0ea5e9!important;color:#fff!important;
+    padding:13px 28px!important;background:linear-gradient(135deg,#fbbf24,#f97316)!important;color:#1c1033!important;
     font-family: 'Montserrat', sans-serif;font-size:12.5px!important;
     font-weight:800!important;letter-spacing:.07em!important;text-transform:uppercase!important;
     border-radius:6px!important;text-decoration:none!important;
-    transition:background .2s,transform .18s!important;border:2px solid transparent!important;
-    box-shadow:0 4px 14px rgba(14,165,233,.35)!important;
+    transition:filter .2s,transform .18s!important;border:2px solid transparent!important;
+    box-shadow:0 4px 14px rgba(251,191,36,.40)!important;
 }
-.hero-cta-btn:hover{background:#0284c7!important;transform:translateY(-2px)!important;color:#fff!important;}
-.hero-cta-btn.outline{background:transparent!important;border:2px solid rgba(255,255,255,.75)!important;box-shadow:none!important;color:#fff!important;}
-.hero-cta-btn.outline:hover{background:rgba(255,255,255,.15)!important;border-color:#fff!important;}
+.hero-cta-btn:hover{filter:brightness(1.08)!important;transform:translateY(-2px)!important;color:#1c1033!important;}
+.hero-cta-btn.outline{background:transparent!important;border:2px solid rgba(251,191,36,.7)!important;box-shadow:none!important;color:#fff!important;}
+.hero-cta-btn.outline:hover{background:rgba(251,191,36,.12)!important;border-color:#fbbf24!important;}
 /* Mobile */
 @media(max-width:1024px){
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{max-width:900px!important;padding:0 28px 50px!important;}
@@ -560,26 +560,9 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
 }</style>
 
 {{-- ══════════════════════════════════
-     HERO - night sky with particles
+     HERO - background image style
 ══════════════════════════════════ --}}
 <section class="hero">
-    <canvas id="starCanvas"></canvas>
-
-    {{-- Dawn glow --}}
-    <div class="dawn-glow"></div>
-
-    {{-- Light rays from horizon --}}
-    <div class="rays" id="raysContainer"></div>
-
-    {{-- Photo strip at bottom --}}
-    <div class="photo-strip">
-        @foreach(range(1,8) as $n)
-        <div class="photo-strip-img">
-            <img src="{{ asset('images/children/image-'.$n.'.jpg') }}" alt="Child {{ $n }}" loading="lazy">
-        </div>
-        @endforeach
-    </div>
-
     <div class="hero-inner">
         <nav class="breadcrumb">
             <a href="{{ route('home') }}">Home</a>
@@ -591,46 +574,25 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
             <span>Housing & Stability</span>
         </nav>
 
-        <div class="h-pill">
-            <div class="h-pill-dot"></div> Family Homes
-        </div>
+        <h1 class="hero-h1">Housing & Family Stability</h1>
 
-        <h1 class="h-heading">
-            Every Child<br>Deserves a<br>
-            <span class="glow-word">Home</span>
-        </h1>
-
-        <p class="h-sub">
-            A safe roof is not a privilege - it is the foundation upon which a child's entire future is built. We build, restore, and protect.
+        <p class="hero-sub">
+            A safe roof is not a privilege — it is the foundation upon which a child's entire future is built. We build, restore, and protect families across Cambodia.
         </p>
 
-        <div class="h-btns">
-            <a href="{{ route('sponsor.children') }}" class="btn-primary">
+        <div class="hero-cta-wrap">
+            <a href="{{ route('sponsor.children') }}" class="hero-cta-btn">
                 <i class="fas fa-house-user"></i> Sponsor a Family
             </a>
-            <a href="{{ route('support.donate') }}" class="btn-outline">
+            <a href="{{ route('support.donate') }}" class="hero-cta-btn outline">
                 <i class="fas fa-hand-holding-heart"></i> Donate
             </a>
-        </div>
-
-        <div class="h-stats">
-            @foreach([['4','Programs'],['100%','Field Impact'],['🏠','Cambodia'],['1958','Since']] as [$n,$l])
-            <div class="h-stat">
-                <div class="h-stat-n">{{ $n }}</div>
-                <div class="h-stat-l">{{ $l }}</div>
-            </div>
-            @if(!$loop->last)<div class="h-stat-div"></div>@endif
-            @endforeach
         </div>
     </div>
 </section>
 
-{{-- Wave --}}
-<div class="wave-dark">
-    <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <path d="M0,50 C360,80 1080,20 1440,50 L1440,0 L0,0 Z" fill="#04091f"/>
-    </svg>
-</div>
+
+
 
 {{-- ══ PROGRAMS ══ --}}
 <section class="section-bg">
@@ -818,130 +780,6 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
 </section>
 
 <script>
-/* ═══════════════════════════════
-   PARTICLE STAR CANVAS
-═══════════════════════════════ */
-(function(){
-    var canvas = document.getElementById('starCanvas');
-    var ctx    = canvas.getContext('2d');
-    var W, H, particles = [], shooting = [];
-
-    function resize(){
-        W = canvas.width  = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    /* ── Static stars ── */
-    for(var i=0;i<220;i++){
-        particles.push({
-            x: Math.random()*100,
-            y: Math.random()*100,
-            r: Math.random()*1.4+.2,
-            a: Math.random(),
-            s: Math.random()*2+1,   /* twinkle speed */
-            p: Math.random()*Math.PI*2, /* phase */
-            warm: Math.random() < .15  /* warm gold tint */
-        });
-    }
-
-    /* ── Shoot a new star ── */
-    function spawnShooting(){
-        shooting.push({
-            x: Math.random()*W*.6 + W*.1,
-            y: Math.random()*H*.4,
-            vx: (Math.random()*3+4) * (Math.random()<.5?1:-1),
-            vy: Math.random()*2+1,
-            life: 1, decay: Math.random()*.015+.01,
-            len: Math.random()*80+40
-        });
-    }
-    setInterval(spawnShooting, 2200);
-    setTimeout(spawnShooting, 400);
-
-    var t = 0;
-    function draw(){
-        ctx.clearRect(0,0,W,H);
-
-        /* Static stars */
-        particles.forEach(function(p){
-            var alpha = .15 + .85*(Math.sin(t*p.s*.02 + p.p)+1)*.5;
-            ctx.beginPath();
-            ctx.arc(p.x/100*W, p.y/100*H, p.r, 0, Math.PI*2);
-            if(p.warm){
-                ctx.fillStyle = 'rgba(251,191,36,'+alpha*.9+')';
-            } else {
-                ctx.fillStyle = 'rgba(255,255,255,'+alpha*.7+')';
-            }
-            ctx.fill();
-
-            /* Tiny glow on bigger stars */
-            if(p.r > 1){
-                ctx.beginPath();
-                ctx.arc(p.x/100*W, p.y/100*H, p.r*3, 0, Math.PI*2);
-                var grd = ctx.createRadialGradient(p.x/100*W,p.y/100*H,0,p.x/100*W,p.y/100*H,p.r*3);
-                grd.addColorStop(0, p.warm ? 'rgba(251,191,36,'+(alpha*.25)+')' : 'rgba(255,255,255,'+(alpha*.12)+')');
-                grd.addColorStop(1, 'transparent');
-                ctx.fillStyle = grd;
-                ctx.fill();
-            }
-        });
-
-        /* Shooting stars */
-        shooting = shooting.filter(function(s){
-            s.life -= s.decay;
-            s.x += s.vx;
-            s.y += s.vy;
-            if(s.life <= 0) return false;
-
-            var grad = ctx.createLinearGradient(s.x, s.y, s.x - s.vx*8, s.y - s.vy*8);
-            grad.addColorStop(0, 'rgba(251,191,36,'+s.life*.9+')');
-            grad.addColorStop(.4,'rgba(255,220,100,'+s.life*.4+')');
-            grad.addColorStop(1, 'transparent');
-
-            ctx.beginPath();
-            ctx.moveTo(s.x, s.y);
-            ctx.lineTo(s.x - s.vx*(s.len/10), s.y - s.vy*(s.len/10));
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = s.life * 2.5;
-            ctx.lineCap = 'round';
-            ctx.stroke();
-            return true;
-        });
-
-        t++;
-        requestAnimationFrame(draw);
-    }
-    draw();
-})();
-
-/* ═══════════════════════════════
-   LIGHT RAYS
-═══════════════════════════════ */
-(function(){
-    var container = document.getElementById('raysContainer');
-    var count = 12;
-    for(var i=0;i<count;i++){
-        var ray = document.createElement('div');
-        ray.className = 'ray';
-        var angle  = (i/(count-1)) * 60 - 30;
-        var height = 200 + Math.random()*180;
-        var op     = .08 + Math.random()*.15;
-        var delay  = Math.random()*3;
-        ray.style.cssText = [
-            'left:calc(50% + '+angle+'px)',
-            'height:'+height+'px',
-            'opacity:'+op,
-            'animation-delay:'+delay+'s',
-            'animation-duration:'+(2.5+Math.random()*2)+'s',
-            'transform:rotate('+angle*.6+'deg)',
-            'background:linear-gradient(to top,rgba(251,191,36,0.45),transparent)'
-        ].join(';');
-        container.appendChild(ray);
-    }
-})();
-
 /* ═══════════════════════════════
    SCROLL REVEAL
 ═══════════════════════════════ */

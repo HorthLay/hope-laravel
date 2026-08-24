@@ -300,6 +300,12 @@
                 <span></span><span></span><span></span>
             </div>
 
+            @if($isTyping)
+            <div class="typing-indicator" style="display:flex;align-items:center;gap:6px;font-size:12px;color:#9ca3af;font-weight:600;padding:4px 0;">
+                <div class="poll-indicator" style="opacity:1;padding:0;"><span></span><span></span><span></span></div>
+                Support Team is typing...
+            </div>
+            @endif
         </div>
 
         {{-- ── Input footer ── --}}
@@ -414,6 +420,7 @@
                     rows="1"
                     x-on:input="autoResize($el); checkDup($el.value)"
                     x-on:keydown="handleEnter($event)"
+                    x-on:keydown.throttle.2000ms="$wire.typing()"
                     :disabled="cooldownLeft > 0"
                 ></textarea>
                 <div class="chat-form-actions">
