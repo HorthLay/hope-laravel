@@ -74,6 +74,25 @@
 </div>
 @endif
 
+{{-- ═══ DELETE THREAD MODAL ═══ --}}
+@if($deleteThreadConfirm)
+<div class="amc-modal-overlay" x-transition>
+    <div class="amc-modal" @click.outside="$wire.cancelDeleteThread()">
+        <div class="amc-modal-icon amc-modal-icon--red">
+            <i class="fas fa-trash-alt"></i>
+        </div>
+        <h3 class="amc-modal-title">Delete entire conversation?</h3>
+        <p class="amc-modal-desc">This will permanently delete the entire thread and all messages within it. This action cannot be undone.</p>
+        <div class="amc-modal-actions">
+            <button wire:click="cancelDeleteThread" class="amc-btn amc-btn--ghost">Cancel</button>
+            <button wire:click="deleteThread" class="amc-btn amc-btn--danger">
+                <i class="fas fa-trash-alt"></i> Delete
+            </button>
+        </div>
+    </div>
+</div>
+@endif
+
 {{-- ═══ TWO-PANEL LAYOUT ═══ --}}
 <div class="amc-layout">
 
@@ -88,12 +107,49 @@
                 </h2>
                 <p class="amc-sidebar-sub">{{ count($threads) }} conversation{{ count($threads) !== 1 ? 's' : '' }}</p>
             </div>
-            @php $totalUnread = array_sum(array_column($threads, 'unread_count')); @endphp
-            @if($totalUnread > 0)
-            <span class="amc-badge amc-badge--orange">{{ $totalUnread }}</span>
-            @endif
+            <div style="display:flex; align-items:center; gap:8px;">
+                @php $totalUnread = array_sum(array_column($threads, 'unread_count')); @endphp
+                @if($totalUnread > 0)
+                <span class="amc-badge amc-badge--orange">{{ $totalUnread }}</span>
+                @endif
+                <button wire:click="toggleNewChat" class="amc-icon-btn" style="width:30px; height:30px;" title="{{ $showNewChat ? 'Cancel' : 'New Chat' }}">
+                    <i class="fas {{ $showNewChat ? 'fa-times' : 'fa-plus' }}" style="font-size:13px;"></i>
+                </button>
+            </div>
         </div>
 
+        @if($showNewChat)
+        <div style="padding:14px; flex:1; display:flex; flex-direction:column; overflow:hidden;">
+            <div class="amc-search-wrap" style="padding:0; border:none; margin-bottom:12px; flex-shrink:0;">
+                <i class="fas fa-search amc-search-icon" style="left:12px"></i>
+                <input
+                    type="text"
+                    wire:model.live.debounce.300ms="sponsorSearch"
+                    placeholder="Type name or email..."
+                    class="amc-search-input"
+                    autofocus
+                >
+            </div>
+            
+            <div class="amc-thread-list">
+                @if(strlen($sponsorSearch) >= 2 && empty($sponsorSearchResults))
+                    <div class="amc-thread-empty"><i class="fas fa-user-slash text-gray-300 text-3xl"></i><p>No sponsors found.</p></div>
+                @elseif(empty($sponsorSearchResults))
+                    <div class="amc-thread-empty"><i class="fas fa-search text-gray-300 text-3xl"></i><p>Type at least 2 characters to search for a sponsor.</p></div>
+                @else
+                    @foreach($sponsorSearchResults as $res)
+                        <div class="amc-thread" wire:click="startNewChat({{ $res['id'] }})">
+                            <div class="amc-thread-avatar" style="background:#f3f4f6; color:#9ca3af; box-shadow:none;">{{ $res['init'] }}</div>
+                            <div class="amc-thread-body" style="display:flex; flex-direction:column; justify-content:center;">
+                                <div class="amc-thread-name">{{ $res['name'] }}</div>
+                                <div class="amc-thread-preview">{{ $res['email'] }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+        </div>
+        @else
         {{-- Search --}}
         <div class="amc-search-wrap">
             <i class="fas fa-search amc-search-icon"></i>
@@ -109,7 +165,7 @@
         <div class="amc-thread-list" id="amc-thread-list">
             @forelse($threads as $thread)
             <div
-                class="amc-thread {{ $selectedId === $thread['id'] ? 'amc-thread--active' : '' }} {{ $thread['unread_count'] > 0 ? 'amc-thread--unread' : '' }}"
+                class="amc-thread {{ $selectedId === $thread['id'] ? 'amc-thread--active' : '' }} {{ $thread['unread_count'] > 0 ? 'amc-thread--unread' : '' }} {{ $thread['is_unread_by_user'] ? 'amc-thread--user-unread' : '' }}"
                 wire:click="selectThread({{ $thread['id'] }})"
                 wire:key="thread-{{ $thread['id'] }}"
             >
@@ -145,6 +201,7 @@
             </div>
             @endforelse
         </div>
+        @endif
     </div>
 
     {{-- ── RIGHT: Chat panel ── --}}
@@ -180,6 +237,11 @@
                 <button wire:click="markAdminReadAll({{ $selectedId }})" class="amc-icon-btn" title="Mark all as read">
                     <i class="fas fa-check-double"></i>
                 </button>
+                @if(auth('admin')->user()->isSuperAdmin())
+                <button wire:click="confirmDeleteThread" class="amc-icon-btn" style="color:#ef4444; background:#fef2f2;" title="Delete entire conversation">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+                @endif
             </div>
         </div>
 
@@ -204,7 +266,8 @@
                         $isAdmin   = $msg['sender'] === 'admin';
                         $isSpnsr   = $msg['sender'] === 'sponsor';
                         $isEditing = $editingId === $msg['id'];
-                        $isUnread  = $isSpnsr && empty($msg['admin_read_at']);
+                        $isUnread  = $isSpnsr && (empty($msg['admin_read_at']) || !empty($msg['is_newly_read']));
+                        $isUserUnread = $isAdmin && empty($msg['read_at']);
 
                         // PHP server-side fallbacks (JS will override with local tz)
                         $dateLabel = match(true) {
@@ -262,7 +325,7 @@
                             @else
                                 {{-- Image bubble --}}
                                 @if(!empty($msg['attachment_url']) && $isImg)
-                                    <div class="amc-bubble {{ $isAdmin ? 'amc-bubble--admin' : 'amc-bubble--sponsor' }} amc-bubble--img {{ $isUnread ? 'amc-bubble--unread' : '' }}">
+                                    <div class="amc-bubble {{ $isAdmin ? 'amc-bubble--admin' : 'amc-bubble--sponsor' }} amc-bubble--img {{ $isUnread ? 'amc-bubble--unread' : '' }} {{ $isUserUnread ? 'amc-bubble--admin-unread' : '' }}">
                                         <a href="{{ $msg['attachment_url'] }}" target="_blank" class="amc-img-link">
                                             <img src="{{ $msg['attachment_url'] }}" alt="Image" class="amc-img" loading="lazy">
                                             <div class="amc-img-overlay"><i class="fas fa-expand-alt"></i></div>
@@ -272,7 +335,7 @@
 
                                 {{-- File bubble --}}
                                 @elseif(!empty($msg['attachment_url']) && !$isImg)
-                                    <div class="amc-bubble {{ $isAdmin ? 'amc-bubble--admin' : 'amc-bubble--sponsor' }} {{ $isUnread ? 'amc-bubble--unread' : '' }}">
+                                    <div class="amc-bubble {{ $isAdmin ? 'amc-bubble--admin' : 'amc-bubble--sponsor' }} {{ $isUnread ? 'amc-bubble--unread' : '' }} {{ $isUserUnread ? 'amc-bubble--admin-unread' : '' }}">
                                         @if(!empty($msg['body']))<p style="margin-bottom:8px">{{ $msg['body'] }}</p>@endif
                                         @php
                                             $ext2  = strtolower(pathinfo($msg['attachment_name'] ?? '', PATHINFO_EXTENSION));
@@ -294,7 +357,7 @@
 
                                 {{-- Text bubble --}}
                                 @elseif(!empty($msg['body']))
-                                    <div class="amc-bubble {{ $isAdmin ? 'amc-bubble--admin' : 'amc-bubble--sponsor' }} {{ $isUnread ? 'amc-bubble--unread' : '' }}">
+                                    <div class="amc-bubble {{ $isAdmin ? 'amc-bubble--admin' : 'amc-bubble--sponsor' }} {{ $isUnread ? 'amc-bubble--unread' : '' }} {{ $isUserUnread ? 'amc-bubble--admin-unread' : '' }}">
                                         {!! nl2br(e($msg['body'])) !!}
                                     </div>
                                 @endif
@@ -313,7 +376,7 @@
                             @endif
 
                             {{-- Meta: time (local tz via JS) + edit/delete actions --}}
-                            <div class="amc-msg-meta {{ $isAdmin ? 'amc-msg-meta--me' : '' }} {{ $isUnread ? 'amc-msg-meta--unread' : '' }}">
+                            <div class="amc-msg-meta {{ $isAdmin ? 'amc-msg-meta--me' : '' }} {{ $isUnread ? 'amc-msg-meta--unread' : '' }} {{ $isUserUnread ? 'amc-msg-meta--admin-unread' : '' }}">
                                 @if(!$isAdmin)
                                     <span style="font-weight:{{ $isUnread ? '800' : '700' }};color:{{ $isUnread ? '#f97316' : '#6b7280' }}">
                                         {{ $activeSponsorName }}
@@ -327,7 +390,7 @@
                                 </time>
 
                                 @if($msg['is_edited'])<span class="amc-edited">(edited)</span>@endif
-                                @if($isUnread)<span class="amc-unread-dot"></span>@endif
+                                @if($isUnread || $isUserUnread)<span class="amc-unread-dot" style="{{ $isUserUnread ? 'background:#ef4444' : '' }}"></span>@endif
 
                                 @if(!$isEditing)
                                 <div class="amc-msg-actions">
@@ -457,6 +520,10 @@
 .amc-thread--unread .amc-thread-name { font-weight: 900; color: #111827; }
 .amc-thread--unread .amc-thread-preview { font-weight: 700; color: #374151; }
 .amc-thread--unread .amc-thread-time { color: #f97316; font-weight: 800; }
+.amc-thread--user-unread { background: #fef2f2; border-left-color: #ef4444; }
+.amc-thread--user-unread .amc-thread-name { font-weight: 800; color: #111827; }
+.amc-thread--user-unread .amc-thread-preview { font-weight: 700; color: #ef4444; }
+.amc-thread--user-unread .amc-thread-time { color: #ef4444; font-weight: 800; }
 .amc-thread-avatar { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 14px; font-weight: 900; display: flex; align-items: center; justify-content: center; position: relative; transition: box-shadow .2s; }
 .amc-thread-avatar--unread { box-shadow: 0 0 0 2.5px #fff, 0 0 0 4.5px #f97316; animation: amcAvatarPulse 2.5s ease-in-out infinite; }
 .amc-thread-dot { position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background: #f97316; border-radius: 50%; border: 2px solid #fafafa; animation: amcDotPop .3s cubic-bezier(.34,1.56,.64,1) both; }
@@ -516,9 +583,11 @@
 .amc-bubble--sponsor { background: #f3f4f6; color: #111827; border-bottom-left-radius: 3px; }
 .amc-bubble--admin   { background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; border-bottom-right-radius: 3px; box-shadow: 0 3px 12px rgba(249,115,22,.3); }
 .amc-bubble--unread  { font-weight: 700 !important; background: #fff8ed !important; border-left: 3px solid #f97316; color: #111827 !important; box-shadow: 0 2px 12px rgba(249,115,22,.13); }
+.amc-bubble--admin-unread { font-weight: 700 !important; background: #fef2f2 !important; border-right: 3px solid #ef4444; color: #111827 !important; box-shadow: 0 2px 12px rgba(239,68,68,.13); }
 .amc-msg-meta { font-size: 10px; color: #9ca3af; font-weight: 600; display: flex; align-items: center; gap: 5px; }
 .amc-msg-meta--me { justify-content: flex-end; }
 .amc-msg-meta--unread { color: #f97316 !important; font-weight: 700; }
+.amc-msg-meta--admin-unread { color: #ef4444 !important; font-weight: 700; }
 .amc-edited { font-size: 9px; color: #d1d5db; font-style: italic; }
 .amc-unread-dot { display: inline-block; width: 7px; height: 7px; background: #f97316; border-radius: 50%; flex-shrink: 0; animation: amcIconPulse 1.8s ease-in-out infinite; }
 .amc-msg-meta time { cursor: default; }

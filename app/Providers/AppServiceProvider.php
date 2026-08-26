@@ -40,6 +40,9 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo \App\Helpers\NumberHelper::formatDuration($expression); ?>";
         });
 
+        // Prevent N+1 queries during development
+        \Illuminate\Database\Eloquent\Model::preventLazyLoading(!app()->isProduction());
+
         View::share('settings', $this->loadSettings());
 
         //  if (config('app.env') === 'local') {
@@ -55,11 +58,13 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-        private function loadSettings(): array
+    private function loadSettings(): array
     {
-        $settingsFile = storage_path('app/settings.json');
-        return file_exists($settingsFile)
-            ? (json_decode(file_get_contents($settingsFile), true) ?? [])
-            : [];
+        return \Illuminate\Support\Facades\Cache::rememberForever('site_settings_json', function () {
+            $settingsFile = storage_path('app/settings.json');
+            return file_exists($settingsFile)
+                ? (json_decode(file_get_contents($settingsFile), true) ?? [])
+                : [];
+        });
     }
 }

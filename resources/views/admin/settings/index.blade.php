@@ -451,6 +451,26 @@
                                    class="w-12 h-6 rounded-full border-gray-300 text-red-500 focus:ring-red-500">
                         </div>
                     </div>
+                    <div class="space-y-4 pt-6 border-t mt-6">
+                        <h3 class="text-md font-bold text-gray-800 flex items-center gap-2">
+                            <i class="fab fa-telegram text-[#2ca5e0]"></i> Telegram Error Logging
+                        </h3>
+                        <p class="text-sm text-gray-500 mb-4">Automatically send application error logs to a Telegram bot.</p>
+                        <div>
+                            <label for="telegram_bot_token" class="block text-sm font-semibold text-gray-700 mb-2">Bot Token</label>
+                            <input type="text" id="telegram_bot_token" name="telegram_bot_token"
+                                   value="{{ old('telegram_bot_token', $settings['telegram_bot_token'] ?? '') }}"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                                   placeholder="123456789:ABCdefGHIjklMNOpqrSTUvwxYZ">
+                        </div>
+                        <div>
+                            <label for="telegram_chat_id" class="block text-sm font-semibold text-gray-700 mb-2">Chat ID</label>
+                            <input type="text" id="telegram_chat_id" name="telegram_chat_id"
+                                   value="{{ old('telegram_chat_id', $settings['telegram_chat_id'] ?? '') }}"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                                   placeholder="-1001234567890">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -75,12 +75,12 @@ Route::get('/children/{child}', [PublicChildController::class, 'show'])->name('c
 Route::get('/articles/{slug}',       [HomeController::class, 'articleDetails'])->name('articles.show');
 Route::get('/categories/{category}', [HomeController::class, 'categoryArticles'])->name('category.articles');
 Route::get('/login/sponsor', [SponsorAuthController::class, 'showLogin'])->name('sponsor.login');
-Route::post('/login/sponsor', [SponsorAuthController::class, 'login']);
+Route::post('/login/sponsor', [SponsorAuthController::class, 'login'])->middleware('throttle:login');
 Route::get('/sponsor/locked',[SponsorAuthController::class,'showLocked'])->name('sponsor.login.locked');
 
 Route::prefix('admin')->group(function () {
         Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
-        Route::post('/login', [LoginController::class, 'login'])->name('admin.login.post');
+        Route::post('/login', [LoginController::class, 'login'])->name('admin.login.post')->middleware('throttle:login');
         Route::middleware('admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
         Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');

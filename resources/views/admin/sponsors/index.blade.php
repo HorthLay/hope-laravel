@@ -123,6 +123,10 @@
                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition" title="View">
                             <i class="fas fa-eye text-xs"></i>
                         </a>
+                        <a href="{{ route('admin.messages.index', ['sponsor_id' => $sponsor->id]) }}"
+                           class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-50 text-green-500 hover:bg-green-100 transition" title="Message Sponsor">
+                            <i class="fas fa-comment-dots text-xs"></i>
+                        </a>
                         <a href="{{ route('admin.sponsors.edit', $sponsor) }}"
                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-orange-50 text-orange-500 hover:bg-orange-100 transition" title="Edit">
                             <i class="fas fa-edit text-xs"></i>

@@ -53,6 +53,10 @@ class SettingController extends Controller
             'articles_per_page' => 'nullable|integer|min:1|max:100',
             'enable_comments'   => 'nullable|boolean',
             'maintenance_mode'  => 'nullable|boolean',
+
+            // Telegram Error Logging
+            'telegram_bot_token'=> 'nullable|string|max:255',
+            'telegram_chat_id'  => 'nullable|string|max:255',
         ]);
 
         // Handle logo upload
@@ -130,6 +134,8 @@ class SettingController extends Controller
             'articles_per_page' => 12,
             'enable_comments'   => false,
             'maintenance_mode'  => false,
+            'telegram_bot_token'=> '',
+            'telegram_chat_id'  => '',
         ];
     }
 
@@ -139,6 +145,8 @@ class SettingController extends Controller
         $currentSettings = $this->getSettings();
         $settings        = array_merge($currentSettings, $newSettings);
         File::put($settingsFile, json_encode($settings, JSON_PRETTY_PRINT));
+        
+        \Illuminate\Support\Facades\Cache::forget('site_settings_json');
     }
 
     public function clearCache()

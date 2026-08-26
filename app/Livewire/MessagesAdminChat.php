@@ -20,15 +20,24 @@ class MessagesAdminChat extends Component
     public        $attachment      = null;
     public string $search          = '';
 
+    // New Chat
+    public bool   $showNewChat = false;
+    public string $sponsorSearch = '';
+    public array  $sponsorSearchResults = [];
+
     // Edit
     public int    $editingId  = 0;
     public string $editBody   = '';
+
+    // Tracking freshly read messages for UI highlighting
+    public array  $newlyReadIds = [];
 
     // Typing indicator
     public bool   $isTyping   = false;
 
     // Delete confirmation
     public int    $deleteConfirmId = 0;
+    public bool   $deleteThreadConfirm = false;
 
     // Selected thread header info
     public string $activeSponsorName  = '';
@@ -44,6 +53,18 @@ class MessagesAdminChat extends Component
     public function mount(): void
     {
         $this->loadThreads();
+        
+        // If coming from "Message Sponsor" button
+        $sponsorId = request('sponsor_id');
+        if ($sponsorId) {
+            $thread = SponsorMessageThread::firstOrCreate(
+                ['sponsor_id' => $sponsorId],
+                ['subject' => 'Support']
+            );
+            $this->loadThreads();
+            $this->selectThread($thread->id);
+        }
+
         // Capture baseline so first poll doesn't toast existing unread messages
         $this->prevTotalUnread = array_sum(array_column($this->threads, 'unread_count'));
     }
@@ -104,15 +125,24 @@ class MessagesAdminChat extends Component
 
     public function selectThread(int $id): void
     {
+        $this->showNewChat = false;
         $this->selectedId = $id;
         $this->cancelEdit();
         $this->deleteConfirmId = 0;
+        $this->deleteThreadConfirm = false;
+        $this->newlyReadIds = [];
 
         $thread = SponsorMessageThread::with('sponsor')->findOrFail($id);
         $this->activeSponsorName  = $thread->sponsor?->full_name ?? 'Unknown Sponsor';
         $this->activeSponsorEmail = $thread->sponsor?->email ?? '';
         $this->activeSponsorInit  = strtoupper(substr($thread->sponsor?->first_name ?? '?', 0, 1));
         $this->activeSubject      = $thread->subject ?? 'Support';
+
+        // Track unread messages before marking them read so UI can highlight them
+        $unreadIds = $thread->messages()->where('sender', 'sponsor')->whereNull('admin_read_at')->pluck('id')->toArray();
+        if (!empty($unreadIds)) {
+            $this->newlyReadIds = $unreadIds;
+        }
 
         $this->loadMessages($id);
         $this->markAdminReadAll($id);
@@ -232,6 +262,30 @@ class MessagesAdminChat extends Component
         $this->loadMessages($this->selectedId);
     }
 
+    public function confirmDeleteThread(): void { $this->deleteThreadConfirm = true; }
+    public function cancelDeleteThread(): void  { $this->deleteThreadConfirm = false; }
+
+    public function deleteThread(): void
+    {
+        if (!auth('admin')->user()->isSuperAdmin()) return;
+
+        $thread = SponsorMessageThread::find($this->selectedId);
+        if ($thread) {
+            $messagesWithFiles = $thread->messages()->whereNotNull('attachment_path')->get();
+            foreach ($messagesWithFiles as $msg) {
+                if (file_exists(public_path($msg->attachment_path))) {
+                    @unlink(public_path($msg->attachment_path));
+                }
+            }
+            $thread->messages()->delete();
+            $thread->delete();
+        }
+
+        $this->deleteThreadConfirm = false;
+        $this->selectedId = 0;
+        $this->loadThreads();
+    }
+
     /* ── Toggle sponsor message read / unread ─────────── */
 
     /**
@@ -270,6 +324,50 @@ class MessagesAdminChat extends Component
     /* ── Search ───────────────────────────────────────── */
 
     public function updatedSearch(): void { $this->loadThreads(); }
+
+    /* ── New Chat ─────────────────────────────────────── */
+
+    public function toggleNewChat(): void
+    {
+        $this->showNewChat = !$this->showNewChat;
+        if ($this->showNewChat) {
+            $this->sponsorSearch = '';
+            $this->sponsorSearchResults = [];
+        }
+    }
+
+    public function updatedSponsorSearch(): void
+    {
+        if (strlen($this->sponsorSearch) < 2) {
+            $this->sponsorSearchResults = [];
+            return;
+        }
+
+        $this->sponsorSearchResults = \App\Models\Sponsor::where('first_name', 'like', "%{$this->sponsorSearch}%")
+            ->orWhere('last_name', 'like', "%{$this->sponsorSearch}%")
+            ->orWhere('email', 'like', "%{$this->sponsorSearch}%")
+            ->take(15)
+            ->get()
+            ->map(fn($s) => [
+                'id'    => $s->id,
+                'name'  => $s->full_name,
+                'email' => $s->email,
+                'init'  => strtoupper(substr($s->first_name, 0, 1)),
+            ])
+            ->toArray();
+    }
+
+    public function startNewChat(int $sponsorId): void
+    {
+        $thread = SponsorMessageThread::firstOrCreate(
+            ['sponsor_id' => $sponsorId],
+            ['subject' => 'Support']
+        );
+        $this->showNewChat = false;
+        $this->sponsorSearch = '';
+        $this->loadThreads();
+        $this->selectThread($thread->id);
+    }
 
     /* ── Render ───────────────────────────────────────── */
 
@@ -318,6 +416,7 @@ class MessagesAdminChat extends Component
                         ? $last->created_at?->diffForHumans()
                         : $thread->created_at?->diffForHumans(),
                     'unread_count'  => $thread->unread_count,
+                    'is_unread_by_user' => $last && $last->sender === 'admin' && is_null($last->read_at),
                 ];
             })
             ->filter()
@@ -338,6 +437,8 @@ class MessagesAdminChat extends Component
                 'is_edited'       => (bool) ($msg->is_edited ?? false),
                 'is_image'        => (bool) ($msg->is_image ?? false),
                 'admin_read_at'   => $msg->admin_read_at?->toISOString(), // null = unread by admin
+                'read_at'         => $msg->read_at?->toISOString(),       // null = unread by sponsor
+                'is_newly_read'   => in_array($msg->id, $this->newlyReadIds),
                 'attachment_url'  => $msg->attachment_path ? asset($msg->attachment_path) : null,
                 'attachment_name' => $msg->attachment_name,
                 'attachment_size' => $msg->attachment_size,

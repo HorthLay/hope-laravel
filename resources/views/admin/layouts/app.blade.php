@@ -403,7 +403,7 @@
                     </div>
                 </div>
                 <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display:none;">@csrf</form>
-                <button onclick="logout()" class="text-gray-400 hover:text-white transition" title="Logout">
+                <button onclick="logout()" class="text-gray-400 hover:text-white transition ml-auto" title="Logout">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
@@ -418,14 +418,19 @@
         <div class="flex items-center gap-2">
             <img src="{{ $siteLogo ? asset($siteLogo) : asset('images/logo.png') }}" alt="{{ $siteName }}" class="w-8 h-8 object-contain rounded-lg">
         </div>
-        <button class="text-gray-700 hover:text-orange-500 transition">
-            <i class="fas fa-bell text-xl"></i>
-        </button>
+        <div class="block lg:hidden">
+            @livewire('admin-notifications', key('mobile-notifications'))
+        </div>
     </div>
 
     <!-- Main Content -->
-    <main id="main-content" class="main-content">
-        <div class="content-wrapper">
+    <main id="main-content" class="main-content relative">
+        <!-- Desktop Notifications -->
+        <div class="hidden lg:flex justify-end pt-5 pr-8 absolute top-0 right-0 z-40">
+            @livewire('admin-notifications', key('desktop-notifications'))
+        </div>
+
+        <div class="content-wrapper pt-12 lg:pt-16">
 
             {{-- ═══ SUCCESS FLASH ═══ --}}
             @if(session('success'))
@@ -472,12 +477,46 @@
     @livewire('admin-message-notifier')
 
     {{-- ── Sound effects toggle (bottom-right) ── --}}
-    <button id="sfxToggle" title="Toggle alert sounds" onclick="toggleSfx()">
-        <i class="fas fa-bell" id="sfxIcon"></i>
-    </button>
+   <button id="sfxToggle" title="Toggle alert sounds" onclick="toggleSfx()">
+    <i class="fas fa-volume-high" id="sfxIcon"></i>
+</button>
 
     {{-- ④ Livewire scripts must come AFTER the component markup ── --}}
     @livewireScripts
+
+    {{-- ⑤ Global Delete Confirmation Modal ── --}}
+    <div id="globalDeleteModal" class="hidden fixed inset-0 z-[9999] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" aria-hidden="true" onclick="closeGlobalDeleteModal()"></div>
+            <!-- Trick to center modal -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-100">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-bold text-gray-900" id="modal-title">Confirm Deletion</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500" id="deleteModalMessage">Are you sure you want to delete this item? This action cannot be undone.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-gray-100">
+                    <button type="button" id="confirmDeleteBtn" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors duration-200">
+                        Yes, Delete
+                    </button>
+                    <button type="button" onclick="closeGlobalDeleteModal()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors duration-200">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
     /* ═══════════════════════════════════════════════════════════
@@ -496,7 +535,7 @@
         sfxOn = !sfxOn;
         localStorage.setItem('adminSfx', sfxOn ? 'on' : 'off');
         document.getElementById('sfxToggle').classList.toggle('off', !sfxOn);
-        document.getElementById('sfxIcon').className = sfxOn ? 'fas fa-bell' : 'fas fa-bell-slash';
+        document.getElementById('sfxIcon').className = sfxOn ? 'fas fa-volume-high' : 'fas fa-volume-xmark';
         if (sfxOn) { _getCtx(); _playClick(); }
         if (!sfxOn && window.speechSynthesis) window.speechSynthesis.cancel();
     }
@@ -606,22 +645,52 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('sfxToggle').classList.toggle('off', !sfxOn);
-        document.getElementById('sfxIcon').className = sfxOn ? 'fas fa-bell' : 'fas fa-bell-slash';
+        document.getElementById('sfxIcon').className = sfxOn ? 'fas fa-volume-high' : 'fas fa-volume-xmark';
 
         @if(session('success'))
         setTimeout(() => {
-            playSoundSuccess();
-            speakSuccess();
+            try { playSoundSuccess(); speakSuccess(); } catch (e) {}
             setTimeout(() => dismissAlert('flashSuccess'), 5000);
         }, 350);
         @endif
 
         @if(session('error'))
         setTimeout(() => {
-            playSoundError();
+            try { playSoundError(); } catch (e) {}
             setTimeout(() => dismissAlert('flashError'), 6000);
         }, 350);
         @endif
+
+        // Dynamic Toast for Livewire Events
+        if (typeof Livewire !== 'undefined') {
+            Livewire.on('new-notification-toast', (event) => {
+                let msg = event.message || (event[0] && event[0].message) || 'New activity detected.';
+                try { playSoundSuccess(); } catch (e) {}
+                
+                const toastId = 'toast-' + Date.now();
+                const toast = document.createElement('div');
+                toast.id = toastId;
+                toast.className = 'flash-alert flash-success fixed top-24 lg:top-8 right-4 z-[99999] shadow-2xl';
+                toast.style.width = '320px';
+                toast.style.background = '#ffffff';
+                toast.style.border = '1.5px solid #f97316';
+                toast.innerHTML = `
+                    <div class="flash-icon-wrap" style="background: rgba(249,115,22,.15);">
+                        <i class="fas fa-bell" style="color: #ea580c;"></i>
+                    </div>
+                    <div class="flash-body">
+                        <div class="flash-title text-gray-800">Notification</div>
+                        <div class="flash-msg text-gray-600">${msg}</div>
+                    </div>
+                    <button class="flash-close text-gray-400" onclick="dismissAlert('${toastId}')" title="Dismiss">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                    <div class="flash-progress" style="background: linear-gradient(90deg, #f97316, #ea580c);"></div>
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => dismissAlert(toastId), 5000);
+            });
+        }
     });
 
     function toggleSidebar() {
@@ -639,6 +708,35 @@
     }
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', () => { if (window.innerWidth <= 1024) closeSidebar(); });
+    });
+
+    // Global Delete Modal Interceptor
+    let formToSubmit = null;
+    document.querySelectorAll('form').forEach(form => {
+        const onsubmitAttr = form.getAttribute('onsubmit');
+        if (onsubmitAttr && onsubmitAttr.includes('confirm')) {
+            const match = onsubmitAttr.match(/'(.*?)'/);
+            const msg = match ? match[1] : 'Are you sure you want to delete this?';
+            
+            form.removeAttribute('onsubmit');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                document.getElementById('deleteModalMessage').textContent = msg;
+                document.getElementById('globalDeleteModal').classList.remove('hidden');
+                formToSubmit = this;
+            });
+        }
+    });
+
+    function closeGlobalDeleteModal() {
+        document.getElementById('globalDeleteModal').classList.add('hidden');
+        formToSubmit = null;
+    }
+
+    document.getElementById('confirmDeleteBtn')?.addEventListener('click', function() {
+        if (formToSubmit) {
+            formToSubmit.submit();
+        }
     });
     </script>
 

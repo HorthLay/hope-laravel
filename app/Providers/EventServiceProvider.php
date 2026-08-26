@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Sponsor;
+use App\Models\Category;
+use App\Models\Article;
+use App\Models\Family;
+use App\Models\SponsoredChild;
+use App\Models\DonationProject;
+use App\Observers\AdminActivityObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,7 +32,12 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Sponsor::observe(AdminActivityObserver::class);
+        Category::observe(AdminActivityObserver::class);
+        Article::observe(AdminActivityObserver::class);
+        Family::observe(AdminActivityObserver::class);
+        SponsoredChild::observe(AdminActivityObserver::class);
+        DonationProject::observe(AdminActivityObserver::class);
     }
 
     /**

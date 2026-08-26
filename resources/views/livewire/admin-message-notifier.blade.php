@@ -7,7 +7,7 @@
     Include in admin layout: @livewire('admin-message-notifier')
 --}}
 <div
-    wire:poll.8000ms="poll"
+    wire:poll.30s="poll"
     data-unread="{{ $totalUnread }}"
     id="adm-notifier"
     style="display:none"

@@ -25,7 +25,30 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+            try {
+                $settingsFile = storage_path('app/settings.json');
+                if (file_exists($settingsFile)) {
+                    $settings = json_decode(file_get_contents($settingsFile), true);
+                    $botToken = $settings['telegram_bot_token'] ?? null;
+                    $chatId = $settings['telegram_chat_id'] ?? null;
+
+                    if (!empty($botToken) && !empty($chatId)) {
+                        $message = "🚨 *Application Error*\n";
+                        $message .= "Environment: " . env('APP_ENV', 'production') . "\n";
+                        $message .= "Message: `" . $e->getMessage() . "`\n";
+                        $message .= "File: `" . $e->getFile() . "`\n";
+                        $message .= "Line: " . $e->getLine() . "\n";
+
+                        \Illuminate\Support\Facades\Http::timeout(5)->post("https://api.telegram.org/bot{$botToken}/sendMessage", [
+                            'chat_id' => $chatId,
+                            'text' => substr($message, 0, 4000), // Telegram max length is 4096
+                            'parse_mode' => 'Markdown',
+                        ]);
+                    }
+                }
+            } catch (\Throwable $loggingException) {
+                // Prevent infinite loop if logging itself fails
+            }
         });
     }
 
