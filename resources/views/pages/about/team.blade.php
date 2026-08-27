@@ -30,8 +30,8 @@
 .text-gradient{background:linear-gradient(135deg,#f97316 0%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-card{background:linear-gradient(135deg,#fff 0%,#fff7ed 100%);border:1px solid #fed7aa;border-radius:20px;padding:24px;text-align:center}
 .stat-number-sm{font-size:2.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,#ea580c,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.faq-body{max-height:0;transition:max-height .35s ease}
-.faq-item.open .faq-body{max-height:600px}
+.faq-body{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .35s ease;}
+.faq-item.open .faq-body{max-height:600px;opacity:1;}
 .faq-item.open .faq-chevron{transform:rotate(180deg)}
 .faq-chevron{transition:transform .3s ease}
 .flag-circle{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.8);box-shadow:0 2px 8px rgba(0,0,0,.2);flex-shrink:0}

@@ -29,8 +29,8 @@
 .text-gradient{background:linear-gradient(135deg,#f97316 0%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-card{background:linear-gradient(135deg,#fff 0%,#fff7ed 100%);border:1px solid #fed7aa;border-radius:20px;padding:24px;text-align:center}
 .stat-number-sm{font-size:2.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,#ea580c,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.faq-body{max-height:0;transition:max-height .35s ease}
-.faq-item.open .faq-body{max-height:600px}
+.faq-body{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .35s ease;}
+.faq-item.open .faq-body{max-height:600px;opacity:1;}
 .faq-item.open .faq-chevron{transform:rotate(180deg)}
 .faq-chevron{transition:transform .3s ease}
 @media(max-width:640px){.page-hero-content{padding:60px 20px 56px}}
@@ -207,7 +207,7 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
                 <div class="icon-badge w-20 h-20 bg-orange-500 flex-shrink-0 shadow-xl shadow-orange-500/30" style="border-radius:20px">
-                    <i class="fas fa-shield-check text-white text-3xl"></i>
+                    <i class="fas fa-shield-alt text-white text-3xl"></i>
                 </div>
                 <div>
                     <div class="pill bg-orange-500/20 border border-orange-400/30 text-orange-300 mb-3"><i class="fas fa-certificate text-xs"></i> Certified Member</div>

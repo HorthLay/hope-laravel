@@ -29,8 +29,8 @@
 .text-gradient{background:linear-gradient(135deg,#f97316 0%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-card{background:linear-gradient(135deg,#fff 0%,#fff7ed 100%);border:1px solid #fed7aa;border-radius:20px;padding:24px;text-align:center}
 .stat-number-sm{font-size:2.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,#ea580c,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.faq-body{max-height:0;transition:max-height .35s ease}
-.faq-item.open .faq-body{max-height:600px}
+.faq-body{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .35s ease;}
+.faq-item.open .faq-body{max-height:600px;opacity:1;}
 .faq-item.open .faq-chevron{transform:rotate(180deg)}
 .faq-chevron{transition:transform .3s ease}
 @media(max-width:640px){.page-hero-content{padding:60px 20px 56px}}
@@ -120,7 +120,8 @@ h1,h2,h3,h4,h5,h6,.hero-h1,.section-title,.stat-number-sm,.stat-num,.stat-label,
     .page-hero-content,.legal-hero-content,.hero-inner,.cp-hero-inner{padding:48px 20px 40px!important;}
     .page-hero h1,.legal-hero h1,.edu-hero h1,.ch-hero h1,.pd-hero h1,.cp-hero h1,.hero h1,.hero-h1{font-size:clamp(1.95rem,10vw,2.5rem)!important;line-height:1!important;margin-bottom:16px!important;}
     .page-hero p,.legal-hero p,.edu-hero p,.ch-hero p,.pd-hero p,.cp-hero p,.hero p,.hero-sub,.hero-meta{font-size:.95rem!important;line-height:1.55!important;}
-}</style>
+}
+</style>
 <script>
 (function(){
 const o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');o.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
@@ -168,14 +169,23 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
                 </div>
             </div>
         </div>
-        <div class="relative grid grid-cols-1 md:grid-cols-4 gap-6">
-            @foreach([['fas fa-search','1','Browse Families','Explore family profiles and find one whose story moves you.'],['fas fa-user-plus','2','Register','Create your sponsor account quickly and securely.'],['fas fa-hand-holding-heart','3','Give','Choose your monthly contribution - every euro helps.'],['fas fa-envelope-open','4','Stay Updated','Receive family news, photos, and annual impact reports.']] as $i => $step)
+        <div class="relative grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            @foreach([
+                ['fas fa-user-plus','1','Create Your Account','Register as a sponsor first. Your data is secure and confidential — this is required before we can match you with a family.'],
+                ['fas fa-home','2','We Choose a Family For You','Once registered, our team selects a family who needs a sponsor and assigns their file to you.'],
+                ['fas fa-hand-holding-heart','3','Give','Choose your monthly contribution - every euro helps.'],
+                ['fas fa-envelope-open','4','Stay Updated','Receive family news, photos, and annual impact reports.'],
+            ] as $i => $step)
             <div class="text-center p-6 section-card reveal stagger-{{ $i+1 }}">
                 <div class="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white font-black text-xl shadow-lg shadow-amber-200">{{ $step[1] }}</div>
                 <h3 class="font-black text-gray-800 mb-2 text-sm">{{ $step[2] }}</h3>
                 <p class="text-xs text-gray-500 leading-relaxed">{{ $step[3] }}</p>
             </div>
             @endforeach
+        </div>
+        <div class="flex items-center gap-3 p-4 bg-sky-50 border border-sky-200 rounded-xl reveal">
+            <div class="icon-badge w-9 h-9 bg-sky-100 flex-shrink-0"><i class="fas fa-comments text-sky-500 text-sm"></i></div>
+            <p class="text-sm text-gray-700"><span class="font-bold">Want to sponsor a specific family instead?</span> Create your account first, then chat with our support team to request a particular family.</p>
         </div>
     </div>
 </section>
@@ -187,14 +197,14 @@ document.querySelectorAll('.faq-toggle').forEach(b=>{b.addEventListener('click',
             <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div class="text-white text-center lg:text-left">
                     <h2 class="text-3xl md:text-4xl font-black mb-3">Support a Family Today</h2>
-                    <p class="text-white/85 text-lg max-w-xl">Browse families waiting for a sponsor and change multiple lives at once.</p>
+                    <p class="text-white/85 text-lg max-w-xl">Create your sponsor account and we'll match you with a family who needs your support.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
-                    <a href="#" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-black rounded-xl hover:bg-orange-50 transition shadow-lg justify-center">
-                        <i class="fas fa-heart"></i> Find a Family
+                    <a href="{{ route('sponsor.children') }}" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-black rounded-xl hover:bg-orange-50 transition shadow-lg justify-center">
+                        <i class="fas fa-user-plus"></i> Create Sponsor Account
                     </a>
-                    <a href="{{ route('support.donate') }}" class="inline-flex items-center gap-3 px-8 py-4 border-2 border-white/50 text-white font-black rounded-xl hover:bg-white/10 transition justify-center">
-                        <i class="fas fa-hand-holding-heart"></i> Make a Donation
+                    <a href="{{ route('sponsor.messages.home') }}" class="inline-flex items-center gap-3 px-8 py-4 border-2 border-white/50 text-white font-black rounded-xl hover:bg-white/10 transition justify-center">
+                        <i class="fas fa-comments"></i> Chat with Support
                     </a>
                 </div>
             </div>
